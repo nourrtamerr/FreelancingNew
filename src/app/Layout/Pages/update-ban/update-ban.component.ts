@@ -15,7 +15,8 @@ export class UpdateBanComponent {
 
   constructor (private activatedroute:ActivatedRoute,
     private banservice:BansService
-  ){}
+  ){
+  }
   currentid:number = 0
     ban:Ban ={} as Ban
     ngOnInit() {

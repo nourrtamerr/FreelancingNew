@@ -2,7 +2,7 @@
     display: flex;
     gap: 32px;
     padding: 32px;
-    background: #f8fafc;
+    /* background: #f8fafc; */
     min-height: calc(100vh - 64px);
   }
   
