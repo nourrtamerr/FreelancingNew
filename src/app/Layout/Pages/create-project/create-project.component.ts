@@ -138,6 +138,8 @@ createdProjectId: number | null = null;
       this.biddingProjectService.CreateBiddingProject(projectData).subscribe({
         next: (response) => {
           console.log('Bidding project created successfully', response);
+          const projectId = response.id; // Ensure ID is returned
+          this.router.navigate(['/details', projectId]);  // Navigate to the bidding project details page
         },
         error: (err) => {
           console.error('Error creating bidding project:', err);
