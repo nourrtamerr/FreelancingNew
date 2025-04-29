@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ProposalService } from '../../../../Shared/Services/Proposal/proposal.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProposalView, SuggestedMilestone } from '../../../../Shared/Interfaces/Proposal';
 import { MilestoneService } from '../../../../Shared/Services/Milestone/milestone.service';
+import { AccountService } from '../../../../Shared/Services/Account/account.service';
+import { AppUser } from '../../../../Shared/Interfaces/Account';
+import { CardPaymentDTO, PaymentMethod } from '../../../../Shared/Interfaces/payment-method';
+import { ProposalPaymentService } from '../../../../Shared/Services/proposal-payment.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-proposal-details',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule, FormsModule],
   templateUrl: './proposal-details.component.html',
   styleUrl: './proposal-details.component.css'
 })
@@ -19,7 +24,26 @@ export class ProposalDetailsComponent implements OnInit {
   getStatusClass(status: any): string {
     return status ? status.toString().toLowerCase() : 'pending';
   }
-  constructor(private proposalService: ProposalService,private route: ActivatedRoute,private milestoneService:MilestoneService) { }
+  constructor(private proposalService: ProposalService,
+    private route: ActivatedRoute,
+    private milestoneService:MilestoneService,
+    private AccountService:AccountService,
+    private fb: FormBuilder,
+    private paymentService:ProposalPaymentService,
+    private toaster:ToastrService,
+    // private location:Location
+  ) { 
+    
+  }
+
+  // balance:number=0;
+
+
+  PaymentMethod =PaymentMethod;
+  showPaymentModal = false;
+  selectedMethod: PaymentMethod | null = null;
+  cardForm!: FormGroup;
+  currentBalance = 0;
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -30,6 +54,23 @@ export class ProposalDetailsComponent implements OnInit {
       
      }
     );
+
+
+    this.AccountService.myPorfile().subscribe({
+          next:(data:AppUser)=>{
+        this.currentBalance=data.balance!;
+        console.log(this.currentBalance);
+        console.log(data);
+        },
+        error:(err)=>console.log(err)
+        });
+
+
+
+        this.cardForm = this.fb.group({
+          cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
+          cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3,4}$')]]
+        });
     
     }
 
@@ -62,6 +103,87 @@ export class ProposalDetailsComponent implements OnInit {
 //       }
 //     });
 //   }
+
+
+openPaymentModal() {
+  this.showPaymentModal = true;
+}
+
+closePaymentModal() {
+  this.showPaymentModal = false;
+  this.selectedMethod = null;
+  this.cardForm.reset();
+}
+
+selectPaymentMethod(method: PaymentMethod) {
+  this.selectedMethod = method;
+}
+
+isPaymentValid(): boolean {
+  switch (this.selectedMethod) {
+    case PaymentMethod.CreditCard:
+      return this.cardForm.valid;
+    case PaymentMethod.Stripe:
+      return true;
+    case PaymentMethod.Balance:
+      return this.currentBalance >= this.proposals.find(p => p.id === this.ProposalId)?.price!;
+    default:
+      return false;
+  }
+}
+
+confirmPayment() {
+  if (!this.isPaymentValid()) return;
+
+  switch (this.selectedMethod) {
+    case PaymentMethod.CreditCard:
+      const card: CardPaymentDTO = {
+        amount: this.proposals.find(p => p.id === this.ProposalId)?.price!,
+        cardNumber: this.cardForm.value.cardNumber,
+        cvv: this.cardForm.value.cvv
+      };
+      this.paymentService.ClientPayFromcard(this.ProposalId, card).subscribe({
+        next: (data: any) => {
+          this.toaster.success('Payment successful');
+          this.closePaymentModal();
+        }, 
+        error: (err)=>{ this.toaster.error('Payment failed',err), console.log(err)}
+      })
+      
+      const cardData = this.cardForm.value;
+      break;
+
+
+
+    case PaymentMethod.Stripe:
+      const authToken = localStorage.getItem('token');
+      this.paymentService.ClientPayFromStrip(this.ProposalId).subscribe({
+        next: (data: any) => {
+          this.toaster.success('Payment successful');
+          this.closePaymentModal();
+          window.location.href=data.url;
+
+        }, 
+        error: (err)=>{this.toaster.error('Payment failed',err), console.log(err)}
+      })
+      break;
+
+
+
+
+    case PaymentMethod.Balance:
+     this.paymentService.ClientPayFromBalance(this.ProposalId).subscribe({
+        next: (data: any) => {
+          this.toaster.success('Payment successful');
+          this.closePaymentModal();
+        }, 
+        error: (err)=>{this.toaster.error('Payment failed',err),console.log(err)}
+      })
+      break;
+  }
+}
+
+
  }
   
 

@@ -127,7 +127,7 @@ export interface AppUser {
   isVerified: boolean
   accountCreationDate: string
   emailConfirmed: boolean
-  balance?: number
+  balance: number
   isAvailable?: boolean
   paymentVerified?: boolean
 }
