@@ -1,0 +1,42 @@
+<div class="container mt-5 mb-5">
+  <div class="col-12 float-left">
+    <div class="wt-proposalholder mt-5">
+      <span class="wt-featuredtag"><img src="images/featured.png" alt="img description" data-tipso="Plus Member" class="template-content tipso_style"></span>
+      <div class="wt-proposalhead">
+        <h2>Update Ban</h2>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <!-- <app-update-ban [ban]="ban"></app-update-ban-form> -->
+            <form class=" mb-4 mx-auto"  (submit)="Updateban(ban)" >
+              <div class="form-group">
+                <label for="banDescription">ID</label>
+                <input type="text" id="banDescription" {{ban.id}} readonly name="id" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="banDescription">Banned User UserName</label>
+                <input type="text" id="banDescription" {{ban.bannedUserName}} readonly name="username" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="banDescription">Ban Date</label>
+                <!-- <input type="text" id="banDescription" [(ngModel)]="ban.banDate" readonly name="bandate" class="form-control"> -->
+              </div>
+              <div class="form-group">
+                <label for="banDescription">Ban EndDate</label>
+                <!-- <input type="text" id="banDescription" [(ngModel)]="ban.banEndDate" required name="banenddate" class="form-control"> -->
+              </div>
+              <div class="form-group">
+                <label for="banDescription">Description</label>
+                <!-- <input type="text" id="banDescription" [(ngModel)]="ban.description" name="description" class="form-control"> -->
+              </div>
+              <button type="submit" class="btn btn-primary">Update Ban</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+

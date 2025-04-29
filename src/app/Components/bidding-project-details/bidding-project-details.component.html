@@ -1,0 +1,345 @@
+<div class="upwork-job-container py-4">
+    <div class="container">
+      <!-- Notification Banner -->
+      <!-- <div class="upwork-banner  mb-4">
+        <span>
+          Starting May 1, 2025, Freelancer Service Fees for new contracts will switch from a fixed to a variable fee based on factors such as client demand for certain work. The fee will remain fixed for the life of the contract.
+          <a href="#">Learn more.</a>
+        </span>
+      </div> -->
+  
+
+      <div class="row gx-4 gy-4">
+        <!-- Main Job Details -->
+        <div class="col-lg-8 col-md-12">
+          <div class="upwork-job-details mb-4">
+            <h1 class="job-title">{{project?.title}}</h1>
+<!-- 
+            <h5><i class="fa-regular fa-hourglass-half" style="color: #b5b5b5;"></i> Ends {{project.biddingEndDate | timeLeft}}</h5>
+
+            <h1 class="job-title">{{project?.numOfBids}} Bids</h1>
+            <h1 class="job-title">Average Bid: {{project?.bidAveragePrice}}</h1>
+            <h1 class="job-title" *ngIf="project?.biddingEndDate">Ends {{project.biddingEndDate | timeLeft}}</h1>
+             -->
+            
+            <div class="job-meta">
+              <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+              <!-- <span class="dot">•</span> -->
+              <span> <i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
+            </div>
+
+            <!-- <div class="specialized-profile mb-3">
+              <i class="fa fa-briefcase"></i>
+              Specialized profiles can help you better highlight your expertise when submitting proposals to jobs like these.
+              <a href="#">Create a specialized profile</a>
+            </div> -->
+  
+           
+  
+            <section class="job-section">
+              
+              <p>
+                {{project?.description}}
+              </p>
+            </section>
+
+
+            <!--newww-->
+            
+         
+          
+<div class="project-info-bar-modern">
+
+    <div class="project-info-modern-item">
+        <i class="fa fa-user-cog"></i>
+        <div>
+          <div class="info-modern-value">{{project?.experienceLevel}}</div>
+          <div class="info-modern-label">Experience Level</div>
+    
+        </div>
+      </div>
+
+  <div class="project-info-modern-item">
+    <!-- <i class="fa fa-gavel"></i> -->
+    <i class="fa-solid fa-tag"></i>
+    <div>
+      <div class="info-modern-value">${{project?.minimumPrice}} - ${{project?.maximumprice}}</div>
+      <div class="info-modern-label">{{project.projectType}} project</div>
+    </div>
+  </div>
+
+  <div class="project-info-modern-item ms-4">
+    <!-- <i class="fa fa-dollar-sign"></i> -->
+    <i class="fa-solid fa-money-bill-1-wave"></i>
+    <div>
+      <div class="info-modern-value">${{project?.bidAveragePrice}}</div>
+      <div class="info-modern-label">Avg Bid</div>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+<div class="project-info-bar-modern">
+    
+  <div class="project-info-modern-item">
+    <i class="fa-regular fa-hourglass-half"></i>
+    <div>
+      <div class="info-modern-value">{{project.biddingEndDate | timeLeft}}</div>
+      <div class="info-modern-label">Time left</div>
+    </div>
+  </div>
+  <div class="project-info-modern-item">
+    <i class="fa fa-users"></i>
+    <div>
+      <div class="info-modern-value">{{project?.numOfBids}}</div>
+      <div class="info-modern-label">Bids</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+  
+            <!--newww-->
+  
+  
+            <!-- <section class="job-section">
+              
+                <p>
+                  {{project?.projectType}} Project
+                </p>
+
+                
+                <p>
+                    Budget: ${{project?.minimumPrice}} - ${{project?.maximumprice}} 
+                  </p>
+
+                  
+                <p>
+                    {{project?.experienceLevel}} 
+                  </p>
+              </section> -->
+  
+
+            <div class="row">
+                <div class="col-lg-12">
+                  <section>
+                    <h3 class="section-title">Skills and Expertise</h3>
+                    
+                    <span *ngFor="let skill of project.projectSkills" class="skill-tag">{{skill}}</span>
+                
+                  </section>
+                </div>
+              </div>
+          </div>
+        </div>
+  
+        <!-- Sidebar -->
+        <div class="col-lg-4 col-md-12">
+          <aside class="upwork-sidebar mb-4">
+            <a [routerLink]="['/home2/proposal2',project.id]"><button class="apply-btn mb-2">Apply now</button></a>
+            
+            <button class="save-btn mb-2">Save job</button>
+      
+  
+            <div class="client-info">
+              <h3>About the client</h3>
+              <div class="client-meta">
+                <span class="verified"><i class="fa fa-check-circle"></i> {{project.clientIsverified?'Payment Verified' : 'Payment not verified'}}</span>
+                <span  class="stars">
+                  <i class="fa fa-star"></i> {{project.clientRating}} of {{project.clientTotalNumberOfReviews}} reviews
+                </span>
+              </div>
+              <div class="client-location">
+                <span>{{project.clientCountry}}</span>
+                <span>{{project.clientCity}}</span>
+                <span>{{project.clientProjectsTotalCount}} jobs posted</span>
+              </div>
+              <div class="client-stats">
+                <!-- <span>Member since {{project.clinetAccCreationDate|date:'mediumDate'}}</span> -->
+                
+            </div>
+              <div class="client-member-since">
+                Member since {{project.clinetAccCreationDate|date:'mediumDate'}}
+              </div>
+              <!-- <div class="job-link">
+                <span>Job link</span>
+                <input type="text" readonly value="https://www.upwork.com/jobs/~021916014755712304387" />
+                <a href="#">Copy link</a>
+              </div> -->
+            </div>
+
+
+
+
+            <div class="client-info">
+                <h3>{{project.freelancersubscriptionPlan}} Member </h3>
+
+                <div class="client-stats">
+                  <span>{{project.freelancerRemainingNumberOfBids}} bids remaining out of {{project.freelancerTotalNumber}}</span>
+                </div>
+
+
+              </div>
+          </aside>
+        </div>
+      </div>
+  
+     <!-- Skills and Expertise -->
+     <hr>
+     
+
+     <!-- Activity on this job -->
+     <!-- <div class="row">
+       <div class="col-lg-12">
+         <section>
+           <h3 class="section-title">Activity on this job</h3>
+           <ul class="activity-list">
+             <li>Proposals: <span class="text-success">15 to 20</span></li>
+             <li>Last viewed by client: <span class="text-success">22 minutes ago</span></li>
+             <li>Hires: 1</li>
+             <li>Interviewing: 0</li>
+             <li>Invites sent: 1</li>
+             <li>Unanswered invites: 0</li>
+           </ul>
+           <div class="upgrade-note">
+             Upgrade your membership to see the bid range <span class="text-success"><i class="fa fa-question-circle"></i></span>
+           </div>
+         </section>
+       </div>
+     </div> -->
+
+    
+     <!-- Client's recent history -->
+     <!-- <div class="row">
+       <div class="col-lg-12">
+         <section>
+           <h3 class="section-title">Client's Reviews </h3>
+           <ul class="client-history-list">
+             <li *ngFor="let review of clientReviews">
+               <a [routerLink]="['/home2/details',review.projectId]"><span class="history-title">{{review.projectTitle}}</span> </a>|
+               <span class="history-rating"><i class="fa fa-star"></i> {{review.rating}}</span>|
+               <span class="history-rating"> {{review.comment!==null? review.comment : 'no comment'}}</span> |
+               <span class="history-details">{{review.date|date:'mediumDate'}}</span>
+             </li>
+             
+           </ul>
+         </section>
+       </div>
+     </div> -->
+
+
+     <!-- ... existing code ... -->
+
+<div class="row pb-4">
+  <div class="col-lg-12">
+    <section>
+      <h3 class="section-title mb-4">Client's Reviews</h3>
+      <div id="clientReviewsCarousel" class="carousel slide" data-bs-ride="carousel" *ngIf="clientReviews.length > 0">
+        <div class="carousel-inner">
+          <div
+            class="carousel-item"
+            *ngFor="let review of clientReviews; let i = index"
+            [class.active]="i === 0"
+          >
+            <!-- <div class="card review-card mx-auto">
+              <div class="card-body">
+                <div class="history-title fw-bold me-2 ">{{ review.projectTitle }}</div>
+                <div class="d-flex align-items-center mb-2">
+                  <span class="history-rating ms-auto text-warning">
+                    <ng-container *ngFor="let star of [1,2,3,4,5]; let idx = index">
+                      <i
+                        class="fa-star"
+                        [ngClass]="{
+                          'fa': true,
+                          'fa-solid': review.rating >= star,
+                          'fa-regular': review.rating < star
+                        }"
+                      ></i>
+                    </ng-container>
+                    <span class="rating-number ms-1">{{ review.rating }}/5</span>
+                  </span>
+                </div>
+                <p class="mb-2 fst-italic text-secondary">
+                  {{ review.comment !== null ? review.comment : 'No comment' }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <a [routerLink]="['/home2/details', review.projectId]" class="btn btn-outline-success btn-sm">View Project</a>
+                  <span class="history-details small text-muted">{{ review.date | date: 'mediumDate' }}</span>
+                </div>
+              </div>
+            </div> -->
+
+           
+<div class="card review-card mx-auto">
+  <div class="card-body">
+    <a [routerLink]="['/home2/details', review.projectId]" class="history-title fw-bold me-2 text-success text-decoration-underline">
+      {{ review.projectTitle }} 
+    </a>
+    <div class="d-flex align-items-center mb-2">
+      <!-- <span >
+        By: {{ review.reviewerName }}
+      </span> -->
+      <span class="history-rating ms-auto text-warning">
+        <ng-container *ngFor="let star of [1,2,3,4,5]; let idx = index">
+          <i
+            class="fa-star"
+            [ngClass]="{
+              'fa': true,
+              'fa-solid': review.rating >= star,
+              'fa-regular': review.rating < star
+            }"
+          ></i>
+        </ng-container>
+        <span class="rating-number ms-1">{{ review.rating }}/5</span>
+      </span>
+    </div>
+    <p class="mb-2 fst-italic text-secondary">
+      {{ review.comment !== null ? review.comment : 'No comment' }}
+    </p>
+    <div class="d-flex justify-content-between align-items-center">
+      <!-- Removed View Project button -->
+      <span></span>
+      <span class="history-details small text-muted">{{ review.date | date: 'mediumDate' }}</span>
+    </div>
+  </div>
+</div>
+
+
+            
+          </div>
+        </div>
+        <!-- Carousel controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#clientReviewsCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#clientReviewsCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+      <div *ngIf="clientReviews.length === 0" class="text-muted">No reviews yet.</div>
+    </section>
+  </div>
+</div>
+
+<!-- ... existing code ... -->
+
+     
+     <!-- Other open jobs -->
+     <div class="row mt-5" style="border-top: 1px solid #efefef;">
+       <div class="col-lg-12">
+         <section>
+           <h3 class="section-title">Other open jobs by this Client</h3>
+           <ul class="other-jobs-list">
+             <li *ngFor="let project of clientOtherProjNameId" ><a [routerLink]="['/home2/details', project.id]">{{project.title}}</a> {{project.projectType}} Project</li>
+           </ul>
+         </section>
+       </div>
+     </div>
+
+
+
+    </div>
+  </div>

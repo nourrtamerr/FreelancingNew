@@ -1,0 +1,232 @@
+.proposals-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .proposals-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .proposals-header h1 {
+    font-size: 1.75rem;
+    color: #001e00;
+    margin: 0;
+  }
+  
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #14a800;
+  }
+  
+  .stat-label {
+    color: #5e6d55;
+    font-size: 0.875rem;
+  }
+  
+  .proposal-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .freelancer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .freelancer-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .freelancer-details {
+    flex: 1;
+  }
+  
+  .freelancer-details h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: #001e00;
+  }
+  
+  .freelancer-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.25rem;
+    color: #5e6d55;
+    font-size: 0.875rem;
+  }
+  
+  .freelancer-meta i {
+    color: #14a800;
+  }
+  
+  .proposal-amount {
+    text-align: right;
+  }
+  
+  .amount {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #14a800;
+  }
+  
+  .duration {
+    color: #5e6d55;
+    font-size: 0.875rem;
+  }
+  
+  .proposal-content {
+    padding: 1rem 0;
+    border-top: 1px solid #e4ebe4;
+    border-bottom: 1px solid #e4ebe4;
+  }
+  
+  .cover-letter {
+    margin-bottom: 1.5rem;
+    color: #001e00;
+    line-height: 1.6;
+  }
+  
+  .skills-section,
+  .languages-section {
+    margin-top: 1rem;
+  }
+  
+  .skills-section h4,
+  .languages-section h4 {
+    margin: 0 0 0.5rem 0;
+    color: #001e00;
+    font-size: 1rem;
+  }
+  
+  .skills-list,
+  .languages-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .skill-tag,
+  .language-tag {
+    background: #f2f7f2;
+    color: #14a800;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.875rem;
+  }
+  
+  .proposal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .footer-stats {
+    color: #5e6d55;
+    font-size: 0.875rem;
+  }
+  
+  .footer-stats i {
+    color: #14a800;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.625rem 1.25rem;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .btn-primary {
+    background: #14a800;
+    color: white;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: #3c8224;
+  }
+  
+  .btn-secondary {
+    background: white;
+    color: #14a800;
+    border: 1px solid #14a800;
+  }
+  
+  .btn-secondary:hover {
+    background: #f2f7f2;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .empty-state i {
+    font-size: 3rem;
+    color: #5e6d55;
+    margin-bottom: 1rem;
+  }
+  
+  .empty-state h2 {
+    color: #001e00;
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-state p {
+    color: #5e6d55;
+  }
+  
+  @media (max-width: 768px) {
+    .proposals-container {
+      padding: 1rem;
+    }
+  
+    .freelancer-info {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .proposal-amount {
+      text-align: center;
+    }
+  
+    .action-buttons {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }

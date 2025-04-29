@@ -1,0 +1,65 @@
+<div class="projects-container">
+    <div class="projects-header">
+      <h1>My Projects</h1>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-value">{{projects.length}}</span>
+          <span class="stat-label">Total Projects</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noProjects>
+      <div class="no-projects">
+        <i class="fas fa-folder-open"></i>
+        <h2>No Projects Found</h2>
+        <p>You haven't created any projects yet.</p>
+      </div>
+    </ng-template>
+  
+    <div class="projects-grid" *ngIf="projects.length > 0; else noProjects">
+      <div class="project-card" *ngFor="let project of projects">
+        <div class="project-header">
+          <h2 class="project-title">{{project.title}}</h2>
+          <span class="project-status" [ngClass]="project.status?.toLowerCase()">
+            {{project.status}}
+          </span>
+        </div>
+        
+        <p class="project-description">{{project.description}}</p>
+        
+        <div class="project-details">
+          <div class="detail-row">
+            <i class="fas fa-calendar"></i>
+            <span>Created At: {{project.createdAt | date}}</span>
+          </div>
+
+          <div class="project-details">
+            <div class="detail-row">
+              <i class="fas fa-calendar-times"></i>
+              <span>Ended At: {{project.endDate | date}}</span>
+            </div>
+            
+          
+          
+         
+          <div class="detail-row">
+            <i class="fas fa-star"></i>
+            <span>Experience Level: {{project.experienceLevel}}</span>
+          </div>
+          <div class="detail-row">
+            <i class="fas fa-clock"></i>
+            <span>Duration: {{project.expectedDuration}}</span>
+          </div>
+          
+        </div>
+  
+        <div class="project-actions">
+          <button class="btn-primary">View Details</button>
+          <button class="btn-secondary" (click)="getprojectById(project.id)">View Milestones</button>
+        </div>
+      </div>
+    </div>
+  
+   
+  </div>

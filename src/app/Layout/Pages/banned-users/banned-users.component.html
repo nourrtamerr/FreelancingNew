@@ -1,0 +1,94 @@
+<main id="wt-main" class="w-75 mx-auto">
+				<!--Register Form Start-->
+				<section class="wt-haslayout wt-dbsectionspace">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
+							<div class="wt-dashboardbox wt-dashboardinvocies">
+								<div class="wt-dashboardboxtitle wt-titlewithsearch">
+									<h2>Banned Users</h2>
+									<form class="wt-formtheme wt-formsearch">
+										<fieldset>
+											<div class="form-group">
+												<input type="text" name="Search" class="form-control" placeholder="Search Here" (input)="search(searched.value)" #searched>
+												<a class="wt-searchgbtn">
+                          <i class="lnr lnr-magnifier">
+                          </i>
+                        </a>
+											</div>
+										</fieldset>
+									</form>
+								</div>
+								<div class="wt-dashboardboxcontent wt-categoriescontentholder wt-categoriesholder">
+									<table class="wt-tablecategories">
+										<thead>
+											<tr>
+												<th>
+												</th>
+												<th>Name</th>
+												<th>Ban Date</th>
+												<th>Ban EndDate</th>
+												<th>Status</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody>
+                      @for (ban of searchedbans; track $index) {
+                        <tr>
+                          <td>
+                            <span class="wt-checkbox">
+                              <input id="wt-namea" type="checkbox" name="head">
+                              <label for="wt-namea"></label>
+                            </span>
+                          </td>
+                          <td>{{ban.bannedUserName}}</td>
+                          <td>{{ban.banDate | date}}</td>
+                          <td>{{ban.banEndDate| date}} </td>
+
+						  <!-- <td>{{ getDateDiff(ban.banEndDate) }} days ago</td> -->
+
+                          @if(getDateDiff(ban.banEndDate)<0){
+                            <td><span class="wt-draft">Active</span></td>
+                          }@else{
+                            <td><span class="wt-pending">Expired</span></td>
+                          }
+                            
+                          <td>
+                            <div class="wt-actionbtn">
+							                <a href="javascript:void(0);" *ngIf="ban.id !== undefined"
+                              (click)="navigatetodetails(ban.id)" class="wt-addinfo wt-skillsaddinfo">view</a>
+
+
+                              <!-- <a href="javascript:void(0);" *ngIf="ban.id !== undefined"
+                              (click)="Update(ban.id)" class="wt-deleteinfo">Update</a> -->
+
+							  <a  [routerLink]="['/home2/updateban',ban.id]" routerLinkActive="router-link-active"  *ngIf="ban.id !== undefined"
+                             class="wt-deleteinfo">Update</a>
+                            </div>
+                          </td>
+                        </tr>
+                      }@empty{
+                        <tr>
+                          <td colspan="6" class="text-center">No Banned Users Found</td>
+                        </tr>
+                      }
+										</tbody>
+									</table>
+									<nav class="wt-pagination">
+										<ul>
+											<li class="wt-prevpage"><a href="javascrip:void(0);"><i class="lnr lnr-chevron-left"></i></a></li>
+											<li><a href="javascrip:void(0);">1</a></li>
+											<li><a href="javascrip:void(0);">2</a></li>
+											<li><a href="javascrip:void(0);">3</a></li>
+											<li><a href="javascrip:void(0);">4</a></li>
+											<li><a href="javascrip:void(0);">...</a></li>
+											<li><a href="javascrip:void(0);">50</a></li>
+											<li class="wt-nextpage"><a href="javascrip:void(0);"><i class="lnr lnr-chevron-right"></i></a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<!--Register Form End-->
+			</main>

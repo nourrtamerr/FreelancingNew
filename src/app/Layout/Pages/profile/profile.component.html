@@ -1,0 +1,1298 @@
+
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="profile-picture-container">
+                        <img [src]="profile.profilePicture? previewUrl || `${picturesurl}/${profile.profilePicture}` : '/images/default.jpg'" 
+                             alt="Profile Picture" 
+                             class="profile-image">
+                        <div class="overlay">
+                            <label for="profilePicture" class="upload-label">
+                                <i class="fa fa-camera"></i>
+                            </label>
+                            <input type="file" 
+                                   id="profilePicture" 
+                                   (change)="onProfilePictureChange($event)" 
+                                   accept="image/*" 
+                                   hidden>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+					<div class="profile-basic-info">
+						<h1>{{profile.firstname}} {{profile.lastname}}</h1>
+						<div class="profile-title" *ngIf="profile.title">
+							<i class="fa fa-briefcase"></i>
+							<span>{{profile.title}}</span>
+						</div>
+						<div class="role-badge mb-3">
+							<i class="fa fa-user-circle"></i>
+							<span>{{profile.role}}</span>
+							<i *ngIf="profile.isVerified" class="fa fa-check-circle text-success mx-2"></i>
+						</div>
+						<div class="location">
+							<i class="fa fa-map-marker"></i> {{profile.city}}, {{profile.country}}
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+
+
+	<!-- Add Tab Navigation -->
+<div class="profile-tabs mt-2">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
+                    <i class="fa fa-user"></i> Profile
+                </a>
+            </li>
+			<li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'myprojects'" (click)="setActiveTab('myprojects')">
+                    <i class="fa fa-user"></i> My Projects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'portfolio'" (click)="setActiveTab('portfolio')">
+                    <i class="fa fa-folder"></i> Portfolio
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'experience'" (click)="setActiveTab('experience')">
+                    <i class="fa fa-briefcase"></i> Experience
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'education'" (click)="setActiveTab('education')">
+                    <i class="fa fa-graduation-cap"></i> Education
+                </a>
+            </li>
+			<li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'certificates'" (click)="setActiveTab('certificates')">
+                    <i class="fa fa-certificate"></i> Certificates
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+    <div class="container mt-4">
+        <div class="row">
+			
+	       <!-- Main Content -->
+            <div class="col-lg-8">
+				<div *ngIf="activeTab === 'profile'">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Profile Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" formControlName="firstname" class="form-control">
+                                        <div *ngIf="profileForm.get('firstname')?.touched && profileForm.get('firstname')?.invalid" 
+                                             class="error-message">
+                                            First name is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" formControlName="lastname" class="form-control">
+                                        <div *ngIf="profileForm.get('lastname')?.touched && profileForm.get('lastname')?.invalid" 
+                                             class="error-message">
+                                            Last name is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Country</label>
+                                        <select formControlName="country" class="form-control" (change)="onCountryChange()">
+                                            <option value="" disabled>Select country</option>
+                                            <option *ngFor="let country of countries" [value]="country.name">
+                                                {{country.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <select formControlName="city" class="form-control" (ngModelChange)="onCityChange($event)"> 
+                                            <option value="" disabled>Select City</option>
+                                            <option *ngFor="let city of filteredCities" [value]="city.name">
+                                                {{city.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" formControlName="UserName" class="form-control">
+                                        <div *ngIf="profileForm.get('UserName')?.touched && profileForm.get('UserName')?.invalid" 
+                                             class="error-message">
+                                            Username is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <input type="tel" formControlName="PhoneNumber" class="form-control">
+                                        <div *ngIf="profileForm.get('PhoneNumber')?.touched && profileForm.get('PhoneNumber')?.invalid" 
+                                             class="error-message">
+                                            <div *ngIf="profileForm.get('PhoneNumber')?.errors?.['required']">Phone number is required</div>
+                                            <div *ngIf="profileForm.get('PhoneNumber')?.errors?.['minlength'] || profileForm.get('PhoneNumber')?.errors?.['maxlength']">
+                                                Phone number must be 11 digits
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+							<div class="row">
+								<div class="col-md-6">
+                                    <div class="form-group">
+										<label>Date of Birth</label>
+										<input type="date" formControlName="DateOfBirth" class="form-control">
+									</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+										<label>Title</label>
+										<input type="text" formControlName="title" class="form-control">
+									</div>
+                                </div>
+                                
+                            </div>
+
+
+                            <!-- <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" formControlName="DateOfBirth" class="form-control">
+                            </div> -->
+
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea formControlName="Description" class="form-control" rows="4"></textarea>
+                                <div *ngIf="profileForm.get('Description')?.touched && profileForm.get('Description')?.errors?.['maxlength']" 
+                                     class="error-message">
+                                    Description cannot exceed 500 characters
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" formControlName="Password" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Confirm Password</label>
+                                        <input type="password" formControlName="ConfirmPassword" class="form-control">
+                                        <div *ngIf="profileForm.errors?.['mismatch']" class="error-message">
+                                            Passwords do not match
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-success" [disabled]="profileForm.invalid">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="skills-section card mb-4" *ngIf="profile.role === 'Freelancer'">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="mb-0">My Skills</h3>
+						<div class="skill-search">
+							<div class="search-input-wrapper">
+								<i class="fa fa-search search-icon"></i>
+								<input type="text" 
+									   class="form-control search-input" 
+									   placeholder="Search skills..." 
+									   [(ngModel)]="searchText" 
+									   (input)="filterSkills()">
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<!-- Current Skills -->
+						<div class="skills-container mb-4">
+							<div class="skill-tags">
+								<div class="skill-tag" *ngFor="let skill of freelancerskills">
+									<span class="skill-name">{{skill.skillName}}</span>
+									<button class="remove-skill" (click)="deleteSkill(skill.id)">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+								<div class="skill-tag custom" *ngFor="let skill of nonrecommendedskills">
+									<span class="skill-name">{{skill.name}}</span>
+									<button class="remove-skill" (click)="deletenonrecommendedSkill(skill.id)">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+				
+						<!-- Filtered Skills Results -->
+						<div class="filtered-skills-results" *ngIf="searchText">
+							<div class="results-list">
+								<div class="skill-result-item" *ngFor="let skill of filteredSkills">
+									<div class="skill-result-content">
+										<i class="fa fa-code skill-icon"></i>
+										<span class="skill-name">{{skill.name}}</span>
+									</div>
+									<button class="add-skill-btn" (click)="addSkill(skill.id)" title="Add skill">
+										<i class="fa fa-plus"></i>
+									</button>
+								</div>
+							</div>
+							<!-- Add New Skill Button -->
+							<button class="btn btn-outline-success add-new-skill-btn" 
+									*ngIf="searchText && !filteredSkills.length"
+									(click)="addNonRecommendedSkill(searchText)">
+								<i class="fa fa-plus-circle me-2"></i>
+								Add "{{searchText}}" as New Skill
+							</button>
+						</div>
+
+
+						
+					</div>
+				</div>
+				</div>
+
+				<div *ngIf="activeTab === 'myprojects'" class="card myprojects-section">
+					<div class="card-header">
+						<h3 class="section-title">My Projects</h3>
+						<button class="btn btn-upwork-primary" >
+							<i class="fa fa-plus-circle"></i> Add Project
+						</button>
+					</div>
+					
+					<div class="card-body">
+						<section class="container">
+
+
+							<div *ngFor="let project of biddingprojects" class="upwork-project-card ">
+							  <div class="project-card-header d-flex justify-content-between align-items-center">
+								<span class="posted-time">Posted {{project.postedFrom | timeAgo}} </span>
+								<div class="project-actions d-flex">
+								  <button class="action-btn bookmark-btn">
+									<i class="fa-regular fa-bookmark" style="color: #48a53c;"></i>
+								  </button>
+				  
+								</div>
+							  </div>
+							  <h3 class="project-title">{{project.title}}</h3>
+				  
+				  
+							  <div class="project-meta d-flex gap-3 align-items-center mb-3">
+								<span class="meta"> <i [ngClass]="project.clientIsVerified? 'fa fa-credit-card' : 'fa-regular fa-circle-xmark'" class="text-black"> </i> {{project.clientIsVerified ? 'Payment verified' : 'Payment unverified'}}</span>
+								
+								<span class="meta">
+								  <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+									<i
+									  class="fa fa-star"
+									  [ngClass]="{'star-color': project.clientRating >= star, 'text-muted': project.clientRating < star}"
+									  style="margin-right:2px;"
+									></i>
+								  </ng-container>
+								  <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
+								</span>
+					
+								<span class="meta"><i class="fa fa-map-marker"></i> {{project.clientCountry}}</span>
+							  </div>
+				  
+							  
+							  <div class="project-meta d-flex flex-wrap align-items-center mb-3">
+								<span class="meta dot">{{project.experienceLevel}}</span> 
+				  
+								<span class="meta dot">Average Bid: ${{project.bidAveragePrice}}</span> 
+							 
+								 <span class="meta dot">Budget: ${{project.minimumPrice}} -  ${{project.maximumprice}}</span> 
+							   
+							  </div>
+				  
+							  <div class="project-meta d-flex flex-wrap align-items-center mb-1">
+							   
+							  </div>
+							  
+							
+							  <div class="project-description mb-1">
+								{{project.description}}
+							  </div>
+				  
+							  <div class="d-flex justify-content-between row pt-4">      
+				  
+								<div class="project-tags mb-4 col-lg-10 col-md-10 col-sm-12">     
+								  <span *ngFor="let skill of project.projectSkills" class=" gap-2 ">{{skill}}</span>            
+								</div>
+				  
+								<div class="proposals-count  d-flex justify-content-end col-lg-2 col-md-2 col-sm-12 ">{{project.numOfBids}} Bids</div>
+				  
+							  </div>
+				  
+				  
+							</div>
+				  
+
+							------------------------------------------------------------------------------
+							<div *ngFor="let project of fixedProjects" class="upwork-project-card">
+								<div class="project-card-header d-flex justify-content-between align-items-center">
+									<div class="project-actions d-flex">
+										<button class="action-btn edit-btn">
+											 <!-- //(click)="editProject(project)"> -->
+											<i class="fa fa-edit" style="color: #48a53c;"></i>
+										</button>
+										<button class="action-btn delete-btn" >
+										<!-- (click)="deleteProject(project.id)"> -->
+											<i class="fa fa-trash" style="color: #dc3545;"></i>
+										</button>
+									</div>
+								</div>
+				
+								<h3 class="project-title">{{project.title}}</h3>
+				
+								<div class="project-meta d-flex gap-3 align-items-center mb-3">
+									<span class="meta">
+										<span class="meta-item">Currency: {{project.currency}}</span>
+										<span class="meta-item">{{project.experienceLevel}}</span>
+										<span class="meta-item">Est. Time: {{project.expectedDuration}} months</span>
+									</span>
+								</div>
+				
+								<div class="project-meta d-flex flex-wrap align-items-center mb-3">
+									<span class="meta dot">{{project.experienceLevel}}</span>
+									<span class="meta-item"><i class="fa fa-check-circle"></i> Payment verified</span>
+									<span class="meta-item"><i class="fa fa-star"></i> $0 spent</span>
+								</div>
+				
+								<div class="project-description mb-1">
+									{{project.description}}
+								</div>
+				
+								<div class="d-flex justify-content-between row pt-4">
+									<div class="project-tags mb-4 col-lg-10 col-md-10 col-sm-12">
+										<span *ngFor="let skill of project.projectSkills" class="gap-2">{{skill}}</span>
+									</div>
+									<span>Proposals: Less than {{project.proposalsCount}}</span>
+								</div>
+							</div>
+				
+							<!-- Empty State -->
+							<div class="empty-state" *ngIf="!fixedProjects?.length">
+								<i class="fa fa-folder-open fa-3x mb-3"></i>
+								<h5>No Projects Added Yet</h5>
+								<p>Start adding your projects to showcase your work</p>
+								<button class="btn btn-upwork mt-3" (click)="openAddProjectModal()">
+									<i class="fa fa-plus-circle me-2"></i>Add Your First Project
+								</button>
+							</div>
+
+
+							
+					      </section>
+
+					</div>
+
+				</div>
+
+				<div *ngIf="activeTab === 'portfolio'" class="card portfolio-section">
+					<div class="card-header">
+						<h3 class="section-title">Portfolio Projects</h3>
+						<button class="btn btn-upwork-primary" (click)="openAddProjectModal()">
+							<i class="fa fa-plus-circle"></i> Add Project
+						</button>
+					</div>
+					
+					<div class="card-body">
+						<div class="projects-grid">
+							<div class="project-card" *ngFor="let project of userPortfolioproject">
+								<div class="project-images" >
+									<div *ngIf="project.images?.length; else noImages" class="carousel-img-container">
+										<input type="file" 
+											   #imageInput
+											   style="display: none"
+											   (change)="addImageToProject($event, project.id)"
+											   accept="image/*"
+											   multiple>
+										<img [src]="projectimagesurl + '/' + project.images[currentImageIndex[project.id] || 0].image" 
+											 class="d-block w-100" 
+											 alt="Project Image"
+											 (click)="imageInput.click()"
+											 style="cursor: pointer">
+										<!-- Navigation buttons -->
+										<div class="carousel-controls" *ngIf="project.images.length > 1">
+											<button class="carousel-control prev" (click)="previousImage(project,$event)">
+												<i class="fa fa-chevron-left"></i>
+											</button>
+											<button class="carousel-control next" (click)="nextImage(project,$event)">
+												<i class="fa fa-chevron-right"></i>
+											</button>
+										</div>
+									</div>
+								
+									
+									<ng-template #noImages>
+										<div class="no-image" style="cursor: pointer" (click)="imageInput.click()">
+											<input type="file" 
+												   #imageInput
+												   style="display: none"
+												   (change)="addImageToProject($event, project.id)"
+												   accept="image/*"
+												   multiple>
+											<i class="fa fa-image fa-3x"></i>
+											<p>Click to add images</p>
+										</div>
+									</ng-template>
+								</div>
+					
+								<div class="project-content">
+									<div class="project-header">
+										<h4 class="project-title">{{project.title}}</h4>
+										<div class="project-date">
+											<i class="fa fa-calendar"></i>
+											{{project.createdAt | date:'MMM yyyy'}}
+										</div>
+									</div>
+					
+									<p class="project-description">{{project.description}}</p>
+					
+									<div class="project-actions">
+										<button class="btn btn-upwork-secondary" (click)="openEditProjectModal(project)">
+											<i class="fa fa-edit"></i> Edit
+										</button>
+										<button class="btn btn-upwork-danger" (click)="deleteProject(project.id)">
+											<i class="fa fa-trash"></i> Delete
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+						<div class="empty-state" *ngIf="!userPortfolioproject?.length">
+							<div class="empty-state-content">
+								<i class="fa fa-folder-open"></i>
+								<h4>Showcase Your Work</h4>
+								<p>Add portfolio projects to demonstrate your expertise to potential clients</p>
+								<button class="btn btn-upwork-primary" (click)="openAddProjectModal()">
+									<i class="fa fa-plus-circle"></i> Add Your First Project
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal" [class.show]="isProjectModalOpen" tabindex="-1" [style.display]="isProjectModalOpen ? 'block' : 'none'">
+					<div class="modal-dialog modal-dialog-centered modal-lg">
+						<div class="modal-content">
+							<div class="modal-header bg-upwork text-white">
+								<h5 class="modal-title d-flex align-items-center">
+									<i class="fa fa-folder-open me-2"></i>
+									{{editingProject ? 'Edit Project' : 'Add New Project'}}
+								</h5>
+								<button type="button" class="btn-close btn-close-white" (click)="closeProjectModal()"></button>
+							</div>
+							<div class="modal-body p-4">
+								<form [formGroup]="projectForm" (ngSubmit)="submitProject()" class="project-form">
+									<div class="row g-3">
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Project Title*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-heading"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="title" 
+														   placeholder="Enter project title"
+														   required>
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Description*</label>
+												<textarea class="form-control" 
+														 formControlName="description" 
+														 rows="4" 
+														 placeholder="Describe your project and its key features..."
+														 required></textarea>
+												<small class="text-muted">Be specific about technologies used and your role in the project</small>
+											</div>
+										</div>
+				
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Completion Date*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+													<input type="date" 
+														   class="form-control" 
+														   formControlName="createdAt" 
+														   required>
+												</div>
+											</div>
+										</div>
+				
+										<!-- Existing Project Images -->
+										<div class="col-12" *ngIf="editingProject && editingProject.images?.length">
+											<div class="form-group">
+												<label class="form-label">Current Images</label>
+												<div class="project-images-grid">
+													<div class="image-card" *ngFor="let img of editingProject.images">
+														<div class="image-wrapper">
+															<img [src]="projectimagesurl + '/' + img.image" alt="Project Image">
+															<button type="button" class="btn-delete-image" (click)="deleteProjectImage(img.id)">
+																<i class="fa fa-times"></i>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+				
+										<!-- New Images Input -->
+										<div class="col-12" *ngIf="editingProject==null">
+											<div class="form-group">
+												<label class="form-label">Project Images</label>
+												<div class="upload-zone">
+													<input type="file" 
+														   class="form-control" 
+														   (change)="onProjectImageSelected($event)" 
+														   accept="image/*"
+														   multiple>
+													<div class="upload-hint">
+														<i class="fa fa-cloud-upload fa-2x mb-2"></i>
+														<p>Drag and drop images or click to browse</p>
+														<small class="text-muted">Supported formats: JPG, PNG, GIF (Max 5MB each)</small>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="modal-footer border-0 px-0 pt-4">
+										<button type="button" 
+												class="btn btn-outline-secondary" 
+												(click)="closeProjectModal()">
+											<i class="fa fa-times me-2"></i>Cancel
+										</button>
+										<button type="submit" 
+												class="btn btn-upwork" 
+												[disabled]="projectForm.invalid">
+											<i class="fa" [class.fa-plus]="!editingProject" [class.fa-check]="editingProject"></i>
+											<span class="ms-2">{{editingProject ? 'Update Project' : 'Add Project'}}</span>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal-backdrop fade" [class.show]="isProjectModalOpen" *ngIf="isProjectModalOpen"></div>
+
+				<div *ngIf="activeTab === 'experience'" class="card">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="mb-0">Work Experience</h3>
+						<button class="btn btn-upwork" (click)="openAddExperienceModal()">
+							<i class="fa fa-plus-circle me-2"></i>Add Experience
+						</button>
+					</div>
+					<div class="card-body">
+						<div class="timeline">
+							<div class="experience-item" *ngFor="let experience of userExperiences">
+								<div class="experience-content">
+									<div class="experience-header">
+										<h4 class="job-title">{{experience.jobTitle}}</h4>
+										<div class="action-buttons">
+											<button class="btn btn-action btn-edit" (click)="openEditExperienceModal(experience)" title="Edit Experience">
+												<i class="fa fa-pencil"></i>
+											</button>
+											<button class="btn btn-action btn-delete" (click)="deleteExperience(experience)" title="Delete Experience">
+												<i class="fa fa-trash"></i>
+											</button>
+										</div>
+									</div>
+									<div class="company-name">
+										<i class="fa fa-building me-2"></i>{{experience.company}}
+									</div>
+									<div class="experience-details">
+										<span class="date-range">
+											<i class="fa fa-calendar me-2"></i>
+											{{experience.startDate | date:'MMM yyyy'}} - {{experience.endDate | date:'MMM yyyy'}}
+										</span>
+										<span class="location">
+											<i class="fa fa-map-marker me-2"></i>{{experience.location}}
+										</span>
+									</div>
+									<p class="description">{{experience.description}}</p>
+								</div>
+							</div>
+							
+							<!-- Empty State -->
+							<div class="empty-state" *ngIf="!userExperiences?.length">
+								<i class="fa fa-briefcase fa-3x mb-3"></i>
+								<h5>No Experience Added Yet</h5>
+								<p>Share your professional journey by adding your work experience</p>
+								<button class="btn btn-upwork mt-3" (click)="openAddExperienceModal()">
+									<i class="fa fa-plus-circle me-2"></i>Add Your First Experience
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal" [class.show]="isExperienceModalOpen" tabindex="-1" [style.display]="isExperienceModalOpen ? 'block' : 'none'">
+					<div class="modal-dialog modal-dialog-centered modal-lg">
+						<div class="modal-content">
+							<div class="modal-header bg-upwork text-white">
+								<h5 class="modal-title d-flex align-items-center">
+									<i class="fa fa-briefcase me-2"></i>
+									{{ editingExperienceId ? 'Edit Work Experience' : 'Add Work Experience' }}
+								</h5>
+								<button type="button" class="btn-close btn-close-white" (click)="closeExperienceModal()"></button>
+							</div>
+							<div class="modal-body p-4">
+								<form [formGroup]="experienceForm" (ngSubmit)="submitExperience()" class="experience-form">
+									<div class="row g-3">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Job Title*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-user-tie"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="jobTitle"
+														   placeholder="e.g., Senior Software Engineer">
+												</div>
+												<div class="text-danger small mt-1" *ngIf="experienceForm.get('jobTitle')?.touched && experienceForm.get('jobTitle')?.invalid">
+													Job title is required
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Company*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-building"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="company"
+														   placeholder="e.g., Tech Solutions Inc.">
+												</div>
+												<div class="text-danger small mt-1" *ngIf="experienceForm.get('company')?.touched && experienceForm.get('company')?.invalid">
+													Company name is required
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Start Date*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+													<input type="date" 
+														   class="form-control" 
+														   formControlName="startDate"
+														   (change)="validateDates()">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">End Date*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+													<input type="date" 
+														   class="form-control" 
+														   formControlName="endDate"
+														   (change)="validateDates()">
+												</div>
+												<div class="text-danger small mt-1" *ngIf="experienceForm.get('endDate')?.errors?.['invalidDate']">
+													End date must be after start date
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Location*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="location"
+														   placeholder="e.g., New York, USA">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Description*</label>
+												<textarea class="form-control" 
+														  formControlName="description" 
+														  rows="4"
+														  placeholder="Describe your responsibilities and achievements..."></textarea>
+												<div class="text-danger small mt-1" *ngIf="experienceForm.get('description')?.errors?.['maxlength']">
+													Description cannot exceed 500 characters
+												</div>
+												<small class="text-muted">Remaining characters: {{ 500 - (experienceForm.get('description')?.value?.length || 0) }}</small>
+											</div>
+										</div>
+									</div>
+				
+									<div class="modal-footer border-0 px-0 pt-4">
+										<button type="button" 
+												class="btn btn-outline-secondary" 
+												(click)="closeExperienceModal()">
+											<i class="fa fa-times me-2"></i>Cancel
+										</button>
+										<button type="submit" 
+												class="btn btn-upwork" 
+												[disabled]="experienceForm.invalid || isSubmitting">
+											<i class="fa" [class.fa-plus]="!editingExperienceId" [class.fa-check]="editingExperienceId"></i>
+											<span class="ms-2">{{ isSubmitting ? 'Saving...' : (editingExperienceId ? 'Update' : 'Add') }}</span>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="modal-backdrop fade" [class.show]="isExperienceModalOpen" *ngIf="isExperienceModalOpen"></div>
+	
+				<div *ngIf="activeTab === 'education'" class="card">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="mb-0">Education</h3>
+						<div class="education-actions">
+							<button *ngIf="!userEducation" class="btn btn-upwork" (click)="openAddEducationModal()">
+								<i class="fa fa-plus-circle me-2"></i>Add Education
+							</button>
+							<div *ngIf="userEducation" class="btn-group">
+								<button class="btn btn-outline-success" (click)="openEditEducationModal()">
+									<i class="fa fa-pencil me-1"></i>Edit
+								</button>
+								<button class="btn btn-outline-danger" (click)="DeleteEducation()">
+									<i class="fa fa-trash me-1"></i>Delete
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div *ngIf="userEducation" class="education-details">
+							<div class="education-icon">
+								<i class="fa fa-graduation-cap"></i>
+							</div>
+							<div class="education-content">
+								<div class="education-header">
+									<h4 class="degree-title">{{userEducation.degree}} in {{userEducation.fieldOfStudy}}</h4>
+									<div class="institution">
+										<i class="fa fa-university me-2"></i>
+										{{userEducation.institution}}
+									</div>
+								</div>
+								<div class="education-info">
+									<div class="info-item">
+										<i class="fa fa-calendar me-2"></i>
+										<span>{{userEducation.startDate | date:'MMM yyyy'}} - {{userEducation.endDate | date:'MMM yyyy'}}</span>
+									</div>
+									<div class="info-item" *ngIf="userEducation.grade">
+										<i class="fa fa-star me-2"></i>
+										<span>Grade: {{userEducation.grade}}</span>
+									</div>
+								</div>
+								<div class="education-description" *ngIf="userEducation.description">
+									<p>{{userEducation.description}}</p>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="!userEducation" class="empty-state">
+							<i class="fa fa-graduation-cap fa-3x mb-3"></i>
+							<h5>No Education Added Yet</h5>
+							<p class="text-muted">Add your educational background to showcase your qualifications</p>
+							<button class="btn btn-upwork mt-3" (click)="openAddEducationModal()">
+								<i class="fa fa-plus-circle me-2"></i>Add Your Education
+							</button>
+						</div>
+					</div>
+				</div>
+
+				
+				<div class="modal" [class.show]="isEducationModalOpen" tabindex="-1" [style.display]="isEducationModalOpen ? 'block' : 'none'">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header bg-success text-white">
+								<h5 class="modal-title">
+									<i class="fa fa-graduation-cap me-2"></i>
+									{{ editMode ? 'Edit Education' : 'Add Education' }}
+								</h5>
+								<button type="button" class="btn-close btn-close-white" (click)="closeEducationModal()"></button>
+							</div>
+							<div class="modal-body">
+								<form [formGroup]="educationForm" (ngSubmit)="submitEducation()">
+									<div class="row mb-3">
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Degree</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-book"></i></span>
+													<input type="text" class="form-control" formControlName="degree" 
+														   placeholder="e.g., Bachelor of Science" required>
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="row mb-3">
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Field of Study</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-flask"></i></span>
+													<input type="text" class="form-control" formControlName="fieldOfStudy" 
+														   placeholder="e.g., Computer Science" required>
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="row mb-3">
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Institution</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-university"></i></span>
+													<input type="text" class="form-control" formControlName="institution" 
+														   placeholder="Enter institution name" required>
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="row mb-3">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Start Date</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+													<input type="date" class="form-control" formControlName="startDate" required>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">End Date</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+													<input type="date" class="form-control" formControlName="endDate" required>
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="row mb-3">
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Grade</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-star"></i></span>
+													<input type="text" class="form-control" formControlName="grade" 
+														   placeholder="e.g., 3.8 GPA">
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="form-group mb-4">
+										<label class="form-label">Description</label>
+										<textarea class="form-control" formControlName="description" 
+												 placeholder="Add any relevant details about your education" rows="3"></textarea>
+									</div>
+				
+									<div class="modal-footer border-0">
+										<button type="button" 
+												class="btn btn-outline-secondary" 
+												(click)="closeEducationModal()">
+											<i class="fa fa-times me-2"></i>Cancel
+										</button>
+										<button type="submit" 
+												class="btn btn-success" 
+												[disabled]="educationForm.invalid">
+											<i class="fa fa-check me-2"></i>
+											{{ editMode ? 'Update' : 'Add' }} Education
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal-backdrop fade" [class.show]="isEducationModalOpen" *ngIf="isEducationModalOpen"></div>
+				
+
+
+
+				<div *ngIf="activeTab === 'certificates'" class="card">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="mb-0">Certificates & Achievements</h3>
+						<button class="btn btn-upwork" (click)="openAddCertificateModal()">
+							<i class="fa fa-plus-circle me-2"></i>Add Certificate
+						</button>
+					</div>
+					<div class="card-body">
+						<div class="certificates-container">
+							<!-- Certificates List -->
+							<div class="certificates-grid" *ngIf="userCertificates?.length">
+								<div class="certificate-card" *ngFor="let certificate of userCertificates">
+									<div class="certificate-icon">
+										<i class="fa fa-certificate"></i>
+									</div>
+									<div class="certificate-content">
+										<h4 class="certificate-name">{{certificate.name}}</h4>
+										<div class="certificate-issuer">
+											<span class="issuer-label">Issued by</span>
+											<strong>{{certificate.issuer}}</strong>
+										</div>
+										<div class="certificate-meta">
+											<div class="issue-date">
+												<i class="fa fa-calendar-check me-2"></i>
+												Issued {{certificate.issueDate | date:'MMMM yyyy'}}
+											</div>
+											
+										</div>
+										<div class="certificate-actions">
+											<button class="btn btn-action text-success" (click)="openEditCertificateModal(certificate)">
+												<i class="fa fa-pencil"></i>
+											</button>
+											<button class="btn btn-action text-danger" (click)="deleteCertificate(certificate.id)">
+												<i class="fa fa-trash"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+				
+							<!-- Empty State -->
+							<div class="empty-state" *ngIf="!userCertificates?.length">
+								<i class="fa fa-certificate fa-3x mb-3"></i>
+								<h5>Showcase Your Certifications</h5>
+								<p>Add professional certificates to demonstrate your expertise</p>
+								<button class="btn btn-upwork mt-3" (click)="openAddCertificateModal()">
+									<i class="fa fa-plus-circle me-2"></i>Add Your First Certificate
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Certificate Modal -->
+				<div class="modal" [class.show]="isCertificateModalOpen" tabindex="-1" [style.display]="isCertificateModalOpen ? 'block' : 'none'">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header bg-upwork text-white">
+								<h5 class="modal-title d-flex align-items-center">
+									<i class="fa fa-certificate me-2"></i>
+									{{ editingCertificate ? 'Edit Certificate' : 'Add New Certificate' }}
+								</h5>
+								<button type="button" class="btn-close btn-close-white" (click)="closeCertificateModal()"></button>
+							</div>
+							<div class="modal-body p-4">
+								<form [formGroup]="certificateForm" (ngSubmit)="submitCertificate()" class="certificate-form">
+									<div class="row g-3">
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Certificate Name*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-award"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="name"
+														   placeholder="e.g., AWS Certified Solutions Architect">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Issuing Organization*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-building"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="issuer"
+														   placeholder="e.g., Amazon Web Services">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Issue Date*</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar"></i></span>
+													<input type="date" 
+														   class="form-control" 
+														   formControlName="issueDate">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-label">Expiry Date</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-calendar-times"></i></span>
+													<input type="date" 
+														   class="form-control" 
+														   formControlName="expiryDate">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Credential ID</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-id-badge"></i></span>
+													<input type="text" 
+														   class="form-control" 
+														   formControlName="credentialId"
+														   placeholder="e.g., ABC123XYZ">
+												</div>
+											</div>
+										</div>
+				
+										<div class="col-12">
+											<div class="form-group">
+												<label class="form-label">Certificate URL</label>
+												<div class="input-group">
+													<span class="input-group-text"><i class="fa fa-link"></i></span>
+													<input type="url" 
+														   class="form-control" 
+														   formControlName="certificateUrl"
+														   placeholder="https://...">
+												</div>
+											</div>
+										</div>
+									</div>
+				
+									<div class="modal-footer border-0 px-0 pt-4">
+										<button type="button" 
+												class="btn btn-outline-secondary" 
+												(click)="closeCertificateModal()">
+											<i class="fa fa-times me-2"></i>Cancel
+										</button>
+										<button type="submit" 
+												class="btn btn-upwork" 
+												[disabled]="certificateForm.invalid">
+											<i class="fa" [class.fa-plus]="!editingCertificate" [class.fa-check]="editingCertificate"></i>
+											<span class="ms-2">{{ editingCertificate ? 'Update' : 'Add' }} Certificate</span>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal-backdrop fade" [class.show]="isCertificateModalOpen" *ngIf="isCertificateModalOpen"></div>
+
+
+				
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <!-- Email Status -->
+                        <div class="status-item">
+                            <div class="status-icon">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div class="status-content">
+                                <span class="status-label">Email Status</span>
+                                <div class="status-value">
+                                    {{profile.email}}
+                                    <i [class]="profile.emailConfirmed ? 'fa fa-check-circle text-success' : 'fa fa-times-circle text-danger'"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Verification Status -->
+                        <div class="status-item">
+							<div class="status-icon">
+								<i class="fa fa-shield"></i>
+							</div>
+							<div class="status-content">
+								<span class="status-label">Account Verification</span>
+								<div class="status-value">
+									<ng-container *ngIf="profile.isVerified || profile.nationalId != null; else unverified">
+										<span>{{profile.isVerified ? 'Verified' : 'Verification in Progress'}}</span>
+										<i class="fa ml-2" 
+										   [ngClass]="{
+											   'fa-check-circle text-success': profile.isVerified,
+											   'fa-clock-o text-warning': !profile.isVerified && profile.nationalId != null
+										   }">
+										</i>
+									</ng-container>
+									<ng-template #unverified>
+										<span>Not Verified</span>
+										<button class="btn btn-outline-primary btn-sm ml-2" (click)="openVerificationModal()">
+											<i class="fa fa-id-card mr-1"></i>
+											Verify Account
+										</button>
+									</ng-template>
+								</div>
+							</div>
+						</div>
+
+                        <!-- Availability Toggle -->
+                        <div class="status-item" *ngIf="profile.role === 'Freelancer'">
+							<div class="status-icon">
+								<i class="fa fa-briefcase"></i>
+							</div>
+							<div class="status-content">
+								<span class="status-label">Available for Work</span>
+								<div class="status-description">Toggle to show clients you're open to offers</div>
+							</div>
+							<label class="custom-switch">
+								<input type="checkbox" 
+									   [(ngModel)]="profile.isAvailable" 
+									   name="isAvailable" 
+									   (change)="ToggleAvailability()"
+									   [checked]="profile.isAvailable">
+								<span class="slider"></span>
+							</label>
+						</div>
+
+                        <!-- Balance -->
+                        <div class="status-item">
+                            <div class="status-icon">
+                                <i class="fa fa-wallet"></i>
+                            </div>
+                            <div class="status-content">
+                                <span class="status-label">Balance</span>
+                                <span class="balance-amount">${{profile.balance?.toFixed(2) || '0.00'}}</span>
+                            </div>
+                        </div>
+
+                        <!-- Member Since -->
+                        <div class="status-item">
+                            <div class="status-icon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="status-content">
+                                <span class="status-label">Member Since</span>
+                                <div class="status-value">{{profile.accountCreationDate | date:'mediumDate'}}</div>
+                            </div>
+                        </div>
+						<div class="status-item">
+							<div class="status-icon">
+								<i class="fa fa-chart-line"></i>
+							</div>
+							<div class="status-content">
+								<span class="status-label">Profile Completion</span>
+								<div class="progress mt-2" style="height: 8px;">
+									<div class="progress-bar bg-success" 
+										 role="progressbar" 
+										 [style.width]="profileCompletionPercentage + '%'" 
+										 [attr.aria-valuenow]="profileCompletionPercentage" 
+										 aria-valuemin="0" 
+										 aria-valuemax="100">
+									</div>
+								</div>
+								<div class="status-value mt-1">{{profileCompletionPercentage}}% Complete</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Verification Modal -->
+<div class="modal" [class.show]="isVerificationModalOpen" tabindex="-1" [style.display]="isVerificationModalOpen ? 'block' : 'none'">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Identity Verification</h5>
+                <button type="button" class="close" (click)="closeVerificationModal()">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="submitVerification()" #verificationForm="ngForm">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" 
+                               class="form-control" 
+                               [(ngModel)]="verificationData.fullName" 
+                               name="fullName" 
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label>National ID</label>
+                        <input type="text" 
+                               class="form-control" 
+                               [(ngModel)]="verificationData.nationalId" 
+                               name="nationalId" 
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label>ID Picture</label>
+                        <input type="file" 
+                               class="form-control" 
+                               (change)="onIdPictureSelected($event)" 
+                               accept="image/*" 
+                               required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeVerificationModal()">Cancel</button>
+                        <button type="submit" class="btn btn-success" [disabled]="!verificationForm.valid">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop fade" [class.show]="isVerificationModalOpen" *ngIf="isVerificationModalOpen"></div>

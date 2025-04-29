@@ -1,0 +1,367 @@
+<header id="wt-header" class="wt-header wt-haslayout">
+    <div class="wt-navigationarea">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <strong class="wt-logo"><a routerLink="/home"><img src="images/logo.png" alt="company logo here"></a></strong>
+            <div class="wt-rightarea">
+              <nav id="wt-nav" class="wt-nav navbar-expand-lg">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <i class="lnr lnr-menu"></i>
+                </button>
+                <div class="collapse navbar-collapse wt-navigation" id="navbarNav">
+                  <ul class="navbar-nav">
+                    <li class="menu-item-has-children page_item_has_children">
+                      <a href="javascript:void(0);">Main</a>
+                      <ul class="sub-menu">
+                        <li class="menu-item-has-children page_item_has_children wt-notificationicon">
+                          <span class="wt-dropdowarrow"><i class="lnr lnr-chevron-right"></i></span>
+                          <a href="javascript:void(0);">Home</a>
+                          <ul class="sub-menu">
+                            <li><a routerLink="/home" routerLinkActive="router-link-active">Home v1</a></li>
+                            <li class="wt-newnoti"><a routerLink="/home2">Home v2<em>without login</em></a></li>
+                          </ul>
+                        </li>
+                        <li class="menu-item-has-children page_item_has_children">
+                          <span class="wt-dropdowarrow"><i class="lnr lnr-chevron-right"></i></span>
+                          <a href="javascript:void(0);">Article</a>
+                          <ul class="sub-menu">
+                            <li><a href="articlelist.html">Article List</a></li>
+                            <li><a href="articlegrid.html">Article Grid</a></li>
+                            <li><a href="articlesingle.html">Article Single</a></li>
+                            <li><a href="articleclassic.html">Article Classic</a></li>
+                          </ul>
+                        </li>
+                        <li class="menu-item-has-children page_item_has_children">
+                          <span class="wt-dropdowarrow"><i class="lnr lnr-chevron-right"></i></span>
+                          <a href="javascript:void(0);">Company</a>
+                          <ul class="sub-menu">
+                            <li><a href="companygrid.html">Company Grid</a></li>
+                            <li><a href="companysigle.html">Company Single</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacypolicy.html">Privacy Policy</a></li>
+                        <li><a href="comingsoon.html">Coming Soon</a></li>
+                        <li><a href="404page.html">404 Page</a></li>
+                      </ul>
+                    </li>
+                    <li class="nav-item">
+                      <a href="howitworks.html">How It Works</a>
+                    </li>
+                    <li class="menu-item-has-children page_item_has_children">
+                      <a href="javascript:void(0);">Browse Jobs</a>
+                      <ul class="sub-menu">
+                        <li><a routerLink="/home2/new">Job Listing</a></li>
+                        <li class="current-menu-item"><a href="jobsingle.html">Job Single</a></li>
+                        <li><a href="jobproposal.html">Job Proposal</a></li>
+                      </ul>
+                    </li>
+                    <li class="menu-item-has-children page_item_has_children">
+                      <a href="javascript:void(0);">View Freelancers</a>
+                      <ul class="sub-menu">
+                        <li><a href="userlisting.html">User Listing</a></li>
+                        <li class="current-menu-item"><a href="usersingle.html">User Single</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+              <div class="wt-loginarea">
+                <figure class="wt-userimg">
+                  <img src="images/user-login.png" alt="img description">
+                </figure>
+                <div class="wt-loginoption">
+                  <a href="javascript:void(0);" id="wt-loginbtn" class="wt-loginbtn">Login</a>
+                  <div class="wt-loginformhold">
+                    <div class="wt-loginheader">
+                      <span>Login</span>
+                      <a href="javascript:void(0);"><i class="fa fa-times"></i></a>
+                    </div>
+                
+                    <!-- Login Form -->
+                    <form
+                      *ngIf="!showForgotPasswordForm && !emailFromQuery"
+                      [formGroup]="loginForm"
+                      (ngSubmit)="onSubmit()"
+                      class="wt-formtheme wt-loginform do-login-form"
+                      [ngClass]="{'wt-hide-form': !isLoginFormVisible}"
+                    >
+                      <fieldset>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Email or Username"
+                            formControlName="Usernameoremail"
+                          />
+                          <div
+                            *ngIf="
+                              loginForm.get('Usernameoremail')?.invalid &&
+                              loginForm.get('Usernameoremail')?.touched
+                            "
+                            class="text-danger"
+                          >
+                            Username or email is required
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Password"
+                            formControlName="loginPassword"
+                          />
+                          <div
+                            *ngIf="
+                              loginForm.get('loginPassword')?.invalid &&
+                              loginForm.get('loginPassword')?.touched
+                            "
+                            class="text-danger"
+                          >
+                            Password is required and must be at least 6 characters
+                          </div>
+                        </div>
+                        <div *ngIf="errorMessage" class="alert alert-danger">
+                          {{ errorMessage }}
+                        </div>
+                        <div class="wt-logininfo">
+                          <button
+                            type="submit"
+                            class="wt-btn do-login-button"
+                            [disabled]="isLoading"
+                          >
+                            {{ isLoading ? "Logging in..." : "Login" }}
+                          </button>
+                          <span class="wt-checkbox">
+                            <input id="wt-login" type="checkbox" name="rememberme" />
+                            <label for="wt-login">Keep me logged in</label>
+                          </span>
+                        </div>
+                      </fieldset>
+                      <div class="wt-loginfooterinfo">
+                        <a
+                          href="javascript:void(0);"
+                          (click)="toggleForgotPassword()"
+                          class="wt-forgot-password"
+                          >Forgot password?</a
+                        >
+                        <a (click)="closeLoginDropdown()" routerLink="/register">Create account</a>
+                      </div>
+                    </form>
+                
+                    <!-- Forgot Password Form -->
+                    <form
+                      *ngIf="showForgotPasswordForm"
+                      [formGroup]="forgetPassword"
+                      class="wt-formtheme wt-loginform do-forgot-password-form"
+                      [ngClass]="{'wt-hide-form': !isForgotPasswordFormVisible}"
+                    >
+                      <fieldset>
+                        <div class="form-group">
+                          <input
+                            formControlName="email"
+                            type="email"
+                            name="email"
+                            class="form-control get_password"
+                            placeholder="Email"
+                          />
+                          <div
+                            *ngIf="
+                              forgetPassword.get('email')?.touched &&
+                              forgetPassword.get('email')?.invalid
+                            "
+                            class="text-danger"
+                          >
+                            <div *ngIf="forgetPassword.get('email')?.errors?.['required']">
+                              Email is required.
+                            </div>
+                            <div *ngIf="forgetPassword.get('email')?.errors?.['email']">
+                              Invalid email format.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="wt-logininfo">
+                          <button
+                            type="button"
+                            (click)="getPassword()"
+                            class="wt-btn do-get-password"
+                            [disabled]="isLoading"
+                          >
+                            {{ isLoading ? "Sending..." : "Get Password" }}
+                          </button>
+                        </div>
+                      </fieldset>
+                      <div class="wt-loginfooterinfo">
+                        <a href="javascript:void(0);" (click)="showLogin()">Login</a>
+                        <a  (click)="closeLoginDropdown()" routerLink="/register">Create account</a>
+                      </div>
+                    </form>
+                
+                    <!-- Reset Password Form -->
+                    <form
+                      *ngIf="emailFromQuery && !showForgotPasswordForm"
+                      [formGroup]="resetPassword"
+                      class="wt-formtheme wt-loginform do-reset-password-form"
+                      [ngClass]="{'wt-hide-form': !isResetPasswordFormVisible}"
+                    >
+                      <fieldset>
+                        <div class="form-group">
+                          <input
+                            formControlName="email"
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="Email"
+                            readonly
+                          />
+                          <div
+                            *ngIf="
+                              resetPassword.get('email')?.touched &&
+                              resetPassword.get('email')?.invalid
+                            "
+                            class="text-danger"
+                          >
+                            <div *ngIf="resetPassword.get('email')?.errors?.['required']">
+                              Email is required.
+                            </div>
+                            <div *ngIf="resetPassword.get('email')?.errors?.['email']">
+                              Invalid email format.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group d-none">
+                          <input
+                            formControlName="token"
+                            type="text"
+                            name="token"
+                            class="form-control"
+                            placeholder="Token"
+                            readonly
+                          />
+                          <div
+                            *ngIf="
+                              resetPassword.get('token')?.touched &&
+                              resetPassword.get('token')?.invalid
+                            "
+                            class="text-danger"
+                          >
+                            <div *ngIf="resetPassword.get('token')?.errors?.['required']">
+                              Token is required.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <input
+                            formControlName="newPassword"
+                            type="password"
+                            name="newPassword"
+                            class="form-control"
+                            placeholder="New Password"
+                          />
+                          <div
+                            *ngIf="
+                              resetPassword.get('newPassword')?.touched &&
+                              resetPassword.get('newPassword')?.invalid
+                            "
+                            class="text-danger"
+                          >
+                            <div *ngIf="resetPassword.get('newPassword')?.errors?.['required']">
+                              New password is required.
+                            </div>
+                            <div *ngIf="resetPassword.get('newPassword')?.errors?.['minlength']">
+                              Password must be at least 8 characters.
+                            </div>
+                            <div *ngIf="resetPassword.get('newPassword')?.errors?.['pattern']">
+                              Password must include at least one uppercase letter, one lowercase
+                              letter, one number, and one special character.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <input
+                            formControlName="confirmNewPassword"
+                            type="password"
+                            name="confirmNewPassword"
+                            class="form-control"
+                            placeholder="Confirm New Password"
+                          />
+                          <div
+                            *ngIf="
+                              resetPassword.get('confirmNewPassword')?.touched &&
+                              resetPassword.get('confirmNewPassword')?.invalid
+                            "
+                            class="text-danger"
+                          >
+                            <div
+                              *ngIf="
+                                resetPassword.get('confirmNewPassword')?.errors?.['required']
+                              "
+                            >
+                              Confirm password is required.
+                            </div>
+                          </div>
+                          <div
+                            *ngIf="
+                              resetPassword.errors &&
+                              resetPassword.errors['mismatch'] &&
+                              resetPassword.get('confirmNewPassword')?.touched
+                            "
+                            class="text-danger"
+                          >
+                            Passwords do not match.
+                          </div>
+                        </div>
+                        <div *ngIf="errorMessage" class="alert alert-danger">
+                          {{ errorMessage }}
+                        </div>
+                        <div class="wt-logininfo">
+                          <button
+                            type="button"
+                            (click)="resetPasswordSubmit()"
+                            class="wt-btn do-reset-password"
+                            [disabled]="isLoading || resetPassword.invalid"
+                          >
+                            {{ isLoading ? "Resetting..." : "Reset Password" }}
+                          </button>
+                        </div>
+                      </fieldset>
+                      <div class="wt-loginfooterinfo">
+                        <a href="javascript:void(0);" (click)="showForgotPassword()"
+                          >Back to Forgot Password</a
+                        >
+                        <a  (click)="closeLoginDropdown()" routerLink="/register">Create account</a>
+                      </div>
+                    </form>
+                
+                    <!-- External Login -->
+                    <div
+                      *ngIf="!showForgotPasswordForm && !emailFromQuery"
+                      class="external-login-container d-flex justify-content-center align-items-center flex-column"
+                    >
+                      <div class="btn-group">
+                        <button (click)="ExternalLogin('Google')" class="google-btn">
+                          <i class="fab fa-google"></i> Login with Google
+                        </button>
+                        <button (click)="ExternalLogin('Facebook')" class="facebook-btn">
+                          <i class="fab fa-facebook-f"></i> Login with Facebook
+                        </button>
+                      </div>
+                    </div>
+                
+                    <!-- Error Message -->
+                    <div
+                      *ngIf="errorMessage && !showForgotPasswordForm && !emailFromQuery"
+                      class="text-danger text-center mt-3"
+                    >
+                      {{ errorMessage }}
+                    </div>
+                  </div>
+                </div>
+                <a routerLink="/register" class="wt-btn">Join Now</a>
+              </div>
+              <app-usernav></app-usernav>
+            </div>
+          </div>
+        </div>
+    </div>

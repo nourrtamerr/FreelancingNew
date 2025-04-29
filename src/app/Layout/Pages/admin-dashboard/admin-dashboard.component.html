@@ -1,0 +1,193 @@
+<div class="container py-4 text-center ">
+  <!-- Header -->
+  <div class="row mb-4  mt-5 ">
+    <div class="offset-lg-3 col-6">
+      <div class="card ">
+        <div class="card-body">
+          <h1 class="h2 mb-0">Admin Dashboard</h1>
+          <p class="text-muted">Welcome to your administration panel</p>
+          <p>last updated: {{ lastUpdated | date:'medium' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row mb-4">
+    <!-- User Stats -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">User Statistics</h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Clients
+              <span class="badge bg-primary rounded-pill">{{ userCounts.clients }}</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Freelancers
+              <span class="badge bg-success rounded-pill">{{ userCounts.freelancers }}</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Admins
+              <span class="badge bg-info rounded-pill">{{ userCounts.admins }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Stats -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Project Statistics</h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Total Projects
+              <span class="badge bg-secondary rounded-pill">{{ projectStats.total }}</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Pending
+              <span class="badge bg-warning rounded-pill">{{ projectStats.pending }}</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Completed
+              <span class="badge bg-success rounded-pill">{{ projectStats.completed }}</span>
+            </div>
+
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Working
+              <span class="badge bg-info rounded-pill">{{ projectStats.Working }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proposal Stats -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Proposal Statistics</h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Total Proposals
+              <span class="badge bg-primary rounded-pill">{{ proposalStats.total }}</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Avg. per Project
+              <span class="badge bg-info rounded-pill">{{ proposalStats.averagePerProject | number:'1.1-1' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate Stats -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Certificate Statistics</h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              Pending Certificates
+              <span class="badge bg-warning rounded-pill">{{ pendingCertificates }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row mb-4">
+    <!-- Revenue Chart -->
+    <div class="col-lg-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Top 5 Freelancer Skills</h5>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Skill</th>
+                  <th>Usage Count</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let skill of topSkills">
+                  <td>{{ skill.name }}</td>
+                  <td>{{ skill.count }}</td>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" 
+                           [style.width.%]="(skill.count / topSkills[0].count) * 100"
+                           [attr.aria-valuenow]="skill.count"
+                           aria-valuemin="0"
+                           [attr.aria-valuemax]="topSkills[0].count">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Project Status Chart -->
+    <div class="col-lg-3 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Project Status Distribution</h5>
+          <div class="chart-container">
+            <canvas baseChart
+              [data]="projectStatusChartData"
+              [options]="pieChartOptions"
+              type="pie">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Language Distribution</h5>
+          <div class="chart-container">
+            <canvas baseChart
+              [data]="languageChartData"
+              [options]="pieChartOptions"
+              type="pie">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Row -->
+  <div class="row mx-auto ">
+    <!-- Top Skills -->
+  
+    <div class="offset-lg-2 col-lg-8 mb-4 ">
+      <div class="card h-100">
+        <div class="card-body ">
+          <h5 class="card-title">Monthly Revenue</h5>
+          <div class="chart-container">
+            <canvas baseChart
+              [data]="revenueChartData"
+              [options]="lineChartOptions"
+              type="line">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Language Distribution -->
+ 
+  </div>
+</div> 

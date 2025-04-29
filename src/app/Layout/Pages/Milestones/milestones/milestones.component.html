@@ -1,0 +1,85 @@
+<div class="milestones-container">
+  <div class="milestones-header">
+    <h1>Project Milestones</h1>
+    <div class="milestone-progress">
+      <div class="progress-stats">
+        <div class="stat-item">
+          <span class="stat-value">{{milestones.length}}</span>
+          <span class="stat-label"> Total Milestones</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="milestones-timeline;" *ngIf="milestones.length > 0">
+    <div class="milestone-card" *ngFor="let milestone of milestones">
+      
+      <div class="milestone-content">
+        <div class="milestone-header">
+          <h3>{{milestone.title}}</h3>
+          <span 
+          class="milestone-status"
+          [ngClass]="{
+            'Completed': milestone.status === 1,
+            'in-progress': milestone.status === 2,
+            'Pending': milestone.status === 0
+          }">
+          {{ getStatusText(milestone.status) }}
+        </span>
+        
+        </div>
+
+        <div class="milestone-info">
+          <p class="description">{{milestone.description}}</p>
+          <div class="milestone-details">
+            <div class="detail">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Start: {{milestone.startDate | date}}</span>
+            </div>
+            <div class="detail">
+              <i class="fas fa-flag-checkered"></i>
+              <span>Due: {{milestone.endDate | date}}</span>
+            </div>
+            <div class="detail">
+              <span>Amount: ${{milestone.amount}}</span>
+            </div>
+            
+          </div> 
+        </div>
+
+
+        <div class="milestone-files" *ngIf="milestone.files && milestone.files.length > 0">
+          <h4>Attachments</h4>
+          <div class="file-list">
+            <div class="detail" *ngFor="let file of milestone.files">
+              <ng-container [ngSwitch]="getFileType(file)">
+                <!-- Image Preview -->
+                <img *ngSwitchCase="'image'" [src]="file" alt="Milestone Image" class="milestone-image"/>
+        
+                <!-- Video Preview -->
+                <video *ngSwitchCase="'video'" [src]="file" controls class="milestone-video"></video>
+        
+                <!-- Others -->
+                <div *ngSwitchDefault class="file-item">
+                  <i class="fas fa-file"></i>
+                  <span>Attached File: 
+                    <a [href]="file" target="_blank" download>Open File</a>
+                  </span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        
+        
+    
+    </div>
+
+  </div>
+
+  <div class="empty-state" *ngIf=" milestones.length === 0">
+    <i class="fas fa-clipboard-list"></i>
+    <h2>No Milestones Found</h2>
+    <p>This project doesn't have any milestones yet.</p>
+  </div>
+</div>

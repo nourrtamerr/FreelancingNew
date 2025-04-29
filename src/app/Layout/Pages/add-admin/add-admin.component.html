@@ -1,0 +1,104 @@
+<div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6 my-4">
+        <img src="https://images.pexels.com/photos/3194519/pexels-photo-3194519.jpeg?auto=compress&cs=tinysrgb&w=600" alt="">
+      </div>
+      <div class="col-md-6">
+
+        <!-- Add this to your template if you want to see errors visually -->
+<div *ngIf="registerForm.invalid && (registerForm.touched || registerForm.dirty)" class="text-danger">
+  <ul>
+    <li *ngFor="let error of getFormValidationErrors()">{{error}}</li>
+  </ul>
+</div>
+        <form [formGroup]="registerForm" (submit)="onSubmit()" class="wt-formtheme wt-loginform do-login-form">
+          <fieldset>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="First Name" formControlName="firstname" />
+              <div *ngIf="registerForm.get('firstname')?.hasError('required') && registerForm.get('firstname')?.touched" class="text-danger">
+                First name is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Last Name" formControlName="lastname" />
+              <div *ngIf="registerForm.get('lastname')?.hasError('required') && registerForm.get('lastname')?.touched" class="text-danger">
+                Last name is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control"   placeholder="Username" formControlName="UserName" />
+              <div *ngIf="registerForm.get('UserName')?.hasError('required') && registerForm.get('UserName')?.touched" class="text-danger">
+                Username is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control"  placeholder="Email" formControlName="Email" />
+              <div *ngIf="registerForm.get('Email')?.hasError('required') && registerForm.get('Email')?.touched" class="text-danger">
+                Email is required.
+              </div>
+              <div *ngIf="registerForm.get('Email')?.hasError('email') && registerForm.get('Email')?.touched" class="text-danger">
+                Invalid email format.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control"  placeholder="Phone Number" formControlName="PhoneNumber" />
+              <div *ngIf="registerForm.get('PhoneNumber')?.hasError('required') && registerForm.get('PhoneNumber')?.touched" class="text-danger">
+                Phone number is required.
+              </div>
+              <div *ngIf="registerForm.get('PhoneNumber')?.hasError('pattern') && registerForm.get('PhoneNumber')?.touched" class="text-danger">
+                Phone number must be exactly 11 digits.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="date" class="form-control"  laceholder="Date of Birth" formControlName="DateOfBirth" />
+              <div *ngIf="registerForm.get('DateOfBirth')?.hasError('required') && registerForm.get('DateOfBirth')?.touched" class="text-danger">
+                Date of birth is required.
+              </div>
+              <div *ngIf="registerForm.get('DateOfBirth')?.hasError('invalidDateFormat') && registerForm.get('DateOfBirth')?.touched" class="text-danger">
+                Date must be in yyyy-MM-dd format.
+              </div>
+            </div>
+            <div class="form-group">
+              <select class="form-control" formControlName="CityId">
+                <option value="">Select City</option>
+                <option *ngFor="let city of cities" [value]="city.id">
+                  {{city.name}}
+                </option>
+              </select>
+              <div *ngIf="registerForm.get('CityId')?.hasError('required') && registerForm.get('CityId')?.touched" class="text-danger">
+                City is required.
+              </div>
+            </div>
+       
+            <div class="form-group">
+              <input type="password" class="form-control"  placeholder="Password" formControlName="Password" />
+              <div *ngIf="registerForm.get('Password')?.hasError('required') && registerForm.get('Password')?.touched" class="text-danger">
+                Password is required.
+              </div>
+              <div *ngIf="registerForm.get('Password')?.hasError('pattern') && registerForm.get('Password')?.touched" class="text-danger">
+                Password must be at least 8 characters, including 1 uppercase, 1 lowercase, 1 number, and 1 special character.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control"  placeholder="Confirm Password" formControlName="ConfirmPassword" />
+              <div *ngIf="registerForm.get('ConfirmPassword')?.hasError('required') && registerForm.get('ConfirmPassword')?.touched" class="text-danger">
+                Confirm password is required.
+              </div>
+              <div *ngIf="registerForm.hasError('mismatch') && registerForm.get('ConfirmPassword')?.touched" class="text-danger">
+                Passwords do not match.
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="file" class="form-control"  (change)="onFileSelected($event)" />
+            </div>
+            <div class="wt-logininfo">
+              <button type="submit" class="wt-btn do-login-button">Register</button>
+            </div>
+          </fieldset>
+          <div class="wt-loginfooterinfo">
+            <a routerLink="/login">Already have an account?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

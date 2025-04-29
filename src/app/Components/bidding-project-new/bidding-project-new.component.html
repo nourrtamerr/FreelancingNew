@@ -1,0 +1,505 @@
+<div class="upwork-container">
+    <!-- Notification Banner -->
+    <!-- <div class="upwork-banner">
+      <span class="pt-5">
+        Starting May 1, 2025, Freelancer Service Fees for new contracts will switch from a fixed to a variable fee based on factors such as client demand for certain work. The fee will remain fixed for the life of the contract.
+        <a href="#">Learn more.</a>
+      </span>
+    </div> -->
+  
+    <!-- Search Bar and Filters -->
+    <div class="container pt-5">
+      <div class="row justify-content-center align-items-center mb-3">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <div class="upwork-searchbar d-flex">
+            <input type="text" placeholder="Search for jobs" class="form-control border-0 shadow-none" />
+            <button class="search-btn">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="results-header">
+                <select class="form-select w-auto">
+                  <option>Sort by: Newest</option>
+                  <option>Sort by: Oldest</option>
+                </select>
+              </div>
+        </div> -->
+        <!-- <div class="col-lg-4 col-md-4 col-sm-12">
+          <a href="#" class="advanced-search">Advanced search</a>
+        </div> -->
+      </div>
+    </div>
+  
+    <!-- Main Content -->
+    <div class="container">
+      <div class="row gap-2">
+        <!-- Sidebar -->
+        
+        <!-- <div class="results-header d-flex justify-content-end mb-3">
+            <select class="form-select w-auto">
+              <option>Sort by: Newest</option>
+              <option>Sort by: Oldest</option>
+            </select>
+          </div> -->
+
+          <div class="col-12 mb-4">
+            <div class="filter-stats">
+                <div class="results-count">
+                    Showing {{projects.length}} of {{projectsBeforeAnyFilters.length}} projects
+                </div>
+                <div class="view-options">
+                    <span class="sort-label">Sort by:</span>
+                    <select class="sort-select" [(ngModel)]="currentSort" (change)="sortProducts(currentSort)">
+                        <option value="featured">Featured</option>
+                        <option value="price-low-high">Price: Low to High</option>
+                        <option value="price-high-low">Price: High to Low</option>
+                        <option value="Latest">Date: Latest</option>
+                        <option value="Oldest">Date: Oldest</option>
+                        
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+<!-- ... existing code ... -->
+
+<!-- ... existing code ... -->
+
+<!-- Dropdown for categories and subcategories -->
+<!-- ... existing code ... -->
+<!-- ... existing code ... -->
+
+
+  <!-- <div class="dropdown" >
+    <button class="btn custom-dropdown menu-item dropdown-toggle" type="button" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+        Select Categories
+    </button>
+    <div class="dropdown-menu"   aria-labelledby="categoriesDropdown">
+      <li class="mb-2 d-flex justify-content-between align-items-center">
+        <label for="adults" class="mb-0">Adults</label>
+        <input id="adults" type="number" asp-for="AdultsNumber" class="form-control w-50" min="1" value="1" />
+    </li>
+        <div class="dropdown-header">Accounting & Consulting</div>
+            <div class="dropdown-item">
+                <label class="form-check-label d-block">
+                    <input type="checkbox" class="form-check-input"> All - Accounting & Consulting
+                </label>
+            </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/> -->
+
+
+  <!-- ... existing code ... -->
+  <!-- ... existing code ... -->
+  
+  <!-- ... existing code ... -->
+
+  <!-- ... existing code ... -->
+
+
+
+
+
+        <aside class="upwork-sidebar col-lg-4 col-md-5 col-sm-12 mb-4">
+
+                <!-- Category -->
+          <div class="sidebar-section category">
+            
+            <div class="sidebar-label-row" (click)="categoryDropdownOpen = !categoryDropdownOpen">
+              <label class="sidebar-label">Categories</label>
+              <span class="chevron" [class.open]="categoryDropdownOpen"></span>
+            </div>
+
+            <div class="sidebar-group-content" *ngIf="categoryDropdownOpen">
+
+              <input
+              type="text"
+              class=" mb-3 custom-search-input"
+              placeholder="Search currency"
+              [(ngModel)]="categorySearch"
+            />
+
+              
+                <div *ngFor="let category of Categories ">
+                   <!--| filter:searchText-->
+                   <!-- <div *ngIf="!categorySearch || 
+                   category.name.toLowerCase().includes(categorySearch.toLowerCase()) ||
+                   (getSubcategoriesOfCategory(category.id) | filter:categorySearch).length > 0"> -->
+
+                  <p class="category-title">{{ category.name }} <p>
+                  <div *ngFor="let sub of getSubcategoriesOfCategory(category.id) | filter:categorySearch">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" [checked]="BiddingProjectFilter.SubCategory?.includes(sub.id)" (change)="selectSubCategory(sub.id)" />
+                      <span class="checkbox-custom"></span>
+                      <span class="checkbox-text">{{ sub.name }}</span>
+                    </label>
+
+                  </div>
+
+                <!-- </div> -->
+
+
+                </div>
+                       
+            </div>
+
+
+          </div>
+
+
+
+          <!-- Experience Level -->
+          <div class="sidebar-section">
+
+            <div class="sidebar-label-row" (click)="expOpen = !expOpen">
+              <label class="sidebar-label">Experience level</label>
+              <span class="chevron" [class.open]="expOpen"></span>
+            </div>
+
+            <div class="sidebar-group-content" *ngIf="expOpen">
+
+              <!--  -->
+              <div *ngFor="let level of getEnumValues(ExperienceLeveles)">
+                <label class="custom-checkbox">
+                  <input type="checkbox" [checked]="BiddingProjectFilter.ExperienceLevel?.includes(level)" (change)="selectExpLevel(level)" />
+                  <!-- <span class="checkbox-custom"></span> -->
+                  <span class="checkbox-text">{{ ExperienceLeveles[level] }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+  
+
+          <!-- Num of proposals -->
+          <!-- ... existing code ... -->
+
+          
+
+          <div class="sidebar-section">
+
+            <div class="sidebar-label-row" (click)="proposalsOpen = !proposalsOpen">
+              <label class="sidebar-label">Number of proposals</label>
+              <span class="chevron" [class.open]="proposalsOpen"></span>
+            </div>
+
+
+            <div class="sidebar-group-content" *ngIf="proposalsOpen">
+              <div class="proposal-checkbox-group">
+                <label class="custom-checkbox d-flex align-items-center mb-2">
+                  <input type="checkbox"
+            
+                  (change)="selectProposalRange(0,4)" 
+                  
+                  />
+
+                  <span class="checkbox-text">Less than 5 </span>
+                </label>
+                <label class="custom-checkbox d-flex align-items-center mb-2">
+                  <input type="checkbox" (change)="selectProposalRange(5,10)" />
+              
+                  <span class="checkbox-text">5 to 10 </span>
+                </label>
+                <label class="custom-checkbox d-flex align-items-center mb-2">
+                  <input type="checkbox" (change)="selectProposalRange(10,15)" />
+            
+                  <span class="checkbox-text">10 to 15 </span>
+                </label>
+                <label class="custom-checkbox d-flex align-items-center mb-2">
+                  <input type="checkbox"  (change)="selectProposalRange(15,20)" />
+              
+                  <span class="checkbox-text">15 to 20 </span>
+                </label>
+                <label class="custom-checkbox d-flex align-items-center mb-2">
+                  <input type="checkbox"  (change)="selectProposalRange(20,50)" />
+          
+                  <span class="checkbox-text">20 to 50 </span>
+                </label>
+
+
+                <!-- Manual entry option -->
+                <div class="custom-checkbox d-flex align-items-center mt-2">
+            
+                
+                  <div class="d-flex flex-row align-items-center mt-2 proposal-manual-range">
+
+                    <div class="input-group input-group-sm me-2">
+
+                    
+                      <input type="number" class="form-control proposal-manual-input"
+                      placeholder="Min"
+                      [(ngModel)]="manualProposalMin"
+                      (ngModelChange)="selectProposalRange(manualProposalMin ?? 0, manualProposalMax ?? 10000, true)" 
+
+                    />             
+                    </div>
+
+                    <div class="input-group input-group-sm">
+                      <input type="number" class="form-control proposal-manual-input"
+                      placeholder="Max"
+                      [(ngModel)]="manualProposalMax"
+                      (ngModelChange)="selectProposalRange(manualProposalMin ?? 0, manualProposalMax ?? 10000, true)" 
+                    />
+                    </div>
+
+
+
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          
+
+
+
+<!-- ... existing code ... -->
+
+
+
+          <!-- ... existing code ... -->
+          <!-- <div class="sidebar-section">
+            <div class="sidebar-label-row" (click)="proposalsOpen = !proposalsOpen">
+              <label class="sidebar-label">Number of proposals</label>
+              <span class="chevron" [class.open]="proposalsOpen"></span>
+            </div>
+            <div class="sidebar-group-content" *ngIf="proposalsOpen">
+              <div class="proposal-slider-container">
+                <div class="proposal-slider-inputs d-flex align-items-center justify-content-between mb-2">
+                  <input
+                    type="number"
+                    class="proposal-input"
+                    [(ngModel)]="proposalMin"
+                    [min]="proposalSliderMin"
+                    [max]="proposalMax"
+                    (input)="selectMinNumOfProposals(proposalMin)"
+                  />
+                  <span class="proposal-range-separator">to</span>
+                  <input
+                    type="number"
+                    class="proposal-input"
+                    [(ngModel)]="proposalMax"
+                    [min]="proposalMin"
+                    [max]="proposalSliderMax"
+                    (input)="selectMaxNumOfProposals(proposalMax)"
+                  />
+                </div>
+                <input
+                  type="range"
+                  class="proposal-range"
+                  [(ngModel)]="proposalMin"
+                  [min]="proposalSliderMin"
+                  [max]="proposalSliderMax"
+                  (input)="selectMinNumOfProposals(proposalMin)"
+                  [style.width.%]="48"
+                />
+                <input
+                  type="range"
+                  class="proposal-range"
+                  [(ngModel)]="proposalMax"
+                  [min]="proposalSliderMin"
+                  [max]="proposalSliderMax"
+                  (input)="selectMaxNumOfProposals(proposalMax)"
+                  [style.width.%]="48"
+                />
+                <div class="proposal-slider-labels d-flex justify-content-between mt-1">
+                  <span>{{ proposalSliderMin }}</span>
+                  <span>{{ proposalSliderMax }}</span>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <!-- ... existing code ... -->
+
+
+
+
+
+
+  
+          <!-- Client country -->
+          <div class="sidebar-section">
+            <div class="sidebar-label-row" (click)="clientCountry = !clientCountry">
+              <label class="sidebar-label">Client Country</label>
+              <span class="chevron" [class.open]="clientCountry"></span>
+            </div>
+
+
+            <div class="sidebar-group-content" *ngIf="clientCountry">
+
+
+
+              <input
+              type="text"
+              class=" mb-3 custom-search-input"
+              placeholder="Search a country"
+              [(ngModel)]="countrySearch"
+            />
+
+
+
+              <div *ngFor="let country of Countries | filter:countrySearch">
+                <label  class="custom-checkbox">
+                  <input [checked]="BiddingProjectFilter.ClientCountry?.includes(country.id)" (change)="selectClientCountry(country.id)" type="checkbox" />{{country.name}}
+                  </label>
+
+                   
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <!-- Currency -->
+          <div class="sidebar-section">
+
+
+            <div class="sidebar-label-row" (click)="currencyOpen = !currencyOpen">
+              <label class="sidebar-label">Currency</label>
+              <span class="chevron" [class.open]="currencyOpen"></span>
+            </div>
+
+
+            <div class="sidebar-group-content" *ngIf="currencyOpen">
+
+              <input
+              type="text"
+              class=" mb-3 custom-search-input"
+              placeholder="Search currency"
+              [(ngModel)]="currencySearch"
+            />
+
+              <div *ngFor="let currency of getEnumValues(Currencies) | filter:currencySearch:Currencies">
+                <label  class="custom-checkbox">
+                  <input [checked]="BiddingProjectFilter.ClientCountry?.includes(currency)" (change)="selectCurrency(currency)" type="checkbox" />{{Currencies[currency]}}
+                  </label>
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <!-- skills-->
+          <div class="sidebar-section">
+            <div class="sidebar-label-row" (click)="projectSkillsOpen = !projectSkillsOpen">
+              <label class="sidebar-label">Skills</label>
+              <span class="chevron" [class.open]="projectSkillsOpen"></span>
+            </div>
+
+
+            <div class="sidebar-group-content" *ngIf="projectSkillsOpen">
+
+              <input
+              type="text"
+              class=" mb-3 custom-search-input"
+              style="  "
+              placeholder="Search skill"
+              [(ngModel)]="skillsSearch"
+            />
+
+              <div *ngFor="let skill of Skills | filter:skillsSearch">
+                <label  class="custom-checkbox">
+                  <input [checked]="BiddingProjectFilter.Skills?.includes(skill.id)" (change)="selectSkills(skill.id)" type="checkbox" />{{skill.name}}
+                  </label>
+              </div>
+
+            </div>
+          </div>
+
+
+        </aside>
+
+        <!----------------------------------------------------------------------------------------------->
+        <!----------------------------------------------------------------------------------------------->
+        <!----------------------------------------------------------------------------------------------->
+
+        <!-- Main Results -->
+        <section class="upwork-results col-lg-8 col-md-7 col-sm-12">
+
+          <div *ngFor="let project of projects" class="upwork-project-card ">
+            <a [routerLink]="['/home2/details',project.id]">
+            <div class="project-card-header d-flex justify-content-between align-items-center">
+              <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+              <div class="project-actions d-flex">
+                <button class="action-btn bookmark-btn">
+                  <i class="fa-regular fa-bookmark" style="color: #48a53c;"></i>
+                </button>
+
+              </div>
+            </div>
+            <h3 class="project-title">{{project.title}}</h3>
+
+
+            <div class="project-meta d-flex gap-3 align-items-center mb-3">
+              <span class="meta"> <i [ngClass]="project.clientIsVerified? 'fa fa-credit-card' : 'fa-regular fa-circle-xmark'" class="text-black"> </i> {{project.clientIsVerified ? 'Payment verified' : 'Payment unverified'}}</span>
+              
+              <span class="meta">
+                <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+                  <i
+                    class="fa fa-star"
+                    [ngClass]="{'star-color': project.clientRating >= star, 'text-muted': project.clientRating < star}"
+                    style="margin-right:2px;"
+                  ></i>
+                </ng-container>
+                <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
+              </span>
+  
+              <span class="meta"><i class="fa fa-map-marker"></i> {{project.clientCountry}}</span>
+            </div>
+
+            
+            <div class="project-meta d-flex flex-wrap align-items-center mb-3">
+              <span class="meta dot">{{project.experienceLevel}}</span> 
+
+              <span class="meta dot">Average Bid: ${{project.bidAveragePrice}}</span> 
+           
+               <span class="meta dot">Budget: ${{project.minimumPrice}} -  ${{project.maximumprice}}</span> 
+             
+            </div>
+
+            <div class="project-meta d-flex flex-wrap align-items-center mb-1">
+             
+              <div class="project-description mb-1">
+                {{project.description}}
+              </div>
+            </div>
+            
+          
+
+            <div class="d-flex justify-content-between row pt-4">      
+
+              <div class="project-tags mb-4 col-lg-10 col-md-10 col-sm-12">     
+                <span *ngFor="let skill of project.projectSkills" class=" gap-2 ">{{skill}}</span>            
+              </div>
+
+              <div class="proposals-count  d-flex justify-content-end col-lg-2 col-md-2 col-sm-12 ">{{project.numOfBids}} Bids</div>
+
+            </div>
+
+
+          </a>
+          </div>
+
+        </section>
+
+
+        
+      </div>
+    </div>
+  </div>
+

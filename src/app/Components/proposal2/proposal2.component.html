@@ -1,0 +1,188 @@
+<div class="upwork-job-container py-4">
+  <div class="container">
+    <div class="row gx-4 gy-4">
+      <div class="col-lg-12 col-md-12">
+        <div class="upwork-job-details mb-4">
+          <h1 class="job-title">Submit a proposal</h1>
+
+          <!-- General Error Message -->
+          <div *ngIf="formErrors.general" class="alert alert-danger">
+            {{ formErrors.general  }}
+          </div>
+
+          <div class="proposal-summary-card">
+            <h2 class="proposal-summary-title">{{project?.title}}</h2>
+            <div class="proposal-summary-list mt-5">
+              <div class="proposal-summary-item">
+                <i class="fa fa-tag"></i>
+                <span class="proposal-summary-label">Project Type:</span>
+                <span class="proposal-summary-value">{{projectType}} project</span>
+              </div>
+              <div class="proposal-summary-item">
+                <i class="fa-solid fa-dollar-sign"></i>
+                <span class="proposal-summary-label">Price:</span>
+                <span class="proposal-summary-value">{{projectType=='Bidding'?  (project?.minimumPrice + ' - ' + project?.maximumprice) : project?.price}}</span>
+              </div>
+              <div class="proposal-summary-item">
+                <i class="fa-regular fa-clock"></i>
+                <span class="proposal-summary-label">Average Expected Duration:</span>
+                <span class="proposal-summary-value">{{project?.expectedDuration}} Days</span>
+              </div>
+              <div class="proposal-summary-item">
+                <i class="fa-solid fa-hourglass"></i>
+                <span class="proposal-summary-label">Bid End Date:</span>
+                <span class="proposal-summary-value">{{project?.biddingEndDate | date:'mediumDate'}}</span>
+              </div>
+            </div>
+        </div>
+       
+      
+
+          <!-- Cover Letter Section -->
+          <div class="proposal-details-card">
+            <form #proposalForm="ngForm">
+              <div class="proposal-details-group">
+                <label for="coverLetter" class="proposal-details-label">Cover Letter*</label>
+                <textarea
+                [(ngModel)]="proposal.coverLetter"
+                name="coverLetter"
+                id="coverLetter"
+                #coverLetterModel="ngModel" 
+                class="proposal-details-textarea"
+                rows="8"
+                required></textarea>
+              <div *ngIf="coverLetterModel.invalid && (coverLetterModel.dirty || coverLetterModel.touched)" class="text-danger small mt-1">
+                {{ getError('coverLetter') }}
+              </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Milestones Section -->
+          <div class="proposal-terms-card">
+            <h2 class="proposal-terms-title">Milestones*</h2>
+            
+            <!-- Milestone General Error -->
+            <div *ngIf="formErrors.milestone?.general" class="alert alert-warning">
+              {{ formErrors.milestone.general }}
+            </div>
+            
+            <div class="proposal-milestone-section">
+              <ng-container *ngFor="let milestone of proposal.suggestedMilestones; let i = index">
+                <div class="proposal-milestone-table milestone-bordered" style="position: relative;">
+                  <!-- Remove button -->
+                  <button *ngIf="i > 0"
+                          type="button"
+                          class="milestone-remove-btn"
+                          (click)="removeMilestone(i)">
+                    &times;
+                  </button>
+                  
+                  <div class="proposal-milestone-table-row milestone-custom-row">
+                    <div class="milestone-description-col">
+                      <label class="proposal-milestone-label" [for]="'milestone-description-' + i">Description*</label>
+                      <textarea
+                      [(ngModel)]="milestone.description"
+                      [name]="'milestone-description-' + i"
+                      [id]="'milestone-description-' + i"
+                      #descriptionModel="ngModel"
+                      class="proposal-milestone-description"
+                      [class.is-invalid]="descriptionModel.invalid && (descriptionModel.dirty || descriptionModel.touched)"
+                      placeholder="Milestone description"
+                      required></textarea>
+                    <div *ngIf="descriptionModel.invalid && (descriptionModel.dirty || descriptionModel.touched)" class="text-danger small mt-1">
+                      {{ getError('description', i) }}
+                    </div>
+                    </div>
+                    <div class="milestone-right-col">
+                      <div>
+                        <label class="proposal-milestone-label" [for]="'milestone-title-' + i">Title*</label>
+                        <input [(ngModel)]="milestone.title"
+                               [name]="'milestone-title-' + i"
+                               [id]="'milestone-title-' + i"
+                               #titleModel="ngModel"
+                               type="text"
+                               class="proposal-milestone-input"
+                               [class.is-invalid]="titleModel.invalid && (titleModel.dirty || titleModel.touched)"
+                               placeholder="Milestone title"
+                               required>
+                               <div *ngIf="titleModel.invalid && (titleModel.dirty || titleModel.touched)" class="text-danger small mt-1">
+                                {{ getError('title', i) }}
+                              </div>
+                      </div>
+                      <div class="milestone-bottom-row">
+                        <div style="flex:1;">
+                          <label class="proposal-milestone-label" [for]="'milestone-amount-' + i">Price*</label>
+                          <input [(ngModel)]="milestone.amount"
+                                 [name]="'milestone-amount-' + i"
+                                 [id]="'milestone-amount-' + i"
+                                #priceModel="ngModel"
+                                [class.is-invalid]="priceModel.invalid && (priceModel.dirty || priceModel.touched)"
+
+                                 type="number"
+                                 class="proposal-milestone-input"
+
+                                 placeholder="$0.00"
+                                 min="0.01"
+                                 step="0.01"
+                                 required>
+                                 <div *ngIf="priceModel.invalid && (priceModel.dirty || priceModel.touched)" class="text-danger small mt-1">
+                                  {{ getError('amount', i) }}
+                                </div>
+                        </div>
+                        <div style="flex:1;">
+                          <label class="proposal-milestone-label" [for]="'milestone-due-' + i">Duration (days)*</label>
+                          <input [(ngModel)]="milestone.duration"
+                                 [name]="'milestone-due-' + i"
+                                 [id]="'milestone-due-' + i"
+                                 #durationModel="ngModel"
+                                 [class.is-invalid]="durationModel.invalid && (durationModel.dirty || durationModel.touched)"
+ 
+                                 type="number"
+                                 class="proposal-milestone-input"
+                                
+                                 placeholder="Duration"
+                                 min="1"
+                                 required>
+                                 <div *ngIf="durationModel.invalid && (durationModel.dirty || durationModel.touched)" class="text-danger small mt-1">
+                                  {{ getError('duration', i) }}
+                                </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Add Milestone Button with Tooltip -->
+              <button type="button" 
+                      class="proposal-milestone-add-btn" 
+                      (click)="addMilestone()"
+                      [disabled]="!isCurrentMilestoneValid()"
+                      [title]="!isCurrentMilestoneValid() ? 'Complete current milestone first' : ''">
+                + Add milestone
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="proposal-submit-actions pt-4">
+            <div *ngIf="submitError" class="alert alert-danger">
+              <i class="fa fa-exclamation-circle"></i> {{ submitError }}
+            </div>
+            
+            <!-- Submit button remains unchanged -->
+            <button class="proposal-send-btn" 
+                    (click)="createProposal()"
+                    [disabled]="!validateForm() || isSubmitting">
+              Apply proposal
+            </button>
+            <button type="button" class="proposal-cancel-link">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

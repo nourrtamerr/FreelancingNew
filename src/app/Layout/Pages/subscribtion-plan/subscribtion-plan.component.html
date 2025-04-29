@@ -1,0 +1,197 @@
+<div class="subscription-container">
+    <h1 class="subscription-title">Choose Your Plan</h1>
+    <p class="subscription-subtitle">Select the perfect plan for your freelancing journey</p>
+
+    <div class="plans-container">
+        <div *ngFor="let plan of plans" class="plan-card" [class.featured]="plan.id === 2">
+            <div *ngIf="plan.id === 2" class="featured-badge">Most Popular</div>
+            <div class="plan-header">
+                <h2>{{plan.name}}</h2>
+                <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount">{{plan.price}}</span>
+                    <span class="period">/{{plan.duration}} days</span>
+                </div>
+            </div>
+            <div class="plan-features">
+                <ul>
+                    <li *ngFor="let feature of plan.features">
+                        <i class="fas fa-check"></i> {{feature}}
+                    </li>
+                </ul>
+            </div>
+            <button 
+                class="plan-button" 
+                [class.featured-button]="plan.id === 2"
+                (click)="selectPlan(plan.id)"
+            >
+                {{plan.id === 1 ? 'Get Started Free' : plan.id === 2 ? 'Choose Pro' : 'Go Elite'}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.subscription-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.subscription-title {
+    text-align: center;
+    color: #14a800;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subscription-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+.plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.plan-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    border: 1px solid #e0e0e0;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.featured {
+    border: 2px solid #14a800;
+    transform: scale(1.05);
+}
+
+.featured-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: #14a800;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.plan-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.plan-header h2 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+}
+
+.currency {
+    color: #666;
+    font-size: 1.5rem;
+}
+
+.amount {
+    color: #14a800;
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+.period {
+    color: #666;
+    font-size: 1rem;
+}
+
+.plan-features {
+    margin-bottom: 30px;
+}
+
+.plan-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.plan-features i {
+    color: #14a800;
+    font-size: 1.1rem;
+}
+
+.plan-button {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #14a800;
+    border-radius: 25px;
+    background: transparent;
+    color: #14a800;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.plan-button:hover {
+    background: #14a800;
+    color: white;
+}
+
+.featured-button {
+    background: #14a800;
+    color: white;
+}
+
+.featured-button:hover {
+    background: transparent;
+    color: #14a800;
+}
+
+@media (max-width: 768px) {
+    .plans-container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .featured {
+        transform: none;
+    }
+
+    .plan-card {
+        padding: 20px;
+    }
+
+    .subscription-title {
+        font-size: 2rem;
+    }
+}
+</style>

@@ -1,0 +1,171 @@
+<main id="wt-main" class="w-75 mx-auto">
+  <!-- Register Form Start -->
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Select Option
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Action</a></li>
+      <li><a class="dropdown-item" href="#">Another action</a></li>
+      <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul>
+  </div>
+  
+  <section class="wt-haslayout wt-dbsectionspace">
+    <div class="row">
+      <div class="col-12">
+        <div class="wt-dashboardbox wt-dashboardinvocies">
+          <div class="wt-dashboardboxtitle wt-titlewithsearch">
+            <h2>All Users</h2>
+
+            <form class="wt-formtheme wt-formsearch">
+              <fieldset>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    name="Search"
+                    class="form-control"
+                    placeholder="Search Here"
+                    (input)="search(searched.value)"
+                    #searched
+                  />
+                  <a class="wt-searchgbtn">
+                    <i class="lnr lnr-magnifier"></i>
+                  </a>
+                </div>
+              </fieldset>
+            </form>
+
+            <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openAddAdminModal(addAdminModal)"
+          >
+            Add Admin
+          </button>
+          </div>
+
+          <div class="wt-dashboardboxcontent wt-categoriescontentholder wt-categoriesholder">
+            <table class="wt-tablecategories">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Image</th>
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th colspan="4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of searchedUser">
+                  <td>
+                    <span class="wt-checkbox">
+                      <input
+                        id="wt-namea-{{ user.id }}"
+                        type="checkbox"
+                        name="head"
+                      />
+                      <label for="wt-namea-{{ user.id }}"></label>
+                    </span>
+                  </td>
+
+                  <td>
+                    <img
+                      *ngIf="user.profilePicture"
+                      [src]="MyPath + '/' + user.profilePicture"
+                      alt="Profile Image"
+                    />
+                    <img
+                      *ngIf="!user.profilePicture"
+                      src="data:image/png;base64,..." 
+                      alt="Default Image"
+                    />
+                  </td>
+
+                  <td>{{ user.userName }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.phoneNumber }}</td>
+                  <td>{{ user.role }}</td>
+
+                  <td>
+                    <!-- @if (currentUserRole === 'Admin') { -->
+                      @if (user.role === 'Admin') {
+                        <button class="btn btn-danger" (click)="removeAdmin(user.id)">
+                          <i class="fa-solid fa-trash"></i> Remove Admin
+                        </button>
+                      } @else {
+                        <button class="btn btn-success" (click)="addAdmin(user.id)">
+                          <i class="fa-regular fa-pen-to-square"></i> Make Admin
+                        </button>
+                      }
+                    <!-- } -->
+                  </td>
+                </tr>
+
+                <tr *ngIf="searchedUser.length === 0">
+                  <td colspan="9" class="text-center">No Users Found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Admin Modal -->
+  <ng-template #addAdminModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Add New Admin</h5>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form #adminForm="ngForm" (ngSubmit)="saveAdmin()">
+        <div class="mb-3">
+          <label for="admin-name" class="col-form-label">Name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="admin-name"
+            [(ngModel)]="newAdmin.name"
+            name="name"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="admin-message" class="col-form-label">Message:</label>
+          <textarea
+            class="form-control"
+            id="admin-message"
+            [(ngModel)]="newAdmin.message"
+            name="message"
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="adminForm.invalid"
+          (click)="modal.close('Save click')"
+        >
+          Save Admin
+        </button>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+</main>

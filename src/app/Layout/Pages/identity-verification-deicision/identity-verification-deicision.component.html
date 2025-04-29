@@ -1,0 +1,101 @@
+<div class="verification-requests-container">
+    <div class="page-header">
+      <h2><i class="fas fa-user-shield"></i> Identity Verification Requests</h2>
+    </div>
+  
+    @if (users.length === 0) {
+      <div class="no-requests">
+        <i class="fas fa-inbox"></i>
+        <p>No pending verification requests</p>
+      </div>
+    } @else {
+      <div class="requests-grid">
+        <div class="request-card" *ngFor="let user of users">
+          <div class="user-info">
+            <div class="profile-image-container" (click)="openImagePreview(user.profilePicture? getImageUrl(user.profilePicture):undefined)">
+              <img [src]="filesurl+'/'+user.profilePicture" alt="Profile picture" *ngIf="user.profilePicture">
+              <img src="/images/default.jpg" alt="Default profile" *ngIf="!user.profilePicture">
+              <div class="image-overlay">
+                <i class="fas fa-search-plus"></i>
+              </div>
+            </div>
+  
+            <div class="user-details">
+              <h3>{{user.firstname}} {{user.lastname}}</h3>
+              <p><i class="fas fa-map-marker-alt"></i> {{user.city}}, {{user.country}}</p>
+              <p><i class="fas fa-calendar"></i> {{user.dateOfBirth | date}}</p>
+              <p><i class="fas fa-id-card"></i> {{user.nationalId}}</p>
+            </div>
+  
+            <div class="id-preview" (click)="openImagePreview(filesurl+'/'+user.nationalId)">
+              <i class="fas fa-id-card"></i>
+              <span>View ID Document</span>
+            </div>
+  
+            <button class="review-btn" (click)="openDecisionModal(user)">
+              <i class="fas fa-check-circle"></i> Review Request
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  
+  <!-- Image Preview Modal -->
+  <div class="modal image-preview-modal" [class.show]="isImagePreviewOpen" (click)="closeImagePreview()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeImagePreview()">
+        <i class="fas fa-times"></i>
+      </button>
+      <img [src]="selectedImage" alt="Preview" *ngIf="selectedImage">
+    </div>
+  </div>
+  
+  <!-- Decision Modal -->
+  <div class="modal decision-modal" [class.show]="isDecisionModalOpen">
+    <div class="modal-content">
+      <button class="close-btn" (click)="closeDecisionModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <h2>Verification Decision</h2>
+      @if (selectedUser) {
+        <div class="user-summary">
+          <h3>{{selectedUser.firstname}} {{selectedUser.lastname}}</h3>
+          <p>National ID: {{selectedUser.nationalId}}</p>
+        </div>
+  
+        <form [formGroup]="decisionForm" (ngSubmit)="submitDecision()">
+          <div class="decision-buttons">
+            <button type="button" 
+                    [class.active]="decisionForm.get('isAccepted')?.value === true"
+                    (click)="setDecision(true)">
+              <i class="fas fa-check"></i> Accept
+            </button>
+            <button type="button" 
+                    [class.active]="decisionForm.get('isAccepted')?.value === false"
+                    (click)="setDecision(false)">
+              <i class="fas fa-times"></i> Reject
+            </button>
+          </div>
+  
+          <div class="form-group" *ngIf="decisionForm.get('isAccepted')?.value === false">
+            <label for="reason">Rejection Reason:</label>
+            <textarea id="reason" 
+                      formControlName="reason" 
+                      placeholder="Please provide a reason for rejection..."
+                      rows="4"></textarea>
+            @if (decisionForm.get('reason')?.errors?.['required'] && decisionForm.get('reason')?.touched) {
+              <span class="error-message">Reason is required for rejection</span>
+            }
+          </div>
+  
+          <button type="submit" 
+                  class="submit-btn" 
+                  [disabled]="!decisionForm.valid || decisionForm.get('isAccepted')?.value === null">
+            Submit Decision
+          </button>
+        </form>
+      }
+    </div>
+  </div>

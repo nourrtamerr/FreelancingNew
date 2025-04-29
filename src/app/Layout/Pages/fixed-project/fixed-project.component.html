@@ -1,0 +1,679 @@
+<div class="wt-haslayout wt-main-section">
+    <div class="container">
+        <div class="row">
+         
+
+            <!-- Main Content Area -->
+            <div class="col-12 col-sm-8 col-lg-9">
+                <div class="wt-userlistingholder">
+                    <!-- Alert Section -->
+                    <div class="alert-section">
+                        <i class="fa fa-bell"></i>
+                        <span>Be the 1st to apply with instant job alerts</span>
+                        <button class="alert-button">Get for 30 Connects</button>
+                    </div>
+
+                 <!-- Job Cards -->
+
+<!-- ... existing code ... -->
+
+<!-- Static Job Card Example -->
+
+
+
+<div class="wt-haslayout wt-main-section">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Sidebar with Filters (30%) -->
+            <div class="col-12 col-sm-4 col-lg-3" style="width: 30%;">
+                <aside class="wt-sidebar">
+                    <div class="filters-container">
+                        <!-- Experience Level Filter -->
+                        <!-- <div class="filter-group">
+                            
+                            <h3>Experience Level</h3>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" [(ngModel)]="filters.experienceLevels" value="ENTRY">
+                                    Entry Level
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" [(ngModel)]="filters.experienceLevels" value="INTERMEDIATE">
+                                    Intermediate
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" [(ngModel)]="filters.experienceLevels" value="EXPERT">
+                                    Expert
+                                </label>
+                            </div>
+                        </div> -->
+
+                        <!-- Experience Level Filter -->
+
+                            <!-- Experience Level Filter -->
+<!-- Experience Level Filter -->
+<div class="filter-group">
+    <h3>Experience Level</h3>
+    <div class="checkbox-group">
+      <label class="checkbox-item" *ngFor="let level of experienceLevels">
+        <input
+          type="checkbox"
+          #checkbox
+          [checked]="filters.experienceLevels?.includes(level)"
+          (change)="onExperienceLevelChange(level, checkbox.checked)"
+        />
+        {{ getExperienceLevelLabel(level) }}
+      </label>
+    </div>
+  </div>
+  
+  
+                        
+                             
+
+
+
+
+                        
+                        <!-- Number of Proposals Filter -->
+                        <div class="filter-group">
+                            <h3>Number of Proposals</h3>
+                            <div class="range-inputs">
+                                <input type="number" [(ngModel)]="filters.minProposals" placeholder="Min" class="form-control">
+                                <span class="range-separator">to</span>
+                                <input type="number" [(ngModel)]="filters.maxProposals" placeholder="Max" class="form-control">
+                            </div>
+                        </div>
+                    
+                        <!-- Price Range Filter -->
+                        <div class="filter-group">
+                            <h3>Price</h3>
+                            <div class="range-inputs">
+                                <input type="number" [(ngModel)]="filters.minPrice" placeholder="Min" class="form-control">
+                                <span class="range-separator">to</span>
+                                <input type="number" [(ngModel)]="filters.maxPrice" placeholder="Max" class="form-control">
+                            </div>
+                        </div>
+                    
+                        <!-- Duration Filter -->
+                        <div class="filter-group">
+                            <h3>Project Duration (months)</h3>
+                            <div class="range-inputs">
+                                <input type="number" [(ngModel)]="filters.minDuration" placeholder="Min" class="form-control">
+                                <span class="range-separator">to</span>
+                                <input type="number" [(ngModel)]="filters.maxDuration" placeholder="Max" class="form-control">
+                            </div>
+                        </div>
+                    
+                        <!-- Currency Filter -->
+                    <!-- Currency Filter -->
+<div class="filter-group">
+    <h3>Currency</h3>
+    <div class="checkbox-group">
+      <label class="checkbox-item" *ngFor="let currency of currencies">
+        <input
+          type="checkbox"
+          #checkbox
+          [checked]="filters.currency?.includes(currency)"
+          (change)="onCurrencyChange(currency, checkbox.checked)"
+        />
+        {{ currency }}
+      </label>
+    </div>
+  </div>
+                    
+                        <!-- Categories Filter -->
+                        <div class="filter-group">
+                            <div class="category-search">
+
+                                <h3>Categories</h3>
+                                <select class="form-control category-search" [(ngModel)]="filters.categoryIds" multiple>
+                                    <option value="1">Web Development</option>
+                                    <option value="2">Mobile Development</option>
+                                    <option value="3">UI/UX Design</option>
+                                    <option value="4">Data Science</option>
+                                    <option value="5">Digital Marketing</option>
+                                    <option value="6">Content Writing</option>
+                                    <option value="7">Graphic Design</option>
+                                    <!-- Add more categories as needed -->
+                                </select>
+                            </div>
+                        </div>
+                    
+                        <!-- Skills Filter -->
+                        <!-- <div class="filter-group">
+                            <h3>Skills</h3>
+                            <div class="skills-search">
+                                <input type="text" class="form-control" placeholder="Search skills...">
+                            </div>
+                            <div class="checkbox-group scrollable">
+                                <label class="checkbox-item" *ngFor="let skill of skills">
+                                    <input type="checkbox" [(ngModel)]="filters.skillIds" [value]="skill.id">
+                                    {{skill.name}}
+                                </label>
+                            </div>
+                        </div> -->
+                    
+                        <!-- Filter Actions -->
+                        <div class="filter-actions">
+                            <button class="btn-apply" (click)="applyFilters()">Apply Filters</button>
+                            <button class="btn-clear" (click)="clearFilters()">Clear All</button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Main Content Area (70%) -->
+            <div class="col-12 col-sm-8 col-lg-9" style="width: 70%;">
+
+                
+                <div class="wt-userlistingholder">
+                    <!-- <div class="job-card">
+                        <div class="job-header">
+                            <h2 class="job-title">.NET Fucken Mahoud   Developer - Remote - India</h2>
+                            <div class="job-actions">
+                                <button class="action-btn"><i class="fa fa-thumbs-down"></i></button>
+                                <button class="action-btn"><i class="fa fa-heart"></i></button>
+                            </div>
+                        </div>
+                    
+                        <div class="job-meta">
+                            <span class="meta-item">Hourly: $5-$7</span>
+                            <span class="meta-item">Intermediate</span>
+                            <span class="meta-item">Est. Time: More than 6 months, 30+ hrs/week</span>
+                        </div>
+                    
+                        <div class="job-description">
+                            Role: .NET Developer Location: REMOTE (India time 9:30 am to 6:30 pm) Budget: Rs 1,00,000 per month (No Deductions) Job Description: Role Overview: We are looking for an experienced .NET Developer to join our team for a greenfield project focused on building a modern workflow platform.
+                        </div>
+                    
+                        <div class="skills-container">
+                            <span class="skill-tag">Microservice</span>
+                            <span class="skill-tag">Microsoft Azure</span>
+                            <span class="skill-tag">Kubernetes</span>
+                            <span class="skill-tag">C++</span>
+                            <span class="skill-tag">RESTful API</span>
+                            <span class="skill-tag">.NET Framework</span>
+                            <span class="skill-tag">C#</span>
+                            <span class="skill-tag">ASP.NET MVC</span>
+                        </div>
+                    
+                        <div class="job-footer">
+                            <div class="footer-meta">
+                                <span class="meta-item"><i class="fa fa-check-circle"></i> Payment verified</span>
+                                <span class="meta-item"><i class="fa fa-star"></i> $0 spent</span>
+                                <span class="meta-item"><i class="fa fa-map-marker"></i> India</span>
+                            </div>
+                            <div class="proposals">
+                                <span>Proposals: Less than 5</span>
+                            </div>
+                        </div>
+                    </div> -->
+                    
+                
+                    
+                    <div *ngFor="let project of projects" class="job-card">
+                        <div class="job-header">
+                            <h2 class="job-title">
+                                <a [routerLink]="['/fixed-project', project.id]" style="text-decoration: none; color: inherit;">
+                                  {{ project.title }}
+                                </a>
+                              </h2>
+                            <div class="job-actions">
+                                <button class="action-btn"><i class="fa fa-thumbs-down"></i></button>
+                                <button class="action-btn"><i class="fa fa-heart"></i></button>
+                            </div>
+                        </div>
+                    
+                        <div class="job-meta">
+                            <span class="meta-item">Currency:  {{project.currency}}</span>
+                            <span class="meta-item">price:  {{project.price}}</span>
+
+                            <span class="meta-item">{{project.experienceLevel}}</span>
+                            <span class="meta-item">Est. Time: {{project.expectedDuration}} months</span>
+                        </div>
+                    
+                        <div class="job-description">
+                            {{project.description}}
+                        </div>
+                    
+                        <div class="skills-container">
+                            <span *ngFor="let skill of project.projectSkills" class="skill-tag">{{skill}}</span>
+                        </div>
+                    
+                        <div class="job-footer">
+                            <div class="footer-meta">
+                                <span class="meta-item"><i class="fa fa-check-circle"></i> Payment verified</span>
+                                <span class="meta-item"><i class="fa fa-star"></i> $0 spent</span>
+                                
+                            </div>
+                            <div class="proposals">
+                                <span>Proposals: Less than {{project.proposalsCount}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pagination-container">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                    <a class="page-link" (click)="onPageChange(currentPage - 1)" [class.disabled]="currentPage === 1">
+                                        Previous
+                                    </a>
+                                </li>
+                                <li class="page-item" 
+                                    *ngFor="let page of getPageNumbers()" 
+                                    [class.active]="currentPage === page">
+                                    <a class="page-link" (click)="onPageChange(page)">
+                                        {{page}}
+                                    </a>
+                                </li>
+                                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                    <a class="page-link" (click)="onPageChange(currentPage + 1)" [class.disabled]="currentPage === totalPages">
+                                        Next
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- Filters -->
+
+  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<style>
+    /* Main Layout */
+    .category-search {
+       height: 180px;
+    }
+    .wt-main-section {
+        background-color: #f2f2f2;
+        padding: 20px 0;
+    }
+
+    /* Search Bar */
+    .search-container {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px 40px 12px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+    }
+
+    /* Job Type Tabs */
+    .job-type-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 10px;
+    }
+
+    .tab {
+        padding: 8px 16px;
+        border: none;
+        background: none;
+        color: #666;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        color: #14a800;
+        border-bottom: 2px solid #14a800;
+    }
+
+    /* Alert Section */
+    .alert-section {
+        background-color: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .alert-section i {
+        color: #14a800;
+        margin-right: 10px;
+    }
+
+    .alert-button {
+        margin-left: auto;
+        background-color: #14a800;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    /* Job Card */
+    .job-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    /* Sidebar */
+    .wt-sidebar {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Filter Section */
+    .filter-section {
+        margin-bottom: 25px;
+    }
+
+    .filter-section h3 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .job-type-tabs {
+            flex-wrap: wrap;
+        }
+        
+        .alert-section {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .alert-button {
+            margin: 10px auto 0;
+        }
+    }
+
+
+    .job-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.job-title {
+    font-size: 18px;
+    color: #14a800;
+    margin: 0;
+    font-weight: 500;
+}
+
+.job-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.job-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.job-description {
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    max-width: 100%; /* Limit the width to the parent container */
+    overflow-wrap: break-word; /* Break long words to prevent overflow */
+    white-space: normal; /* Allow text to wrap onto the next line */
+    line-height: 1.5; /* Adjust line height for better readability */
+    margin: 0;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.skill-tag {
+    background: #f2f2f2;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 13px;
+    color: #666;
+}
+
+.job-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.footer-meta {
+    display: flex;
+    gap: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.proposals {
+    color: #666;
+    font-size: 14px;
+}
+
+
+.filters-container {
+    padding: 15px 0;
+}
+
+.filter-group {
+   
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-group h3 {
+    font-size: 14px;
+    color: #001e00;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #001e00;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+}
+
+.range-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.range-separator {
+    color: #666;
+}
+
+.form-control {
+    
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #001e00;
+}
+
+.form-control:focus {
+    border-color: #14a800;
+    outline: none;
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 32px;
+}
+
+.skills-search {
+    margin-bottom: 10px;
+}
+
+.scrollable {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-apply {
+    flex: 1;
+    padding: 10px;
+    background: #14a800;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-clear {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    color: #666;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-apply:hover {
+    background: #138f00;
+}
+
+.btn-clear:hover {
+    background: #f5f5f5;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .job-meta, .footer-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .job-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+</style>

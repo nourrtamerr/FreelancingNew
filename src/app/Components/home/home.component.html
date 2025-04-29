@@ -1,0 +1,261 @@
+
+<!-- Hero Section -->
+<div class="fiverr-hero-section position-relative d-flex align-items-center justify-content-start">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative z-2">
+      <div class="row justify-content-start">
+        <div class="col-lg-10 col-md-10">
+          <h1 class="fiverr-hero-title mb-4">Our freelancers<br>will take it from here</h1>
+          
+          <!-- <div class="row mb-3">
+            <div class="col-12">
+              <form class="fiverr-searchbar d-flex" (submit)="onSearch()">
+                <input type="text" class="form-control form-control-lg fiverr-search-input" placeholder="Search for any service..." [(ngModel)]="searchTerm" name="searchTerm">
+                <button class="btn btn-light btn-lg ms-2 px-4" type="submit"><i class="fa fa-search"></i></button>
+              </form>
+            </div>
+          </div> -->
+  
+          <!-- ... existing code ... -->
+          <div class="row mb-3">
+            <div class="col-12">
+              <form class="position-relative" (submit)="onSearch()">
+                <input
+                  type="text"
+                  class="form-control form-control-lg fiverr-search-input pe-5"
+                  placeholder="Search for any service..."
+                  [(ngModel)]="searchTerm"
+                  name="searchTerm"
+                />
+                <button
+                  type="submit"
+                  class="search-icon-btn"
+                  tabindex="-1"
+                >
+                  <i class="fa fa-search"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+  <!-- ... existing code ... -->
+  
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="trending-tags d-flex flex-wrap">
+                <span class="badge" *ngFor="let tag of trendingTags">{{ tag }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="col-12 trusted-by d-flex flex-wrap align-items-center gap-4">
+              <span class="text-white-50 me-2">Trusted by:</span>
+              <img src="images/brands/meta.png" alt="Meta" class="brand-logo">
+              <img src="images/brands/google.png" alt="Google" class="brand-logo">
+              <img src="images/brands/netflix.png" alt="Netflix" class="brand-logo">
+              <img src="images/brands/pg.png" alt="P&G" class="brand-logo">
+              <img src="images/brands/paypal.png" alt="PayPal" class="brand-logo">
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!--new section-->
+
+
+<!-- Browse Talent by Category Section -->
+<section class="browse-category-section my-5">
+  <div class="container">
+    <h2 class="browse-category-title mb-2">Browse talent by category</h2>
+    <div class="browse-category-sub mb-4">
+      Looking for work? <a href="#" class="browse-jobs-link">Browse jobs</a>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3" *ngFor="let cat of browseCategories">
+        <div class="category-card-custom p-4 h-100">
+          <div class="category-card-title mb-3">{{ cat.name }}</div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="category-rating">
+              <i class="fa fa-star"></i> {{ cat.rating }}/5
+            </span>
+            <span class="category-skills text-muted">{{ cat.skills }} skills</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Enterprise Suite Section -->
+<section class="enterprise-suite-section my-5 ">
+  <div class="container">
+  <div class="enterprise-suite-card d-flex flex-column flex-md-row overflow-hidden">
+    <div class="enterprise-suite-content p-4 p-md-5 flex-fill">
+      <div class="enterprise-suite-label mb-2">Enterprise Suite</div>
+      <h2 class="enterprise-suite-title mb-3">
+        This is how<br>
+        <span class="highlight">good companies<br>find good company.</span>
+      </h2>
+      <div class="enterprise-suite-desc mb-4">
+        Access the top 1% of talent on Upwork, and a full suite of hybrid workforce management tools. This is how innovation works now.
+      </div>
+      <ul class="enterprise-suite-list mb-4">
+        <li><i class="fa fa-check-circle"></i> Access expert talent to fill your skill gaps</li>
+        <li><i class="fa fa-check-circle"></i> Control your workflow: hire, classify and pay your talent</li>
+        <li><i class="fa fa-check-circle"></i> Partner with Upwork for end-to-end support</li>
+      </ul>
+      <button class="btn btn-light enterprise-suite-btn">Learn more</button>
+    </div>
+    <div class="enterprise-suite-image flex-fill">
+      <img src="images/try.jpg" alt="Enterprise Suite" />
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!--second section-->
+
+
+<section class="find-talent-section my-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="find-talent-card position-relative overflow-hidden">
+          <img src="images/freelance.png" alt="Find Talent" class="find-talent-bg-img">
+          <div class="find-talent-overlay"></div>
+          <div class="find-talent-content position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between">
+            <div class="p-4 p-md-5 ">
+              <div class="find-talent-label mb-2">For clients</div>
+              <h2 class="find-talent-title mb-3">Find talent<br>your way</h2>
+              <div class="find-talent-desc mb-4">
+                Work with the largest network of independent professionals and get things done—from quick turnarounds to big transformations.
+              </div>
+            </div>
+            <div class="row g-3 pb-4 pb-md-5 mx-0">
+              <div class="col-md-4">
+                <div class="find-talent-action-card h-100">
+                  <div class="action-title">Post a job and hire a pro</div>
+                  <div class="action-desc">Talent Marketplace<sup>™</sup> &rarr;</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="find-talent-action-card h-100">
+                  <div class="action-title">Browse and buy projects</div>
+                  <div class="action-desc">Project Catalog<sup>™</sup> &rarr;</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="find-talent-action-card h-100">
+                  <div class="action-title">Get advice from an industry expert</div>
+                  <div class="action-desc">Consultations &rarr;</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ... existing code ... -->
+
+<!-- ... existing code ... -->
+
+  
+  <!-- Featured Projects Section -->
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="fw-bold mb-4 text-center">Featured Projects</h2>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4" *ngFor="let project of featuredProjects">
+        <div class="fiverr-project-card h-100 p-4 rounded shadow-sm bg-white">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold">{{ project.title }}</span>
+            <span class="badge bg-success">{{ project.projectType }}</span>
+          </div>
+          <div class="mb-2 text-muted small">{{ project.description | slice:0:100 }}<span *ngIf="project.description.length > 100">...</span></div>
+          <div class="mb-2">
+            <span class="badge bg-light text-dark me-1" *ngFor="let skill of project.projectSkills">{{ skill }}</span>
+          </div>
+          <div class="d-flex flex-wrap align-items-center mb-2 small text-secondary">
+            <span class="me-2"><i class="fa fa-briefcase me-1"></i>{{ project.experienceLevel }}</span>
+            <span class="me-2"><i class="fa fa-dollar-sign me-1"></i>${{ project.minimumPrice }} - ${{ project.maximumprice }}</span>
+            <span><i class="fa fa-users me-1"></i>{{ project.numOfBids }} Bids</span>
+          </div>
+          <div class="text-end">
+            <a [routerLink]="['/home2/details', project.id]" class="btn btn-outline-success btn-sm">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center mt-4">
+        <a routerLink="/home2/new" class="btn btn-outline-primary btn-lg">Browse All Projects</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Platform Features Section -->
+  <!-- <div class="container py-5">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="fw-bold mb-4 text-center">Why Choose Our Platform?</h2>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card-fiverr p-4 text-center h-100 bg-white rounded shadow-sm">
+          <i class="fa fa-shield-alt fa-2x mb-3 text-fiverr-green"></i>
+          <h5 class="fw-bold mb-2">Secure Payments</h5>
+          <p class="text-muted small mb-0">All transactions are protected and your funds are safe until you approve the work.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card-fiverr p-4 text-center h-100 bg-white rounded shadow-sm">
+          <i class="fa fa-users fa-2x mb-3 text-fiverr-green"></i>
+          <h5 class="fw-bold mb-2">Top Talent</h5>
+          <p class="text-muted small mb-0">Work with experienced freelancers from around the world, across every skill set.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card-fiverr p-4 text-center h-100 bg-white rounded shadow-sm">
+          <i class="fa fa-clock fa-2x mb-3 text-fiverr-green"></i>
+          <h5 class="fw-bold mb-2">Fast Delivery</h5>
+          <p class="text-muted small mb-0">Get your projects delivered quickly and efficiently, with clear timelines and milestones.</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  
+  <!-- Testimonials Section -->
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="fw-bold mb-4 text-center">What Our Clients Say</h2>
+      </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-card-fiverr p-4 bg-white rounded shadow-sm h-100">
+          <div class="d-flex align-items-center mb-3">
+            <img [src]="testimonial.avatar" alt="User" class="rounded-circle me-3" style="width:48px;height:48px;">
+            <div>
+              <div class="fw-bold">{{ testimonial.name }}</div>
+              <div class="text-muted small">{{ testimonial.role }}</div>
+            </div>
+          </div>
+          <p class="mb-0 fst-italic text-secondary">"{{ testimonial.text }}"</p>
+        </div>
+      </div>
+    </div>
+  </div>

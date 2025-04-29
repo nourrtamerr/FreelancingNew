@@ -1,0 +1,76 @@
+<!-- Wrapper Start -->
+<div id="wt-wrapper" class="wt-wrapper wt-haslayout">
+  <!-- Content Wrapper Start -->
+  <div class="wt-contentwrapper">
+
+    <!--Inner Home Banner Start-->
+    <div class="wt-haslayout wt-innerbannerholder">
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="col-xs-12 col-sm-12 col-md-8 push-md-2 col-lg-6 push-lg-3">
+            <div class="wt-innerbannercontent">
+            <div class="wt-title"><h2>Ban Detail</h2></div>
+            <ol class="wt-breadcrumb">
+              <li><a href="index-2.html">Home</a></li>
+              <li><a href="javascript:void(0);" [routerLink]="['/home2/banned']" routerLinkActive="router-link-active" >Banned Users</a></li>
+              <li class="wt-active">Job Detail</li>
+            </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Inner Home End-->
+    <!--Main Start-->
+    <main id="wt-main" class="wt-main wt-haslayout wt-innerbgcolor">
+      <div class="wt-haslayout wt-main-section">
+        <!-- User Listing Start-->
+        <div class="container">
+          <div class="row">
+            <div id="wt-twocolumns" class="wt-twocolumns wt-haslayout">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 float-left">
+                <div class="wt-proposalholder">
+                  <span class="wt-featuredtag"><img src="images/featured.png" alt="img description" data-tipso="Plus Member" class="template-content tipso_style"></span>
+                  <div class="wt-proposalhead">
+                    <h2>{{ban.bannedUserName}}</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 float-left">
+                <div class="wt-projectdetail-holder">
+                  <div class="wt-projectdetail">
+                    <div class="wt-title">
+                      <h3>Ban Detail</h3>
+                    </div>
+                    <div class="wt-description">
+                      <ul class="wt-projectliststyle">
+                        <li><span><i class="fa fa-check"></i>banId: {{ban.id}}</span></li>
+                        <li><span><i class="fa fa-check"></i>bannedUserId:  {{ban.bannedUserId}}</span></li>
+                        <li><span><i class="fa fa-check"></i>banDate:  {{ban.banDate | date}}</span></li>
+                        <li><span><i class="fa fa-check"></i>banEndDate:  {{ban.banEndDate | date}}</span></li>
+                      </ul>
+                      <p>Description: {{ban.description}}</p>
+                      <div class="d-flex ">
+                        <div>
+                          <button (click)="goback()" class="btn btn-primary">Back</button>
+                        </div>
+                        <div class="ms-4">
+                          <button (click)="Delete()" class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- User Listing End-->
+      </div>
+    </main>
+    <!--Main End-->
+  </div>
+  <!--Content Wrapper End-->
+</div>
+<!--Wrapper End-->

@@ -1,0 +1,66 @@
+<div class="proposals-container">
+    <div class="proposals-header">
+      <h1>Proposals</h1>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-value">{{proposals.length}}</span>
+          <span class="stat-label">Total Proposals</span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="proposals-list" *ngIf="proposals.length > 0">
+      <div class="proposal-card" *ngFor="let proposal of proposals">
+        <div class="freelancer-info">
+          <img [src]="proposal.freelancerProfilePicture || 'assets/default-avatar.png'" 
+               alt="Freelancer" 
+               class="freelancer-avatar">
+          <div class="freelancer-details">
+            <h3>{{proposal.freelancerName}}</h3>
+            <div class="freelancer-meta">
+              <span class="location" *ngIf="proposal.country">
+                <i class="fas fa-map-marker-alt"></i> {{proposal.country}}
+              </span>
+              <span class="verification" *ngIf="proposal.isVerified">
+                <i class="fas fa-check-circle"></i> Verified
+              </span>
+            </div>
+          </div>
+          <div class="proposal-amount">
+            <span class="amount">${{proposal.price}}</span>
+            <span class="duration">{{proposal.suggestedDuration}} days</span>
+          </div>
+        </div>
+  
+        <div class="proposal-content">
+          <div class="cover-letter">
+            <h4>Cover Letter</h4>
+            <p>{{proposal.coverLetter}}</p>
+          </div>
+
+        </div>
+  
+        <div class="proposal-footer">
+          <div class="footer-stats">
+            <span class="stat">
+              <i class="fas fa-star"></i> Rank: {{proposal.rank}}
+            </span>
+          </div>
+          <div class="action-buttons">
+            <button class="btn-primary" (click)="getprojectById(proposal.id)">
+              View Details
+            </button>
+            <button class="btn-secondary">
+              Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="empty-state" *ngIf="proposals.length === 0">
+      <i class="fas fa-file-alt"></i>
+      <h2>No Proposals Yet</h2>
+      <p>There are currently no proposals for this project.</p>
+    </div>
+  </div>
