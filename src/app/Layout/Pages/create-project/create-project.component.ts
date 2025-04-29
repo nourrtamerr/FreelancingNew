@@ -7,6 +7,10 @@ import { BiddingProjectService } from '../../../Shared/Services/BiddingProject/b
 import { BiddingprojectCreateUpdate } from '../../../Shared/Interfaces/BiddingProject/biddingproject-create-update';
 import { SkillService } from '../../../Shared/Services/Skill/skill.service';
 import { SubCategoryService } from '../../../Shared/Services/SubCategory/sub-category.service';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+
+
 
 
 
@@ -15,7 +19,7 @@ import { SubCategoryService } from '../../../Shared/Services/SubCategory/sub-cat
 @Component({
   selector: 'app-create-project',
   standalone: true,  // Make sure this is true for standalone component
-  imports: [CommonModule, ReactiveFormsModule],  // Import ReactiveFormsModule here
+  imports: [CommonModule, ReactiveFormsModule,RouterModule],  // Import ReactiveFormsModule here
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.css']
 })
@@ -28,10 +32,14 @@ export class CreateProjectComponent implements OnInit {
     private fixedPriceProjectService: FixedPriceProjectService,
     private biddingProjectService: BiddingProjectService,
     private skills:SkillService,
-    private subcategorie: SubCategoryService
+    private subcategorie: SubCategoryService,
+    private router: Router  // <--- Add this
+
   ) {}
   availableSkills: any[] = [];
 subcategories: any[] = [];
+createdProjectId: number | null = null;
+
 
   ngOnInit(): void {
     // Initialize the form with common fields
@@ -101,6 +109,10 @@ subcategories: any[] = [];
       this.fixedPriceProjectService.createProject(projectData).subscribe({
         next: (response) => {
           console.log('Fixed project created successfully', response);
+          const projectId = response.id; // Make sure your API returns the ID
+          this.createdProjectId = response.id;
+
+    this.router.navigate(['/fixed-project', projectId]);  // Navigate to the details page
         },
         error: (err) => {
           console.error('Error creating fixed project:', err);

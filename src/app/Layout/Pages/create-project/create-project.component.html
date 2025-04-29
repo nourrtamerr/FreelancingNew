@@ -195,13 +195,32 @@
             
             <div class="form-actions">
             </div>
-            <button type="submit" class="btn-primary" [disabled]="projectForm.invalid">
+            <button type="submit"  class="btn-primary" [disabled]="projectForm.invalid">
             <!-- <button type="submit" class="btn-primary"> -->
 
                 Post Project
                 <i class="fas fa-arrow-right"></i>
             </button>
+            <div class="form-actions">
+               
+                
+                <!-- Navigation buttons -->
+                <div class="navigation-buttons">
+                    <button type="button" class="btn-secondary" routerLink="/fixed">
+                        <i class="fas fa-list"></i>
+                        Go to Fixed Projects
+                    </button>
+                   
+                    <button *ngIf="createdProjectId" class="btn btn-secondary" [routerLink]="['/fixed-project', createdProjectId]">
+                        <i class="fas fa-info-circle"></i>
+                        View Project Details
+                      </button>
+                      </div>
+              
+            </div>
         </div>
+
+        
     </form>
 </div>
 
@@ -525,4 +544,41 @@ select[multiple] option:hover {
     background-color: #f5f5f5;
 }
 
+.navigation-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.navigation-buttons .btn-secondary {
+    flex: 1;
+    justify-content: center;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navigation-buttons .btn-secondary:hover {
+    background: #e0e0e0;
+    transform: translateY(-1px);
+}
+
+.navigation-buttons .btn-secondary i {
+    font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navigation-buttons {
+        flex-direction: column;
+    }
+}
 </style>
