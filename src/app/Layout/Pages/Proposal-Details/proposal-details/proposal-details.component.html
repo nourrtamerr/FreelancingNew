@@ -119,3 +119,76 @@
     <p>There are currently no proposals for this project.</p>
   </div>
 </div>
+
+
+<!-- ... existing code ... -->
+<div class="card-actions">
+  <button class="btn-confirm" (click)="openPaymentModal()">
+    <i class="fas fa-check-circle"></i> Confirm Proposal
+  </button>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" [ngClass]="{'show': showPaymentModal}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Proposal Payment</h5>
+        <button type="button" class="btn-close" (click)="closePaymentModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="payment-methods">
+          <h6>Select Payment Method</h6>
+          <div class="method-options">
+            <div class="method-option" [class.selected]="selectedMethod === PaymentMethod.CreditCard" 
+                 (click)="selectPaymentMethod(PaymentMethod.CreditCard)">
+              <i class="fas fa-credit-card"></i>
+              <span>Credit Card</span>
+            </div>
+            <div class="method-option" [class.selected]="selectedMethod === PaymentMethod.Stripe" 
+                 (click)="selectPaymentMethod(PaymentMethod.Stripe)">
+              <i class="fab fa-stripe"></i>
+              <span>Stripe</span>
+            </div>
+            <div class="method-option" [class.selected]="selectedMethod === PaymentMethod.Balance" 
+                 (click)="selectPaymentMethod(PaymentMethod.Balance)">
+              <i class="fas fa-wallet"></i>
+              <span>Balance (${{currentBalance | number:'1.2-2'}})</span>            </div>
+          </div>
+        </div>
+
+        <!-- Credit Card Form -->
+        <form *ngIf="selectedMethod === PaymentMethod.CreditCard" [formGroup]="cardForm" class="payment-form">
+          <div class="form-group">
+            <label>Card Number</label>
+            <input type="text" formControlName="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+            <div class="error-message" *ngIf="cardForm.get('cardNumber')?.invalid && cardForm.get('cardNumber')?.touched">
+              Please enter a valid card number
+            </div>
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="number" formControlName="cvv" class="form-control" placeholder="123">
+            <div class="error-message" *ngIf="cardForm.get('cvv')?.invalid && cardForm.get('cvv')?.touched">
+              Please enter a valid CVV
+            </div>
+          </div>
+        </form>
+
+        <!-- Balance Warning -->
+        <div *ngIf="selectedMethod === PaymentMethod.Balance && currentBalance < proposals[0].price" class="balance-warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          Insufficient balance. Available: ${{currentBalance | number:'1.2-2'}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closePaymentModal()">Cancel</button>
+        <button type="button" class="btn-primary" 
+                [disabled]="!isPaymentValid()"
+                (click)="confirmPayment()">
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

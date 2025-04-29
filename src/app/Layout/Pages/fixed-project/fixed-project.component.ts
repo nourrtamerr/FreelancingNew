@@ -79,6 +79,8 @@ export class FixedProjectComponent implements OnInit {
         (l) => l !== level
       );
     }
+    this.applyFilters(); // Apply filters automatically after change
+
   }
 
   getCurrencyLabel(currency: Currency): string {
@@ -125,6 +127,8 @@ export class FixedProjectComponent implements OnInit {
         (c) => c !== currency
       );
     }
+    this.applyFilters(); // Apply filters automatically after change
+
   }
   
 

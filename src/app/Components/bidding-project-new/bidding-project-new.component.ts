@@ -43,13 +43,13 @@ export class BiddingProjectNewComponent implements OnInit {
   ){}
 
 
-  categoryDropdownOpen = false;
-  expOpen = false;
-  jobTypeOpen = false;
-  proposalsOpen = false;
-  clientCountry = false;
-  currencyOpen = false;
-  projectSkillsOpen = false;
+  categoryDropdownOpen = true;
+  expOpen = true;
+  jobTypeOpen = true;
+  proposalsOpen = true;
+  clientCountry = true;
+  currencyOpen = true;
+  projectSkillsOpen = true;
   currentSort: string = 'featured';
 
   countrySearch:string=''
@@ -124,16 +124,13 @@ export class BiddingProjectNewComponent implements OnInit {
 
     })
 
-    this.wishlistService.GetWishList().pipe(
-      map(proj => (proj.projectId )) 
-    ).subscribe({
-      next:(data)=>{
-        this.userWishlist2.push(data);
-         console.log(data)
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: Wishlist[]) => {
+        this.userWishlist2 = data.map(item => item.projectId); // Extract all project IDs
+        console.log("Loaded wishlist:", this.userWishlist2);
       },
-      error: (err)=> console.log(err)
-
-    })
+      error: (err) => console.log(err)
+    });
    
 
   }

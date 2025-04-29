@@ -13,16 +13,16 @@ export class WishlistService {
 
   Url=`${Environment.baseUrl}Wishlist`;
 
-  AddToWishlist(projectid:number){
-    return this.myClient.post(`${this.Url}?projectid=${projectid}`,null);
+  AddToWishlist(projectid:number):Observable<any>{
+    return this.myClient.post(`${this.Url}/${projectid}`,null);
   }
 
-  RemoveFromWishList(projectid:number){
-    return this.myClient.delete(`${this.Url}?projectid=${projectid}`);
+  RemoveFromWishList(projectid:number):Observable<any>{
+    return this.myClient.delete(`${this.Url}/${projectid}`);
   }
 
-  GetWishList():Observable<Wishlist>{
-    return this.myClient.get<Wishlist>(this.Url);
+  GetWishList():Observable<Wishlist[]>{
+    return this.myClient.get<Wishlist[]>(this.Url);
   }
 
 }
