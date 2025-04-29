@@ -76,35 +76,104 @@
 
                         
                         <!-- Number of Proposals Filter -->
-                        <div class="filter-group">
+                        <!-- <div class="filter-group">
+                            
                             <h3>Number of Proposals</h3>
                             <div class="range-inputs">
                                 <input type="number" [(ngModel)]="filters.minProposals" placeholder="Min" class="form-control">
                                 <span class="range-separator">to</span>
                                 <input type="number" [(ngModel)]="filters.maxProposals" placeholder="Max" class="form-control">
                             </div>
-                        </div>
+                        </div> -->
                     
-                        <!-- Price Range Filter -->
+
                         <div class="filter-group">
+                            <h3>Number of Proposals</h3>
+                            <div class="range-inputs">
+                              <input 
+                                type="number" 
+                                [(ngModel)]="filters.minProposals" 
+                                placeholder="Min" 
+                                class="form-control"
+                                (input)="onMinProposalsChange($event)">
+                              <span class="range-separator">to</span>
+                              <input 
+                                type="number" 
+                                [(ngModel)]="filters.maxProposals" 
+                                placeholder="Max" 
+                                class="form-control"
+                                (input)="onMaxProposalsChange($event)">
+                            </div>
+                          </div>
+
+
+
+                        <!-- Price Range Filter -->
+                        <!-- <div class="filter-group">
                             <h3>Price</h3>
                             <div class="range-inputs">
                                 <input type="number" [(ngModel)]="filters.minPrice" placeholder="Min" class="form-control">
                                 <span class="range-separator">to</span>
                                 <input type="number" [(ngModel)]="filters.maxPrice" placeholder="Max" class="form-control">
                             </div>
-                        </div>
+                        </div> -->
                     
-                        <!-- Duration Filter -->
+
+
                         <div class="filter-group">
+                            <h3>Price</h3>
+                            <div class="range-inputs">
+                              <input 
+                                type="number" 
+                                [(ngModel)]="filters.minPrice" 
+                                placeholder="Min" 
+                                class="form-control"
+                                (input)="onMinPriceChange($event)">
+                              <span class="range-separator">to</span>
+                              <input 
+                                type="number" 
+                                [(ngModel)]="filters.maxPrice" 
+                                placeholder="Max" 
+                                class="form-control"
+                                (input)="onMaxPriceChange($event)">
+                            </div>
+                          </div>
+                          
+
+                        <!-- Duration Filter -->
+                        <!-- <div class="filter-group">
+
                             <h3>Project Duration (months)</h3>
                             <div class="range-inputs">
                                 <input type="number" [(ngModel)]="filters.minDuration" placeholder="Min" class="form-control">
                                 <span class="range-separator">to</span>
                                 <input type="number" [(ngModel)]="filters.maxDuration" placeholder="Max" class="form-control">
                             </div>
-                        </div>
+                        </div> -->
                     
+
+
+                        <div class="filter-group">
+                            <h3>Project Duration (months)</h3>
+                            <div class="range-inputs">
+                              <input 
+                                type="number" 
+                                [(ngModel)]="filters.minDuration" 
+                                placeholder="Min" 
+                                class="form-control"
+                                (input)="onMinDurationChange($event)">
+                              <span class="range-separator">to</span>
+                              <input 
+                                type="number" 
+                                [(ngModel)]="filters.maxDuration" 
+                                placeholder="Max" 
+                                class="form-control"
+                                (input)="onMaxDurationChange($event)">
+                            </div>
+                          </div>
+                          
+
+
                         <!-- Currency Filter -->
                     <!-- Currency Filter -->
 <div class="filter-group">
