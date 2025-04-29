@@ -13,13 +13,16 @@ import { SkillService } from '../../Shared/Services/Skill/skill.service';
 import { FormsModule } from '@angular/forms';
 import { SubCategory2 } from '../../Shared/Interfaces/sub-category2';
 import { BiddingProjectService } from '../../Shared/Services/BiddingProject/bidding-project.service';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { BiddingProjectFilter } from '../../Shared/Interfaces/BiddingProject/bidding-project-filter';
 import { BiddingProjectGetAll } from '../../Shared/Interfaces/BiddingProject/bidding-project-get-all';
 import { CommonModule } from '@angular/common';
 import { FilterPipe } from '../../Pipes/filter.pipe';
 import { TimeAgoPipe } from '../../Pipes/time-ago.pipe';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { WishlistService } from '../../Shared/Services/wishlist.service';
+import { ToastrService } from 'ngx-toastr';
+import { Wishlist } from '../../Shared/Interfaces/wishlist';
 
 @Component({
   selector: 'app-bidding-project-new',
@@ -34,7 +37,9 @@ export class BiddingProjectNewComponent implements OnInit {
     private CountryService: CountriesService,
     private SubCategoryService:SubCategoryService,
     private SkillsService:SkillService,
-    private BiddingProjectService:BiddingProjectService
+    private BiddingProjectService:BiddingProjectService,
+    private wishlistService:WishlistService,
+    private toaster: ToastrService
   ){}
 
 
@@ -81,6 +86,11 @@ export class BiddingProjectNewComponent implements OnInit {
     
   };
 
+  userWishlist:Wishlist[]=[];
+
+  userWishlist2: number[]=[];
+
+
 
   ngOnInit(): void {
     this.CategoryService.GetAllCategories().subscribe({
@@ -110,6 +120,17 @@ export class BiddingProjectNewComponent implements OnInit {
 
     this.BiddingProjectService.GetAllBiddingProjects(this.BiddingProjectFilter,1,12).subscribe({
       next:(data)=>{this.projectsBeforeAnyFilters=data, this.projects=data,console.log(data)},
+      error: (err)=> console.log(err)
+
+    })
+
+    this.wishlistService.GetWishList().pipe(
+      map(proj => (proj.projectId )) 
+    ).subscribe({
+      next:(data)=>{
+        this.userWishlist2.push(data);
+         console.log(data)
+      },
       error: (err)=> console.log(err)
 
     })
@@ -381,6 +402,42 @@ export class BiddingProjectNewComponent implements OnInit {
     //     r => r.min === min && r.max === max && !r.isManual
     //   ) ?? false;
     // }
+
+    AddToWishlist(projectid:number){
+      this.wishlistService.AddToWishlist(projectid).subscribe({
+        next:()=>{
+          this.toaster.success("Added to wishlist")
+        },
+        error:(err)=>{
+          console.log(err)
+        }
+      })
+    }
+
+
+    RemoveFromWishlist(projectid:number){
+      this.wishlistService.RemoveFromWishList(projectid).subscribe({
+        next:()=>{
+          this.toaster.success("Removed from wishlist")
+        },
+        error:(err)=>{
+          console.log(err)
+        }
+      })
+    }
+
+    toggleWishlist(projectid:number){
+     const index= this.userWishlist2.indexOf(projectid);
+     if(index > -1){
+      this.RemoveFromWishlist(projectid);
+      this.userWishlist2.splice(index,1);
+     }
+     else{
+      this.AddToWishlist(projectid);
+      this.userWishlist2.push(projectid);
+     }
+
+    }
 
 
 }

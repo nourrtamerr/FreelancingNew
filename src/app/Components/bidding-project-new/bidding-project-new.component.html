@@ -436,7 +436,7 @@
             <div class="project-card-header d-flex justify-content-between align-items-center">
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
               <div class="project-actions d-flex">
-                <button class="action-btn bookmark-btn">
+                <button (click)="toggleWishlist(project.id)" class="fa-bookmark" [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'">
                   <i class="fa-regular fa-bookmark" style="color: #48a53c;"></i>
                 </button>
 

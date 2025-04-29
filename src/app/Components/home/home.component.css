@@ -114,7 +114,7 @@
 .fiverr-hero-section {
     /* min-height: 340px; */
     height: 80vh;
-    background: url('/images/try2.jpg') center center/cover no-repeat;
+    background: url('/images/try.jpg') center center/cover no-repeat;
     position: relative;
     display: flex;
     align-items: center;
@@ -124,7 +124,9 @@
   .hero-overlay {
     position: absolute;
     inset: 0;
+    /* background: rgba(20, 20, 20, 0.55); */
     background: rgba(20, 20, 20, 0.55);
+
     background: linear-gradient(90deg, rgba(20, 20, 20, 0.826) 0%, rgba(20, 20, 20, 0.55) 100%);
     z-index: 1;
   }
@@ -430,9 +432,9 @@
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
 }
-
+/*ahyyy*/
 .enterprise-suite-card {
-  background: #0B2A47;
+  background: #C2CBCC;
   border-radius: 12px;
   width: 100%;
   min-height: 320px;
@@ -445,7 +447,7 @@
 }
 
 .enterprise-suite-content {
-  color: #fff;
+  color: #000000;
   flex: 1 1 0;
   min-width: 0;
   display: flex;
@@ -470,13 +472,13 @@
 }
 
 .enterprise-suite-title .highlight {
-  color: #ffffff;
+  color: #000000;
   font-weight: 500;
 }
 
 .enterprise-suite-desc {
   font-size: 1.08rem;
-  color: #e6f2ef;
+  color: #000000;
   margin-bottom: 1.2rem;
 }
 
@@ -491,11 +493,11 @@
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  color: #e6f2ef;
+  color: #000000;
 }
 
 .enterprise-suite-list i.fa-check-circle {
-  color: #ffffff;
+  color: #000000;
   margin-right: 0.7em;
   font-size: 1.1em;
 }
@@ -505,14 +507,14 @@
   font-weight: 500;
   padding: 0.4rem 1.2rem;
   background: #fff;
-  color: #195e53;
+  color: #000000;
   border: none;
   transition: background 0.15s, color 0.15s;
 }
 
 .enterprise-suite-btn:hover {
-  background: #7ee6c7;
-  color: #195e53;
+  background: #175b99;
+  color: #ffffff;
 }
 
 .enterprise-suite-image {
@@ -521,7 +523,7 @@
   display: flex;
   align-items: stretch;
   justify-content: stretch;
-  background: #195e53;
+  background: #6f98cf;
 
   width: 50%;         /* Add this line */
   flex-basis: 50%; 
@@ -635,8 +637,12 @@
 }
 
 .find-talent-action-card:hover {
-  background: #0e7c00;
+  background: #175b99;
+  color:white;
   box-shadow: 0 4px 24px 0 rgba(20,168,0,0.13);
+  .action-desc{
+    color:white
+  }
 }
 
 .action-title {
@@ -647,9 +653,11 @@
 
 .action-desc {
   font-size: 1rem;
-  color: #e6f2ef;
+  color: #000000;
   font-weight: 400;
 }
+
+
 
 
 
@@ -720,14 +728,15 @@
 }
 
 .find-talent-action-card {
-  background: #16446e;  /* Changed from #13a300 */
+  background: #dde6ed;  /* Changed from #13a300 */
   color: #fff;
   box-shadow: 0 2px 8px 0 rgba(22, 68, 110, 0.10);  /* Changed rgba values */
 }
 
 .find-talent-action-card:hover {
-  background: #1a5d90;  /* Changed from #0e7c00 - lighter shade for hover */
+  background: #175b99;  /* Changed from #0e7c00 - lighter shade for hover */
   box-shadow: 0 4px 24px 0 rgba(22, 68, 110, 0.13);
+  color:white;
 }
 
 .find-talent-overlay {
@@ -754,12 +763,12 @@
 }
 
 .trending-tags .badge {
-  background: #175b99;
-  border: 1.5px solid #175b99;
+  background: #ffffff1f;
+  border: 1px solid #ffffff;
 }
 
 .trending-tags .badge:hover {
-  background: #1e6eb8;
+  background: #1e6eb84d;
   border-color: #1e6eb8;
 }
 
@@ -784,7 +793,7 @@
 
 .testimonial-card-fiverr:hover {
   border-color: #175b99;
-  box-shadow: 0 4px 24px 0 rgba(23, 91, 153, 0.1);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
 }
 
 .browse-jobs-link {
@@ -800,12 +809,14 @@
 }
 
 .find-talent-action-card {
-  background: #175b99;
+  background: #C2CBCC;
   box-shadow: 0 2px 8px rgba(23, 91, 153, 0.15);
+  color: black;
 }
 
 .find-talent-action-card:hover {
-  background: #1e6eb8;
+  background: #175b99;
+  color:white;
 }
 
 .btn-outline-success {
@@ -832,3 +843,5 @@
 .badge.bg-success {
   background-color: #175b99 !important;
 }
+
+
