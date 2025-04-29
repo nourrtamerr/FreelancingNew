@@ -5,12 +5,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { Chat } from '../../Interfaces/Chat';
 import { AuthService } from '../Auth/auth.service';
+import { Form } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService implements OnDestroy {
-  private hubConnection!: HubConnection;
+  public hubConnection!: HubConnection;
   private apiUrl = Environment.baseUrl;
   private destroy$ = new Subject<void>();
 
@@ -29,6 +30,7 @@ export class ChatService implements OnDestroy {
       this.hubConnection = new HubConnectionBuilder()
         .withUrl(Environment.signalRUrl, { 
           accessTokenFactory: () => {
+            accessTokenFactory: () => this.authService.getTokenFromCookie() || ''
             const token = this.authService.getTokenFromCookie();
             if (!token) {
               console.warn('No auth token available');
@@ -45,7 +47,7 @@ export class ChatService implements OnDestroy {
           console.log('SignalR Connected');
           this.connectionStatus$.next(true);
         })
-        .catch(err => {
+        .catch((err: unknown) => {
           console.error('SignalR Connection Error:', err);
           this.connectionStatus$.next(false);
         });
@@ -68,7 +70,8 @@ export class ChatService implements OnDestroy {
     return this.onlineUsers$.asObservable();
   }
 
-  sendMessage(message: Chat): Observable<Chat> {
+  sendMessage(message: FormData): Observable<Chat> {
+    
     return this.http.post<Chat>(`${this.apiUrl}Chat`, message).pipe(
       takeUntil(this.destroy$)
     );
@@ -97,12 +100,18 @@ export class ChatService implements OnDestroy {
     ).pipe(takeUntil(this.destroy$));
   }
 
+
+  allowrealtime(){
+    this.hubConnection.on("ReceiveMessage", (message: Chat) => {
+      console.log('Message received:', message);
+  });
+}
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     
     if (this.hubConnection) {
-      this.hubConnection.stop().catch(err => 
+      this.hubConnection.stop().catch((err: unknown)=> 
         console.error('SignalR disconnect error:', err));
     }
   }

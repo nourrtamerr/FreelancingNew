@@ -98,5 +98,17 @@ export class AuthService {
       return null;
     }
   }
+
+  getUserName(): string | null {
+    const token = this.getTokenFromCookie();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || null;
+    } catch {
+      return null;
+    }
+  }
   
 }

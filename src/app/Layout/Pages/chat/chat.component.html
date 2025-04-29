@@ -1,17 +1,27 @@
 <div class="chat-container">
-    <div class="messages-container">
-      <div *ngFor="let message of messages" class="message" [class.sent]="message.senderId === currentUserId">
-        <div *ngIf="message.imageUrl" class="message-image">
-          <img [src]="message.imageUrl" alt="Attached image">
-        </div>
-        <div *ngIf="message.message" class="message-text">{{ message.message }}</div>
-        <div class="message-time">{{ message.sentAt | date:'shortTime' }}</div>
+  <div class="messages-container">
+    <div *ngFor="let message of messages" class="message" [class.sent]="message.senderId === currentUserId">
+      <div *ngIf="message.imageUrl" class="message-image">
+        <img [src]="filesurl+'/'+message.imageUrl" 
+             alt="Attached image" 
+             (click)="openImageModal(message.imageUrl)">
       </div>
+      <div *ngIf="message.message" class="message-text">{{ message.message }}</div>
+      <div class="message-time">{{ message.sentAt | date:'shortTime' }}</div>
     </div>
-  
-    <div class="message-input">
-      <input type="text" [(ngModel)]="newMessage" placeholder="Type your message...">
-      <input type="file" accept="image/*" (change)="handleFileInput($event)">
-      <button (click)="sendMessage()">Send</button>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="image-modal" *ngIf="selectedImage" (click)="closeImageModal()">
+    <div class="modal-content">
+      <span class="close-button" (click)="closeImageModal()">&times;</span>
+      <img [src]="filesurl+'/'+selectedImage" alt="Full size image">
     </div>
-  </div>    
+  </div>
+
+  <div class="message-input">
+    <input type="text" [(ngModel)]="newMessage" placeholder="Type your message...">
+    <input type="file" accept="image/*" (change)="handleFileInput($event)">
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>

@@ -23,6 +23,8 @@ import { IdentityVerificationDeicisionComponent } from './Layout/Pages/identity-
 import { ProposalsComponent } from './Layout/Pages/Proposal/proposals/proposal.component';
 import { HomeComponent } from './Components/home/home.component';
 import { LoginComponent } from './Layout/Pages/login/login.component';
+import { ChatComponent } from './Layout/Pages/chat/chat.component';
+import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 
 
 
@@ -61,6 +63,8 @@ export const routes: Routes = [
       {path: 'freelancers',component: FreelancersComponent},
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent},
       {path: 'login',component: LoginComponent},
+      {path: 'chathub/:username',component: ChatComponent},
+      {path: 'notification',component: NotificationsComponent},
 
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
     
