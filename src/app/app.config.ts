@@ -14,7 +14,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(),
     withInterceptors([headerInterceptor,errorInterceptor])),
     provideAnimations(),
-    provideToastr(),
+    provideToastr({
+      positionClass: 'toast-bottom-right',  // Global position for all toasts
+      timeOut: 3000,                       // Time for toast to stay visible
+      closeButton: true,                   // Show close button
+      progressBar: true,                   // Show progress bar
+      preventDuplicates: true,             // Prevent duplicate toasts
+    }),
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes)]
 

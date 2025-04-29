@@ -43,6 +43,11 @@ import { Country } from '../../../Shared/Interfaces/Country';
 })
 export class ProfileComponent {
   ngOnInit() {
+    this.toastr.success('Logged in successfully', 'Success', {
+      positionClass: 'toast-bottom-right',
+      timeOut: 5000,
+      closeButton: true
+    });
     this.route.fragment.subscribe(fragment => {
       if (fragment) {
         this.activeTab = fragment;

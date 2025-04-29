@@ -56,7 +56,10 @@ export class MilestoneService {
 
   }
 
-
+  RemoveMilestoneFilesByName(name:string):Observable<boolean>{
+    console.log(name);
+    return this.httpclient.delete<boolean>(`${this.url}/RemoveMilestoneFilesByName/${name}`);
+  }
 
   RemoveMilestoneFile(FileId:number):Observable<boolean>{
     return this.httpclient.delete<boolean>(`${this.url}/RemoveMilestoneFiles/${FileId}`);
