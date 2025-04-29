@@ -5,7 +5,9 @@
 
 
 export enum Environment {
+    
    baseUrl= "https://localhost:7093/api/",
+   signalRUrl= 'https://localhost:7093/chathub'
   //  baseUrl= "http://localhost:5045/api/",
 
 }

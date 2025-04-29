@@ -23,7 +23,6 @@ import { IdentityVerificationDeicisionComponent } from './Layout/Pages/identity-
 import { ProposalsComponent } from './Layout/Pages/Proposal/proposals/proposal.component';
 import { HomeComponent } from './Components/home/home.component';
 import { LoginComponent } from './Layout/Pages/login/login.component';
-import { WishlistComponent } from './Components/wishlist/wishlist.component';
 
 
 
@@ -62,7 +61,6 @@ export const routes: Routes = [
       {path: 'freelancers',component: FreelancersComponent},
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent},
       {path: 'login',component: LoginComponent},
-      {path: 'wishlist',component: WishlistComponent},
 
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
     

@@ -1,0 +1,17 @@
+<div class="chat-container">
+    <div class="messages-container">
+      <div *ngFor="let message of messages" class="message" [class.sent]="message.senderId === currentUserId">
+        <div *ngIf="message.imageUrl" class="message-image">
+          <img [src]="message.imageUrl" alt="Attached image">
+        </div>
+        <div *ngIf="message.message" class="message-text">{{ message.message }}</div>
+        <div class="message-time">{{ message.sentAt | date:'shortTime' }}</div>
+      </div>
+    </div>
+  
+    <div class="message-input">
+      <input type="text" [(ngModel)]="newMessage" placeholder="Type your message...">
+      <input type="file" accept="image/*" (change)="handleFileInput($event)">
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>    
