@@ -35,11 +35,11 @@ search(searched:string){
 }
 
 navigatetodetails(id:number) {
-  this.router.navigateByUrl(`/home2/bandetails/${id}`)
+  this.router.navigateByUrl(`/bandetails/${id}`)
 }
 
 Update(id:number){
-  this.router.navigateByUrl(`/home2/updateban/${id}`)
+  this.router.navigateByUrl(`/updateban/${id}`)
 }
 getDateDiff(dateString: string): number {
   const banEndDate = new Date(dateString);

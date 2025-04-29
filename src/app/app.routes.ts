@@ -22,6 +22,7 @@ import { IdentityVerificationDeicisionComponent } from './Layout/Pages/identity-
 // import { ProposalComponent } from './Components/proposal/proposal.component';
 import { ProposalsComponent } from './Layout/Pages/Proposal/proposals/proposal.component';
 import { HomeComponent } from './Components/home/home.component';
+import { LoginComponent } from './Layout/Pages/login/login.component';
 
 
 
@@ -57,8 +58,9 @@ export const routes: Routes = [
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent)},
       {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent)},
       {path: 'proposal2/:id',component: Proposal2Component},
-      {path: 'Freelancers',component: FreelancersComponent},
+      {path: 'freelancers',component: FreelancersComponent},
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent},
+      {path: 'login',component: LoginComponent},
 
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
     
