@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,12 @@ import { RouterModule } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  constructor(private AuthService:AuthService) { }
+  ngOnInit(): void {
+    ;
+    console.log('UserId :',this.AuthService.getUserId() );
+  }
   searchTerm = '';
 
   trendingTags = [

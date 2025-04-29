@@ -1,41 +1,110 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Environment } from '../../../base/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { Chat } from '../../Interfaces/Chat';
+import { AuthService } from '../Auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
-  private apiUrl = `${Environment.baseUrl}`;
-  constructor(private _HttpClient:HttpClient) { }
+export class ChatService implements OnDestroy {
+  private hubConnection!: HubConnection;
+  private apiUrl = Environment.baseUrl;
+  private destroy$ = new Subject<void>();
 
-  getChatById(id: number):Observable<Chat> {
-    return this._HttpClient.get<Chat>(`${this.apiUrl}Chat/${id}`);
+  private onlineUsers$ = new BehaviorSubject<string[]>([]);
+  private messages$ = new BehaviorSubject<Chat[]>([]);
+  private connectionStatus$ = new BehaviorSubject<boolean>(false);
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    this.initializeSignalRConnection();
+  }
+  private initializeSignalRConnection(): void {
+    try {
+      this.hubConnection = new HubConnectionBuilder()
+        .withUrl(Environment.signalRUrl, { 
+          accessTokenFactory: () => {
+            const token = this.authService.getTokenFromCookie();
+            if (!token) {
+              console.warn('No auth token available');
+              return '';
+            }
+            return token;
+          }
+        })
+        .withAutomaticReconnect()
+        .build();
+  
+      this.hubConnection.start()
+        .then(() => {
+          console.log('SignalR Connected');
+          this.connectionStatus$.next(true);
+        })
+        .catch(err => {
+          console.error('SignalR Connection Error:', err);
+          this.connectionStatus$.next(false);
+        });
+  
+    } catch (error) {
+      console.error('SignalR Initialization Error:', error);
+      this.connectionStatus$.next(false);
+    }
+  }
+    // Public API
+  get connectionStatus(): Observable<boolean> {
+    return this.connectionStatus$.asObservable();
+  }
+
+  getMessages(): Observable<Chat[]> {
+    return this.messages$.asObservable();
+  }
+
+  getOnlineUsers(): Observable<string[]> {
+    return this.onlineUsers$.asObservable();
+  }
+
+  sendMessage(message: Chat): Observable<Chat> {
+    return this.http.post<Chat>(`${this.apiUrl}Chat`, message).pipe(
+      takeUntil(this.destroy$)
+    );
+  }
+
+  getChatById(id: number): Observable<Chat> {
+    return this.http.get<Chat>(`${this.apiUrl}Chat/${id}`).pipe(
+      takeUntil(this.destroy$)
+    );
   }
 
   deleteChat(id: number): Observable<void> {
-    return this._HttpClient.delete<void>(`${this.apiUrl}Chat/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}Chat/${id}`).pipe(
+      takeUntil(this.destroy$)
+    );
   }
 
   getConversations(SenderId: string, ReceiverId: string): Observable<Chat[]> {
-    return this._HttpClient.get<Chat[]>(`${this.apiUrl}Chat/conversations/${SenderId}/${ReceiverId}`);
+    return this.http.get<Chat[]>(`${this.apiUrl}Chat/conversation/${SenderId}/${ReceiverId}`);
+  }
+  
+
+  markAsRead(id: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}Chat/mark-as-read/${id}`, {}
+    ).pipe(takeUntil(this.destroy$));
   }
 
-
-  CreateChat(chat: Chat): Observable<Chat> {
-    return this._HttpClient.post<Chat>(`${this.apiUrl}Chat`, chat);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    
+    if (this.hubConnection) {
+      this.hubConnection.stop().catch(err => 
+        console.error('SignalR disconnect error:', err));
+    }
   }
 
-  getAllConversations(userId: string): Observable<Chat[]> {
-    return this._HttpClient.get<Chat[]>(`${this.apiUrl}Chat/conversations/${userId}`);
-  }
-  MarkAsRead(id:number): Observable<Chat[]> {
-    return this._HttpClient.put<Chat[]>(`${this.apiUrl}Chat/mark-as-read/${id}`, null);
-  }
-
-  getAllUserOnline(): Observable<any[]> {
-    return this._HttpClient.get<any[]>(`${this.apiUrl}Chat/online-users`);
-  }
 }
