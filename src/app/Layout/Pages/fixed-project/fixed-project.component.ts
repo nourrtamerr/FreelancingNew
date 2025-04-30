@@ -7,12 +7,16 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { Currency, ExperienceLevel } from '../../../Shared/Enums/FixedPriceProjectEnum';
 import { FixedProjectFilters } from '../../../Shared/Interfaces/FixedPriceProjectFilters';
+import { FilterPipe } from '../../../Pipes/filter.pipe';
+import { WishlistService } from '../../../Shared/Services/wishlist.service';
+import { ToastrService } from 'ngx-toastr';
+import { Wishlist } from '../../../Shared/Interfaces/wishlist';
 
 @Component({
   selector: 'app-fixed-project',
   templateUrl: './fixed-project.component.html',
   styleUrls: ['./fixed-project.component.css'],
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, FilterPipe],
   standalone: true,
 })
 export class FixedProjectComponent implements OnInit {
@@ -41,16 +45,43 @@ export class FixedProjectComponent implements OnInit {
   ExperienceLevel = ExperienceLevel;
   Currency = Currency;
 
+  projectsBeforeAnyFilters:FixedPriceProject[]=[];
+
   // Available currencies for dropdown
   currencies = Object.values(Currency);
 
   // Available experience levels for checkboxes
   experienceLevels = Object.values(ExperienceLevel);
 
-  constructor(private projectService: FixedPriceProjectService) {}
+
+  
+  categoryDropdownOpen = true;
+  expOpen = true;
+  jobTypeOpen = true;
+  proposalsOpen = true;
+  clientCountry = true;
+  currencyOpen = true;
+  projectSkillsOpen = true;
+  durationOpen=true;
+  priceOpen=true;
+  currentSort: string = 'featured';
+
+  
+  countrySearch:string=''
+  currencySearch:string=''
+  categorySearch:string=''
+  skillsSearch:string=''
+
+  userWishlist2: number[]=[];
+
+  constructor(private projectService: FixedPriceProjectService,
+    private wishlistService:WishlistService,
+    private toaster: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.loadProjects();
+    
   }
   getExperienceLevelLabel(level: ExperienceLevel): string {
     switch (level) {
@@ -63,6 +94,47 @@ export class FixedProjectComponent implements OnInit {
       default:
         return level;
     }
+  }
+
+  expandedSections = {
+    category: true,
+    
+  };
+
+  sortProducts(sortOption: string) {
+    this.currentSort = sortOption;
+    switch (sortOption) {
+      case 'price-low-high':
+        this.projects.sort((a, b) => a.price - b.price);
+        // this.ApplyPagination();
+        console.log("entered low to high")
+        break;
+      case 'price-high-low':
+        console.log("entered high to low")
+
+        this.projects.sort((a, b) => b.price - a.price);
+        // this.ApplyPagination();
+        break;
+
+        // case 'Latest':
+        //   this.projects.sort((a, b) => a.postedFrom - b.postedFrom);
+        //   // this.ApplyPagination();
+        //   break;
+
+        //   case 'Oldest':
+        //   this.projects.sort((a, b) => b.postedFrom - a.postedFrom);
+        //   // this.ApplyPagination();
+        //   break;
+
+      default:
+        console.log("didnt enter")
+        this.projects;
+        break;
+    }
+  }
+
+  toggleSection(section: keyof typeof this.expandedSections) {
+    this.expandedSections[section] = !this.expandedSections[section];
   }
 
   onExperienceLevelChange(level: ExperienceLevel, checked: boolean): void {
@@ -182,6 +254,41 @@ export class FixedProjectComponent implements OnInit {
   
   
 
+  AddToWishlist(projectid:number){
+    this.wishlistService.AddToWishlist(projectid).subscribe({
+      next:()=>{
+        this.toaster.success("Added to wishlist")
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
+  }
+
+
+  RemoveFromWishlist(projectid:number){
+    this.wishlistService.RemoveFromWishList(projectid).subscribe({
+      next:()=>{
+        this.toaster.success("Removed from wishlist")
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
+  }
+
+  toggleWishlist(projectid:number){
+   const index= this.userWishlist2.indexOf(projectid);
+   if(index > -1){
+    this.RemoveFromWishlist(projectid);
+    this.userWishlist2.splice(index,1);
+   }
+   else{
+    this.AddToWishlist(projectid);
+    this.userWishlist2.push(projectid);
+   }
+
+  }
 
 
 
@@ -197,6 +304,7 @@ export class FixedProjectComponent implements OnInit {
     this.filters = {};
     this.loadProjects();
   }
+
 
   private cleanFilters() {
     const cleanedFilters = { ...this.filters } as FixedProjectFilters;
@@ -221,10 +329,21 @@ export class FixedProjectComponent implements OnInit {
       next: (data: FixedPriceProject[]) => {
         console.log('Projects received:', data);
         this.projects = data;
+        if (!Object.keys(filters).length || (Object.keys(filters).length === 2 && filters.pageNumber && filters.pageSize)) {
+          this.projectsBeforeAnyFilters = data;
+        }
       },
       error: (error) => {
         console.error('Error fetching projects:', error);
       },
+    });
+
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: Wishlist[]) => {
+        this.userWishlist2 = data.map(item => item.projectId); // Extract all project IDs
+        console.log("Loaded wishlist:", this.userWishlist2);
+      },
+      error: (err) => console.log(err)
     });
   }
 

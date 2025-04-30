@@ -8,9 +8,7 @@
         <!-- <span class="jobs-text"></span> -->
       </div>
     </div>
-    <!-- <div class="stats-image">
-      <img src="images/loan.png" alt="Stats" />
-    </div> -->
+
   </div>
 </div>
 
@@ -60,8 +58,8 @@
     <!-- <i class="fa fa-gavel"></i> -->
     <i class="fa-solid fa-tag"></i>
     <div>
-      <div class="info-modern-value">${{project?.minimumPrice}} - ${{project?.maximumprice}}</div>
-      <div class="info-modern-label">{{project.projectType}} project</div>
+      <div class="info-modern-value">{{project?.minimumPrice}} - {{project?.maximumprice}} {{project.currency}}</div>
+      <div class="info-modern-label">{{project.projectType}} Range</div>
     </div>
   </div>
 
@@ -69,7 +67,7 @@
     <!-- <i class="fa fa-dollar-sign"></i> -->
     <i class="fa-solid fa-money-bill-1-wave"></i>
     <div>
-      <div class="info-modern-value">${{project?.bidAveragePrice}}</div>
+      <div class="info-modern-value">{{project?.bidAveragePrice}} {{project.currency}}</div>
       <div class="info-modern-label">Avg Bid</div>
     </div>
   </div>
@@ -115,9 +113,9 @@
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
           <aside class="upwork-sidebar mb-4">
-            <a [routerLink]="['/home2/proposal2',project.id]"><button class="apply-btn mb-2">Apply now</button></a>
+            <a [routerLink]="['/proposal2',project.id]"><button   class="apply-btn mb-2">Apply now</button></a>
             
-            <button class="save-btn mb-2">Save job</button>
+            <button (click)="AddToWishlist(project.id)" class="save-btn mb-2">Save job</button>
       
   
             <div class="client-info">
@@ -134,17 +132,12 @@
                 <span>{{project.clientProjectsTotalCount}} jobs posted</span>
               </div>
               <div class="client-stats">
-                <!-- <span>Member since {{project.clinetAccCreationDate|date:'mediumDate'}}</span> -->
                 
             </div>
               <div class="client-member-since">
                 Member since {{project.clinetAccCreationDate|date:'mediumDate'}}
               </div>
-              <!-- <div class="job-link">
-                <span>Job link</span>
-                <input type="text" readonly value="https://www.upwork.com/jobs/~021916014755712304387" />
-                <a href="#">Copy link</a>
-              </div> -->
+
             </div>
 
 
@@ -191,7 +184,7 @@
            
 <div class="card review-card mx-auto">
   <div class="card-body">
-    <a [routerLink]="['/home2/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
+    <a [routerLink]="['/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
       {{ review.projectTitle }} 
     </a>
     <div class="d-flex align-items-center mb-2">

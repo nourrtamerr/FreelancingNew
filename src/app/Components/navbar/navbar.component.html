@@ -17,14 +17,14 @@
               Explore Projects
             </a>
             <ul class="dropdown-menu" aria-labelledby="exploreDropdown">
-              <li><a class="dropdown-item" href="#">Bidding</a></li>
-              <li><a class="dropdown-item" href="#">Fixed Price</a></li>
+              <li><a [routerLink]="['/new']" routerLinkActive="router-link-active"  class="dropdown-item" href="#">Bidding</a></li>
+              <li><a [routerLink]="['/fixed']" routerLinkActive="router-link-active" class="dropdown-item" href="#">Fixed Price</a></li>
               <!-- <li><a class="dropdown-item" href="#">Guides</a></li> -->
             </ul>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Freelancers</a>
+            <a [routerLink]="['/freelancers']" routerLinkActive="router-link-active" class="nav-link" href="#">Freelancers</a>
           </li>
 
           <!-- <li class="nav-item dropdown">
@@ -43,17 +43,40 @@
           </li> -->
         </ul>
         <div class="d-flex align-items-center gap-2">
-          <a href="#" class="nav-link  navbar-icon-link" title="Profile">
+
+          <div class="nav-item dropdown">
+          <a 
+          routerLinkActive="router-link-active"
+          class="nav-link  navbar-icon-link dropdown-toggle"
+          role="button"
+           data-bs-toggle="dropdown"
+            aria-expanded="false"
+             title="Profile">
             <i class="fa-regular fa-user"></i>
           </a>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" [routerLink]="['/profile']">View Profile</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
+            <li><a class="dropdown-item" href="#">Add Funds</a></li>
+            <li><a class="dropdown-item" href="#">Withdraw</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" [routerLink]="['/login']">Logout</a></li>
+          </ul>
+        </div>
+
+
+
+
+
           <a href="#" class="nav-link  navbar-icon-link" title="Notifications">
             <i class="fa-regular fa-bell"></i>
           </a>
           <a href="#" class="nav-link  navbar-icon-link" title="Messages">
             <i class="fa-regular fa-comment-dots"></i>
           </a>
-          <a href="#" class="nav-link signin-link">Sign In</a>
-          <a href="#" class="btn btn-outline-dark btn-sm join-btn">Join</a>
+          <a [routerLink]="['/login']" routerLinkActive="router-link-active" class="nav-link signin-link">Sign In</a>
+          <a [routerLink]="['/register']" routerLinkActive="router-link-active" class="btn btn-outline-dark btn-sm join-btn">Join</a>
         </div>
       </div>
     </div>

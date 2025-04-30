@@ -16,13 +16,15 @@ export interface BiddingProjectGetById {
   clientIsverified: boolean
   clientCountry: string
   clientCity: string
+
   clinetAccCreationDate: string
   freelancersubscriptionPlan: string
   freelancerTotalNumber: number
   freelancerRemainingNumberOfBids: number
   clientOtherProjectsIdsNotAssigned: number[]
-  numOfBids:number
   clientProjectsTotalCount:number
+  
+  numOfBids:number
   clientId:string
   expectedDuration:number
   endDate:string

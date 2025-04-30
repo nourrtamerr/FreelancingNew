@@ -34,6 +34,20 @@ export interface Milestone {
     projectSkills: string[]
     milestones: any[]
     endDate:string
+    clientId:string
+    clientRating:number
+    clientTotalNumberOfReviews: number
+    clientIsverified:boolean
+    clientCountry:string
+    clientCity:string
+    clinetAccCreationDate: string
+    freelancersubscriptionPlan: string
+    freelancerTotalNumber: number
+    freelancerRemainingNumberOfBids: number
+    clientOtherProjectsIdsNotAssigned: number[]
+    clientProjectsTotalCount:number
+    projectType: string
+    postedFrom:number
   }
   export interface ProjectsResponse {
     totalCount: number;

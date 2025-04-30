@@ -11,6 +11,9 @@ import { GetReviewsByRevieweeIdDto } from '../../Shared/Interfaces/get-reviews-b
 import { ReviewService } from '../../Shared/Services/Review/review.service';
 import { FixedPriceProjectService } from '../../Shared/Services/FixedPriceProject/fixed-price-project.service';
 
+import { ToastrService } from 'ngx-toastr';
+import { WishlistService } from '../../Shared/Services/wishlist.service';
+
 @Component({
   selector: 'app-bidding-project-details',
   imports: [RouterModule, TimeAgoPipe, FormsModule, CommonModule, TimeLeftPipe],
@@ -22,7 +25,9 @@ export class BiddingProjectDetailsComponent implements OnInit {
   constructor(private biddingProjectDetailsService:BiddingProjectService,
      private route:ActivatedRoute,
     private ReviewsService:ReviewService,
-    private FixedService:FixedPriceProjectService
+    private FixedService:FixedPriceProjectService,
+    private wishlistService:WishlistService,
+    private toaster:ToastrService
     ){}
 
 
@@ -59,19 +64,7 @@ project: BiddingProjectGetById={
 
   clientOtherProjNameId: {id:number, title:string, projectType:string} []=[];
 
-  // ngOnInit(): void {
 
-  //   const code = +this.route.snapshot.paramMap.get('id')!
-
-  //   this.biddingProjectDetailsService.GetBiddingProjectById(code).subscribe({
-  //     next:(data)=>{
-  //       this.project=data;
-  //     },
-  //     error:(err)=> console.log(err)
-  //   })
-
-
-  // }
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
 
@@ -149,6 +142,17 @@ project: BiddingProjectGetById={
         })
         ,console.log(err),console.log("niwnfoinewio")}
     });
+  }
+
+  AddToWishlist(projectid:number){
+    this.wishlistService.AddToWishlist(projectid).subscribe({
+      next:()=>{
+        this.toaster.success("Added to wishlist")
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
   }
 
 }

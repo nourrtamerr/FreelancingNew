@@ -321,6 +321,11 @@
     border-radius: 12px;
     padding: 24px 20px;
     font-size: 15px;
+
+    height: fit-content;
+    /* position: sticky; */
+    /* top: 30px;
+    overflow-y: auto; */
   }
   
   .sidebar-section {
@@ -413,6 +418,10 @@
     padding: 6px 0 0 0;
     animation: fadeIn 0.2s;
   }
+
+  
+
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -531,6 +540,7 @@
     color: #333;
     /* background-color: white; */
     cursor: pointer;
+    background: #f5f7f9;
   }
   
   .sort-select:focus {

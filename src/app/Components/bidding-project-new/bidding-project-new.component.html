@@ -4,26 +4,18 @@
 
     <div class="jobs-illustration">
       <div>
-        <h1 class="jobs-count">4536+ Jobs Available</h1>
-        <!-- <span class="jobs-text"></span> -->
+        <h1 class="jobs-count">Available Jobs</h1>
+
       </div>
     </div>
-    <!-- <div class="stats-image">
-      <img src="images/loan.png" alt="Stats" />
-    </div> -->
+
   </div>
 </div>
 
 
 
 <div class="upwork-container">
-    <!-- Notification Banner -->
-    <!-- <div class="upwork-banner">
-      <span class="pt-5">
-        Starting May 1, 2025, Freelancer Service Fees for new contracts will switch from a fixed to a variable fee based on factors such as client demand for certain work. The fee will remain fixed for the life of the contract.
-        <a href="#">Learn more.</a>
-      </span>
-    </div> -->
+  
   
     <!-- Search Bar and Filters -->
     <div class="container pt-5">
@@ -37,17 +29,7 @@
           </div>
         </div>
 
-        <!-- <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="results-header">
-                <select class="form-select w-auto">
-                  <option>Sort by: Newest</option>
-                  <option>Sort by: Oldest</option>
-                </select>
-              </div>
-        </div> -->
-        <!-- <div class="col-lg-4 col-md-4 col-sm-12">
-          <a href="#" class="advanced-search">Advanced search</a>
-        </div> -->
+
       </div>
     </div>
   
@@ -56,12 +38,7 @@
       <div class="row gap-2">
         <!-- Sidebar -->
         
-        <!-- <div class="results-header d-flex justify-content-end mb-3">
-            <select class="form-select w-auto">
-              <option>Sort by: Newest</option>
-              <option>Sort by: Oldest</option>
-            </select>
-          </div> -->
+
 
           <div class="col-12 mb-4">
             <div class="filter-stats">
@@ -83,48 +60,6 @@
         </div>
 
 
-
-<!-- ... existing code ... -->
-
-<!-- ... existing code ... -->
-
-<!-- Dropdown for categories and subcategories -->
-<!-- ... existing code ... -->
-<!-- ... existing code ... -->
-
-
-  <!-- <div class="dropdown" >
-    <button class="btn custom-dropdown menu-item dropdown-toggle" type="button" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-        Select Categories
-    </button>
-    <div class="dropdown-menu"   aria-labelledby="categoriesDropdown">
-      <li class="mb-2 d-flex justify-content-between align-items-center">
-        <label for="adults" class="mb-0">Adults</label>
-        <input id="adults" type="number" asp-for="AdultsNumber" class="form-control w-50" min="1" value="1" />
-    </li>
-        <div class="dropdown-header">Accounting & Consulting</div>
-            <div class="dropdown-item">
-                <label class="form-check-label d-block">
-                    <input type="checkbox" class="form-check-input"> All - Accounting & Consulting
-                </label>
-            </div>
-    </div>
-</div>
-
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/> -->
-
-
-  <!-- ... existing code ... -->
-  <!-- ... existing code ... -->
-  
-  <!-- ... existing code ... -->
-
-  <!-- ... existing code ... -->
 
 
 
@@ -151,11 +86,7 @@
 
               
                 <div *ngFor="let category of Categories ">
-                   <!--| filter:searchText-->
-                   <!-- <div *ngIf="!categorySearch || 
-                   category.name.toLowerCase().includes(categorySearch.toLowerCase()) ||
-                   (getSubcategoriesOfCategory(category.id) | filter:categorySearch).length > 0"> -->
-
+               
                   <p class="category-title">{{ category.name }} <p>
                   <div *ngFor="let sub of getSubcategoriesOfCategory(category.id) | filter:categorySearch">
                     <label class="custom-checkbox">
@@ -165,9 +96,6 @@
                     </label>
 
                   </div>
-
-                <!-- </div> -->
-
 
                 </div>
                        
@@ -199,11 +127,6 @@
             </div>
           </div>
   
-
-          <!-- Num of proposals -->
-          <!-- ... existing code ... -->
-
-          
 
           <div class="sidebar-section">
 
@@ -281,69 +204,6 @@
             </div>
           </div>
           
-
-
-
-<!-- ... existing code ... -->
-
-
-
-          <!-- ... existing code ... -->
-          <!-- <div class="sidebar-section">
-            <div class="sidebar-label-row" (click)="proposalsOpen = !proposalsOpen">
-              <label class="sidebar-label">Number of proposals</label>
-              <span class="chevron" [class.open]="proposalsOpen"></span>
-            </div>
-            <div class="sidebar-group-content" *ngIf="proposalsOpen">
-              <div class="proposal-slider-container">
-                <div class="proposal-slider-inputs d-flex align-items-center justify-content-between mb-2">
-                  <input
-                    type="number"
-                    class="proposal-input"
-                    [(ngModel)]="proposalMin"
-                    [min]="proposalSliderMin"
-                    [max]="proposalMax"
-                    (input)="selectMinNumOfProposals(proposalMin)"
-                  />
-                  <span class="proposal-range-separator">to</span>
-                  <input
-                    type="number"
-                    class="proposal-input"
-                    [(ngModel)]="proposalMax"
-                    [min]="proposalMin"
-                    [max]="proposalSliderMax"
-                    (input)="selectMaxNumOfProposals(proposalMax)"
-                  />
-                </div>
-                <input
-                  type="range"
-                  class="proposal-range"
-                  [(ngModel)]="proposalMin"
-                  [min]="proposalSliderMin"
-                  [max]="proposalSliderMax"
-                  (input)="selectMinNumOfProposals(proposalMin)"
-                  [style.width.%]="48"
-                />
-                <input
-                  type="range"
-                  class="proposal-range"
-                  [(ngModel)]="proposalMax"
-                  [min]="proposalSliderMin"
-                  [max]="proposalSliderMax"
-                  (input)="selectMaxNumOfProposals(proposalMax)"
-                  [style.width.%]="48"
-                />
-                <div class="proposal-slider-labels d-flex justify-content-between mt-1">
-                  <span>{{ proposalSliderMin }}</span>
-                  <span>{{ proposalSliderMax }}</span>
-                </div>
-              </div>
-            </div>
-          </div> -->
-          <!-- ... existing code ... -->
-
-
-
 
 
 
@@ -442,19 +302,14 @@
 
         </aside>
 
-        <!----------------------------------------------------------------------------------------------->
-        <!----------------------------------------------------------------------------------------------->
-        <!----------------------------------------------------------------------------------------------->
-
-        <!-- Main Results -->
         <section class="upwork-results col-lg-8 col-md-7 col-sm-12">
 
           <div *ngFor="let project of projects" class="upwork-project-card ">
-            <a [routerLink]="['/home2/details',project.id]">
+            <a [routerLink]="['/details',project.id]">
             <div class="project-card-header d-flex justify-content-between align-items-center">
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
               <div class="project-actions d-flex">
-                <i  (click)="toggleWishlist(project.id)" class="fa-bookmark fs-4" [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
+                <i  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" class="fa-bookmark fs-4" [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
                
 
               </div>
