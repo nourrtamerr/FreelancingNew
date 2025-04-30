@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 interface PasswordMatchErrors extends ValidationErrors {
   mismatch: boolean;
@@ -19,21 +21,20 @@ interface PasswordMatchErrors extends ValidationErrors {
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
-  forgetPassword: FormGroup;
-  resetPassword: FormGroup;
+  loginForm!: FormGroup;
+  forgetPassword!: FormGroup;
+  resetPassword!: FormGroup;
   errorMessage: string | null = null;
   isLoging = false;
   isLoading = false;
   selectedRole: UserRole | null = null;
   roleOptions = Object.values(UserRole);
-  showForgotPasswordForm = false;
   emailFromQuery: string | null = null;
   tokenFromQuery: string | null = null;
   frontendBase = 'http://localhost:4200';
-  isLoginFormVisible = true; // Controls login form visibility
-  isForgotPasswordFormVisible = false; // Controls forgot password form visibility
-  isResetPasswordFormVisible = false; // Controls reset password form visibility
+  currentForm: 'login' | 'forgotPassword' | 'resetPassword' = 'login';
+  passwordStrength: number = 0;
+  passwordStrengthText: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +44,10 @@ export class LoginComponent implements OnInit {
     private _ToastrService: ToastrService,
     private route: ActivatedRoute
   ) {
+    this.initForms();
+  }
+
+  private initForms(): void {
     this.loginForm = this.fb.group({
       Usernameoremail: ['', [Validators.required]],
       loginPassword: ['', [Validators.required, Validators.minLength(6)]]
@@ -65,87 +70,134 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+
+    this.resetPassword.get('newPassword')?.valueChanges.subscribe(
+      password => this.checkPasswordStrength(password || '')
+    );
+  }
+
+  checkPasswordStrength(password: string): void {
+    if (!password) {
+      this.passwordStrength = 0;
+      this.passwordStrengthText = '';
+      return;
+    }
+
+    let strength = 0;
+    
+    if (password.length >= 8) strength += 1;
+    if (password.length >= 12) strength += 1;
+    
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    
+    this.passwordStrength = Math.min(5, strength);
+    
+    if (strength <= 1) this.passwordStrengthText = 'Very Weak';
+    else if (strength === 2) this.passwordStrengthText = 'Weak';
+    else if (strength === 3) this.passwordStrengthText = 'Medium';
+    else if (strength === 4) this.passwordStrengthText = 'Strong';
+    else this.passwordStrengthText = 'Very Strong';
   }
 
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoging = isLoggedIn;
+      if (isLoggedIn) {
+        this.router.navigate(['/profile']);
+      }
     });
 
     console.log('Role:', this.authService.getRole());
 
+    this.processQueryParams();
+  }
+
+  private processQueryParams(): void {
     this.route.queryParams.subscribe(params => {
       this.emailFromQuery = params['email'] ? decodeURIComponent(params['email']) : null;
       this.tokenFromQuery = params['token'] ? decodeURIComponent(params['token']) : null;
+
       if (this.emailFromQuery && this.tokenFromQuery) {
-        this.showForgotPasswordForm = false;
-        this.isLoginFormVisible = false;
-        this.isForgotPasswordFormVisible = false;
-        this.isResetPasswordFormVisible = true;
+        this.currentForm = 'resetPassword';
         this.resetPassword.patchValue({
           email: this.emailFromQuery,
           token: this.tokenFromQuery
         });
-        console.log('Patched resetPassword form:', {
-          email: this.emailFromQuery,
-          token: this.tokenFromQuery.substring(0, 50) + '...' 
-        });
+        console.log('Reset password form initialized with email:', this.emailFromQuery);
+      } else {
+        this.currentForm = 'login';
       }
-    });
 
-    this.route.queryParams.subscribe(params => {
       if (params['error']) {
         this.errorMessage = decodeURIComponent(params['error']);
         this._ToastrService.error(this.errorMessage, 'External Login Failed');
+        this.currentForm = 'login';
       }
-    });
 
-    this.route.queryParams.subscribe(params => {
       if (params['pleaseLogin'] !== undefined) {
-        this.tryClickLoginButton();
+        this.currentForm = 'login';
       }
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+      this.markFormGroupTouched(this.loginForm);
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = null;
     const credentials = this.loginForm.value;
 
-    this.authService.login(credentials).subscribe({
-      next: (response: { token: string }) => {
-        document.cookie = `user_Token=${response.token}; path=/; secure; samesite=Lax`;
-        this.authService.deCodeUserData(response.token);
-        this.router.navigate(['/profile']);
-        this._ToastrService.success('Login successful!');
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Login failed. Please try again.';
-        this._ToastrService.error(this.errorMessage || 'An error occurred. Please try again later.', 'Error', { timeOut: 7000 });
-        this.loginForm.reset();
-        this.isLoading = false;
-      }
-    });
+    this.authService.login(credentials)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.handleError(error, 'Login failed');
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(response => {
+        if (response) {
+          this.handleSuccessfulLogin(response);
+        }
+      });
+  }
+
+  private handleSuccessfulLogin(response: { token: string }): void {
+    document.cookie = `user_Token=${response.token}; path=/; secure; samesite=Lax`;
+    this.authService.deCodeUserData(response.token);
+    this._ToastrService.success('Login successful! Redirecting to your profile...', 'Welcome Back');
+    setTimeout(() => {
+      this.router.navigate(['/profile']);
+    }, 500);
   }
 
   ExternalLogin(provider: 'Google' | 'Facebook'): void {
-    const returnUrl = `${this.frontendBase}/home2/profile`;
+    const returnUrl = `${this.frontendBase}/profile`;
     const errorUrl = `${this.frontendBase}/home`;
   
-    console.log(`Attempting external login with ${provider}`);
+    console.log(`Initiating ${provider} login...`);
+    this._ToastrService.info(`Redirecting to ${provider} login...`, 'Please wait');
   
     this.authService.logout();
   
-    this._AccountService.ExternalLogin(provider, undefined, returnUrl, errorUrl).subscribe({
-      error: (err) => {
-        this._ToastrService.error('External login failed. Please try again.');
-      }
-    });
+    this._AccountService.ExternalLogin(provider, undefined, returnUrl, errorUrl)
+      .pipe(
+        catchError((error) => {
+          this.errorMessage = 'External login initiation failed. Please try again.';
+          this._ToastrService.error(this.errorMessage, `${provider} Login Failed`);
+          this.currentForm = 'login';
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 
   passwordMatchValidator(form: FormGroup): PasswordMatchErrors | null {
@@ -156,14 +208,15 @@ export class LoginComponent implements OnInit {
 
   getPassword(): void {
     if (this.forgetPassword.invalid) {
-      this.forgetPassword.markAllAsTouched();
+      this.markFormGroupTouched(this.forgetPassword);
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = null;
     const email = this.forgetPassword.value.email;
-    const reseturl = `${this.frontendBase}/home`;
-    const successurl = `${this.frontendBase}/home2/profile`;
+    const reseturl = `${this.frontendBase}/login`;
+    const successurl = `${this.frontendBase}/profile`;
     const errorUrl = `${this.frontendBase}/home`;
 
     const dto: ForgotPasswordDTO = {
@@ -172,32 +225,35 @@ export class LoginComponent implements OnInit {
       errorUrl
     };
 
-    console.log('ForgotPassword Request:', { dto, reseturl });
-
-    this._AccountService.ForgotPassword(dto, reseturl).subscribe({
-      next: (response) => {
-        console.log('ForgotPassword Response:', response);
-        this._ToastrService.success('Check your email for reset password link!');
-        this.forgetPassword.reset();
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('ForgotPassword Error:', err);
-        this.errorMessage = err.error?.message || err.error?.errors?.reseturl?.[0] || 'Failed to send reset password link.';
-        this._ToastrService.error(this.errorMessage || 'An error occurred. Please try again later.', 'Error', { timeOut: 7000 });
-        this.router.navigateByUrl('/home');
-        this.isLoading = false;
-      }
-    });
+    this._AccountService.ForgotPassword(dto, reseturl)
+      .pipe(
+        catchError((error) => {
+          this.handleError(error, 'Failed to send reset password link');
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(response => {
+        if (response) {
+          this._ToastrService.success(
+            'Please check your email and follow the instructions to reset your password.',
+            'Reset Link Sent!'
+          );
+          this.forgetPassword.reset();
+        }
+      });
   }
 
   resetPasswordSubmit(): void {
     if (this.resetPassword.invalid) {
-      this.resetPassword.markAllAsTouched();
+      this.markFormGroupTouched(this.resetPassword);
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = null;
     const dto: ResetPasswordDTO = {
       newPassword: this.resetPassword.value.newPassword,
       confirmNewPassword: this.resetPassword.value.confirmNewPassword,
@@ -205,85 +261,80 @@ export class LoginComponent implements OnInit {
       token: this.resetPassword.value.token
     };
 
-    console.log('ResetPassword Request:', {
-      email: dto.email,
-      newPassword: dto.newPassword,
-      confirmNewPassword: dto.confirmNewPassword,
-      token: dto.token
-    });
-
-    this._AccountService.ResetPassword(dto).subscribe({
-      next: (response) => {
-        console.log('ResetPassword Response:', response);
-        this._ToastrService.success('Password reset successfully! Please log in.');
-        this.resetPassword.reset();
-        this.router.navigateByUrl('/home2/profile');
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('ResetPassword Error:', err);
-        this.errorMessage = err.error?.message || 'Failed to reset password.';
-        this._ToastrService.error(this.errorMessage || 'An error occurred. Please try again later.', 'Error', { timeOut: 7000 });
-        this.isLoading = false;
-      }
-    });
+    this._AccountService.ResetPassword(dto)
+      .pipe(
+        catchError((error) => {
+          this.handleError(error, 'Failed to reset password');
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(response => {
+        if (response) {
+          this._ToastrService.success(
+            'Your password has been reset successfully. You can now log in with your new password.',
+            'Password Reset'
+          );
+          this.resetPassword.reset();
+          this.currentForm = 'login';
+          this.loginForm.reset();
+          this.errorMessage = null;
+        }
+      });
   }
 
   showLogin(): void {
-    this.showForgotPasswordForm = false;
-    this.emailFromQuery = null;
-    this.tokenFromQuery = null;
-    this.isLoginFormVisible = true;
-    this.isForgotPasswordFormVisible = false;
-    this.isResetPasswordFormVisible = false;
+    this.currentForm = 'login';
     this.loginForm.reset();
     this.errorMessage = null;
-    // this.closeLoginDropdown();
   }
 
-  toggleForgotPassword(): void {
-    this.showForgotPasswordForm = true;
-    this.isLoginFormVisible = false;
-    this.isForgotPasswordFormVisible = true;
-    this.isResetPasswordFormVisible = false;
+  showForgotPasswordView(): void {
+    this.currentForm = 'forgotPassword';
     this.forgetPassword.reset();
     this.errorMessage = null;
-    // this.closeLoginDropdown();
   }
 
-  showForgotPassword(): void {
-    this.showForgotPasswordForm = true;
-    this.emailFromQuery = null;
-    this.tokenFromQuery = null;
-    this.isLoginFormVisible = false;
-    this.isForgotPasswordFormVisible = true;
-    this.isResetPasswordFormVisible = false;
-    this.forgetPassword.reset();
-    this.errorMessage = null;
-    // this.closeLoginDropdown();
-  }
-
- 
   closeLoginDropdown(): void {
+    // The dropdown may not exist in the new UI structure, so this is just a fallback
+    // for backward compatibility with the old UI
     const loginBtn = document.getElementById('wt-loginbtn');
-    if (loginBtn) {
+    if (!loginBtn) return;
+    
+    const dropdownContainer = loginBtn.closest('.wt-loginarea')?.querySelector('.wt-loginformhold');
+    if (dropdownContainer?.classList.contains('show')) {
       loginBtn.click();
     }
   }
 
-  private tryClickLoginButton(): void {
-    let attempts = 0;
-    const maxAttempts = 10;
+  /**
+   * Utility method to handle HTTP errors
+   */
+  private handleError(error: HttpErrorResponse, defaultMessage: string): void {
+    console.error('API Error:', error);
+    
+    if (error.error?.message) {
+      this.errorMessage = String(error.error.message);
+    } else if (error.error?.errors) {
+      // Extract the first error message if available
+      const firstError = Object.values(error.error.errors)[0];
+      this.errorMessage = Array.isArray(firstError) ? firstError[0] : String(firstError);
+    } else {
+      this.errorMessage = defaultMessage;
+    }
+    
+    this._ToastrService.error(this.errorMessage || 'An error occurred. Please try again later.', 'Error', { timeOut: 7000 });
+  }
 
-    const interval = setInterval(() => {
-      const loginBtn = document.getElementById('wt-loginbtn');
-      if (loginBtn) {
-        loginBtn.click();
-        clearInterval(interval);
-      } else if (++attempts >= maxAttempts) {
-        clearInterval(interval);
-        console.warn('Login button not found after multiple attempts');
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
-    }, 100); // Retry every 100ms
+    });
   }
 }
