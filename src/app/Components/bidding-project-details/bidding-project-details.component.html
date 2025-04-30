@@ -1,39 +1,36 @@
+<div class="jobs-available-section mb-5">
+  <div class="hero-overlay"></div>
+  <div class="jobs-available-content">
+
+    <div class="jobs-illustration">
+      <div>
+        <h1 class="jobs-count">Job Details</h1>
+        <!-- <span class="jobs-text"></span> -->
+      </div>
+    </div>
+    <!-- <div class="stats-image">
+      <img src="images/loan.png" alt="Stats" />
+    </div> -->
+  </div>
+</div>
+
+
 <div class="upwork-job-container py-4">
     <div class="container">
-      <!-- Notification Banner -->
-      <!-- <div class="upwork-banner  mb-4">
-        <span>
-          Starting May 1, 2025, Freelancer Service Fees for new contracts will switch from a fixed to a variable fee based on factors such as client demand for certain work. The fee will remain fixed for the life of the contract.
-          <a href="#">Learn more.</a>
-        </span>
-      </div> -->
-  
+
 
       <div class="row gx-4 gy-4">
         <!-- Main Job Details -->
         <div class="col-lg-8 col-md-12">
           <div class="upwork-job-details mb-4">
             <h1 class="job-title">{{project?.title}}</h1>
-<!-- 
-            <h5><i class="fa-regular fa-hourglass-half" style="color: #b5b5b5;"></i> Ends {{project.biddingEndDate | timeLeft}}</h5>
-
-            <h1 class="job-title">{{project?.numOfBids}} Bids</h1>
-            <h1 class="job-title">Average Bid: {{project?.bidAveragePrice}}</h1>
-            <h1 class="job-title" *ngIf="project?.biddingEndDate">Ends {{project.biddingEndDate | timeLeft}}</h1>
-             -->
             
             <div class="job-meta">
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
-              <!-- <span class="dot">•</span> -->
+
               <span> <i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
             </div>
 
-            <!-- <div class="specialized-profile mb-3">
-              <i class="fa fa-briefcase"></i>
-              Specialized profiles can help you better highlight your expertise when submitting proposals to jobs like these.
-              <a href="#">Create a specialized profile</a>
-            </div> -->
-  
            
   
             <section class="job-section">
@@ -102,27 +99,6 @@
 
 <hr>
   
-            <!--newww-->
-  
-  
-            <!-- <section class="job-section">
-              
-                <p>
-                  {{project?.projectType}} Project
-                </p>
-
-                
-                <p>
-                    Budget: ${{project?.minimumPrice}} - ${{project?.maximumprice}} 
-                  </p>
-
-                  
-                <p>
-                    {{project?.experienceLevel}} 
-                  </p>
-              </section> -->
-  
-
             <div class="row">
                 <div class="col-lg-12">
                   <section>
@@ -145,7 +121,7 @@
       
   
             <div class="client-info">
-              <h3>About the client</h3>
+              <p style="font-size: 22px; font-weight: bold;">About the client</p>
               <div class="client-meta">
                 <span class="verified"><i class="fa fa-check-circle"></i> {{project.clientIsverified?'Payment Verified' : 'Payment not verified'}}</span>
                 <span  class="stars">
@@ -191,44 +167,10 @@
      <hr>
      
 
-     <!-- Activity on this job -->
-     <!-- <div class="row">
-       <div class="col-lg-12">
-         <section>
-           <h3 class="section-title">Activity on this job</h3>
-           <ul class="activity-list">
-             <li>Proposals: <span class="text-success">15 to 20</span></li>
-             <li>Last viewed by client: <span class="text-success">22 minutes ago</span></li>
-             <li>Hires: 1</li>
-             <li>Interviewing: 0</li>
-             <li>Invites sent: 1</li>
-             <li>Unanswered invites: 0</li>
-           </ul>
-           <div class="upgrade-note">
-             Upgrade your membership to see the bid range <span class="text-success"><i class="fa fa-question-circle"></i></span>
-           </div>
-         </section>
-       </div>
-     </div> -->
+
 
     
-     <!-- Client's recent history -->
-     <!-- <div class="row">
-       <div class="col-lg-12">
-         <section>
-           <h3 class="section-title">Client's Reviews </h3>
-           <ul class="client-history-list">
-             <li *ngFor="let review of clientReviews">
-               <a [routerLink]="['/home2/details',review.projectId]"><span class="history-title">{{review.projectTitle}}</span> </a>|
-               <span class="history-rating"><i class="fa fa-star"></i> {{review.rating}}</span>|
-               <span class="history-rating"> {{review.comment!==null? review.comment : 'no comment'}}</span> |
-               <span class="history-details">{{review.date|date:'mediumDate'}}</span>
-             </li>
-             
-           </ul>
-         </section>
-       </div>
-     </div> -->
+
 
 
      <!-- ... existing code ... -->
@@ -244,38 +186,12 @@
             *ngFor="let review of clientReviews; let i = index"
             [class.active]="i === 0"
           >
-            <!-- <div class="card review-card mx-auto">
-              <div class="card-body">
-                <div class="history-title fw-bold me-2 ">{{ review.projectTitle }}</div>
-                <div class="d-flex align-items-center mb-2">
-                  <span class="history-rating ms-auto text-warning">
-                    <ng-container *ngFor="let star of [1,2,3,4,5]; let idx = index">
-                      <i
-                        class="fa-star"
-                        [ngClass]="{
-                          'fa': true,
-                          'fa-solid': review.rating >= star,
-                          'fa-regular': review.rating < star
-                        }"
-                      ></i>
-                    </ng-container>
-                    <span class="rating-number ms-1">{{ review.rating }}/5</span>
-                  </span>
-                </div>
-                <p class="mb-2 fst-italic text-secondary">
-                  {{ review.comment !== null ? review.comment : 'No comment' }}
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <a [routerLink]="['/home2/details', review.projectId]" class="btn btn-outline-success btn-sm">View Project</a>
-                  <span class="history-details small text-muted">{{ review.date | date: 'mediumDate' }}</span>
-                </div>
-              </div>
-            </div> -->
+          
 
            
 <div class="card review-card mx-auto">
   <div class="card-body">
-    <a [routerLink]="['/home2/details', review.projectId]" class="history-title fw-bold me-2 text-success text-decoration-underline">
+    <a [routerLink]="['/home2/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
       {{ review.projectTitle }} 
     </a>
     <div class="d-flex align-items-center mb-2">
