@@ -1,4 +1,3 @@
-
 <div class="profile-container">
     <!-- Profile Header -->
     <div class="profile-header">
@@ -6,7 +5,7 @@
             <div class="row align-items-center">
                 <div class="col-auto">
                     <div class="profile-picture-container">
-                        <img [src]="profile.profilePicture? previewUrl || `${picturesurl}/${profile.profilePicture}` : '/images/default.jpg'" 
+                        <img [src]="previewUrl || `${picturesurl}/${profile.profilePicture}` || '/assets/images/default.jpg'" 
                              alt="Profile Picture" 
                              class="profile-image">
                         <div class="overlay">
@@ -1244,11 +1243,73 @@
 						</div>
                     </div>
                 </div>
+
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Languages</h5>
+						<button class="btn btn-sm btn-upwork" (click)="openAddLanguageModal()">
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+					<div class="card-body">
+						<div class="languages-list">
+							<div class="language-item" *ngFor="let lang of mylanguages">
+								<span class="language-name">{{lang.language}}</span>
+								<button class="btn btn-sm btn-link text-danger" (click)="deleteLanguage(lang)">
+									<i class="fa fa-times"></i>
+								</button>
+							</div>
+							<!-- Empty state -->
+							<div class="empty-state-mini" *ngIf="!mylanguages?.length">
+								<p>No languages added yet</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				
             </div>
         </div>
     </div>
 </div>
+<div class="modal" [class.show]="isLanguageModalOpen" tabindex="-1" [style.display]="isLanguageModalOpen ? 'block' : 'none'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-upwork text-white">
+                <h5 class="modal-title">
+                    <i class="fa fa-language me-2"></i>
+                    Add Language
+                </h5>
+                <button type="button" class="btn-close btn-close-white" (click)="closeLanguageModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="languageForm" (ngSubmit)="submitLanguage()">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Select Language</label>
+                        <select class="form-select" formControlName="language">
+                            <option value="">Choose a language...</option>
+                            <option *ngFor="let lang of missinglanguages" [value]="lang">
+                                {{lang}}
+                            </option>
+                        </select>
+                    </div>
 
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-secondary" (click)="closeLanguageModal()">
+                            <i class="fa fa-times me-2"></i>Cancel
+                        </button>
+                        <button type="submit" class="btn btn-upwork" [disabled]="languageForm.invalid">
+                            <i class="fa fa-plus me-2"></i>Add Language
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade" [class.show]="isLanguageModalOpen" *ngIf="isLanguageModalOpen"></div>
 <!-- Verification Modal -->
 <div class="modal" [class.show]="isVerificationModalOpen" tabindex="-1" [style.display]="isVerificationModalOpen ? 'block' : 'none'">
     <div class="modal-dialog">

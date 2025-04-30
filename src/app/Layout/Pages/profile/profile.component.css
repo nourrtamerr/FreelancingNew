@@ -1,5 +1,4 @@
 /* Upwork Colors (as CSS variables) */
-
 :root {
     --upwork-green: #108a00;
     --upwork-green-hover: #3c8224;
@@ -4071,5 +4070,66 @@ textarea.form-control {
         h5 {
             margin: 15px 0;
             color: #333;
+        }
+    }
+
+
+    .languages-list {
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+    
+            &:hover {
+                background-color: #f2f7f2;
+            }
+    
+            .language-name {
+                color: #14a800;
+                font-weight: 500;
+            }
+    
+            .btn-link {
+                padding: 0;
+                font-size: 14px;
+                opacity: 0.7;
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+    
+    .empty-state-mini {
+        text-align: center;
+        padding: 15px;
+        color: #666;
+        font-size: 14px;
+    }
+    
+
+
+
+    .bg-upwork {
+        background-color: #14a800;
+    }
+    
+    .btn-upwork {
+        background-color: #14a800;
+        color: white;
+        &:hover {
+            background-color: #3c8224;
+            color: white;
+        }
+    }
+    
+    .modal-header {
+        .btn-close-white {
+            filter: brightness(0) invert(1);
         }
     }

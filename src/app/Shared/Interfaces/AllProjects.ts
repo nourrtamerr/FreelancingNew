@@ -3,9 +3,9 @@ import { ExperienceLevel } from "../Enums/FixedPriceProjectEnum";
 
   
 export enum ProjectStatus {
-  Pending = 'Pending',
-  Working = 'Working',
-  Completed = 'Completed'
+  Pending = 0,
+  Working = 1,
+  Completed = 2
 }
   
   
