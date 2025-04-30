@@ -13,12 +13,11 @@ import { AccountService } from '../../../Shared/Services/Account/account.service
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CountriesService } from '../../../Shared/Services/Countries/countries.service';
-import { HomeNavbarComponent } from '../../Additions/home-navbar/home-navbar.component';
 
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,HomeNavbarComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

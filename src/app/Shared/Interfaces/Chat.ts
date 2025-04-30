@@ -5,6 +5,7 @@ export interface Chat {
     receiverId: string
     receiverName?: string
     message?: any
+    image?:File
     imageUrl?: string
     sentAt?: string
     isRead?: boolean

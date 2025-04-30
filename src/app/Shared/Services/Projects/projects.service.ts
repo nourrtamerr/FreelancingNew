@@ -21,7 +21,7 @@ export class ProjectsService {
   }
 
   getProjectById(projId:number):Observable<any[]>{
-    return this.myClient.get<any[]>(`${this.apiURL}/id`,{ params: { ProjectId: projId},withCredentials:true },).pipe(
+    return this.myClient.get<any[]>(`${this.apiURL}/${projId}`).pipe(
       tap(() => console.log(`Project Id ${projId}`)),
 
     );

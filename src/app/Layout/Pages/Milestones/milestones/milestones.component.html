@@ -12,7 +12,7 @@
   </div>
   
   <div class="milestones-timeline;" *ngIf="milestones.length > 0">
-    <div class="milestone-card" *ngFor="let milestone of milestones">
+    <div class="milestone-card" *ngFor="let milestone of milestones; let i = index">
       
       <div class="milestone-content">
         <div class="milestone-header">
@@ -21,14 +21,34 @@
           class="milestone-status"
           [ngClass]="{
             'Completed': milestone.status === 1,
-            'in-progress': milestone.status === 2,
-            'Pending': milestone.status === 0
+            'in-progress': milestone.status === 0
           }">
           {{ getStatusText(milestone.status) }}
         </span>
         
         </div>
 
+
+        <!-- Add buttons based on user role -->
+  <div class="milestone-actions" *ngIf="milestone.status === 0">
+    <button *ngIf="isProjectClient && milestone.status === 0 && isFirstPendingMilestone(milestone)" 
+          class="btn btn-success" 
+          (click)="confirmMilestone(milestone.id??0)">
+    <i class="fa fa-check"></i> Confirm Milestone
+  </button>
+    
+    <div class="file-upload-section" *ngIf="isProjectFreelancer">
+      <input type="file" 
+             #fileInput 
+             (change)="onFileSelected($event, milestone.id??0)" 
+             multiple 
+             style="display: none;">
+      <button class="btn btn-primary upload-btn" 
+              (click)="fileInput.click()">
+        <i class="fas fa-upload"></i> Upload Files
+      </button>
+    </div>
+  </div>
         <div class="milestone-info">
           <p class="description">{{milestone.description}}</p>
           <div class="milestone-details">
@@ -51,20 +71,38 @@
         <div class="milestone-files" *ngIf="milestone.files && milestone.files.length > 0">
           <h4>Attachments</h4>
           <div class="file-list">
-            <div class="detail" *ngFor="let file of milestone.files">
+            <div class="file-container" *ngFor="let file of milestone.files">
               <ng-container [ngSwitch]="getFileType(file)">
-                <!-- Image Preview -->
-                <img *ngSwitchCase="'image'" [src]="file" alt="Milestone Image" class="milestone-image"/>
-        
-                <!-- Video Preview -->
-                <video *ngSwitchCase="'video'" [src]="file" controls class="milestone-video"></video>
-        
-                <!-- Others -->
-                <div *ngSwitchDefault class="file-item">
-                  <i class="fas fa-file"></i>
-                  <span>Attached File: 
-                    <a [href]="file" target="_blank" download>Open File</a>
-                  </span>
+                <!-- Image files -->
+                <div class="file-preview">
+                  <img *ngSwitchCase="'image'" [src]="file" alt="Milestone Image" class="milestone-image">
+                  <button *ngIf="isProjectFreelancer" 
+                          class="delete-btn" 
+                          (click)="deleteFile( file)">
+                    <i class="fa fa-times"></i>
+                  </button>
+                </div>
+            
+                <!-- Video files -->
+                <div class="file-preview">
+                  <video *ngSwitchCase="'video'" [src]="file" controls></video>
+                  <button *ngIf="isProjectFreelancer" 
+                          class="delete-btn" 
+                          (click)="deleteFile( file)">
+                    <i class="fa fa-times"></i>
+                  </button>
+                </div>
+            
+                <!-- Other files -->
+                <div *ngSwitchDefault class="file-preview">
+                  <a [href]="file" target="_blank">
+                    <i class="fa fa-file"></i> Download File
+                  </a>
+                  <button *ngIf="isProjectFreelancer" 
+                          class="delete-btn" 
+                          (click)="deleteFile( file)">
+                    <i class="fa fa-times"></i>
+                  </button>
                 </div>
               </ng-container>
             </div>

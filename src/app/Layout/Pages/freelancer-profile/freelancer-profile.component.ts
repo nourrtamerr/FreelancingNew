@@ -28,6 +28,8 @@ import { freelancerportofolioproject, freelancerportofolioprojects } from '../..
 import { Certificate } from '../../../Shared/Interfaces/certificate';
 import { ReviewService } from '../../../Shared/Services/Review/review.service';
 import { GetReviewsByRevieweeIdDto } from '../../../Shared/Interfaces/get-reviews-by-reviewee-id-dto';
+import { FreelancerLanguage } from '../../../Shared/Interfaces/freelancer-language';
+import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLanguages/freelancerlanguage.service';
 
 @Component({
   selector: 'app-freelancer-profile',
@@ -54,6 +56,7 @@ constructor(
     ,private BiddingProjects:BiddingProjectService
     ,private fixedprojects:FixedPriceProjectService
     ,private reviewservice:ReviewService
+    ,private freelancerlanguages:FreelancerlanguageService
 ){
 
 }
@@ -63,6 +66,8 @@ error:string='';
 profile!:SingularFreelancer;
 freelancerskills:FreelancerSkill[]=[];
 userEducation!:Education
+mylanguages:FreelancerLanguage[]=[]
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.username = params['username'];
@@ -123,14 +128,36 @@ nonrecommendedskills:nonrecommendedSkill[]=[]
     )
   }
 
+
+  loadLanguages(){
+      this.freelancerlanguages.getFreelancerLanguageByUserName(this.profile.userName).subscribe(
+        {
+          next:(data:FreelancerLanguage[])=>{
+            this.mylanguages=data;
+           
+          
+          },
+          error:(err:string)=>{
+            this.error=err;
+            this.toastr.error("failed to load languages");
+          }
+        }
+      )
+      // const allLanguages = Object.values(LanguageEnum);
+      
+      // Filter out languages that the freelancer already has
+     
+      
+    }
   loadProfile() {
     this.account.getFreelancerByUsername(this.username).subscribe({
       next: (data) => {
         this.profile = data;
-       
+       console.log(data);
         Promise.all([
          
           this.loadEducation(),
+          this.loadLanguages(),
           this.loadExperience(),
           this.loadPortofolioProjects(),
           this.loadCertificates(),

@@ -79,6 +79,8 @@ export class FixedProjectComponent implements OnInit {
         (l) => l !== level
       );
     }
+    this.applyFilters(); // Apply filters automatically after change
+
   }
 
   getCurrencyLabel(currency: Currency): string {
@@ -125,7 +127,59 @@ export class FixedProjectComponent implements OnInit {
         (c) => c !== currency
       );
     }
+    this.applyFilters(); // Apply filters automatically after change
+
   }
+  
+  onMinProposalsChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input && input.value !== '') {  // Ensure that input is not null and the value is not empty
+      this.filters.minProposals = input.valueAsNumber;
+      this.applyFilters();
+    }
+  }
+  
+  onMaxProposalsChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input && input.value !== '') {
+      this.filters.maxProposals = input.valueAsNumber;
+      this.applyFilters();
+    }
+  }
+  
+  onMinPriceChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input && input.value !== '') {
+      this.filters.minPrice = input.valueAsNumber;
+      this.applyFilters();
+    }
+  }
+  
+  onMaxPriceChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input && input.value !== '') {
+      this.filters.maxPrice = input.valueAsNumber;
+      this.applyFilters();
+    }
+  }
+  
+  
+  onMinDurationChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input && input.value !== '') {
+      this.filters.minDuration = input.valueAsNumber;
+      this.applyFilters();
+    }
+  }
+  
+  onMaxDurationChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input && input.value !== '') {
+      this.filters.maxDuration = input.valueAsNumber;
+      this.applyFilters();
+    }
+  }
+  
   
 
 

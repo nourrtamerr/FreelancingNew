@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
-import { AppUser, EditProfileDTO, IdentityVerificationRequest } from '../../../Shared/Interfaces/Account';
+import { AppUser, EditProfileDTO, IdentityVerificationRequest, LanguageEnum } from '../../../Shared/Interfaces/Account';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { Country } from '../../../Shared/Interfaces/Country';
+import { Country } from '../../../Shared/Interfaces/Country';
 import { City } from '../../../Shared/Interfaces/City';
 import { CountriesService } from '../../../Shared/Services/Countries/countries.service';
 import { CitiesService } from '../../../Shared/Services/Cities/cities.service';
@@ -30,14 +30,15 @@ import { BiddingProjectGetAll } from '../../../Shared/Interfaces/BiddingProject/
 import { TimeAgoPipe } from '../../../Pipes/time-ago.pipe';
 import { FixedPriceProjectService } from '../../../Shared/Services/FixedPriceProject/fixed-price-project.service';
 import { FixedPriceProject } from '../../../Shared/Interfaces/FixedPriceProject';
-import { Country } from '../../../Shared/Interfaces/Country';
+import { FreelancerLanguage } from '../../../Shared/Interfaces/freelancer-language';
+import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLanguages/freelancerlanguage.service';
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule,FormsModule,ReactiveFormsModule,TimeAgoPipe],
-  // providers:[FormBuilder],
+  providers:[FormBuilder],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -59,6 +60,7 @@ export class ProfileComponent {
     this.initializeExperienceForm();
     this.initProjectForm();
     this.initCertificateForm();
+    this.initLanguageForm();
     
   }
   
@@ -78,14 +80,99 @@ export class ProfileComponent {
     ,private certificatservice:CertificateService
     ,private BiddingProjects:BiddingProjectService
     ,private fixedprojects:FixedPriceProjectService
+    ,private freelancerlanguages:FreelancerlanguageService
   ) {
 
     
   }
 
 
+  mylanguages:FreelancerLanguage[]=[];
+  missinglanguages:LanguageEnum[]=[];
+
+  loadLanguages(){
+    this.freelancerlanguages.getFreelancerLanguageByUserName(this.profile.userName).subscribe(
+      {
+        next:(data:FreelancerLanguage[])=>{
+          this.mylanguages=data;
+          this.missinglanguages = allLanguages.filter(lang => 
+            !this.mylanguages.some(myLang => 
+                myLang.language === lang && !myLang.isDeleted
+            )
+        );
+        },
+        error:(err)=>{
+          this.error=err;
+          this.toastr.error("failed to load languages");
+        }
+      }
+    )
+    const allLanguages = Object.values(LanguageEnum);
+    
+    // Filter out languages that the freelancer already has
+   
+    
+  }
+
+
   fixedProjects:FixedPriceProject[]=[]
   biddingprojects:BiddingProjectGetAll[]=[]
+  isLanguageModalOpen = false;
+languageForm!: FormGroup;
+
+
+initLanguageForm() {
+  this.languageForm = this.fb.group({
+      language: ['', Validators.required]
+  });
+}
+
+openAddLanguageModal() {
+  // this.loadLanguages(); // Make sure to get updated list
+  this.initLanguageForm();
+  this.isLanguageModalOpen = true;
+}
+
+closeLanguageModal() {
+  this.isLanguageModalOpen = false;
+  this.languageForm.reset();
+}
+
+submitLanguage() {
+  if (this.languageForm.valid) {
+      const newLanguage: FreelancerLanguage = {
+          language: this.languageForm.value.language,
+          isDeleted: false
+      };
+
+      this.freelancerlanguages.addFreelancerLanguage(newLanguage).subscribe({
+          next: () => {
+              this.toastr.success('Language added successfully');
+              this.loadLanguages(); // Refresh the languages list
+              this.closeLanguageModal();
+          },
+          error: (err) => {
+              this.toastr.error('Failed to add language');
+              console.error(err);
+          }
+      });
+  }
+}
+
+deleteLanguage(language: FreelancerLanguage) {
+  this.freelancerlanguages.deleteFreelancerLanguage(language.id?? 0).subscribe({
+      next: () => {
+          this.toastr.success('Language removed successfully');
+          this.loadLanguages(); // Refresh the languages list
+      },
+      error: (err) => {
+          this.toastr.error('Failed to remove language');
+          console.error(err);
+      }
+  });
+}
+
+
 loadBiddingProjects(){
   this.BiddingProjects.GetmyBiddingprojects().subscribe(
     {
@@ -294,13 +381,13 @@ private loadCertificates() {
 
 //#region portofolio project
 
-projectForm!: FormGroup;
   isProjectModalOpen: boolean = false;
+  projectForm!: FormGroup;
+  selectedProjectImages: File[] = [];
+  imagePreviewUrls: string[] = [];
   userPortfolioproject:freelancerportofolioprojects=[]
   editingProject: freelancerportofolioproject | null = null;
-  imagePreviewUrls: string[] = [];
   projectimagesurl:string=projectImages.filesUrl;
-  selectedProjectImages: File[] = [];
   loadPortofolioProjects(){
 
   this.portfolioprojectservice.getMyPortfolioProjects().subscribe(
@@ -556,12 +643,12 @@ submitProject() {
 //#endregion
 
   //#region 
-  isExperienceModalOpen: boolean = false;
-  experienceForm!: FormGroup;
-  isLoadingExperience: boolean = false;
-  editingExperienceId: number | null = null;
-  isSubmitting: boolean = false;
-  userExperiences:Experience[]=[]
+userExperiences:Experience[]=[]
+isExperienceModalOpen: boolean = false;
+experienceForm!: FormGroup;
+isLoadingExperience: boolean = false;
+editingExperienceId: number | null = null;
+isSubmitting: boolean = false;
   loadExperience(){
     if (!this.profile?.userName) {
       this.toastr.error('Unable to load experience: User profile not available');
@@ -998,7 +1085,8 @@ addSkill(skillId: number): void {
           this.loadExperience(),
           this.loadPortofolioProjects(),
           this.loadCertificates(),
-          this.loadBiddingProjects()
+          this.loadBiddingProjects(),
+          this.loadLanguages()
         ]).then(() => {
           // ✅ Now everything is loaded
           this.calculateProfileCompletion();
