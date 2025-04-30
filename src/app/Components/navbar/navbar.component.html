@@ -75,9 +75,13 @@
           <a routerLink="/chathub" class="nav-link  navbar-icon-link" title="Messages">
             <i class="fa-regular fa-comment-dots"></i>
           </a>
-          <a routerLink="/login" class="nav-link signin-link">Sign In</a>
-          <a routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a>
-          <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
+          @if (!isLoggedIn) {
+            <a routerLink="/login" class="nav-link signin-link">Sign In</a>
+            <a routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a>
+          }@else {
+            <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
+          }
+
         </div>
       </div>
     </div>
