@@ -160,7 +160,7 @@ export class UserDashboradComponent implements OnInit {
       map((response: any) => {
         console.log('User Counts Response:', response);
         this.userCounts.clients = response.clients || 0;
-        // this.projectStats.completed = response.completed || 0; // there is a problem here in binding with html
+        this.projectStats.completed = response.completed || 0; // there is a problem here in binding with html
         this.projectStats.Working = response.Working || 0;
         // this.projectStats.total = response.Working + response.completed || 0;
         this.cdr.detectChanges();
