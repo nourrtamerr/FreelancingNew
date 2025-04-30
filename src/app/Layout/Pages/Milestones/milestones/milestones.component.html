@@ -1,54 +1,56 @@
+<div class="jobs-available-section">
+  <div class="hero-overlay"></div>
+  <div class="jobs-available-content">
+
+    <div class="jobs-illustration">
+      <div>
+        <h1 class="jobs-count">Manage Your project Milestones</h1>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div class="milestones-container">
   <div class="milestones-header">
     <h1>Project Milestones</h1>
-    <div class="milestone-progress">
-      <div class="progress-stats">
-        <div class="stat-item">
-          <span class="stat-value">{{milestones.length}}</span>
-          <span class="stat-label"> Total Milestones</span>
-        </div>
-      </div>
+    <div class="stat-item">
+      <span class="stat-value">{{milestones.length}}</span>
+      <span class="stat-label">Total Milestones</span>
     </div>
   </div>
   
-  <div class="milestones-timeline;" *ngIf="milestones.length > 0">
+  <div class="milestones-timeline" *ngIf="milestones.length > 0">
     <div class="milestone-card" *ngFor="let milestone of milestones; let i = index">
-      
       <div class="milestone-content">
         <div class="milestone-header">
           <h3>{{milestone.title}}</h3>
           <span 
-          class="milestone-status"
-          [ngClass]="{
-            'Completed': milestone.status === 1,
-            'in-progress': milestone.status === 0
-          }">
-          {{ getStatusText(milestone.status) }}
-        </span>
-        
+            class="milestone-status"
+            [ngClass]="{
+              'Completed': milestone.status === 1,
+              'in-progress': milestone.status === 0
+            }">
+            {{ getStatusText(milestone.status) }}
+          </span>
         </div>
 
-
-        <!-- Add buttons based on user role -->
-  <div class="milestone-actions" *ngIf="milestone.status === 0">
-    <button *ngIf="isProjectClient && milestone.status === 0 && isFirstPendingMilestone(milestone)" 
-          class="btn btn-success" 
-          (click)="confirmMilestone(milestone.id??0)">
-    <i class="fa fa-check"></i> Confirm Milestone
-  </button>
-    
-    <div class="file-upload-section" *ngIf="isProjectFreelancer">
-      <input type="file" 
-             #fileInput 
-             (change)="onFileSelected($event, milestone.id??0)" 
-             multiple 
-             style="display: none;">
-      <button class="btn btn-primary upload-btn" 
-              (click)="fileInput.click()">
-        <i class="fas fa-upload"></i> Upload Files
-      </button>
-    </div>
-  </div>
+        <!-- Actions based on user role -->
+        <!-- <div class="milestone-actions" *ngIf="milestone.status === 0">
+          <div class="file-upload-section" *ngIf="isProjectFreelancer && isFirstPendingMilestone(milestone)">
+            <input 
+              type="file" 
+              #fileInput 
+              (change)="onFileSelected($event, milestone.id??0)" 
+              multiple 
+              style="display: none;">
+            <div class="file-upload-placeholder" (click)="fileInput.click()">
+              <i class="fas fa-plus"></i>
+            </div>
+          </div>
+        </div> -->
+        
         <div class="milestone-info">
           <p class="description">{{milestone.description}}</p>
           <div class="milestone-details">
@@ -61,63 +63,94 @@
               <span>Due: {{milestone.endDate | date}}</span>
             </div>
             <div class="detail">
+              <i class="fas fa-money-bill-wave"></i>
               <span>Amount: ${{milestone.amount}}</span>
             </div>
-            
           </div> 
         </div>
 
+       
 
-        <div class="milestone-files" *ngIf="milestone.files && milestone.files.length > 0">
+        <!-- Milestone Files Section - Fixed to prevent duplicate files display -->
+        <div class="milestone-files" *ngIf="milestone.files && milestone.files.length > 0 || (isProjectFreelancer && isFirstPendingMilestone(milestone) && milestone.status === 0)">
           <h4>Attachments</h4>
-          <div class="file-list">
-            <div class="file-container" *ngFor="let file of milestone.files">
-              <ng-container [ngSwitch]="getFileType(file)">
-                <!-- Image files -->
-                <div class="file-preview">
-                  <img *ngSwitchCase="'image'" [src]="file" alt="Milestone Image" class="milestone-image">
-                  <button *ngIf="isProjectFreelancer" 
-                          class="delete-btn" 
-                          (click)="deleteFile( file)">
-                    <i class="fa fa-times"></i>
+          <div class="file-container">
+            <ng-container *ngFor="let file of milestone.files">
+              <!-- Image files -->
+              <div class="file-preview" *ngIf="getFileType(file) === 'image'" (click)="openImageModal(file)">
+                <img [src]="file" alt="Milestone Image">
+                <div class="file-actions" *ngIf="isProjectFreelancer && milestone.status === 0">
+                  <button class="action-btn" (click)="$event.stopPropagation(); openImageModal(file)">
+                    <i class="fas fa-eye"></i> Preview
+                  </button>
+                  <button class="action-btn delete-btn" (click)="$event.stopPropagation(); deleteFile(file)">
+                    <i class="fas fa-trash"></i> Delete
                   </button>
                 </div>
+              </div>
+              
+              <!-- Video files -->
+              <div class="file-preview" *ngIf="getFileType(file) === 'video'">
+                <video [src]="file" controls></video>
+                <button 
+                  *ngIf="isProjectFreelancer && milestone.status === 0" 
+                  class="delete-btn" 
+                  (click)="deleteFile(file)">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+              
+              <!-- Other files -->
+              <div class="file-preview" *ngIf="getFileType(file) === 'other'">
+                <a [href]="file" target="_blank">
+                  <i class="fa fa-file"></i>
+                  <span>Download File</span>
+                </a>
+                <button 
+                  *ngIf="isProjectFreelancer && milestone.status === 0" 
+                  class="delete-btn" 
+                  (click)="deleteFile(file)">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </ng-container>
             
-                <!-- Video files -->
-                <div class="file-preview">
-                  <video *ngSwitchCase="'video'" [src]="file" controls></video>
-                  <button *ngIf="isProjectFreelancer" 
-                          class="delete-btn" 
-                          (click)="deleteFile( file)">
-                    <i class="fa fa-times"></i>
-                  </button>
-                </div>
-            
-                <!-- Other files -->
-                <div *ngSwitchDefault class="file-preview">
-                  <a [href]="file" target="_blank">
-                    <i class="fa fa-file"></i> Download File
-                  </a>
-                  <button *ngIf="isProjectFreelancer" 
-                          class="delete-btn" 
-                          (click)="deleteFile( file)">
-                    <i class="fa fa-times"></i>
-                  </button>
-                </div>
-              </ng-container>
+            <!-- File upload placeholder - now inside the file container -->
+            <div class="file-upload-section" *ngIf="isProjectFreelancer && isFirstPendingMilestone(milestone) && milestone.status === 0">
+              <input 
+                type="file" 
+                #fileInput 
+                (change)="onFileSelected($event, milestone.id??0)" 
+                multiple 
+                style="display: none;">
+              <div class="file-preview file-upload-placeholder" (click)="fileInput.click()">
+                <i class="fas fa-plus"></i>
+              </div>
             </div>
           </div>
         </div>
-        
-        
-    
-    </div>
 
+        <div class="confirm-milestone-container" *ngIf="isProjectClient && milestone.status === 0 && isFirstPendingMilestone(milestone)">
+          <button 
+            class="btn btn-primary confirm-btn" 
+            (click)="confirmMilestone(milestone.id??0)">
+            <i class="fa fa-check"></i> Confirm Milestone
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="empty-state" *ngIf=" milestones.length === 0">
+  <div class="empty-state" *ngIf="milestones.length === 0">
     <i class="fas fa-clipboard-list"></i>
     <h2>No Milestones Found</h2>
     <p>This project doesn't have any milestones yet.</p>
+  </div>
+</div>
+
+<div class="image-modal" [class.show]="selectedImage" (click)="closeImageModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-modal" (click)="closeImageModal()">&times;</span>
+    <img *ngIf="selectedImage" [src]="selectedImage" alt="Full size image">
   </div>
 </div>

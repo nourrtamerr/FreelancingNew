@@ -33,6 +33,10 @@ export class MyProjectsComponent implements OnInit {
    getprojectById(projectId: number) {
     this.router.navigate(['/milestones', projectId]);
   }
+  viewProjectDetails(projectId: number) {
+    // Implement project details view navigation
+    this.router.navigate(['/project-details', projectId]);
+  }
    }
 
 

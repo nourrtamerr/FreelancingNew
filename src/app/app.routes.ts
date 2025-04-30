@@ -26,8 +26,6 @@ import { LoginComponent } from './Layout/Pages/login/login.component';
 import { ChatComponent } from './Layout/Pages/chat/chat.component';
 import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 
-
-
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: '', component: HomeComponent },
@@ -68,8 +66,5 @@ export const routes: Routes = [
 
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
     
-
-    
-   
     
 ];

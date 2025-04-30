@@ -1,2 +1,109 @@
 @import 'ngx-toastr/toastr';
 
+/* Essential styles from the original template */
+/* Owl Carousel */
+
+
+/* Additional essential styles - comment out ones that you don't need */
+/* Note: These would need to be installed via npm or added to the assets folder */
+
+/* Bootstrap is already included in your project */
+/* @import 'bootstrap/dist/css/bootstrap.min.css'; */
+
+/* Font Awesome for icons */
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Custom styles for job board */
+.job-board-container {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: #212529;
+}
+
+/* Nice-select styles for dropdowns */
+.nice-select {
+  -webkit-tap-highlight-color: transparent;
+  background-color: #fff;
+  border-radius: 4px;
+  border: solid 1px #e8e8e8;
+  box-sizing: border-box;
+  clear: both;
+  cursor: pointer;
+  display: block;
+  float: left;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: normal;
+  height: 50px;
+  line-height: 48px;
+  outline: none;
+  padding-left: 18px;
+  padding-right: 30px;
+  position: relative;
+  text-align: left !important;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.nice-select:hover {
+  border-color: #dbdbdb;
+}
+
+.nice-select.open, .nice-select:active, .nice-select:focus {
+  border-color: #999;
+}
+
+.nice-select:after {
+  border-bottom: 2px solid #999;
+  border-right: 2px solid #999;
+  content: '';
+  display: block;
+  height: 8px;
+  margin-top: -4px;
+  pointer-events: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform-origin: 66% 66%;
+  transform: rotate(45deg);
+  transition: all 0.15s ease-in-out;
+  width: 8px;
+}
+
+/* Animation styles (simplified version of animate.css) */
+.fadeInLeft {
+  animation-name: fadeInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Add delay classes if needed */
+.delay-200ms {
+  animation-delay: 200ms;
+}
+
+.delay-300ms {
+  animation-delay: 300ms;
+}
+
+.delay-400ms {
+  animation-delay: 400ms;
+}
+
+.delay-500ms {
+  animation-delay: 500ms;
+}
+
