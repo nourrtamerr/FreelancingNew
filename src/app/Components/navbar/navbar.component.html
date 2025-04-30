@@ -72,11 +72,12 @@
           <a href="#" class="nav-link  navbar-icon-link" title="Notifications">
             <i class="fa-regular fa-bell"></i>
           </a>
-          <a href="#" class="nav-link  navbar-icon-link" title="Messages">
+          <a routerLink="/chathub" class="nav-link  navbar-icon-link" title="Messages">
             <i class="fa-regular fa-comment-dots"></i>
           </a>
-          <a [routerLink]="['/login']" routerLinkActive="router-link-active" class="nav-link signin-link">Sign In</a>
-          <a [routerLink]="['/register']" routerLinkActive="router-link-active" class="btn btn-outline-dark btn-sm join-btn">Join</a>
+          <a routerLink="/login" class="nav-link signin-link">Sign In</a>
+          <a routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a>
+          <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
         </div>
       </div>
     </div>

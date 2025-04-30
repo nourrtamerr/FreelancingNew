@@ -1,4 +1,18 @@
-<div class="page-container">
+<div class="jobs-available-section mb-5">
+  <div class="hero-overlay"></div>
+  <div class="jobs-available-content">
+
+    <div class="jobs-illustration">
+      <div>
+        <h1 class="jobs-count">Available Jobs</h1>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="page-container  ">
+
     <!-- Left Sidebar -->
     <aside class="filters-sidebar">
       <div class="filters-header">
@@ -84,10 +98,10 @@
     <!-- Main Content -->
     <main class="freelancers-content">
         <div class="freelancers-grid">
-            <div class="freelancer-card" *ngFor="let freelancer of freelancers">
-              <div class="card-content">
-                <div class="freelancer-main">
-                  <div class="profile-section">
+          <div class="freelancer-card" *ngFor="let freelancer of freelancers">
+            <div class="card-content">
+              <div class="freelancer-main">
+                <div class="profile-section">
                     <div class="profile-image">
                       <img [src]="freelancer.profilePicture ? picturesurl + '/' + freelancer.profilePicture : '/images/default.jpg'" 
                            [alt]="freelancer.firstname">
@@ -101,38 +115,40 @@
                   </div>
           
                   <div class="freelancer-details">
-                    <div class="name-section">
-                      <h3>
-                        <a [routerLink]="['/Freelancerprofile', freelancer.userName]">
-                          {{freelancer.firstname}} {{freelancer.lastname}}
-                        </a>
-                      </h3>
-                      <span class="role">{{freelancer.role}}</span>
-                    </div>
-                    
-                    <div class="location-info">
-                      <i class="fas fa-map-marker-alt"></i>
-                      <span>{{freelancer.city}}, {{freelancer.country}}</span>
-                    </div>
-          
-                    <div class="skills-wrapper">
-                      <div class="skills">
-                        <span class="skill-tag" *ngFor="let skill of freelancer.userSkills.slice(0, 4)">
-                          {{skill}}
-                        </span>
-                        <span class="more-skills" *ngIf="freelancer.userSkills.length > 4">
-                          +{{freelancer.userSkills.length - 4}}
-                        </span>
+                    <div class="content-area">
+                      <div class="name-section">
+                        <h3>
+                          <a class="detail-row" [routerLink]="['/Freelancerprofile', freelancer.userName]">
+                            {{freelancer.firstname}} {{freelancer.lastname}}
+                          </a>
+                        </h3>
+                        <span class="role">{{freelancer.role}}</span>
                       </div>
+                      
+                      <div class="detail-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{freelancer.city}}, {{freelancer.country}}</span>
+                      </div>
+            
+                      
                     </div>
                   </div>
                 </div>
-          
+                <div class="skills-wrapper mb-3">
+                  <div class="skills">
+                    <span class="skill-tag " *ngFor="let skill of freelancer.userSkills.slice(0, 4)">
+                      {{skill}}
+                    </span>
+                    <span class="more-skills " *ngIf="freelancer.userSkills.length > 4">
+                      +{{freelancer.userSkills.length - 4}}
+                    </span>
+                  </div>
+                </div>
                 <div class="card-actions">
-                  <button class="view-profile-btn" [routerLink]="['/Freelancerprofile', freelancer.userName]">
+                  <button class="btn btn-primary" [routerLink]="['/Freelancerprofile', freelancer.userName]">
                     View Profile
                   </button>
-                  <button class="contact-btn">
+                  <button class="btn btn-secondary">
                     <i class="fas fa-envelope"></i>
                   </button>
                 </div>
@@ -150,4 +166,5 @@
         </button>
       </div>
     </main>
+
   </div>

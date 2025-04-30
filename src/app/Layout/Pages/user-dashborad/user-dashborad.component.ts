@@ -1,40 +1,25 @@
-// import { Component } from '@angular/core';
-
 
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { AccountService } from '../../../Shared/Services/Account/account.service';
+
 import { FixedPriceProjectService } from '../../../Shared/Services/FixedPriceProject/fixed-price-project.service';
 import { ProposalService } from '../../../Shared/Services/Proposal/proposal.service';
 import { CertificateService } from '../../../Shared/Services/Certificates/certificate.service';
-import { SkillService } from '../../../Shared/Services/Skill/skill.service';
-import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLanguages/freelancerlanguage.service';
+
 import { MilestoneService } from '../../../Shared/Services/Milestone/milestone.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, forkJoin, of } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
-import { AppUsers } from '../../../Shared/Interfaces/Account';
 import { FixedPriceProject, ProjectsResponse } from '../../../Shared/Interfaces/FixedPriceProject';
 import { Certificate } from '../../../Shared/Interfaces/certificate';
-import { Skill } from '../../../Shared/Interfaces/Skill';
-import { FreelancerLanguage } from '../../../Shared/Interfaces/freelancer-language';
 import { BiddingProjectService } from '../../../Shared/Services/BiddingProject/bidding-project.service';
 import { BiddingProjectGetAll, BiddingProjectsResponse } from '../../../Shared/Interfaces/BiddingProject/bidding-project-get-all';
-import { UserSkill } from '../../../Shared/Interfaces/UserSkill';
 import { ProjectsService } from '../../../Shared/Services/Projects/projects.service';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
-// @Component({
-//   selector: 'app-user-dashborad',
-//   imports: [],
-//   templateUrl: './user-dashborad.component.html',
-//   styleUrl: './user-dashborad.component.css'
-// })
-// export class UserDashboradComponent {
 
-// }
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
@@ -49,8 +34,6 @@ export class UserDashboradComponent implements OnInit {
     projects: true,
     proposals: true,
     certificates: true,
-    skills: true,
-    languages: true,
     revenue: true
   };
 
@@ -59,20 +42,15 @@ export class UserDashboradComponent implements OnInit {
     projects: false,
     proposals: false,
     certificates: false,
-    skills: false,
-    languages: false,
     revenue: false
   };
 
   userCounts = {
     clients: 0,
-    freelancers: 0,
-    admins: 0
   };
 
   projectStats = {
     total: 0,
-    pending: 0,
     completed: 0,
     Working :0,
   };
@@ -84,7 +62,7 @@ export class UserDashboradComponent implements OnInit {
 
   pendingCertificates = 0;
 
-  languageDistribution: { language: string; count: number }[] = [];
+
 
   revenueChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -99,27 +77,13 @@ export class UserDashboradComponent implements OnInit {
   };
 
   projectStatusChartData: ChartConfiguration<'pie'>['data'] = {
-    labels: ['Pending', 'Working', 'Completed'],
+    labels: ['Working', 'Completed'],
     datasets: [{
       data: [],
-      backgroundColor: ['#FFA500', '#4CAF50','#4BC0C0']
+      backgroundColor: ['#4CAF50','#4BC0C0']
     }]
   };
 
-  languageChartData: ChartConfiguration<'pie'>['data'] = {
-    labels: [],
-    datasets: [{
-      data: [],
-      backgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-        '#4BC0C0',
-        '#9966FF',
-        '#FF9F40'
-      ]
-    }]
-  };
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -146,12 +110,9 @@ export class UserDashboradComponent implements OnInit {
   };
 
   constructor(
-    private accountService: AccountService,
     private projectService: FixedPriceProjectService,
     private proposalService: ProposalService,
     private certificateService: CertificateService,
-    private skillService: SkillService,
-    private languageService: FreelancerlanguageService,
     private toastr: ToastrService,
     private biddingProjectService: BiddingProjectService,
     private cdr: ChangeDetectorRef,
@@ -164,10 +125,7 @@ export class UserDashboradComponent implements OnInit {
   ngOnInit(): void {
     this.lastUpdated = new Date();
     this.loadDashboardData();
-    this.skillService.getUserSkillsForAdmin().subscribe((skills: UserSkill[]) => {
-      console.log('Skills:', skills);
-    });
-    this.biddingProjectService.GetAllBiddingProjects({},10,10).subscribe((bidding:any)=>{
+    this.biddingProjectService.GetmyBiddingprojects().subscribe((bidding:any)=>{
         console.log('Bidding' , bidding)
     } )
   }
@@ -178,7 +136,6 @@ export class UserDashboradComponent implements OnInit {
       this.loadProjectStatistics(),
       this.loadProposalStatistics(),
       this.loadCertificateStatistics(),
-      // this.loadLanguageDistribution(),
       this.loadRevenueData()
     ]).subscribe({
       next: () => {
@@ -203,9 +160,9 @@ export class UserDashboradComponent implements OnInit {
       map((response: any) => {
         console.log('User Counts Response:', response);
         this.userCounts.clients = response.clients || 0;
-        this.projectStats.completed = response.completed || 0;
+        this.projectStats.completed = response.completed || 0; // there is a problem here in binding with html 
         this.projectStats.Working = response.Working || 0;
-        this.projectStats.total = response.Working + response.completed || 0;
+        // this.projectStats.total = response.Working + response.completed || 0;
         this.cdr.detectChanges();
       }));
   }
@@ -214,21 +171,20 @@ export class UserDashboradComponent implements OnInit {
     this.isLoading.projects = true;
     this.hasError.projects = false;
 
-    const fixedProjects$ = this.projectService.getProjectsFixedDashBoard().pipe(
-      map((response: ProjectsResponse) => {
+    const fixedProjects$ = this.projectService.getmyprojects().pipe(
+      map((response: FixedPriceProject[]) => {
         console.log('Fixed Projects Response:', response);
-        return response.projects || [];
+        return response || [];
       }),
       catchError(error => {
         console.error('Error fetching fixed projects:', error);
         return of([] as FixedPriceProject[]);
       })
     );
-
-    const biddingProjects$ = this.biddingProjectService.GetAllBiddingProjectsDashBoard({}, 10, 10).pipe(
-      map((response: BiddingProjectsResponse) => {
+    const biddingProjects$ = this.biddingProjectService.GetmyBiddingprojects().pipe(
+      map((response: BiddingProjectGetAll[]) => {
         console.log('Bidding Projects Response:', response);
-        return response.projects || [];
+        return response || [];
       }),
       catchError(error => {
         console.error('Error fetching bidding projects:', error);
@@ -238,7 +194,6 @@ export class UserDashboradComponent implements OnInit {
 
     return forkJoin([fixedProjects$, biddingProjects$]).pipe(
       map(([fixedProjects, biddingProjects]) => {
-        let pending = 0;
         let completed = 0;
         let Working =0;
 
@@ -247,8 +202,7 @@ export class UserDashboradComponent implements OnInit {
           if (latestMilestone) {
             console.log('Fixed Project Milestone Status:', latestMilestone.status);
             const status = latestMilestone.status.toString().toLowerCase();
-            if (status.includes('pending')) pending++;
-            else if (status.includes('completed')) completed++;
+            if (status.includes('completed')) completed++;
             else if (status.includes('working')) Working++;
           }
         });
@@ -269,16 +223,15 @@ export class UserDashboradComponent implements OnInit {
 
         this.projectStats = {
           total: this.total,
-          pending,
-          completed,
-          Working
+          completed: this.projectStats.completed,
+          Working:this.projectStats.Working
         };
 
         this.projectStatusChartData = {
           ...this.projectStatusChartData,
           datasets: [{
             ...this.projectStatusChartData.datasets[0],
-            data: [pending, completed ,Working]
+            data: [completed ,Working]
           }]
         };
 
@@ -288,7 +241,7 @@ export class UserDashboradComponent implements OnInit {
         console.error('Error combining project statistics:', error);
         this.hasError.projects = true;
         this.toastr.error('Failed to load project statistics');
-        this.projectStats = { total: 0, pending: 0, completed: 0 ,Working :0};
+        this.projectStats = { total: 0, completed: 0 ,Working :0};
         this.projectStatusChartData = {
           ...this.projectStatusChartData,
           datasets: [{ ...this.projectStatusChartData.datasets[0], data: [0, 0] }]
@@ -353,10 +306,10 @@ export class UserDashboradComponent implements OnInit {
     this.isLoading.revenue = true;
     this.hasError.revenue = false;
 
-    const fixedProjects$ = this.projectService.getProjectsFixedDashBoard().pipe(
-      map((response: ProjectsResponse) => {
+    const fixedProjects$ = this.projectService.getmyprojects().pipe(
+      map((response: FixedPriceProject[]) => {
         console.log('Fixed Projects Response (Revenue):', response);
-        return response.projects || [];
+        return response || [];
       }),
       catchError(error => {
         console.error('Error fetching fixed projects for revenue:', error);
@@ -364,10 +317,10 @@ export class UserDashboradComponent implements OnInit {
       })
     );
 
-    const biddingProjects$ = this.biddingProjectService.GetAllBiddingProjectsDashBoard({}, 1, 10).pipe(
-      map((response: BiddingProjectsResponse) => {
+    const biddingProjects$ = this.biddingProjectService.GetmyBiddingprojects().pipe(
+      map((response: BiddingProjectGetAll[]) => {
         console.log('Bidding Projects Response (Revenue):', response);
-        return response.projects || [];
+        return response || [];
       }),
       catchError(error => {
         console.error('Error fetching bidding projects for revenue:', error);

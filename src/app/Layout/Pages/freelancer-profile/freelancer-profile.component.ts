@@ -240,7 +240,7 @@ private startCarouselInterval(project: any) {
   this.carouselIntervals[project.id] = setInterval(() => {
     // Create a mock event object for the carousel
     const mockEvent = new Event('autoplay');
-    this.nextImage(project, mockEvent);
+    this.nextImage(project);
   }, 3000); // Change image every 3 seconds
 }
 
@@ -253,30 +253,14 @@ private stopCarouselInterval(projectId: number) {
 
 currentImageIndex: { [key: number]: number } = {};
 
-nextImage(project: any, event: Event) {
-  event.stopPropagation();
-  if (!this.currentImageIndex[project.id]) {
-    this.currentImageIndex[project.id] = 0;
-  }
-  this.currentImageIndex[project.id] = 
-    (this.currentImageIndex[project.id] + 1) % project.images.length;
-  this.currentImageIndex = { ...this.currentImageIndex };
-  
-  // Reset the interval
-  this.startCarouselInterval(project);
+nextImage(project: any) {
+  const currentIndex = this.currentImageIndex[project.id] || 0;
+  this.currentImageIndex[project.id] = (currentIndex + 1) % project.images.length;
 }
 
-previousImage(project: any, event: Event) {
-  event.stopPropagation();
-  if (!this.currentImageIndex[project.id]) {
-    this.currentImageIndex[project.id] = 0;
-  }
-  this.currentImageIndex[project.id] = 
-    (this.currentImageIndex[project.id] - 1 + project.images.length) % project.images.length;
-  this.currentImageIndex = { ...this.currentImageIndex };
-  
-  // Reset the interval
-  this.startCarouselInterval(project);
+previousImage(project: any) {
+  const currentIndex = this.currentImageIndex[project.id] || 0;
+  this.currentImageIndex[project.id] = (currentIndex - 1 + project.images.length) % project.images.length;
 }
 ngOnDestroy() {
   // Clear all intervals when component is destroyed
@@ -363,6 +347,11 @@ loadBiddingProjects(){
   )
   
 }
+
+setImage(projectId: number, index: number) {
+  this.currentImageIndex[projectId] = index;
+}
+
 reviews:GetReviewsByRevieweeIdDto[]=[];
 loadReviews()
 {

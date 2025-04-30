@@ -1,6 +1,6 @@
 <div class="verification-requests-container">
     <div class="page-header">
-      <h2><i class="fas fa-user-shield"></i> Identity Verification Requests</h2>
+      <h2 class="my-5"><i class="fas fa-user-shield"></i> Identity Verification Requests</h2>
     </div>
   
     @if (users.length === 0) {
@@ -27,14 +27,16 @@
               <p><i class="fas fa-id-card"></i> {{user.nationalId}}</p>
             </div>
   
-            <div class="id-preview" (click)="openImagePreview(filesurl+'/'+user.nationalId)">
-              <i class="fas fa-id-card"></i>
-              <span>View ID Document</span>
+            <div class="button-container">
+              <button class="btn btn-secondary" (click)="openImagePreview(filesurl+'/'+user.nationalId)">
+                <i class="fas fa-id-card"></i>
+                <span>View ID Document</span>
+              </button>
+        
+              <button class="btn btn-primary" (click)="openDecisionModal(user)">
+                <i class="fas fa-check-circle"></i> Review Request
+              </button>
             </div>
-  
-            <button class="review-btn" (click)="openDecisionModal(user)">
-              <i class="fas fa-check-circle"></i> Review Request
-            </button>
           </div>
         </div>
       </div>

@@ -50,15 +50,59 @@ private accountservice:AccountService) {}
     console.log(this.FilesURL);
   }
 
+  selectedImage: string | null = null;
 
+  openImageModal(imageUrl: string) {
+    this.selectedImage = imageUrl;
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  }
+  
+  closeImageModal() {
+    this.selectedImage = null;
+    document.body.style.overflow = 'auto'; // Restore scrolling
+  }
+  
+  ngOnDestroy() {
+    // Ensure scroll is restored when component is destroyed
+    document.body.style.overflow = 'auto';
+  }
 
   deleteFile(fileName: string) {
     const fileNameOnly = fileName.split('/').pop(); // Extract filename from URL
     if (fileNameOnly) {
+      // Find which milestone this file belongs to
+      let milestoneWithFile: Milestone | undefined;
+      for (const milestone of this.milestones) {
+        if (milestone.files?.includes(fileName)) {
+          milestoneWithFile = milestone;
+          break;
+        }
+      }
+
       this.milestoneService.RemoveMilestoneFilesByName(fileNameOnly).subscribe({
         next: () => {
           this.toastr.success('File deleted successfully');
-          this.loadMilestones(); // Reload to update the file list
+          
+          // If we found the milestone, update only its files instead of reloading everything
+          if (milestoneWithFile && milestoneWithFile.id !== undefined) {
+            // First remove the file from the current array to give immediate UI feedback
+            if (milestoneWithFile.files) {
+              milestoneWithFile.files = milestoneWithFile.files.filter(f => f !== fileName);
+            }
+            
+            // Then refresh from server to ensure consistency
+            this.milestoneService.GetFilesByMilestoneId(milestoneWithFile.id).subscribe({
+              next: (files: MilestoneFile[]) => {
+                milestoneWithFile!.files = files.map((f: any) => `${this.FilesURL}${f.fileName}`);
+              },
+              error: (error) => {
+                console.error(`Error reloading files after deletion:`, error);
+              }
+            });
+          } else {
+            // Fallback to full reload if milestone not found
+            this.loadMilestones();
+          }
         },
         error: (error) => {
           this.toastr.error('Error deleting file');
@@ -70,25 +114,25 @@ private accountservice:AccountService) {}
   loadMilestones() {
     this.milestoneService.GetMilestoneByProjectId(this.projectId).subscribe({
       next: (data: any) => {
-        this.milestones =Array.isArray(data) ? data : [data];
+        this.milestones = Array.isArray(data) ? data : [data];
         console.log(data);
         
         this.milestones.forEach(milestone => {
-          if(milestone.id !=undefined){
-          this.milestoneService.GetFilesByMilestoneId(milestone.id).subscribe({
-            next:(files: MilestoneFile[]) => {
-              milestone.files = files.map((f: any) => `${this.FilesURL}${f.fileName}`);
-              
-                // `${Environment.baseUrl}${f.fileName}`); 
-              // 👆 fix the path depending where your backend serves uploaded files
-
-          },
-          error: (error) => {
-            console.error(`Error loading files for milestone ${milestone.id}:`, error);
-            milestone.files = []; 
+          if(milestone.id != undefined) {
+            // Clear existing files to prevent duplication
+            milestone.files = [];
+            
+            this.milestoneService.GetFilesByMilestoneId(milestone.id).subscribe({
+              next:(files: MilestoneFile[]) => {
+                // Assign files array instead of appending
+                milestone.files = files.map((f: any) => `${this.FilesURL}${f.fileName}`);
+              },
+              error: (error) => {
+                console.error(`Error loading files for milestone ${milestone.id}:`, error);
+                milestone.files = []; 
+              }
+            });
           }
-        } );
-      }
         });
       },
       error: (error) => {
@@ -164,14 +208,59 @@ private accountservice:AccountService) {}
   onFileSelected(event: any, milestoneId: number) {
     const files: File[] = Array.from(event.target.files);
     if (files.length > 0) {
+      // Show loading indicator or disable button while uploading
+      const uploadButton = document.querySelector('.upload-btn') as HTMLButtonElement;
+      if (uploadButton) {
+        uploadButton.disabled = true;
+        uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+      }
+
       this.milestoneService.UploadMilestoneFile(files, milestoneId).subscribe({
         next: (response) => {
           this.toastr.success('Files uploaded successfully');
-          this.loadMilestones(); // Reload milestones to show new files
+          // Reset the file input
+          const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+          if (fileInput) {
+            fileInput.value = '';
+          }
+          
+          // Only reload the specific milestone's files rather than all milestones
+          const milestone = this.milestones.find(m => m.id === milestoneId);
+          if (milestone) {
+            milestone.files = [];
+            this.milestoneService.GetFilesByMilestoneId(milestoneId).subscribe({
+              next: (files: MilestoneFile[]) => {
+                milestone.files = files.map((f: any) => `${this.FilesURL}${f.fileName}`);
+              },
+              error: (error) => {
+                console.error(`Error loading files for milestone ${milestoneId}:`, error);
+              },
+              complete: () => {
+                // Re-enable the upload button
+                if (uploadButton) {
+                  uploadButton.disabled = false;
+                  uploadButton.innerHTML = '<i class="fas fa-upload"></i> Upload Files';
+                }
+              }
+            });
+          } else {
+            // Fallback to full reload if milestone not found
+            this.loadMilestones();
+            // Re-enable the upload button
+            if (uploadButton) {
+              uploadButton.disabled = false;
+              uploadButton.innerHTML = '<i class="fas fa-upload"></i> Upload Files';
+            }
+          }
         },
         error: (error) => {
           this.toastr.error('Error uploading files');
           console.error('Error uploading files:', error);
+          // Re-enable the upload button on error
+          if (uploadButton) {
+            uploadButton.disabled = false;
+            uploadButton.innerHTML = '<i class="fas fa-upload"></i> Upload Files';
+          }
         }
       });
     }

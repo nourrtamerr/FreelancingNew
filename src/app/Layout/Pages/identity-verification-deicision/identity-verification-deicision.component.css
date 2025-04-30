@@ -278,7 +278,7 @@
   .submit-btn {
     width: 100%;
     padding: 12px;
-    background: #3b82f6;
+    background: #175b99;
     color: white;
     border: none;
     border-radius: 8px;
@@ -288,7 +288,7 @@
   }
   
   .submit-btn:hover {
-    background: #2563eb;
+    background: #0e4677;
   }
   
   .submit-btn:disabled {
@@ -320,4 +320,326 @@
     .user-details h3 {
       font-size: 1.1rem;
     }
+  }
+
+
+
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: center;
+    width:100%;
+    margin-top: 15px;
+  }
+  
+  .btn-primary {
+    background-color: #175b99;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0e4677;
+  }
+  
+  .btn-secondary {
+    background-color: #f1f5f9;
+    color: #175b99;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e2e8f0;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .btn-primary {
+    background-color: #175b99;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0e4677;
+  }
+  
+  .btn-secondary {
+    background-color: #f1f5f9;
+    color: #175b99;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e2e8f0;
+  }
+  
+
+  .milestone-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .milestone-info {
+    flex: 1;
+  }
+  
+  .milestone-files {
+    margin-top: 1rem;
+  }
+  
+  .file-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .file-preview {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .file-actions {
+    display: flex;
+    gap: 0.5rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .action-btn {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  
+  .confirm-milestone-container {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .confirm-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+
+  .request-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  .user-details {
+    flex: 1;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex: 1;
+    white-space: nowrap;
+    min-width: 140px;
+  }
+
+
+  .button-container {
+    display: flex;
+    flex-direction: column;
+     gap: 0rem; 
+    margin-top: 0rem;
+     padding-top: 0rem; 
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .btn {
+     padding: 0.75rem 1.5rem; 
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     gap: 0.5rem; 
+    width: 100%;
+    white-space: nowrap;
+  }
+  
+  .btn-secondary {
+    background-color: #f1f5f9;
+    color: #175b99;
+    margin-bottom: 0.5rem;
+  }
+  
+  .btn-primary {
+    background-color: #175b99;
+    color: white;
+  }
+
+
+  .user-details {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+  }
+  
+  .user-details p {
+    color: #64748b;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  .user-details p:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+  }
+  
+  .user-details i {
+    color: #175b99;
+    width: 16px;
+    text-align: center;
+  }
+  
+  .user-details h3 {
+    color: #1e293b;
+    margin: 0 0 16px;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+  }
+  
+  /* Add this for the date and other details */
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem;
+    color: #475569;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  .detail-row:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+  }
+  
+  .detail-row i {
+    color: #175b99;
+    width: 16px;
+    text-align: center;
+  }
+
+  .user-details {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+  }
+  
+  .user-details h3 {
+    color: #1e293b;
+    margin: 0 0 16px;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  
+  .user-details p {
+    color: #64748b;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    justify-content: flex-start;
+  }
+  
+  .user-details p:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+  }
+  
+  .user-details i {
+    color: #175b99;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
   }
