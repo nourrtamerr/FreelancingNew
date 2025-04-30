@@ -196,24 +196,42 @@
               <label class="sidebar-label">Categories</label>
               <span class="chevron" [class.open]="categoryDropdownOpen"></span>
             </div>
+
+
             <div class="sidebar-group-content" *ngIf="categoryDropdownOpen">
-              <select class="form-control" [(ngModel)]="filters.categoryIds" multiple>
-                <option value="1">Web Development</option>
-                <option value="2">Mobile Development</option>
-                <option value="3">UI/UX Design</option>
-                <option value="4">Data Science</option>
-                <option value="5">Digital Marketing</option>
-                <option value="6">Content Writing</option>
-                <option value="7">Graphic Design</option>
-              </select>
+              
+              
+              <input
+              type="text"
+              class=" mb-3 custom-search-input"
+              placeholder="Search currency"
+              [(ngModel)]="categorySearch"
+            />
+
+              
+                <div *ngFor="let category of Categories ">
+               
+                  <p class="category-title">{{ category.name }} <p>
+                  <div *ngFor="let sub of getSubcategoriesOfCategory(category.id) | filter:categorySearch">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" [checked]="filters.categoryIds?.includes(sub.id)" (change)="selectSubCategory(sub.id)" />
+                      <span class="checkbox-custom"></span>
+                      <span class="checkbox-text">{{ sub.name }}</span>
+                    </label>
+
+                  </div>
+
+                </div>
+
+
             </div>
           </div>
   
           <!-- Filter Actions -->
-          <div class="filter-actions">
+          <!-- <div class="filter-actions">
             <button class="btn-apply" (click)="applyFilters()">Apply Filters</button>
             <button class="btn-clear" (click)="clearFilters()">Clear All</button>
-          </div>
+          </div> -->
         </aside>
   
         <!-- Projects Results -->
@@ -268,7 +286,7 @@
           </div>
   
           <!-- Pagination -->
-          <div class="pagination-container">
+          <!-- <div class="pagination-container">
             <nav aria-label="Page navigation">
               <ul class="pagination">
                 <li class="page-item" [class.disabled]="currentPage === 1">
@@ -290,7 +308,9 @@
                 </li>
               </ul>
             </nav>
-          </div>
+          </div> -->
+
+
         </section>
       </div>
     </div>

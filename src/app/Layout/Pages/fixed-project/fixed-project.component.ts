@@ -11,6 +11,10 @@ import { FilterPipe } from '../../../Pipes/filter.pipe';
 import { WishlistService } from '../../../Shared/Services/wishlist.service';
 import { ToastrService } from 'ngx-toastr';
 import { Wishlist } from '../../../Shared/Interfaces/wishlist';
+import { CategoryService } from '../../../Shared/Services/Category/category.service';
+import { SubCategoryService } from '../../../Shared/Services/SubCategory/sub-category.service';
+import { SubCategory2 } from '../../../Shared/Interfaces/sub-category2';
+import { Category } from '../../../Shared/Interfaces/category';
 
 @Component({
   selector: 'app-fixed-project',
@@ -73,10 +77,13 @@ export class FixedProjectComponent implements OnInit {
   skillsSearch:string=''
 
   userWishlist2: number[]=[];
+  subCategories:SubCategory2[]=[];
 
   constructor(private projectService: FixedPriceProjectService,
     private wishlistService:WishlistService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private categoryService: CategoryService,
+    private subcategoryService: SubCategoryService
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +107,8 @@ export class FixedProjectComponent implements OnInit {
     category: true,
     
   };
+
+  Categories: Category[] = [];
 
   sortProducts(sortOption: string) {
     this.currentSort = sortOption;
@@ -201,6 +210,22 @@ export class FixedProjectComponent implements OnInit {
     }
     this.applyFilters(); // Apply filters automatically after change
 
+  }
+
+  selectSubCategory(subcategoryid:number){
+
+    if(this.filters.subcategoryIds==null){
+      this.filters.subcategoryIds=[];
+    }
+
+    const index = this.filters.subcategoryIds.indexOf(subcategoryid);
+    if (index > -1) {
+      this.filters.subcategoryIds.splice(index, 1);
+    } else {
+      this.filters.subcategoryIds.push(subcategoryid);
+    }
+
+    this.applyFilters();
   }
   
   onMinProposalsChange(event: Event): void {
@@ -345,6 +370,26 @@ export class FixedProjectComponent implements OnInit {
       },
       error: (err) => console.log(err)
     });
+
+    this.categoryService.GetAllCategories().subscribe({
+      next: (data: any) => {
+        this.Categories = data;
+        console.log("Loaded categories:", this.Categories);
+      },
+      error: (err) => console.log(err)
+    });
+
+    this.subcategoryService.getAllSubcategories().subscribe({
+      next: (data: any) => {
+        this.subCategories = data;
+        console.log("Loaded subcategories:", this.subCategories);
+      },
+      error: (err) => console.log(err)
+    });
+  }
+
+  getSubcategoriesOfCategory(categoryId:number):SubCategory2[]{
+    return this.subCategories.filter(sc=>sc.categoryId==categoryId);
   }
 
   getPageNumbers(): number[] {

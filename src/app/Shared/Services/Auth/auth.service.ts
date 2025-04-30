@@ -58,7 +58,7 @@ export class AuthService {
     this.deleteCookie('user_Token');
     this.userData.next(null);
     this._isLoggedIn.set(false);
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
   }
 
   login(userData: any): Observable<any> {
@@ -110,5 +110,9 @@ export class AuthService {
       return null;
     }
   }
+
+  // getCurrentLoginStatus(): boolean {
+  //   return this.isLoggedIn;
+  // }
   
 }

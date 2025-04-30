@@ -12,13 +12,17 @@ export class NavbarComponent {
   isLoggedIn: boolean = false;
   constructor(private  AuthService: AuthService){
 
+    this.isLoggedIn = this.AuthService.isLoggedIn();
+    console.log(this.isLoggedIn); // Log the initial status of isLoggedI
+
     this.AuthService.isLoggedIn$.subscribe((status :any) => {
       this.isLoggedIn = status;
+      console.log(status); // Log the status t
     });
   }
   logout() {
+    this.isLoggedIn = false;
      this.AuthService.logout();
-      this.isLoggedIn = false;
 
 
 }

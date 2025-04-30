@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-lg navbar-light  fiverr-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" routerLink="/">
-        <img src="imagves/L4.png" alt="fiverr logo" class="fiverr-navbar-logo" />
+        <img src="imagves/L4.png" alt="logo" class="fiverr-navbar-logo" />
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#fiverrNavbar" aria-controls="fiverrNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -61,7 +61,7 @@
             <li><a class="dropdown-item" href="#">Add Funds</a></li>
             <li><a class="dropdown-item" href="#">Withdraw</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" [routerLink]="['/login']">Logout</a></li>
+            <li><a class="dropdown-item"(click)="logout()">Logout</a></li>
           </ul>
         </div>
 
@@ -75,9 +75,9 @@
           <a routerLink="/chathub" class="nav-link  navbar-icon-link" title="Messages">
             <i class="fa-regular fa-comment-dots"></i>
           </a>
-          <a routerLink="/login" class="nav-link signin-link">Sign In</a>
-          <a routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a>
-          <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
+          <a *ngIf="!isLoggedIn" routerLink="/login" class="nav-link signin-link">Sign In</a>
+          <a *ngIf="!isLoggedIn" routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a>
+          <!-- <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a> -->
         </div>
       </div>
     </div>
