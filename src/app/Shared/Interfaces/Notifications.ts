@@ -1,5 +1,5 @@
 export interface Notifications {
-    id?: number
+    id: number
     message: string
     userId: string
     isRead: boolean
