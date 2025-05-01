@@ -1,0 +1,14 @@
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-control.ng-invalid.ng-touched {
+    border-color: #dc3545;
+}
+
+.form-control.ng-valid.ng-touched {
+    border-color: #198754;
+}

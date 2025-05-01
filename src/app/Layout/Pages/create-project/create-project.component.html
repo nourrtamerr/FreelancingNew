@@ -34,40 +34,36 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="biddingStartDate">Bidding Start Date</label>
-                                <input 
-                                    type="date" 
-                                    id="biddingStartDate" 
-                                    formControlName="biddingStartDate" 
-                                    class="form-control"
-                                />
+                                <input type="date" id="biddingStartDate" formControlName="biddingStartDate" class="form-control"/>
+                                <small class="error-message" *ngIf="projectForm.get('biddingStartDate')?.invalid && projectForm.get('biddingStartDate')?.touched">
+                                    Start date is required
+                                </small>
                             </div>
-    
+                    
                             <div class="form-group">
                                 <label for="biddingEndDate">Bidding End Date</label>
-                                <input 
-                                    type="date" 
-                                    id="biddingEndDate" 
-                                    formControlName="biddingEndDate" 
-                                    class="form-control"
-                                />
+                                <input type="date" id="biddingEndDate" formControlName="biddingEndDate" class="form-control"/>
+                                <small class="error-message" *ngIf="projectForm.get('biddingEndDate')?.invalid && projectForm.get('biddingEndDate')?.touched">
+                                    End date is required
+                                </small>
                             </div>
+                    
                             <div class="form-group">
-                                <label for="biddingEndDate">min price</label>
-                                <input 
-                                    type="number" 
-                                    id="minPrice" 
-                                    formControlName="minPrice" 
-                                    class="form-control"
-                                />
+                                <label for="minPrice">Minimum Price</label>
+                                <input type="number" id="minPrice" formControlName="minPrice" class="form-control"/>
+                                <small class="error-message" *ngIf="projectForm.get('minPrice')?.invalid && projectForm.get('minPrice')?.touched">
+                                    <span *ngIf="projectForm.get('minPrice')?.errors?.['required']">Minimum price is required</span>
+                                    <span *ngIf="projectForm.get('minPrice')?.errors?.['min']">Minimum price must be greater than 0</span>
+                                </small>
                             </div>
+                    
                             <div class="form-group">
-                                <label for="biddingEndDate">max price</label>
-                                <input 
-                                    type="number" 
-                                    id="maxPrice" 
-                                    formControlName="maxPrice" 
-                                    class="form-control"
-                                />
+                                <label for="maxPrice">Maximum Price</label>
+                                <input type="number" id="maxPrice" formControlName="maxPrice" class="form-control"/>
+                                <small class="error-message" *ngIf="projectForm.get('maxPrice')?.invalid && projectForm.get('maxPrice')?.touched">
+                                    <span *ngIf="projectForm.get('maxPrice')?.errors?.['required']">Maximum price is required</span>
+                                    <span *ngIf="projectForm.get('maxPrice')?.errors?.['min']">Maximum price must be greater than 0</span>
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -75,26 +71,26 @@
                 
                 <div class="form-group">
                     <label for="title">Project Title</label>
-                    <input 
-                        type="text" 
-                        id="title" 
-                        formControlName="title" 
-                        placeholder="Enter a clear title describing your project"
-                        class="form-control"
-                    />
+                    <input type="text" id="title" formControlName="title" 
+                           placeholder="Enter a clear title describing your project"
+                           class="form-control" />
                     <small class="form-hint">Example: Build a responsive website using React</small>
+                    <small class="error-message" *ngIf="projectForm.get('title')?.invalid && projectForm.get('title')?.touched">
+                        <span *ngIf="projectForm.get('title')?.errors?.['required']">Title is required</span>
+                        <span *ngIf="projectForm.get('title')?.errors?.['minlength']">Title must be at least 10 characters</span>
+                    </small>
                 </div>
 
                 <div class="form-group">
                     <label for="description">Project Description</label>
-                    <textarea 
-                        id="description" 
-                        formControlName="description" 
-                        placeholder="Describe your project in detail"
-                        class="form-control"
-                        rows="6"
-                    ></textarea>
+                    <textarea id="description" formControlName="description" 
+                              placeholder="Describe your project in detail"
+                              class="form-control" rows="6"></textarea>
                     <small class="form-hint">Be specific about your requirements and expectations</small>
+                    <small class="error-message" *ngIf="projectForm.get('description')?.invalid && projectForm.get('description')?.touched">
+                        <span *ngIf="projectForm.get('description')?.errors?.['required']">Description is required</span>
+                        <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Description must be at least 30 characters</span>
+                    </small>
                 </div>
             </div>
 
@@ -105,21 +101,24 @@
                     <div class="form-group">
                         <label for="currency">Currency</label>
                         <select id="currency" formControlName="currency" class="form-control">
+                            <option value="">Select Currency</option>
                             <option value="1">USD ($)</option>
                             <option value="2">EUR (€)</option>
                             <option value="3">GBP (£)</option>
                         </select>
+                        <small class="error-message" *ngIf="projectForm.get('currency')?.invalid && projectForm.get('currency')?.touched">
+                            Please select a currency
+                        </small>
                     </div>
 
                     <div class="form-group">
                         <label for="expectedDuration">Duration (in months)</label>
-                        <input 
-                            type="number" 
-                            id="expectedDuration" 
-                            formControlName="expectedDuration" 
-                            placeholder="Expected months"
-                            class="form-control"
-                        />
+                        <input type="number" id="expectedDuration" formControlName="expectedDuration" 
+                               placeholder="Expected months" class="form-control"/>
+                        <small class="error-message" *ngIf="projectForm.get('expectedDuration')?.invalid && projectForm.get('expectedDuration')?.touched">
+                            <span *ngIf="projectForm.get('expectedDuration')?.errors?.['required']">Duration is required</span>
+                            <span *ngIf="projectForm.get('expectedDuration')?.errors?.['min']">Duration must be at least 1 month</span>
+                        </small>
                     </div>
                 </div>
 
@@ -152,6 +151,9 @@
                                 <small>Looking for comprehensive expertise</small>
                             </span>
                         </label>
+                        <small class="error-message" *ngIf="projectForm.get('experienceLevel')?.invalid && projectForm.get('experienceLevel')?.touched">
+                            Please select an experience level
+                        </small>
                     </div>
                 </div>
             </div>
@@ -165,6 +167,10 @@
                       </select>
                     
                     <small class="form-hint">Choose a subcategory for your project</small>
+
+                    <small class="error-message" *ngIf="projectForm.get('subcategoryID')?.invalid && projectForm.get('subcategoryID')?.touched">
+                        Please select a subcategory
+                    </small>
                 </div>
             </div>
 
@@ -177,19 +183,22 @@
                         <option *ngFor="let skill of availableSkills" [value]="skill.id">{{ skill.name }}</option>
                       </select>
                     <small class="form-hint">Choose the relevant skills for your project</small>
+
+                    <small class="error-message" *ngIf="projectForm.get('projectSkills')?.invalid && projectForm.get('projectSkills')?.touched">
+                        Please select at least one skill
+                    </small>
                 </div>
             </div>
 
 <!-- Fixed Price Field (only shown for fixed price projects) -->
-<div *ngIf="!isBiddingProject">
+<div *ngIf="!isBiddingProject" class="form-group">
     <label for="fixedPrice">Fixed Price</label>
-    <input formControlName="fixedPrice" type="number" id="fixedPrice" min="1" />
-    <div *ngIf="projectForm.get('fixedPrice')?.invalid && projectForm.get('fixedPrice')?.touched">
-      <small *ngIf="projectForm.get('fixedPrice')?.errors?.['required']">Price is required.</small>
-      <small *ngIf="projectForm.get('fixedPrice')?.errors?.['min']">Price must be greater than 0.</small>
-    </div>
-  </div>
-  
+    <input type="number" id="fixedPrice" formControlName="fixedPrice" class="form-control"/>
+    <small class="error-message" *ngIf="projectForm.get('fixedPrice')?.invalid && projectForm.get('fixedPrice')?.touched">
+        <span *ngIf="projectForm.get('fixedPrice')?.errors?.['required']">Fixed price is required</span>
+        <span *ngIf="projectForm.get('fixedPrice')?.errors?.['min']">Fixed price must be greater than 0</span>
+    </small>
+</div>
 
           
             

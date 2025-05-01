@@ -123,20 +123,27 @@
   
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
-          <aside class="upwork-sidebar mb-4">
-            <a [routerLink]="['/proposal2',project.id]">
+          <aside  class="upwork-sidebar mb-4">
+            <a *ngIf="role=='Freelancer'"  [routerLink]="['/proposal2',project.id]">
             <button class="apply-btn mb-2">
              
               Apply now
             </button>
           </a>
+
+          <a *ngIf="role=='Client' || role=='Admin'"  [routerLink]="['/proposals',project.id]">
+            <button class="apply-btn mb-2">
+             
+              View Proposals
+            </button>
+          </a>
             
+          <button class="save-btn mb-2" *ngIf="role=='Freelancer'"  (click)="AddToWishlist(projectid)">
+            
+            Save job
+          </button>
 
           
-            <button class="save-btn mb-2" (click)="AddToWishlist(projectid)">
-              
-              Save job
-            </button>
           
   
             <div class="client-info">

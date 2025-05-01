@@ -5,8 +5,8 @@
     </div>
   </div>
 
-  <div class="proposals-list" *ngIf="proposals.length > 0">
-    <div class="proposal-card" *ngFor="let proposal of proposals">
+  <div class="proposals-list" *ngIf="proposal">
+    <div class="proposal-card" >
       <div class="proposal-content">
         <div class="main-content">
           
@@ -73,7 +73,7 @@
   <div class="sidebar">
     <div class="freelancer-card">
       <div class="freelancer-header">
-        <img [src]="proposal.freelancerProfilePicture|| 'assets/default-avatar.png'" alt="Freelancer" class="profile-image">
+        <img [src]="filesurl+'/'+proposal.freelancerProfilePicture|| 'assets/default-avatar.png'" alt="Freelancer" class="profile-image">
         <div class="freelancer-info">
           <h3>{{proposal.freelancerName}}</h3>
           <!-- <p class="title">{{proposal.freelancer?.title}}</p> -->
@@ -108,12 +108,12 @@
           </div>
     </div>
     <div class="button-container">
-        <button class="btn-primary">View Profile</button>
+        <a class="btn btn-primary" [routerLink]="['/Freelancerprofile',proposal.freelancerName]" routerLinkActive="router-link-active" >View Profile</a>
       </div>
   </div>
 </div>
 </div>
-  <div class="no-proposals" *ngIf="proposals.length === 0">
+  <div class="no-proposals" *ngIf="!proposal">
     <i class="fas fa-file-alt"></i>
     <h2>No Proposals Found</h2>
     <p>There are currently no proposals for this project.</p>
@@ -122,7 +122,7 @@
 
 
 <!-- ... existing code ... -->
-<div class="card-actions">
+<div class="card-actions" *ngIf="projectstatus.toString() ==='Pending' && isOwner">
   <button class="btn-confirm" (click)="openPaymentModal()">
     <i class="fas fa-check-circle"></i> Confirm Proposal
   </button>
@@ -176,7 +176,7 @@
         </form>
 
         <!-- Balance Warning -->
-        <div *ngIf="selectedMethod === PaymentMethod.Balance && currentBalance < proposals[0].price" class="balance-warning">
+        <div *ngIf="selectedMethod === PaymentMethod.Balance && currentBalance < proposal.price" class="balance-warning">
           <i class="fas fa-exclamation-triangle"></i>
           Insufficient balance. Available: ${{currentBalance | number:'1.2-2'}}
         </div>

@@ -26,6 +26,7 @@ import { LoginComponent } from './Layout/Pages/login/login.component';
 import { ChatComponent } from './Layout/Pages/chat/chat.component';
 import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-fund-by-client.component';
+import { WishlistComponent } from './Components/wishlist/wishlist.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -38,35 +39,35 @@ export const routes: Routes = [
     loadComponent: () => import('../app/Layout/Pages/fixed-project-details/fixed-project-details.component')
       .then(m => m.FixedProjectDetailsComponent)},
 
-    {path:'milestone',component:MilestonesComponent,title:'milestone'},
+    // {path:'milestone',component:MilestonesComponent,title:'milestone'},
     {path:'myprojects',component:MyProjectsComponent,title:'MyProjects'},
-    {path: 'milestones/:projectId',component: MilestonesComponent},
-    {path: 'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails'},
-    {path: 'VerificationRequests',component: IdentityVerificationDeicisionComponent},
-    {path: 'proposals/:projectId',component: ProposalsComponent,title:'proposals'},
+    {path:'milestones/:projectId',component: MilestonesComponent},
+    {path:'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails'},
+    {path:'VerificationRequests',component: IdentityVerificationDeicisionComponent},
+    {path:'proposals/:projectId',component: ProposalsComponent,title:'proposals'},
     {
         path: 'profile',
         loadComponent: () =>
           import('./Layout/Pages/profile/profile.component').then(m => m.ProfileComponent)
       },
-      {path: 'banned',component: BannedUsersComponent},
-      {path: 'bandetails/:id',component: BanDetailsComponent},
-      {path: 'admin-dashboard',component: AdminDashboardComponent},
-      {path: 'updateban/:id',component: UpdateBanComponent},
-      {path: 'dashboard', component: UserDashboradComponent},
-      {path: 'addfund', component: AddFundByClientComponent},
-      {path: 'new',component: BiddingProjectNewComponent},
-      {path: 'details/:id',component: BiddingProjectDetailsComponent},
+      {path:'banned',component: BannedUsersComponent},
+      {path:'bandetails/:id',component: BanDetailsComponent},
+      {path:'admin-dashboard',component: AdminDashboardComponent},
+      {path:'updateban/:id',component: UpdateBanComponent},
+      {path:'dashboard', component: UserDashboradComponent},
+      {path:'addfund', component: AddFundByClientComponent},
+      {path:'new',component: BiddingProjectNewComponent},
+      {path:'details/:id',component: BiddingProjectDetailsComponent},
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent)},
-      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent)},
-      {path: 'proposal2/:id',component: Proposal2Component},
-      {path: 'freelancers',component: FreelancersComponent},
-      {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent},
-      {path: 'login',component: LoginComponent},
-      {path: 'chathub/:username',component: ChatComponent},
-      {path: 'notification',component: NotificationsComponent},
-
-    {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
+      {path:'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent)},
+      {path:'proposal2/:id',component: Proposal2Component},
+      {path:'freelancers',component: FreelancersComponent},
+      {path:'Freelancerprofile/:username',component: FreelancerProfileComponent},
+      {path:'login',component: LoginComponent},
+      {path:'chathub/:username',component: ChatComponent},
+      {path:'notification',component: NotificationsComponent},
+      {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
+      {path:'wishlist', component: WishlistComponent},
 
 
 ];
