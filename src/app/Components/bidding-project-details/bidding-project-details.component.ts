@@ -13,6 +13,7 @@ import { FixedPriceProjectService } from '../../Shared/Services/FixedPriceProjec
 
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../Shared/Services/wishlist.service';
+import { AuthService } from '../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-bidding-project-details',
@@ -27,9 +28,11 @@ export class BiddingProjectDetailsComponent implements OnInit {
     private ReviewsService:ReviewService,
     private FixedService:FixedPriceProjectService,
     private wishlistService:WishlistService,
-    private toaster:ToastrService
+    private toaster:ToastrService,
+    private authService:AuthService
     ){}
-
+    isowner:boolean=false;
+    role:string="";
 
 project: BiddingProjectGetById={
   id: 0,
@@ -67,7 +70,7 @@ project: BiddingProjectGetById={
 
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
-
+  
 
   ngOnInit(): void {
     // const code = +this.route.snapshot.paramMap.get('id')!;
@@ -110,6 +113,25 @@ project: BiddingProjectGetById={
                     // If you want to store multiple, use an array instead
                     console.log(this.project.clinetAccCreationDate)
 
+
+
+                    if (this.project?.clientId) {
+                      this.ReviewsService.getRevieweeById(this.project.clientId).subscribe({
+                        next: (data) => {
+                          this.clientReviews = data;
+                          console.log(data);
+                          console.log("ddddddddddddddddddddd")
+                        },
+                        error: (err) => {console.log(err), console.log("no reviews")}
+                      });
+                      this.authService.getUserId()==this.project.clientId
+                      {
+                        this.isowner=true;
+                      }
+                      const roles = this.authService.getRoles();
+                      this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+                      console.log(this.role);
+                    }
                   }
                   else{
                     console.log("data is null")
@@ -144,6 +166,8 @@ project: BiddingProjectGetById={
     });
   }
 
+
+  
   AddToWishlist(projectid:number){
     this.wishlistService.AddToWishlist(projectid).subscribe({
       next:()=>{

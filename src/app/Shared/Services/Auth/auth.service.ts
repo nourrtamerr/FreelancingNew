@@ -87,6 +87,22 @@ export class AuthService {
     }
   }
 
+
+  getRoles(): string[] | null {
+    const token = this.getTokenFromCookie();
+    if (!token) return null;
+  
+    try {
+      const decoded: any = jwtDecode(token);
+      const rolesClaim = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+  
+      if (!rolesClaim) return null;
+      return Array.isArray(rolesClaim) ? rolesClaim : [rolesClaim];
+    } catch {
+      return null;
+    }
+  }
+
   getUserId(): string | null {
     const token = this.getTokenFromCookie();
     if (!token) return null;

@@ -3,6 +3,7 @@ import { ProjectsService } from '../../../../Shared/Services/Projects/projects.s
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Project } from '../../../../Shared/Interfaces/AllProjects';
+import { ProjectType } from '../../../../Shared/Interfaces/Proposal';
 
 @Component({
   selector: 'app-my-projects',
@@ -33,9 +34,18 @@ export class MyProjectsComponent implements OnInit {
    getprojectById(projectId: number) {
     this.router.navigate(['/milestones', projectId]);
   }
-  viewProjectDetails(projectId: number) {
+  viewProjectDetails(projectId: number,projecttype:ProjectType) {
     // Implement project details view navigation
-    this.router.navigate(['/project-details', projectId]);
+    if(projecttype==ProjectType.Bidding)
+    {
+      this.router.navigate(['/details', projectId]);
+
+    }
+    else
+    {
+
+      this.router.navigate(['/fixed-project', projectId]);
+    }
   }
    }
 

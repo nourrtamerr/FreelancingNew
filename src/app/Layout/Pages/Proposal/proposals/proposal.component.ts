@@ -2,12 +2,15 @@ import { Component } from '@angular/core';
 import { ProposalService } from '../../../../Shared/Services/Proposal/proposal.service';
 import { ProposalsView, ProposalView } from '../../../../Shared/Interfaces/Proposal';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute,Params, Router } from '@angular/router';
+import { ActivatedRoute,Params, Router, RouterModule } from '@angular/router';
+import { ProjectsService } from '../../../../Shared/Services/Projects/projects.service';
+import { FixedPriceProjectById } from '../../../../Shared/Interfaces/FixedPriceProject';
+import { AuthService } from '../../../../Shared/Services/Auth/auth.service';
 
 
 @Component({
   selector: 'app-proposal',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './proposals.component.html',
   styleUrl: './proposals.component.css'
 })
@@ -15,8 +18,15 @@ export class ProposalsComponent {
 projectId: number = 0;
 proposals: ProposalView[] = [];
 proposalId: number = 0;
+isowner:boolean=false;
+role:string="";
+project: FixedPriceProjectById | null = null;
+
   
-  constructor(private proposalService:ProposalService, private route: ActivatedRoute,private router: Router) { }
+  constructor(private proposalService:ProposalService, private route: ActivatedRoute,private router: Router,
+    private projectService:ProjectsService,
+    private authService:AuthService
+  ) { }
 
   ngOnInit(): void
    {
@@ -25,6 +35,7 @@ proposalId: number = 0;
       this.projectId = +params['projectId'];
       console.log('Project ID:', this.projectId);
       this.loadProposals();
+      this.LoadProjectDetails();
     });
 }
 loadProposals(){
@@ -41,6 +52,38 @@ loadProposals(){
   getprojectById(proposalId: number) {
     this.router.navigate(['/proposaldetails', proposalId]);
     console.log('Navigating to project details for ID:', this.proposalId);
+  }
+
+
+
+
+  LoadProjectDetails(): void {
+    this.projectService.getProjectById(this.projectId).subscribe({
+      next: (data) => {
+        this.project = data;
+        console.log('Project details:', data);
+
+
+        if (this.project?.clientId) {
+         
+          this.authService.getUserId()==this.project.clientId
+          {
+            this.isowner=true;
+          }
+          const roles = this.authService.getRoles();
+          this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+          console.log(this.role);
+        }
+
+
+        
+      },
+      error: (error) => {
+        console.error('Error fetching project details:', error);
+      }
+    });
+
+    
   }
  
 }

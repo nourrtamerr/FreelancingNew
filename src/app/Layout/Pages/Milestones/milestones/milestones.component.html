@@ -79,40 +79,40 @@
               <!-- Image files -->
               <div class="file-preview" *ngIf="getFileType(file) === 'image'" (click)="openImageModal(file)">
                 <img [src]="file" alt="Milestone Image">
-                <div class="file-actions" *ngIf="isProjectFreelancer && milestone.status === 0">
-                  <button class="action-btn" (click)="$event.stopPropagation(); openImageModal(file)">
-                    <i class="fas fa-eye"></i> Preview
-                  </button>
-                  <button class="action-btn delete-btn" (click)="$event.stopPropagation(); deleteFile(file)">
-                    <i class="fas fa-trash"></i> Delete
-                  </button>
-                </div>
+                <!-- <div class="file-actions" *ngIf="isProjectFreelancer && milestone.status === 0"> -->
+                  <button 
+                    *ngIf="isProjectFreelancer && milestone.status === 0" 
+                    class="delete-btn" 
+                    (click)="deleteFile(file)">
+                    <i class="fa fa-times"></i>
+                </button>
+                <!-- </div> -->
               </div>
               
               <!-- Video files -->
               <div class="file-preview" *ngIf="getFileType(file) === 'video'">
                 <video [src]="file" controls></video>
                 <button 
-                  *ngIf="isProjectFreelancer && milestone.status === 0" 
-                  class="delete-btn" 
-                  (click)="deleteFile(file)">
-                  <i class="fa fa-times"></i>
+                    *ngIf="isProjectFreelancer && milestone.status === 0" 
+                    class="delete-btn" 
+                    (click)="deleteFile(file)">
+                    <i class="fa fa-times"></i>
                 </button>
-              </div>
-              
-              <!-- Other files -->
-              <div class="file-preview" *ngIf="getFileType(file) === 'other'">
-                <a [href]="file" target="_blank">
-                  <i class="fa fa-file"></i>
-                  <span>Download File</span>
+            </div>
+            
+            <!-- Other files -->
+            <div class="file-preview" *ngIf="getFileType(file) === 'other'">
+                <a [href]="file" target="_blank" download>
+                    <i class="fa fa-file"></i>
+                    <span>Download File</span>
                 </a>
                 <button 
-                  *ngIf="isProjectFreelancer && milestone.status === 0" 
-                  class="delete-btn" 
-                  (click)="deleteFile(file)">
-                  <i class="fa fa-times"></i>
+                    *ngIf="isProjectFreelancer && milestone.status === 0" 
+                    class="delete-btn" 
+                    (click)="deleteFile(file)">
+                    <i class="fa fa-times"></i>
                 </button>
-              </div>
+            </div>
             </ng-container>
             
             <!-- File upload placeholder - now inside the file container -->

@@ -18,8 +18,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         toastr.error('Session expired. Please log in again.');
         return EMPTY;
       }
-      else if (error.error?.message) {
+      else if (error.error?.Message) {
+        console.log(error)
         toastr.error(error.error.message);
+        // toastr.error(error.message);
+
         return EMPTY;
       }
       return throwError(() => error);
