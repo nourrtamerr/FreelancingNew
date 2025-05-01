@@ -230,3 +230,48 @@
       gap: 0.5rem;
     }
   }
+
+  .apply-btn {
+    width: 100%;
+    background: #175b99;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 0;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.apply-btn:hover {
+    background: #3480c7;
+}
+
+.apply-btn {
+  width: auto;
+  background: #175b99;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  margin-top: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  float: right;
+}
+
+.apply-btn:hover {
+  background: #3480c7;
+}
+
+/* Add this if you have a container for the total proposals count */
+.proposals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 16px; */
+}

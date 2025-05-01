@@ -13,7 +13,15 @@ export interface ProposalView {
   country: any
   suggestedDuration: number
   suggestedMilestones: SuggestedMilestone[]
-  rank: string
+  rank: string,
+  proposalStatus:proposalStatus
+  projecttype:ProjectType
+}
+
+export enum proposalStatus{
+  Pending,
+Accepted,
+Rejected
 }
 
 export interface SuggestedMilestone {
