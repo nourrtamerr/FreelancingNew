@@ -108,7 +108,12 @@
           }@else {
             <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
           }
+<!-- 
+            <a *ngIf="!isLoggedIn" routerLink="/login" class="nav-link signin-link">Sign In</a>
+            <a *ngIf="!isLoggedIn" routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a> -->
 
+
+         
         </div>
       </div>
     </div>

@@ -37,5 +37,19 @@ export class NotificationsComponent implements OnInit {
         this.Notifications.push(message);
         // }
     });
+    this.getAllNotification();
   }
+  getAllNotification(){
+     this.Notificationservice.getNotifications().subscribe({
+      next:(data:any)=>{
+        this.Notifications = data;
+        console.log("notificaion ", this.Notifications)
+      },
+      error:(err:any)=>{
+        console.log(err);
+      }
+     })
+}
+
+
 }

@@ -8,6 +8,7 @@ import { GetReviewsByRevieweeIdDto } from '../../../Shared/Interfaces/get-review
 import { BiddingProjectService } from '../../../Shared/Services/BiddingProject/bidding-project.service';
 import { WishlistService } from '../../../Shared/Services/wishlist.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-fixed-project-details',
@@ -19,13 +20,15 @@ import { ToastrService } from 'ngx-toastr';
 export class FixedProjectDetailsComponent implements OnInit {
   project: FixedPriceProjectById | null = null;
   projectid: number = 0;
-
+  isowner:boolean=false;
+  role:string="";
   constructor(
     private route: ActivatedRoute,
     private projectService: FixedPriceProjectService,
     private ReviewsService:ReviewService,
     private BiddingProjectService:BiddingProjectService,
     private wishlistService:WishlistService,
+    private authService:AuthService,
     private toaster:ToastrService
   ) {}
 
@@ -58,6 +61,12 @@ export class FixedProjectDetailsComponent implements OnInit {
             },
             error: (err) => {console.log(err), console.log("no reviews")}
           });
+          this.authService.getUserId()==this.project.clientId
+          {
+            this.isowner=true;
+          }
+          const roles = this.authService.getRoles();
+          this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
         }
 
 
