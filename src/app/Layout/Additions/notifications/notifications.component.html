@@ -1,10 +1,66 @@
-<h1>asdiohasiodhasiod</h1>
-<div *ngFor="let notification of Notifications" style="background-color: red;">
-    <h1>{{ notification.id }}</h1>
-    <h1>{{ notification.message }}</h1>
-
-    <h1>{{ notification.userId }}</h1>
-    <h1>{{ notification.isRead }}</h1>
-
-    <!-- Add other notification properties as needed -->
-</div>
+<div class="container-fluid p-4">
+    <div class="card shadow border-0">
+      <div class="card-header bg-primary-subtle text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 text-dark-emphasis">Notifications</h4>
+        <button class="btn btn-light btn-sm" (click)="markAllAsRead($event)">
+          Mark All as Read <i class="fas fa-check-double ms-2"></i>
+        </button>
+      </div>
+  
+      <div class="card-body p-0">
+        <div *ngIf="notifications.length === 0" class="p-4 text-center text-muted">
+          <i class="fas fa-bell-slash fa-2x mb-3"></i>
+          <p class="mb-0">No notifications available</p>
+        </div>
+  
+        <table *ngIf="notifications.length > 0" class="table table-hover mb-0">
+          <thead class="bg-info text-white">
+            <tr>
+              <th scope="col" style="width: 70%">Message</th>
+              <th scope="col" class="text-center">Status</th>
+              <th scope="col" class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let notification of notifications" 
+                [class.bg-light-blue]="!notification.isRead"
+                class="align-middle">
+              <td class="py-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-bell me-3 text-primary"></i>
+                  <span>{{notification.message}}</span>
+                </div>
+              </td>
+           
+              <td class="text-center">
+                <span class="badge" 
+                     [class.bg-primary]="!notification.isRead"
+                     [class.bg-secondary]="notification.isRead">
+                  {{notification.isRead ? 'Read' : 'Unread'}}
+                </span>
+              </td>
+              <td class="text-center  justify-content-between ">
+                <button *ngIf="! notification.isRead" 
+                       class="btn btn-sm btn-outline-primary"
+                       (click)="markAsRead(notification.id)">
+                  Mark Read
+                </button>
+                <span *ngIf="notification.isRead" class="text-muted small">
+                  Viewed
+                </span>
+                
+                <button class="btn btn-sm btn-outline-danger ms-2" 
+                        (click)="deleteNotification(notification.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <div class="card-footer bg-light d-flex justify-content-end">
+        <small class="text-muted">Total notifications: {{notifications.length}}</small>
+      </div>
+    </div>
+  </div>

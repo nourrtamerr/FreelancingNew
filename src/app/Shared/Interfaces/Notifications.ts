@@ -3,5 +3,6 @@ export interface Notifications {
     message: string
     userId: string
     isRead: boolean
+    createdAt: Date
   }
   
