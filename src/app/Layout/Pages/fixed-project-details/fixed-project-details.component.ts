@@ -35,14 +35,14 @@ export class FixedProjectDetailsComponent implements OnInit {
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
 
   clientOtherProjNameId: {id:number, title:string, projectType:string} []=[];
-  
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectid = +params['id'];
       this.loadProjectDetails();
     });
 
-    
+
   }
 
   loadProjectDetails(): void {
@@ -93,7 +93,7 @@ export class FixedProjectDetailsComponent implements OnInit {
                 }
               },
               error: (error) => {
-               
+
                 console.error('Error fetching project details:', error);
               }
             });
@@ -105,7 +105,7 @@ export class FixedProjectDetailsComponent implements OnInit {
       }
     });
 
-    
+
   }
 
   AddToWishlist(projectid:number){
@@ -114,6 +114,7 @@ export class FixedProjectDetailsComponent implements OnInit {
         this.toaster.success("Added to wishlist")
       },
       error:(err)=>{
+        this.toaster.error(err.error.message)
         console.log(err)
       }
     })
