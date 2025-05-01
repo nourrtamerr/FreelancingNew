@@ -30,7 +30,6 @@ export class ChatService implements OnDestroy {
       this.hubConnection = new HubConnectionBuilder()
         .withUrl(Environment.signalRUrl, { 
           accessTokenFactory: () => {
-            accessTokenFactory: () => this.authService.getTokenFromCookie() || ''
             const token = this.authService.getTokenFromCookie();
             if (!token) {
               console.warn('No auth token available');
@@ -71,7 +70,6 @@ export class ChatService implements OnDestroy {
   }
 
   sendMessage(message: FormData): Observable<Chat> {
-    
     return this.http.post<Chat>(`${this.apiUrl}Chat`, message).pipe(
       takeUntil(this.destroy$)
     );
@@ -101,11 +99,7 @@ export class ChatService implements OnDestroy {
   }
 
 
-  allowrealtime(){
-    this.hubConnection.on("ReceiveMessage", (message: Chat) => {
-      console.log('Message received:', message);
-  });
-}
+ 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -115,5 +109,11 @@ export class ChatService implements OnDestroy {
         console.error('SignalR disconnect error:', err));
     }
   }
-
+  getAllConversations(username: string): Observable<Chat[]> {
+    const url = `${this.apiUrl}Chat/conversations/${username}`;
+    console.log('Fetching conversations from:', url); // Debug
+    return this.http.get<Chat[]>(url).pipe(
+      takeUntil(this.destroy$)
+    );
+  }
 }

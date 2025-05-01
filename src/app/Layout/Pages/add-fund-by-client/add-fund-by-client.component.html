@@ -1,5 +1,5 @@
 <div class="payment-container">
-  <form [formGroup]="paymentForm"  class="payment-form" (ngSubmit)="Fund()">
+  <form [formGroup]="paymentForm"  class="payment-form">
     <div class="payment-section">
       <h2>Add new payment method</h2>
 
@@ -114,11 +114,9 @@
   </div>
 </div>
 
-<button type="submit" class="pay-button" [disabled]="!paymentForm.valid" >
+<button type="submit" class="pay-button" [disabled]="!paymentForm.valid&&selectedPaymentMethod==='card'" (click)="Fund()" >
   Confirm and pay ${{calculateTotal().toFixed(2)}} USD
 </button>
-
-
       <p class="terms-text">
         You agree to authorize the use of your card for this deposit and future payments, and agree to be bound by the
         <a href="#">Terms & Conditions</a>.

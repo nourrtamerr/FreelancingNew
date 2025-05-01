@@ -1,0 +1,15 @@
+.bg-light-blue {
+    background-color: #f0f8ff !important;  /* Very light blue for unread */
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #e6f2ff !important;  /* Medium light blue on hover */
+  }
+  
+  .card {
+    border-radius: 0.8rem;
+  }
+  
+  th {
+    font-weight: 500;
+  }

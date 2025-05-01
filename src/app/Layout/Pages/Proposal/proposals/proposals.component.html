@@ -8,7 +8,13 @@
         </div>
       </div>
     </div>
-  
+    <div class="proposals-header" style="justify-content: end;">
+    <a   *ngIf="role=='Freelancer' && project" [routerLink]="['/proposal2',projectId]" routerLinkActive="router-link-active" >
+    <button class="apply-btn mb-2">
+      Apply Now
+    </button>
+  </a>
+</div>
     <div class="proposals-list" *ngIf="proposals.length > 0">
       <div class="proposal-card" *ngFor="let proposal of proposals">
         <div class="freelancer-info">

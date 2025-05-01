@@ -29,6 +29,9 @@ import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-
 import { clientGuard } from './Shared/Guards/client/client.guard';
 import { adminGuard } from './Shared/Guards/admin/admin.guard';
 import { freelancerGuard } from './Shared/Guards/freelancer/freelancer.guard';
+import { WishlistComponent } from './Components/wishlist/wishlist.component';
+import { MyProposalsComponent } from './Layout/Pages/my-proposals/my-proposals.component';
+import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -47,6 +50,12 @@ export const routes: Routes = [
     {path: 'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails', canActivate: [clientGuard,freelancerGuard]},
     {path: 'VerificationRequests',component: IdentityVerificationDeicisionComponent, canActivate: [adminGuard]},
     {path: 'proposals/:projectId',component: ProposalsComponent,title:'proposals', canActivate: [clientGuard,freelancerGuard]},
+    // {path:'milestone',component:MilestonesComponent,title:'milestone'},
+    {path:'myprojects',component:MyProjectsComponent,title:'MyProjects',canActivate: [freelancerGuard]},
+    {path:'milestones/:projectId',component: MilestonesComponent, canActivate: [clientGuard,freelancerGuard]},
+    {path:'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails', canActivate: [clientGuard,freelancerGuard]},
+    {path:'VerificationRequests',component: IdentityVerificationDeicisionComponent, canActivate: [adminGuard]},
+    {path:'proposals/:projectId',component: ProposalsComponent,title:'proposals', canActivate: [clientGuard,freelancerGuard]},
     {
         path: 'profile',
         loadComponent: () =>
@@ -56,7 +65,7 @@ export const routes: Routes = [
       {path: 'bandetails/:id',component: BanDetailsComponent,canActivate: [adminGuard]},
       {path: 'admin-dashboard',component: AdminDashboardComponent,canActivate: [adminGuard]},
       {path: 'updateban/:id',component: UpdateBanComponent,canActivate: [adminGuard]},
-      {path: 'dashboard', component: UserDashboradComponent},
+      {path: 'dashboard', component: UserDashboradComponent,canActivate: [clientGuard,adminGuard]},
       {path: 'addfund', component: AddFundByClientComponent,canActivate: [clientGuard]},
       {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientGuard,freelancerGuard]},
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientGuard,freelancerGuard]},
@@ -71,5 +80,11 @@ export const routes: Routes = [
 
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
+     
+      {path:'withdraw', component: WithdrawComponent,title:'Withdraw'},
+     
+      {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
+      {path:'wishlist', component: WishlistComponent},
+      {path:'myproposals',component:MyProposalsComponent}
 
 ];

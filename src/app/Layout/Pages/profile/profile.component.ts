@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
 import { AppUser, EditProfileDTO, IdentityVerificationRequest, LanguageEnum } from '../../../Shared/Interfaces/Account';
@@ -37,7 +37,7 @@ import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLa
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,TimeAgoPipe],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,TimeAgoPipe,RouterModule],
   providers:[FormBuilder],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -1079,23 +1079,18 @@ addSkill(skillId: number): void {
           title: data.title
         });
   
-        Promise.all([
-          this.loadCities(),
-          this.loadEducation(),
-          this.loadExperience(),
-          this.loadPortofolioProjects(),
-          this.loadCertificates(),
-          this.loadBiddingProjects(),
-          this.loadLanguages()
-        ]).then(() => {
-          // ✅ Now everything is loaded
+ 
+          this.loadCities();
+          this.loadEducation();
+          this.loadBiddingProjects();
+          if(this.profile.role==='Freelancer') {
+          this.loadExperience();
+          this.loadPortofolioProjects();
+          this.loadCertificates();
+          this.loadLanguages();
+        
           this.calculateProfileCompletion();
-        }).catch(error => {
-          console.error('Error loading profile data:', error);
-        });
-  
-
-      console.log(this.profile,'hh');
+          }
 
       },
       error: (error) => {

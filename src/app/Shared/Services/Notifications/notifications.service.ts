@@ -73,9 +73,9 @@ export class NotificationsService {
   }
 
   MarkAsReadNotifications(id: number): Observable<Notifications> {
-    return this._HttpClient.put<Notifications>(`${this.apiUrl}Notifications/markAsRead/${id}`, null);
+    return this._HttpClient.put<Notifications>(`${this.apiUrl}Notifications/mark-as-read/${id}`, {});
   }
   MarkAsReadAllNotifications(): Observable<Notifications[]> {
-    return this._HttpClient.post<Notifications[]>(`${this.apiUrl}Notifications/markAsReadAll`, null);
+    return this._HttpClient.post<Notifications[]>(`${this.apiUrl}Notifications/mark-all-as-read`, {});
   }
 }

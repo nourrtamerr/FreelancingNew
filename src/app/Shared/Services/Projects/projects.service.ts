@@ -20,8 +20,8 @@ export class ProjectsService {
     return this.myClient.get<any[]>(`${this.apiURL}/MyProjects`);
   }
 
-  getProjectById(projId:number):Observable<any[]>{
-    return this.myClient.get<any[]>(`${this.apiURL}/${projId}`).pipe(
+  getProjectById(projId:number):Observable<any>{
+    return this.myClient.get<any>(`${this.apiURL}/${projId}`).pipe(
       tap(() => console.log(`Project Id ${projId}`)),
 
     );

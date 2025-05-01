@@ -1,8 +1,8 @@
 export interface Chat {
     id?: number
-    senderId?: string
-    senderName?: string
-    receiverId: string
+    senderId?: string 
+    senderName?: string 
+    receiverId?: string
     receiverName?: string
     message?: any
     image?:File
