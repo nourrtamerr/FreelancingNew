@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../Shared/Services/Auth/auth.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Notifications } from '../../Shared/Interfaces/Notifications';
 import { NotificationsService } from '../../Shared/Services/Notifications/notifications.service';
+import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
 
 
 @Component({
@@ -19,10 +20,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notifications: Notifications[] = [];
   unreadNotifications: number = 0;
   private subscriptions: Subscription[] = [];
+  role: string | null = null;
 
   constructor(
     private AuthService: AuthService,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private projectService: ProjectsService, 
+    private router: Router
   ){
     this.isLoggedIn = this.AuthService.isLoggedIn();
     console.log(this.isLoggedIn); // Log the initial status of isLoggedI
@@ -43,7 +47,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.AuthService.userData.subscribe((user) => {
+      if (user) {
+        const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        this.role = role?.toLowerCase() || null;
+      }
+    });
     this.subscriptions.push(
       this.notificationsService.AllNotificaitions.subscribe(notifications => {
         this.notifications = notifications;

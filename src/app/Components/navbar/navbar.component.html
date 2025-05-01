@@ -12,7 +12,7 @@
       <div class="collapse navbar-collapse" id="fiverrNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
 
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" *ngIf="role === 'freelancer'">
             <a class="nav-link dropdown-toggle" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Explore Projects
             </a>
@@ -26,7 +26,8 @@
           <li class="nav-item">
             <a [routerLink]="['/freelancers']" routerLinkActive="router-link-active" class="nav-link" href="#">Freelancers</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item"  *ngIf="role === 'client'">
+            
             <a [routerLink]="['/createproject']" routerLinkActive="router-link-active" class="nav-link" href="#">Create Project</a>
           </li>
 
@@ -62,8 +63,8 @@
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" [routerLink]="['/profile']">View Profile</a></li>
             <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
-            <li><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
+            <li  *ngIf="role === 'client'"><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
+            <li  *ngIf="role === 'client'"><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item"(click)="logout()">Logout</a></li>
           </ul>

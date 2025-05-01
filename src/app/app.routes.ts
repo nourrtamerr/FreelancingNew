@@ -47,7 +47,7 @@ export const routes: Routes = [
       .then(m => m.FixedProjectDetailsComponent ) ,canActivate: [clientOrFreelancerGuard] },
 
  //   {path:'milestone',component:MilestonesComponent,title:'milestone',canActivate: [clientGuard,freelancerGuard]},
-    {path:'myprojects',component:MyProjectsComponent,title:'MyProjects', canActivate: [freelancerGuard]},
+    {path:'myprojects',component:MyProjectsComponent,title:'MyProjects', canActivate: [clientOrFreelancerGuard]},
     {path: 'milestones/:projectId',component: MilestonesComponent, canActivate: [clientOrFreelancerGuard] },
     {path: 'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails', canActivate: [clientOrFreelancerGuard] },
     {path: 'VerificationRequests',component: IdentityVerificationDeicisionComponent, canActivate: [adminGuard]},
@@ -75,7 +75,7 @@ export const routes: Routes = [
       {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},
       {path: 'proposal2/:id',component: Proposal2Component,canActivate: [clientOrFreelancerGuard] },
       {path: 'freelancers',component: FreelancersComponent,canActivate: [clientOrFreelancerGuard] },
-      {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [freelancerGuard]},
+      {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [clientOrFreelancerGuard]},
       {path: 'login',component: LoginComponent},
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
