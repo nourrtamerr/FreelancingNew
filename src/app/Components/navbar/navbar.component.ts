@@ -21,6 +21,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   unreadNotifications: number = 0;
   private subscriptions: Subscription[] = [];
   role: string | null = null;
+  savedTalent: number = 0;
+  unreadMessages: number = 0;
+  balance: number = 0;
 
   constructor(
     private AuthService: AuthService,
@@ -77,10 +80,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
     }
 
+    if (this.role === 'client') {
+      this.loadClientData();
+    }
+
   }
   ngOnDestroy(): void {
     // Clean up subscriptions to prevent memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  private loadClientData(): void {
+    // This is where you would typically load client-specific data
+    // For now, we'll just simulate some data
+    this.savedTalent = 5;
+    this.unreadMessages = 2;
+    this.balance = 1000;
   }
 
   loadNotifications(): void {
