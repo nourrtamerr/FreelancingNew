@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Environment } from '../../../base/environment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Notifications } from '../../Interfaces/Notifications';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { AuthService } from '../Auth/auth.service';
@@ -11,13 +11,26 @@ import { AuthService } from '../Auth/auth.service';
 })
 export class NotificationsService {
   public hubConnection!: HubConnection;
+  public AllNotificaitions:BehaviorSubject<Notifications[]> = new BehaviorSubject<Notifications[]>([]);
+  public unreadNotifications: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private apiUrl = `${Environment.baseUrl}`;
   // private connectionStatus$ = new BehaviorSubject<boolean>(false);
   constructor(private _HttpClient:HttpClient,private authService:AuthService) {
     this.initializeSignalRConnection();
+    this.setupNotificationHandlers();
    }
 
 
+   private setupNotificationHandlers(): void {
+    this.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
+      console.log('New notification received:', notification);
+      const current = this.AllNotificaitions.getValue();
+      this.AllNotificaitions.next([notification, ...current]);
+      if (!notification.isRead) {
+        this.unreadNotifications.next(this.unreadNotifications.value + 1);
+      }
+    });
+  }
 
    private initializeSignalRConnection(): void {
        try {
@@ -52,7 +65,15 @@ export class NotificationsService {
        }
      }
   getNotifications(): Observable<Notifications[]> {
-    return this._HttpClient.get<Notifications[]>(`${this.apiUrl}Notifications/user`);
+    return this._HttpClient.get<Notifications[]>(`${this.apiUrl}Notifications/user`)
+      .pipe(
+        tap((notifications: Notifications[]) => { 
+          this.AllNotificaitions.next(notifications);
+          this.unreadNotifications.next(notifications.filter(notification => !notification.isRead).length);
+        }));   
+      
+
+
   }
   getNotificationsById(id : number) {
     return this._HttpClient.get(`${this.apiUrl}Notifications/${id}`);
@@ -61,8 +82,15 @@ export class NotificationsService {
   updatateNotifications(id: number, notifications: Notifications): Observable<Notifications> {
     return this._HttpClient.put<Notifications>(`${this.apiUrl}Notifications/${id}`, notifications);
   }
+  
   deleteNotifications(id: number): Observable<void> {
-    return this._HttpClient.delete<void>(`${this.apiUrl}Notifications/${id}`);
+    return this._HttpClient.delete<void>(`${this.apiUrl}Notifications/${id}`).pipe(
+      tap(() => {
+        const updated = this.AllNotificaitions.value.filter(n => n.id !== id);
+        this.AllNotificaitions.next(updated);
+        this.unreadNotifications.next(updated.filter(n => !n.isRead).length);
+      })
+    );
   }
   addNotifications(notifications: Notifications): Observable<Notifications> {
     return this._HttpClient.post<Notifications>(`${this.apiUrl}Notifications`, notifications);

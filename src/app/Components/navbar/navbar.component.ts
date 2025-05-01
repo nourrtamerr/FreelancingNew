@@ -43,12 +43,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.subscriptions.push(
+      this.notificationsService.AllNotificaitions.subscribe(notifications => {
+        this.notifications = notifications;
+      }),
+      
+      this.notificationsService.unreadNotifications.subscribe(count => {
+        this.unreadNotifications = count;
+      })
+    );
     if (this.isLoggedIn) {
       this.loadNotifications();
       
       // Listen for real-time notifications
       this.notificationsService.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
         console.log('New notification received:', notification);
+        this.notificationsService.AllNotificaitions.next([notification]);
+        this.notificationsService.unreadNotifications.next(this.unreadNotifications + 1);
         this.notifications.unshift(notification);
         if (!notification.isRead) {
           this.unreadNotifications++;
@@ -69,6 +81,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
       
           this.notifications = data
+
           this.unreadNotifications = data.filter(n => !n.isRead).length;
 
           console.log('Loaded notifications:', this.notifications);
@@ -125,7 +138,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
         next: (result:any) => {
           console.log('Notification deleted:', result);
           // Remove the notification from the local list
-          this.notifications = this.notifications.filter(n => n.id !== id);
+          this.notificationsService.AllNotificaitions.next(this.notifications.filter(n => n.id !== id));
+          this.notificationsService.unreadNotifications.next(this.unreadNotifications - 1);
         },
         error: (err : any) => {
           console.error('Error deleting notification:', err);

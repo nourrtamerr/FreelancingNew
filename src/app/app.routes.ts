@@ -28,6 +28,7 @@ import { NotificationsComponent } from './Layout/Additions/notifications/notific
 import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-fund-by-client.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
+import { adminGuard } from './Shared/Guards/admin/admin.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -44,7 +45,7 @@ export const routes: Routes = [
     {path:'myprojects',component:MyProjectsComponent,title:'MyProjects'},
     {path:'milestones/:projectId',component: MilestonesComponent},
     {path:'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails'},
-    {path:'VerificationRequests',component: IdentityVerificationDeicisionComponent},
+    {path:'VerificationRequests',component: IdentityVerificationDeicisionComponent ,canActivate: [adminGuard],title:'Identity Verification'},
     {path:'proposals/:projectId',component: ProposalsComponent,title:'proposals'},
     {
         path: 'profile',
