@@ -178,6 +178,10 @@
       </div>
     </div>
 
+    <div class="fee-row total">
+      <span>Curent Balance</span>
+      <span>${{ profile.balance.toFixed(2)}}</span>
+    </div>
     <div class="fee-details">
       <div class="fee-row">
         <span>Total due</span>
@@ -188,14 +192,10 @@
         <span>${{ getProcessingFee().toFixed(2) }}</span>
       </div>
       <div class="fee-row total">
-        <span>Payment due</span>
+        <span>Withdrawal due</span>
         <span>${{ calculateTotal().toFixed(2) }}</span>
       </div>
     </div>
-    <!-- <div class="fee-row ">
-      <span>Curent Balance</span>
-      <span>${{ profile.balance.toFixed(2)}}</span>
-    </div> -->
     <button
       class="pay-button bg-success"
       [disabled]="!paymentForm.valid && selectedPaymentMethod === 'card'"
