@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { SubscriptionPaymentService } from '../../../Shared/Services/Subscribtion plan Payment/subscribtionpayment.service';
 
 @Component({
   selector: 'app-subscribtion-plan',
@@ -58,14 +59,41 @@ export class SubscribtionPlanComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private subscriptionService: SubscriptionPaymentService
+  ) {}
 
   ngOnInit(): void {}
 
   selectPlan(planId: number) {
-    // Here you can implement the logic to handle plan selection
-    // For example, navigate to payment page or save selection
-    console.log(`Selected plan: ${planId}`);
-    // this.router.navigate(['/payment'], { queryParams: { planId: planId } });
+    const selectedPlan = this.plans.find(p => p.id === planId);
+
+    if (!selectedPlan) return;
+
+    if (selectedPlan.price === 0) {
+      // Free plan — activate immediately from balance
+      this.subscriptionService.payFromBalance(planId).subscribe({
+        next: () => {
+          alert('Free plan activated successfully');
+          this.router.navigate(['/dashboard']);
+        },
+        error: err => {
+          console.error(err);
+          alert('Failed to activate free plan');
+        }
+      });
+    } else {
+      // Paid plan — redirect to Stripe
+      this.subscriptionService.payFromStripe(planId).subscribe({
+        next: (url: string) => {
+          window.location.href = url; // Redirect to Stripe Checkout
+        },
+        error: err => {
+          console.error(err);
+          alert('Failed to redirect to payment');
+        }
+      });
+    }
   }
 }

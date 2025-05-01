@@ -37,9 +37,9 @@ export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
-    {path: 'fixed', component: FixedProjectComponent,canActivate: [clientGuard,freelancerGuard]},
+    {path: 'fixed', component: FixedProjectComponent,canActivate: [clientGuard]},
     {path: 'createproject', component: CreateProjectComponent ,canActivate: [clientGuard]},
-    {path: 'subscribtion', component: SubscribtionPlanComponent,canActivate: [clientGuard,adminGuard]},
+    {path: 'subscribtion', component: SubscribtionPlanComponent},
   {  path: 'fixed-project/:id',
     loadComponent: () => import('../app/Layout/Pages/fixed-project-details/fixed-project-details.component')
       .then(m => m.FixedProjectDetailsComponent ) ,canActivate: [clientGuard,freelancerGuard]},
@@ -81,7 +81,7 @@ export const routes: Routes = [
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
      
-      {path:'withdraw', component: WithdrawComponent,title:'Withdraw'},
+      {path:'withdraw', component: WithdrawComponent,title:'Withdraw',canActivate: [clientGuard,freelancerGuard]},
      
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
