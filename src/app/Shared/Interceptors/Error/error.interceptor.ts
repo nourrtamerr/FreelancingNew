@@ -19,7 +19,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         return EMPTY;
       }
       else if (error.error?.message) {
-        toastr.error(error.error.message);
+        // toastr.error(error.error.message);
+        // toastr.error(error.message);
+
         return EMPTY;
       }
       return throwError(() => error);
