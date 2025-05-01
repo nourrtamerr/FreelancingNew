@@ -1,5 +1,5 @@
 <div class="payment-container">
-  <form [formGroup]="paymentForm"  class="payment-form" (ngSubmit)="Fund()">
+  <form [formGroup]="paymentForm"  class="payment-form">
     <div class="payment-section">
       <h2>Add new payment method</h2>
 
@@ -114,8 +114,13 @@
   </div>
 </div>
 
-<button type="submit" class="pay-button" [disabled]="!paymentForm.valid" >
+<button type="submit" class="pay-button" [disabled]="!paymentForm.valid&&selectedPaymentMethod==='card'" (click)="Fund()" >
   Confirm and pay ${{calculateTotal().toFixed(2)}} USD
+</button>
+<br>
+<br>
+<button type="submit" class="pay-button bg-success" [disabled]="!paymentForm.valid&&selectedPaymentMethod==='card'" (click)="withdraw()" >
+  Confirm and withdraw ${{calculateTotal().toFixed(2)}} USD
 </button>
 
 
