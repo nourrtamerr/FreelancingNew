@@ -6,13 +6,19 @@
     </div>
     <div class="chat-list">
       <div *ngFor="let conversation of conversations" 
-           class="chat-item" 
+            
+           class="chat-item d-flex align-items-center "  
+           
            [class.active]="(conversation.receiverId === truereceiverid || conversation.senderId === truereceiverid)"
 
            (click)="switchConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
 
+           <img class="profile-image" [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '']"
+            />
+           
            <div class="chat-item-content">
-          <div class="chat-item-name">
+          <div class="chat-item-name ms-2">
+            
             {{ conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName }}
           </div>
           <div class="chat-item-preview">
@@ -28,7 +34,12 @@
 
   <!-- Right Chat Area -->
   <div class="chat-main">
-    <div class="chat-header">
+    <div class="chat-header d-flex  align-items-center">
+      <img
+      class="profile-image"
+      [src]="receiverImage ? receiverImage: 'https://th.bing.com/th/id/OIP.pu65piyuwGoBpHJ2SvvGvAHaHa?pid=ImgDet&w=192&h=192&c=7'"
+      alt="Profile Image"
+    />
       <h3>
         {{ receiverUsername || 'Select a conversation' }}
         <span *ngIf="onlineUsers.includes(truereceiverid)" class="online-status">● Online</span>

@@ -250,8 +250,16 @@ checkExternalLogin(): void {
     // Clean the URL
     window.history.replaceState({}, document.title, window.location.pathname);
   }
+
+  
 }
 
+
+
+
+getImagebyUserName(userName: string): Observable<{ fileName: string }> {
+  return this._HttpClient.get<{ fileName: string }>(`${this.apiUrl}/getImagebyUserName?userName=${userName}`);
+}
 
 
 }
