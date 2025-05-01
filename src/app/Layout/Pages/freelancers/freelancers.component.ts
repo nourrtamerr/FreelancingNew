@@ -50,6 +50,7 @@ export class FreelancersComponent implements OnInit{
       ,private BiddingProjects:BiddingProjectService
       ,private fixedprojects:FixedPriceProjectService
       ,private reviewservice:ReviewService
+      ,private Auth:AuthService
   ){
   
   }
@@ -64,12 +65,13 @@ export class FreelancersComponent implements OnInit{
   ranks = Object.values(RankEnum);
   countries: Country[] = []; // Assuming you have a countries list
   picturesurl:string=Files.filesUrl;
+  currentUserId!:string;
   ngOnInit(): void {
       
         this.initializeFilter();
         this.InitialieCountries();
         this.loadFreelancers();
-        
+        this.currentUserId = this.Auth.getUserId()!;
       
           
     
