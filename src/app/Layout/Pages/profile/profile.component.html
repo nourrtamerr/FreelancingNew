@@ -5,19 +5,19 @@
             <div class="row align-items-center">
                 <div class="col-auto">
                     <div class="profile-picture-container">
-                        <img [src]="profile.profilePicture?`${picturesurl}${profile.profilePicture}` :  'images/default.jpg'" 
-                             alt="Profile Picture" 
-                             class="profile-image">
-                        <div class="overlay">
-                            <label for="profilePicture" class="upload-label">
-                                <i class="fa fa-camera"></i>
-                            </label>
-                            <input type="file" 
-                                   id="profilePicture" 
-                                   (change)="onProfilePictureChange($event)" 
-                                   accept="image/*" 
-                                   hidden>
-                        </div>
+                      <img [src]="previewUrl || (profile.profilePicture ? picturesurl + '/' + profile.profilePicture : 'images/default.jpg')" 
+                      alt="Profile Picture" 
+                      class="profile-image">
+                 <div class="overlay">
+                     <label for="profilePicture" class="upload-label">
+                         <i class="fa fa-camera"></i>
+                     </label>
+                     <input type="file" 
+                            id="profilePicture" 
+                            (change)="onProfilePictureChange($event)" 
+                            accept="image/*" 
+                            hidden>
+                 </div>
                     </div>
                 </div>
                 <div class="col">
