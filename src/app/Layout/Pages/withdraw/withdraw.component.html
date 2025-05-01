@@ -1,0 +1,221 @@
+<div class="payment-container">
+  <form [formGroup]="paymentForm" class="payment-form">
+    <div class="payment-section">
+      <h2>Add new payment method</h2>
+
+      <div
+        class="payment-option"
+        [class.selected]="selectedPaymentMethod === 'card'"
+        (click)="onPaymentMethodChange('card')"
+      >
+        <input
+          type="radio"
+          id="card"
+          formControlName="paymentMethod"
+          value="card"
+        />
+        <label for="card">Debit or credit card</label>
+        <span class="accepted-text">All major cards accepted</span>
+      </div>
+
+      <div class="card-details mb-3" *ngIf="selectedPaymentMethod === 'card'">
+        <div class="form-group">
+          <label>Card number:</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="cardNumber"
+            placeholder="1234 5678 9012 3456"
+          />
+          <div
+            class="error-message text-danger"
+            *ngIf="
+              paymentForm.get('cardNumber')?.invalid &&
+              paymentForm.get('cardNumber')?.touched
+            "
+          >
+            Please enter a valid 16-digit card number
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiry date:</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="expiryDate"
+              placeholder="MM/YY"
+            />
+            <div
+              class="error-message text-danger"
+              *ngIf="
+                paymentForm.get('expiryDate')?.invalid &&
+                paymentForm.get('expiryDate')?.touched
+              "
+            >
+              Please enter a valid expiry date (MM/YY)
+            </div>
+          </div>
+          <div class="form-group">
+            <label>CVC/CVV: <i class="info-icon">i</i></label>
+            <input type="text" class="form-control" formControlName="cvv" />
+            <div
+              class="error-message text-danger"
+              *ngIf="
+                paymentForm.get('cvv')?.invalid &&
+                paymentForm.get('cvv')?.touched
+              "
+            >
+              Please enter a valid CVV
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Cardholder name:</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="cardholderName"
+          />
+          <div
+            class="error-message text-danger"
+            *ngIf="
+              paymentForm.get('cardholderName')?.invalid &&
+              paymentForm.get('cardholderName')?.touched
+            "
+          >
+            Please enter the cardholder name
+          </div>
+        </div>
+
+        <div class="card-logos">
+          <img src="./images/visa.jpeg" alt="Visa" />
+          <img src="./images/MSC.png" alt="Mastercard" />
+          <img src="./images/AMSL.png" alt="American Express" />
+          <img src="./images/JCB.png" alt="JCB" />
+        </div>
+      </div>
+
+      <div
+        class="payment-option"
+        [class.selected]="selectedPaymentMethod === 'paypal'"
+        (click)="onPaymentMethodChange('paypal')"
+      >
+        <input
+          type="radio"
+          id="paypal"
+          formControlName="paymentMethod"
+          value="paypal"
+        />
+        <label for="paypal">PayPal</label>
+        <img src="./images/paypal.jpeg" alt="PayPal" class="payment-logo" />
+      </div>
+
+      <div
+        class="payment-option"
+        [class.selected]="selectedPaymentMethod === 'stripe'"
+        (click)="onPaymentMethodChange('stripe')"
+      >
+        <input
+          type="radio"
+          id="stripe"
+          formControlName="paymentMethod"
+          value="stripe"
+        />
+        <label for="stripe">Stripe</label>
+        <img src="./images/Stripe-Logo.png" alt="stripe" class="payment-logo" />
+      </div>
+
+      <div
+        class="payment-option"
+        [class.selected]="selectedPaymentMethod === 'bank'"
+        (click)="onPaymentMethodChange('bank')"
+      >
+        <input
+          type="radio"
+          id="bank"
+          formControlName="paymentMethod"
+          value="bank"
+        />
+        <label for="bank">Bank deposit</label>
+        <img src="./images/BANK.jpeg" alt="Bank" class="payment-logo" />
+      </div>
+    </div>
+
+    <div class="amount-section">
+      <h2>Select amount <span>(USD)</span></h2>
+      <!-- </div> -->
+      <div class="form-group">
+        <label>Currency</label>
+        <div class="currency-select">
+          <select formControlName="currency" class="currency-dropdown">
+            <option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+            <option value="GBP">🇬🇧 GBP</option>
+            <option value="JPY">🇯🇵 JPY</option>
+            <option value="AUD">🇦🇺 AUD</option>
+            <option value="CAD">🇨🇦 CAD</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Amount</label>
+        <div class="amount-input">
+          <span class="currency-symbol">$</span>
+          <input type="number" formControlName="amount" min="1" />
+        </div>
+        <div
+        class="error-message"
+        *ngIf="
+            paymentForm.get('amount')?.invalid &&
+            paymentForm.get('amount')?.touched
+          "
+        >
+        Please enter a valid amount
+      </div>
+    </div>
+
+    <div class="fee-details">
+      <div class="fee-row">
+        <span>Total due</span>
+        <span>${{ getTotalDue().toFixed(2) }}</span>
+      </div>
+      <div class="fee-row">
+        <span>Processing fee <i class="info-icon">i</i></span>
+        <span>${{ getProcessingFee().toFixed(2) }}</span>
+      </div>
+      <div class="fee-row total">
+        <span>Payment due</span>
+        <span>${{ calculateTotal().toFixed(2) }}</span>
+      </div>
+    </div>
+    <!-- <div class="fee-row ">
+      <span>Curent Balance</span>
+      <span>${{ profile.balance.toFixed(2)}}</span>
+    </div> -->
+    <button
+      class="pay-button bg-success"
+      [disabled]="!paymentForm.valid && selectedPaymentMethod === 'card'"
+      (click)="withdraw()"
+      >
+      Confirm and withdraw ${{ calculateTotal().toFixed(2) }} USD
+    </button>
+
+      <p class="terms-text">
+        You agree to authorize the use of your card for this deposit and future
+        payments, and agree to be bound by the
+        <a href="#">Terms & Conditions</a>.
+      </p>
+
+      <div class="security-logos">
+        <img src="./images/ssl.jpeg" alt="SSL" />
+        <img src="./images/pci.png" alt="PCI DSS" />
+        <img src="./images/MSC.png" alt="Mastercard SecureCode" />
+        <img src="/images/visa.jpeg" alt="Visa Secure" />
+      </div>
+    </div>
+  </form>
+</div>

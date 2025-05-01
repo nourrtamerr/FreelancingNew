@@ -42,68 +42,43 @@ export class NavbarComponent implements OnInit, OnDestroy {
     );
   }
 
-  // ngOnInit(): void {
-  //   if (this.isLoggedIn) {
-  //     this.loadNotifications();
-      
-  //     // Listen for real-time notifications
-  //     this.notificationsService.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
-  //       console.log('New notification received:', notification);
-  //       this.notifications.unshift(notification);
-  //       if (!notification.isRead) {
-  //         this.unreadNotifications++;
-  //       }
-  //     });
-  //   }
-  //   this.loadNotifications();
-  // }
-
-
-
   ngOnInit(): void {
-
-
-    this.notificationsService.hubConnection.on("ReceiveNotification", (message: Notifications) => {
-      // if(this.receiverId==message.senderId){
-      console.log('notification received:', message);
-      console.log("asidohasoidhasd")
-      this.notifications.push(message);
-      // }
-  });
-  this.getAllNotification();
-}
-getAllNotification(){
-   this.notificationsService.getNotifications().subscribe({
-    next:(data:any)=>{
-      this.notifications = data;
-      console.log("notificaion ", this.notifications)
-    },
-    error:(err:any)=>{
-      console.log(err);
+    if (this.isLoggedIn) {
+      this.loadNotifications();
+      
+      // Listen for real-time notifications
+      this.notificationsService.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
+        console.log('New notification received:', notification);
+        this.notifications.unshift(notification);
+        if (!notification.isRead) {
+          this.unreadNotifications++;
+        }
+      });
     }
-   })
-  }
 
+  }
   ngOnDestroy(): void {
     // Clean up subscriptions to prevent memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  // loadNotifications(): void {
-  //   this.subscriptions.push(
-  //     this.notificationsService.getNotifications().subscribe({
-  //       next: (data: Notifications[]) => {
-  //         // Sort notifications by date descending (newest first)
+  loadNotifications(): void {
+    this.subscriptions.push(
+      this.notificationsService.getNotifications().subscribe({
+        next: (data: Notifications[]) => {
+
       
-  //         this.unreadNotifications = data.filter(n => !n.isRead).length;
-  //         console.log('Loaded notifications:', this.notifications);
-  //       },
-  //       error: (err) => {
-  //         console.error('Error loading notifications:', err);
-  //       }
-  //     })
-  //   );
-  // }
+          this.notifications = data
+          this.unreadNotifications = data.filter(n => !n.isRead).length;
+
+          console.log('Loaded notifications:', this.notifications);
+        },
+        error: (err) => {
+          console.error('Error loading notifications:', err);
+        }
+      })
+    );
+  }
 
   markAsRead(id: number): void {
     this.subscriptions.push(
@@ -144,6 +119,20 @@ getAllNotification(){
     );
   }
 
+  deleteNotification(id: number): void {
+    this.subscriptions.push(
+      this.notificationsService.deleteNotifications(id).subscribe({
+        next: (result:any) => {
+          console.log('Notification deleted:', result);
+          // Remove the notification from the local list
+          this.notifications = this.notifications.filter(n => n.id !== id);
+        },
+        error: (err : any) => {
+          console.error('Error deleting notification:', err);
+        }
+      })
+    );
+  }
   logout() {
     this.isLoggedIn = false;
     this.AuthService.logout();
