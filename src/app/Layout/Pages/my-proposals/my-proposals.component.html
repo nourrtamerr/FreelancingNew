@@ -1,0 +1,72 @@
+<div class="proposals-section">
+    <div class="hero-overlay"></div>
+    <div class="proposals-content">
+      <h1 class="section-title">My Proposals</h1>
+    </div>
+  </div>
+  
+  <div class="proposals-container">
+    <div class="loading-spinner" *ngIf="loading">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+  
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+  
+    <div class="proposals-grid" *ngIf="!loading && !error">
+      <div class="proposal-card" *ngFor="let proposal of proposals">
+        <div class="proposal-header">
+          <div class="freelancer-info">
+            <img [src]="proposal.freelancerProfilePicture? Filesurl+'/'+proposal.freelancerProfilePicture : '/images/default.jpg'" alt="Profile" class="profile-picture">
+            <div class="freelancer-details">
+              <h3>{{ proposal.freelancerName }}</h3>
+              <div class="verified-badge" *ngIf="proposal.isVerified">
+                <i class="fas fa-check-circle"></i> Verified
+              </div>
+            </div>
+          </div>
+          <div class="proposal-status" [ngClass]="'status-' + proposal.proposalStatus">
+  {{ proposal.proposalStatus }}
+</div>
+        </div>
+  
+        <div class="proposal-body">
+          <div class="proposal-details">
+            <div class="detail-item">
+              <i class="fas fa-money-bill"></i>
+              <span>Bid Amount: ${{ proposal.price }}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-clock"></i>
+              <span>Duration: {{ proposal.suggestedDuration }} days</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-star"></i>
+              <span>Rank: {{ proposal.rank }}</span>
+            </div>
+          </div>
+  
+          <div class="skills-section">
+            <h4>Skills</h4>
+            <div class="skills-container">
+              <span class="skill-tag" *ngFor="let skill of proposal.freelancerskills">
+                {{ skill }}
+              </span>
+            </div>
+          </div>
+  
+          <div class="cover-letter">
+            <h4>Cover Letter</h4>
+            <p>{{ proposal.coverLetter }}</p>
+          </div>
+        </div>
+  
+        <div class="proposal-footer">
+          <button class="view-project-btn" [routerLink]="proposal.projecttype.toString() =='bidding'?['/details', proposal.projectId]:['/fixed-project', proposal.projectId]">
+            <i class="fas fa-external-link-alt"></i> View Project
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

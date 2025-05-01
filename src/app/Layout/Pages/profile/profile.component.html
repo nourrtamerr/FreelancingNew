@@ -5,7 +5,7 @@
             <div class="row align-items-center">
                 <div class="col-auto">
                     <div class="profile-picture-container">
-                        <img [src]="previewUrl || `${picturesurl}/${profile.profilePicture}` || '/assets/images/default.jpg'" 
+                        <img [src]="profile.profilePicture?`${picturesurl}${profile.profilePicture}` :  'images/default.jpg'" 
                              alt="Profile Picture" 
                              class="profile-image">
                         <div class="overlay">
@@ -293,9 +293,11 @@
 				<div *ngIf="activeTab === 'myprojects'" class="card myprojects-section">
 					<div class="card-header">
 						<h3 class="section-title">My Projects</h3>
-						<button class="btn btn-upwork-primary" *ngIf="!fixedProjects?.length&&profile.role=='Client'" >
+						<a [routerLink]="['/createproject']" routerLinkActive="router-link-active" *ngIf="!fixedProjects?.length&&profile.role=='Client'">
+						<button class="btn btn-upwork-primary"  >
 							<i class="fa fa-plus-circle"></i> Add Project
 						</button>
+					</a>
 					</div>
 					
 					<div class="card-body">
@@ -408,13 +410,17 @@
 							</div>
 				
 							<!-- Empty State -->
-							<div class="empty-state" *ngIf="!fixedProjects?.length&&profile.role=='Client'">
+							<div class="empty-state" *ngIf="!fixedProjects?.length&& !biddingprojects?.length &&profile.role=='Client'">
 								<i class="fa fa-folder-open fa-3x mb-3"></i>
 								<h5>No Projects Added Yet</h5>
 								<p>Start adding your projects to showcase your work</p>
-								<button class="btn btn-upwork mt-3" (click)="openAddProjectModal()">
-									<i class="fa fa-plus-circle me-2"></i>Add Your First Project
-								</button>
+								
+							</div>
+							<div class="empty-state" *ngIf="!fixedProjects?.length&& !biddingprojects?.length &&profile.role=='Freelancer'">
+								<i class="fa fa-folder-open fa-3x mb-3"></i>
+								<h5>No Projects Added Yet</h5>
+								<p>Browse Available Projects For More Jobs</p>
+								
 							</div>
 
 
@@ -503,9 +509,7 @@
 								<i class="fa fa-folder-open"></i>
 								<h4>Showcase Your Work</h4>
 								<p>Add portfolio projects to demonstrate your expertise to potential clients</p>
-								<button class="btn btn-upwork-primary" (click)="openAddProjectModal()">
-									<i class="fa fa-plus-circle"></i> Add Your First Project
-								</button>
+								
 							</div>
 						</div>
 					</div>
@@ -664,9 +668,7 @@
 								<i class="fa fa-briefcase fa-3x mb-3"></i>
 								<h5>No Experience Added Yet</h5>
 								<p>Share your professional journey by adding your work experience</p>
-								<button class="btn btn-upwork mt-3" (click)="openAddExperienceModal()">
-									<i class="fa fa-plus-circle me-2"></i>Add Your First Experience
-								</button>
+								
 							</div>
 						</div>
 					</div>
@@ -844,9 +846,7 @@
 							<i class="fa fa-graduation-cap fa-3x mb-3"></i>
 							<h5>No Education Added Yet</h5>
 							<p class="text-muted">Add your educational background to showcase your qualifications</p>
-							<button class="btn btn-upwork mt-3" (click)="openAddEducationModal()">
-								<i class="fa fa-plus-circle me-2"></i>Add Your Education
-							</button>
+							
 						</div>
 					</div>
 				</div>
@@ -1012,9 +1012,7 @@
 								<i class="fa fa-certificate fa-3x mb-3"></i>
 								<h5>Showcase Your Certifications</h5>
 								<p>Add professional certificates to demonstrate your expertise</p>
-								<button class="btn btn-upwork mt-3" (click)="openAddCertificateModal()">
-									<i class="fa fa-plus-circle me-2"></i>Add Your First Certificate
-								</button>
+								
 							</div>
 						</div>
 					</div>

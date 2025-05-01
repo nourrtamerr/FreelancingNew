@@ -67,6 +67,7 @@ export class FixedProjectDetailsComponent implements OnInit {
           }
           const roles = this.authService.getRoles();
           this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+          console.log(this.role);
         }
 
 

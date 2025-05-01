@@ -131,9 +131,8 @@
             </button>
           </a>
 
-          <a *ngIf="role=='Client' || role=='Admin'"  [routerLink]="['/proposals',project.id]">
+          <a  [routerLink]="['/proposals',project.id]">
             <button class="apply-btn mb-2">
-             
               View Proposals
             </button>
           </a>

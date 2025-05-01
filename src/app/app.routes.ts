@@ -27,6 +27,7 @@ import { ChatComponent } from './Layout/Pages/chat/chat.component';
 import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-fund-by-client.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
+import { MyProposalsComponent } from './Layout/Pages/my-proposals/my-proposals.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -68,6 +69,6 @@ export const routes: Routes = [
       {path:'notification',component: NotificationsComponent},
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
-
+      {path:'myproposals',component:MyProposalsComponent}
 
 ];
