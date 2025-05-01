@@ -27,11 +27,11 @@ import { ChatComponent } from './Layout/Pages/chat/chat.component';
 import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-fund-by-client.component';
 import { clientGuard } from './Shared/Guards/client/client.guard';
-import { adminGuard } from './Shared/Guards/admin/admin.guard';
 import { freelancerGuard } from './Shared/Guards/freelancer/freelancer.guard';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { MyProposalsComponent } from './Layout/Pages/my-proposals/my-proposals.component';
 import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
+import { adminGuard } from './Shared/Guards/admin/admin.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
