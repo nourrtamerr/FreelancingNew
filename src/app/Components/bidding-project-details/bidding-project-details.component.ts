@@ -82,6 +82,11 @@ project: BiddingProjectGetById={
 
   }
 
+  isBiddingExpired(): boolean {
+    return new Date(this.project.biddingEndDate) < new Date();
+  }
+  
+
   private loadNgOnIt(id:number):void{
     this.biddingProjectDetailsService.GetBiddingProjectById(id).subscribe({
       next: (data) => {

@@ -5,6 +5,7 @@ import { FundandwithdrawService } from '../../../Shared/Services/FundandWithdraw
 import { FundsCard } from '../../../Shared/Interfaces/funds-card';
 import { CommonModule } from '@angular/common';
 import { AppUser } from '../../../Shared/Interfaces/Account';
+import { AccountService } from '../../../Shared/Services/Account/account.service';
 
 @Component({
   selector: 'app-withdraw',
@@ -26,7 +27,8 @@ export class WithdrawComponent {
   constructor(
     private fb: FormBuilder,
     private fundService: FundandwithdrawService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private accountService: AccountService
   ) {
     this.paymentForm = this.fb.group({
       paymentMethod: ['card', Validators.required],
@@ -42,8 +44,12 @@ export class WithdrawComponent {
     this.paymentForm.get('amount')?.valueChanges.subscribe(value => {
       this.calculateTotal();
     });
-  }
 
+    this.accountService.myPorfile().subscribe((profile: AppUser) => {
+      this.profile = profile;
+      console.log('Profile:', profile);
+    });
+  }
   onPaymentMethodChange(method: string) {
     this.selectedPaymentMethod = method;
   }
