@@ -26,49 +26,65 @@ import { LoginComponent } from './Layout/Pages/login/login.component';
 import { ChatComponent } from './Layout/Pages/chat/chat.component';
 import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-fund-by-client.component';
+import { clientGuard } from './Shared/Guards/client/client.guard';
+import { freelancerGuard } from './Shared/Guards/freelancer/freelancer.guard';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { MyProposalsComponent } from './Layout/Pages/my-proposals/my-proposals.component';
 import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
+import { adminGuard } from './Shared/Guards/admin/admin.guard';
+import { add } from 'date-fns';
+import { clientOrFreelancerGuard } from './Shared/Guards/Combination/clientOrFreelancerGuard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
-    {path: 'fixed', component: FixedProjectComponent},
-    {path: 'createproject', component: CreateProjectComponent},
-    {path: 'subscribtion', component: SubscribtionPlanComponent},
+    {path: 'fixed', component: FixedProjectComponent,canActivate: [clientOrFreelancerGuard] },
+    {path: 'createproject', component: CreateProjectComponent ,canActivate: [clientGuard]},
+    {path: 'subscribtion', component: SubscribtionPlanComponent,canActivate: [clientOrFreelancerGuard] },
   {  path: 'fixed-project/:id',
     loadComponent: () => import('../app/Layout/Pages/fixed-project-details/fixed-project-details.component')
-      .then(m => m.FixedProjectDetailsComponent)},
+      .then(m => m.FixedProjectDetailsComponent ) ,canActivate: [clientOrFreelancerGuard] },
 
+ //   {path:'milestone',component:MilestonesComponent,title:'milestone',canActivate: [clientGuard,freelancerGuard]},
+    {path:'myprojects',component:MyProjectsComponent,title:'MyProjects', canActivate: [clientOrFreelancerGuard]},
+    {path: 'milestones/:projectId',component: MilestonesComponent, canActivate: [clientOrFreelancerGuard] },
+    {path: 'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails', canActivate: [clientOrFreelancerGuard] },
+    {path: 'VerificationRequests',component: IdentityVerificationDeicisionComponent, canActivate: [adminGuard]},
+    {path: 'proposals/:projectId',component: ProposalsComponent,title:'proposals', canActivate: [clientOrFreelancerGuard]},
     // {path:'milestone',component:MilestonesComponent,title:'milestone'},
-    {path:'myprojects',component:MyProjectsComponent,title:'MyProjects'},
-    {path:'milestones/:projectId',component: MilestonesComponent},
-    {path:'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails'},
-    {path:'VerificationRequests',component: IdentityVerificationDeicisionComponent},
-    {path:'proposals/:projectId',component: ProposalsComponent,title:'proposals'},
+    {path:'myprojects',component:MyProjectsComponent,title:'MyProjects',canActivate: [freelancerGuard]},
+    {path:'milestones/:projectId',component: MilestonesComponent, canActivate: [clientOrFreelancerGuard] },
+    {path:'proposaldetails/:proposalId',component: ProposalDetailsComponent,title:'ProposalDetails', canActivate: [clientOrFreelancerGuard] },
+    {path:'VerificationRequests',component: IdentityVerificationDeicisionComponent, canActivate: [adminGuard]},
+    {path:'proposals/:projectId',component: ProposalsComponent,title:'proposals', canActivate: [clientOrFreelancerGuard] },
     {
         path: 'profile',
         loadComponent: () =>
           import('./Layout/Pages/profile/profile.component').then(m => m.ProfileComponent)
       },
-      {path:'banned',component: BannedUsersComponent,title:'Banned Users'},
-      {path:'bandetails/:id',component: BanDetailsComponent,title:'Ban Details'},
-      {path:'admin-dashboard',component: AdminDashboardComponent},
-      {path:'updateban/:id',component: UpdateBanComponent},
-      {path:'dashboard', component: UserDashboradComponent,title:'Dashboard'},
-      {path:'addfund', component: AddFundByClientComponent,title:'Add Fund'},
+      {path: 'banned',component: BannedUsersComponent,canActivate: [adminGuard]},
+      {path: 'bandetails/:id',component: BanDetailsComponent,canActivate: [adminGuard]},
+      {path: 'admin-dashboard',component: AdminDashboardComponent,canActivate: [adminGuard]},
+      {path: 'updateban/:id',component: UpdateBanComponent,canActivate: [adminGuard]},
+      {path: 'dashboard', component: UserDashboradComponent,canActivate: [clientOrFreelancerGuard] },
+      {path: 'addfund', component: AddFundByClientComponent,canActivate: [clientGuard]},
+      {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
+      {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
+      {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),canActivate: [adminGuard]},
+      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},
+      {path: 'proposal2/:id',component: Proposal2Component,canActivate: [clientOrFreelancerGuard] },
+      {path: 'freelancers',component: FreelancersComponent,canActivate: [clientOrFreelancerGuard] },
+      {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [clientOrFreelancerGuard]},
+      {path: 'login',component: LoginComponent},
+      {path: 'chathub/:username',component: ChatComponent},
+      {path: 'notification',component: NotificationsComponent},
+    
+    {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
+
+     
       {path:'withdraw', component: WithdrawComponent,title:'Withdraw'},
-      {path:'new',component: BiddingProjectNewComponent},
-      {path:'details/:id',component: BiddingProjectDetailsComponent},
-      {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent)},
-      {path:'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent)},
-      {path:'proposal2/:id',component: Proposal2Component},
-      {path:'freelancers',component: FreelancersComponent},
-      {path:'Freelancerprofile/:username',component: FreelancerProfileComponent},
-      {path:'login',component: LoginComponent},
-      {path:'chathub/:username',component: ChatComponent},
-      {path:'notification',component: NotificationsComponent},
+     
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
       {path:'myproposals',component:MyProposalsComponent}

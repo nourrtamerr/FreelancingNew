@@ -41,12 +41,25 @@ export class NotificationsComponent implements OnInit , OnDestroy {
    }
  
    ngOnInit(): void {
+
+    this.subscriptions.push(
+      this.notificationsService.AllNotificaitions.subscribe(notifications => {
+        this.notifications = notifications;
+      }),
+      
+      this.notificationsService.unreadNotifications.subscribe(count => {
+        this.unreadNotifications = count;
+      })
+    );
      if (this.isLoggedIn) {
        this.loadNotifications();
        
        // Listen for real-time notifications
        this.notificationsService.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
          console.log('New notification received:', notification);
+          this.notificationsService.AllNotificaitions.next([notification]);
+          this.notificationsService.unreadNotifications.next(this.unreadNotifications + 1);
+
          this.notifications.unshift(notification);
          if (!notification.isRead) {
            this.unreadNotifications++;
@@ -79,24 +92,19 @@ export class NotificationsComponent implements OnInit , OnDestroy {
    }
  
    markAsRead(id: number): void {
-     this.subscriptions.push(
-       this.notificationsService.MarkAsReadNotifications(id).subscribe({
-         next: (result) => {
-           console.log('Notification marked as read:', result);
-           // Update local notification status
-           const notification = this.notifications.find(n => n.id === id);
-           if (notification && !notification.isRead) {
-             notification.isRead = true;
-             this.unreadNotifications = Math.max(0, this.unreadNotifications - 1);
-           }
-         },
-         error: (err) => {
-           console.error('Error marking notification as read:', err);
-         }
-       })
-     );
-   }
- 
+    this.subscriptions.push(
+      this.notificationsService.MarkAsReadNotifications(id).subscribe({
+        next: (result) => {
+          const updated = this.notifications.map(n => 
+            n.id === id ? {...n, isRead: true} : n
+          );
+          this.notificationsService.AllNotificaitions.next(updated);
+        },
+        error: (err) => console.error(err)
+      })
+    );
+  }
+  
    markAllAsRead(event: Event): void {
      event.preventDefault();
      
@@ -124,7 +132,9 @@ export class NotificationsComponent implements OnInit , OnDestroy {
          next: (result:any) => {
            console.log('Notification deleted:', result);
            // Remove the notification from the local list
-           this.notifications = this.notifications.filter(n => n.id !== id);
+           this.notificationsService.AllNotificaitions.next(this.notifications.filter(n => n.id !== id));
+           this.notificationsService.unreadNotifications.next(this.unreadNotifications - 1);
+
          },
          error: (err : any) => {
            console.error('Error deleting notification:', err);

@@ -1,81 +1,101 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/images/L4.png" alt="logo" class="navbar-logo" />
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-
-<nav class="navbar navbar-expand-lg navbar-light  fiverr-navbar">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" routerLink="/">
-        <img src="imagves/L4.png" alt="logo" class="fiverr-navbar-logo" />
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#fiverrNavbar" aria-controls="fiverrNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="fiverrNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Explore Projects
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="exploreDropdown">
-              <li><a [routerLink]="['/new']" routerLinkActive="router-link-active"  class="dropdown-item" href="#">Bidding</a></li>
-              <li><a [routerLink]="['/fixed']" routerLinkActive="router-link-active" class="dropdown-item" href="#">Fixed Price</a></li>
-              <!-- <li><a class="dropdown-item" href="#">Guides</a></li> -->
-            </ul>
-          </li>
-
-          <li class="nav-item">
-            <a [routerLink]="['/freelancers']" routerLinkActive="router-link-active" class="nav-link" href="#">Freelancers</a>
-          </li>
-          <li class="nav-item">
-            <a [routerLink]="['/createproject']" routerLinkActive="router-link-active" class="nav-link" href="#">Create Project</a>
-          </li>
-
-
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              English
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-              <li><a class="dropdown-item" href="#">English</a></li>
-              <li><a class="dropdown-item" href="#">العربية</a></li>
-              <li><a class="dropdown-item" href="#">Français</a></li>
-            </ul>
-          </li> -->
-
-          <!-- <li class="nav-item">
-            <a class="nav-link text-fiverr-go" href="#">Try Fiverr Go</a>
-          </li> -->
-        </ul>
-        <div class="d-flex align-items-center gap-2">
-
-          <div class="nav-item dropdown">
-          <a
-          routerLinkActive="router-link-active"
-          class="nav-link  navbar-icon-link dropdown-toggle"
-          role="button"
-           data-bs-toggle="dropdown"
-            aria-expanded="false"
-             title="Profile">
-            <i class="fa-regular fa-user"></i>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- Client Navigation -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role === 'client'">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+            Jobs
           </a>
-
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" [routerLink]="['/profile']">View Profile</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
-            <li><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Jobs</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/createproject']">Post a Job</a></li>
+            <li><a class="dropdown-item" href="#">All Contracts</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item"(click)="logout()">Logout</a></li>
+            <li><a class="dropdown-item" href="#">Bring Your Own Talent</a></li>
           </ul>
-        </div>
+        </li>
 
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+            Talent
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="['/freelancers']">Discover</a></li>
+            <li><a class="dropdown-item" href="#">Saved Talent ({{savedTalent}})</a></li>
+            <li><a class="dropdown-item" href="#">Recently Viewed</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+            Reports
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Transaction History</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/addfund']">Billing & Payments</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Connect History</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Freelancer Navigation -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role === 'freelancer'">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+            Find Work
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="['/new']">Bidding Projects</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/fixed']">Fixed Price Projects</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/freelancers']">Freelancers</a>
+        </li>
+      </ul>
+
+      <!-- Right Side Navigation -->
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link balance-link" [routerLink]="['/withdraw']">
+            <i class="fa-solid fa-wallet me-1"></i>
+            ${{balance}}
+          </a>
+        </li>
+
+        <!-- Search -->
+        <!-- <li class="nav-item">
+          <a class="nav-link icon-link">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </a>
+        </li> -->
+
+        <!-- Messages -->
+        <li class="nav-item">
+          <a class="nav-link icon-link" routerLink="/chathub">
+            <i class="fas fa-comment-dots"></i>
+            <span class="badge bg-success" *ngIf="unreadMessages > 0">{{unreadMessages}}</span>
+          </a>
+        </li>
+
+        <!-- Notifications -->
         <div class="nav-item dropdown">
-          <a class="nav-link navbar-icon-link dropdown-toggle"
+          <a class="nav-link icon-link dropdown-toggle"
              role="button"
              data-bs-toggle="dropdown"
              aria-expanded="false"
              title="Notifications">
-            <i class="fa-regular fa-bell"></i>
+            <i class="fa-solid fa-bell"></i>
             <span *ngIf="unreadNotifications > 0" class="badge bg-danger rounded-pill notification-badge">{{unreadNotifications}}</span>
           </a>
 
@@ -113,22 +133,29 @@
           </ul>
         </div>
 
-          <a routerLink="/chathub" class="nav-link  navbar-icon-link" title="Messages">
-            <i class="fa-regular fa-comment-dots"></i>
+        <!-- User Menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link icon-link dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-user-circle"></i>
           </a>
-          @if (!isLoggedIn) {
-            <a routerLink="/login" class="nav-link signin-link">Sign In</a>
-            <a routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a>
-          }@else {
-            <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
-          }
-<!--
-            <a *ngIf="!isLoggedIn" routerLink="/login" class="nav-link signin-link">Sign In</a>
-            <a *ngIf="!isLoggedIn" routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a> -->
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" [routerLink]="['/profile']">View Profile</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
+            <li *ngIf="role === 'client'"><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
+            <li *ngIf="role === 'client'"><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+          </ul>
+        </li>
 
-
-
-        </div>
-      </div>
+        <!-- Auth Buttons -->
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" routerLink="/login">Log In</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="btn btn-primary signup-btn" routerLink="/register">Sign Up</a>
+        </li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>

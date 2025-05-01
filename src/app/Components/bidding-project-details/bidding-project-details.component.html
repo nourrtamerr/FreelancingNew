@@ -112,8 +112,9 @@
   
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
-          <aside  class="upwork-sidebar mb-4">
-            <a *ngIf="role=='Freelancer'"  [routerLink]="['/proposal2',project.id]">
+          <aside class="upwork-sidebar mb-4"> 
+           <div  *ngIf="!isBiddingExpired()">
+  <a *ngIf="role === 'Freelancer'" [routerLink]="['/proposal2', project.id]">
             <button class="apply-btn mb-2">
              
               Apply now
@@ -130,6 +131,10 @@
             
             Save job
           </button>
+
+           </div>
+          
+      
       
   
             <div class="client-info">
@@ -157,10 +162,10 @@
 
 
 
-            <div class="client-info">
+            <div class="client-info"  *ngIf="!isBiddingExpired()">
                 <h3>{{project.freelancersubscriptionPlan}} Member </h3>
 
-                <div class="client-stats">
+                <div class="client-stats" >
                   <span>{{project.freelancerRemainingNumberOfBids}} bids remaining out of {{project.freelancerTotalNumber}}</span>
                 </div>
 
@@ -185,7 +190,7 @@
 <div class="row pb-4">
   <div class="col-lg-12">
     <section>
-      <h3 class="section-title mb-4">Client's Reviews</h3>
+      <h3 class="section-title mb-4">Client's recent history</h3>
       <div id="clientReviewsCarousel" class="carousel slide" data-bs-ride="carousel" *ngIf="clientReviews.length > 0">
         <div class="carousel-inner">
           <div
@@ -242,7 +247,7 @@
           <span class="carousel-control-next-icon"></span>
         </button>
       </div>
-      <div *ngIf="clientReviews.length === 0" class="text-muted">No reviews yet.</div>
+      <div *ngIf="clientReviews.length === 0" class="text-muted">Client hasn't done any reviews yet</div>
     </section>
   </div>
 </div>
@@ -258,6 +263,7 @@
            <ul class="other-jobs-list">
              <li *ngFor="let project of clientOtherProjNameId" ><a [routerLink]="['/home2/details', project.id]">{{project.title}}</a> {{project.projectType}} Project</li>
            </ul>
+           
          </section>
        </div>
      </div>
