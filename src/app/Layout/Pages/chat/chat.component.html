@@ -1,27 +1,78 @@
 <div class="chat-container">
-  <div class="messages-container">
-    <div *ngFor="let message of messages" class="message" [class.sent]="message.senderId === currentUserId">
-      <div *ngIf="message.imageUrl" class="message-image">
-        <img [src]="filesurl+'/'+message.imageUrl" 
-             alt="Attached image" 
-             (click)="openImageModal(message.imageUrl)">
+  <!-- Left Sidebar: Chat History -->
+  <div class="chat-sidebar">
+    <div class="sidebar-header">
+      <h2>Chats</h2>
+    </div>
+    <div class="chat-list">
+      <div *ngFor="let conversation of conversations" 
+           class="chat-item" 
+           [class.active]="(conversation.receiverId === truereceiverid || conversation.senderId === truereceiverid)"
+
+           (click)="switchConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
+
+           <div class="chat-item-content">
+          <div class="chat-item-name">
+            {{ conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName }}
+          </div>
+          <div class="chat-item-preview">
+            <!-- {{ conversation.message | slice:0:30 }}{{ conversation.message.length > 30 ? '...' : '' }} -->
+          </div>
+        </div>
+        <div class="chat-item-time">
+          {{ conversation.sentAt | date:'shortTime' }}
+        </div>
       </div>
-      <div *ngIf="message.message" class="message-text">{{ message.message }}</div>
-      <div class="message-time">{{ message.sentAt | date:'shortTime' }}</div>
+    </div>
+  </div>
+
+  <!-- Right Chat Area -->
+  <div class="chat-main">
+    <div class="chat-header">
+      <h3>
+        {{ receiverUsername || 'Select a conversation' }}
+        <span *ngIf="onlineUsers.includes(truereceiverid)" class="online-status">● Online</span>
+      </h3>
+    </div>
+    <div class="messages-container" #messagesContainer>
+      <div *ngIf="!messages.length" class="no-messages">
+        No messages yet. Start a conversation!
+      </div>
+      <div *ngFor="let message of messages" 
+           class="message" 
+           [class.sent]="message.senderId === currentUserId"
+           [class.received]="message.senderId !== currentUserId">
+        <div *ngIf="message.imageUrl" class="message-image">
+          <img [src]="filesurl+'/'+message.imageUrl" 
+               alt="Attached image" 
+               (click)="openImageModal(message.imageUrl)">
+        </div>
+        <div *ngIf="message.message" class="message-text">{{ message.message }}</div>
+        <div class="message-time">{{ message.sentAt | date:'shortTime' }}</div>
+      </div>
+    </div>
+    <div class="message-input">
+      <input type="text" 
+             [(ngModel)]="newMessage" 
+             placeholder="Type a message..." 
+             (keyup.enter)="sendMessage()">
+      <input type="file" 
+             accept="image/*" 
+             #fileInput
+             (change)="handleFileInput($event)" 
+             style="display: none;">
+      <button class="attach-button" (click)="fileInput.click()">
+        <i class="fa fa-paperclip"></i>
+      </button>
+      <button class="send-button" (click)="sendMessage()">Send</button>
     </div>
   </div>
 
   <!-- Image Modal -->
   <div class="image-modal" *ngIf="selectedImage" (click)="closeImageModal()">
     <div class="modal-content">
-      <span class="close-button" (click)="closeImageModal()">&times;</span>
+      <span class="close-button" (click)="closeImageModal()">×</span>
       <img [src]="filesurl+'/'+selectedImage" alt="Full size image">
     </div>
-  </div>
-
-  <div class="message-input">
-    <input type="text" [(ngModel)]="newMessage" placeholder="Type your message...">
-    <input type="file" accept="image/*" (change)="handleFileInput($event)">
-    <button (click)="sendMessage()">Send</button>
   </div>
 </div>

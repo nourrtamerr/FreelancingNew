@@ -175,7 +175,11 @@ return this._HttpClient.post<string>(`${this.apiUrl}/Testingformdata`, formData2
       return this._HttpClient.get<any>(`${this.apiUrl}/getIdByUserName/${username}`);
   }
    
+  getUserNameById(id: string): Observable<{ username: string }> {
+    return this._HttpClient.get<{ username: string }>(`${this.apiUrl}/usernameById?id=${id}`);
+  }
 
+  
     CreateAdminAccount(AdminData: FormData): Observable<CreateAdminResponse> {
       return this._HttpClient.post<CreateAdminResponse>(`${this.apiUrl}/CreateAdminAccount`, AdminData);
   }

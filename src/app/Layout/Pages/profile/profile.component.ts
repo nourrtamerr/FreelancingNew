@@ -1079,23 +1079,18 @@ addSkill(skillId: number): void {
           title: data.title
         });
   
-        Promise.all([
-          this.loadCities(),
-          this.loadEducation(),
-          this.loadExperience(),
-          this.loadPortofolioProjects(),
-          this.loadCertificates(),
-          this.loadBiddingProjects(),
-          this.loadLanguages()
-        ]).then(() => {
-          // ✅ Now everything is loaded
+ 
+          this.loadCities();
+          this.loadEducation();
+          this.loadBiddingProjects();
+          if(this.profile.role==='Freelancer') {
+          this.loadExperience();
+          this.loadPortofolioProjects();
+          this.loadCertificates();
+          this.loadLanguages();
+        
           this.calculateProfileCompletion();
-        }).catch(error => {
-          console.error('Error loading profile data:', error);
-        });
-  
-
-      console.log(this.profile,'hh');
+          }
 
       },
       error: (error) => {

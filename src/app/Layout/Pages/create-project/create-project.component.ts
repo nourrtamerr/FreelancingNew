@@ -56,7 +56,7 @@ createdProjectId: number | null = null;
       projectSkills: [[], Validators.required],     // 🔥 And this
       fixedPrice: [null, [Validators.required, Validators.min(1)]],
       minPrice: [null, Validators.min(1)],   // ✅ ADD THIS
-  maxPrice: [null, Validators.min(1)]    // ✅ ADD THIS
+      maxPrice: [null, Validators.min(1)]    // ✅ ADD THIS
 
       
     });
@@ -81,9 +81,49 @@ createdProjectId: number | null = null;
   // Handle project type change (fixed/bidding)
   onProjectTypeChange(type: string): void {
     this.isBiddingProject = type === 'bidding';
-  }
+    
+    if (type === 'bidding') {
+        // Add validators for bidding project fields
+        this.projectForm.get('biddingStartDate')?.setValidators([Validators.required]);
+        this.projectForm.get('biddingEndDate')?.setValidators([Validators.required]);
+        this.projectForm.get('minPrice')?.setValidators([Validators.required, Validators.min(1)]);
+        this.projectForm.get('maxPrice')?.setValidators([Validators.required, Validators.min(1)]);
+        // Remove validators from fixed price
+        this.projectForm.get('fixedPrice')?.clearValidators();
+    } else {
+        // Remove validators from bidding fields
+        this.projectForm.get('biddingStartDate')?.clearValidators();
+        this.projectForm.get('biddingEndDate')?.clearValidators();
+        this.projectForm.get('minPrice')?.clearValidators();
+        this.projectForm.get('maxPrice')?.clearValidators();
+        // Add validators to fixed price
+        this.projectForm.get('fixedPrice')?.setValidators([Validators.required, Validators.min(1)]);
+    }
+
+    // Update form validation
+    this.projectForm.get('biddingStartDate')?.updateValueAndValidity();
+    this.projectForm.get('biddingEndDate')?.updateValueAndValidity();
+    this.projectForm.get('minPrice')?.updateValueAndValidity();
+    this.projectForm.get('maxPrice')?.updateValueAndValidity();
+    this.projectForm.get('fixedPrice')?.updateValueAndValidity();
+}
 
   // Submit the form based on project type
+  getErrorMessage(controlName: string): string {
+    const control = this.projectForm.get(controlName);
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) {
+        return 'This field is required';
+      }
+      if (control.errors['minlength']) {
+        return `Minimum length is ${control.errors['minlength'].requiredLength} characters`;
+      }
+      if (control.errors['min']) {
+        return `Value must be greater than ${control.errors['min'].min}`;
+      }
+    }
+    return '';
+  }
   onSubmit(): void {
     if (this.projectForm.invalid) {
       console.log('Form is invalid');

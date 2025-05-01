@@ -148,9 +148,12 @@
                   <button class="btn btn-primary" [routerLink]="['/Freelancerprofile', freelancer.userName]">
                     View Profile
                   </button>
-                  <button class="btn btn-secondary">
+                 @if(currentUserId !== freelancer.id)
+                 {
+                  <button class="btn btn-secondary" [routerLink]="['/chathub', freelancer.userName]">
                     <i class="fas fa-envelope"></i>
                   </button>
+                 }
                 </div>
               </div>
             </div>
