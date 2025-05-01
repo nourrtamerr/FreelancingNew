@@ -11,7 +11,7 @@
       </button>
       <div class="collapse navbar-collapse" id="fiverrNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
-          
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Explore Projects
@@ -37,7 +37,7 @@
               <li><a class="dropdown-item" href="#">Français</a></li>
             </ul>
           </li> -->
-          
+
           <!-- <li class="nav-item">
             <a class="nav-link text-fiverr-go" href="#">Try Fiverr Go</a>
           </li> -->
@@ -45,7 +45,7 @@
         <div class="d-flex align-items-center gap-2">
 
           <div class="nav-item dropdown">
-          <a 
+          <a
           routerLinkActive="router-link-active"
           class="nav-link  navbar-icon-link dropdown-toggle"
           role="button"
@@ -58,18 +58,18 @@
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" [routerLink]="['/profile']">View Profile</a></li>
             <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
-            <li><a class="dropdown-item" href="#">Add Funds</a></li>
-            <li><a class="dropdown-item" href="#">Withdraw</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
+            <li><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item"(click)="logout()">Logout</a></li>
           </ul>
         </div>
 
         <div class="nav-item dropdown">
-          <a class="nav-link navbar-icon-link dropdown-toggle" 
-             role="button" 
-             data-bs-toggle="dropdown" 
-             aria-expanded="false" 
+          <a class="nav-link navbar-icon-link dropdown-toggle"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false"
              title="Notifications">
             <i class="fa-regular fa-bell"></i>
             <span *ngIf="unreadNotifications > 0" class="badge bg-danger rounded-pill notification-badge">{{unreadNotifications}}</span>
@@ -85,7 +85,7 @@
                 No notifications
               </div>
               <li *ngFor="let notification of notifications">
-                <a class="dropdown-item notification-item" [ngClass]="{'unread': !notification.isRead}" 
+                <a class="dropdown-item notification-item" [ngClass]="{'unread': !notification.isRead}"
                    (click)="markAsRead(notification.id)">
                   <div class="notification-content">
                     <p>{{notification.message}}</p>
@@ -108,12 +108,12 @@
           }@else {
             <a (click)="logout()" class="btn btn-outline-dark btn-sm join-btn">Logout</a>
           }
-<!-- 
+<!--
             <a *ngIf="!isLoggedIn" routerLink="/login" class="nav-link signin-link">Sign In</a>
             <a *ngIf="!isLoggedIn" routerLink="/register" class="btn btn-outline-dark btn-sm join-btn">Join</a> -->
 
 
-         
+
         </div>
       </div>
     </div>

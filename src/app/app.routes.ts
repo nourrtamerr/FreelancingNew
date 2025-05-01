@@ -27,6 +27,7 @@ import { ChatComponent } from './Layout/Pages/chat/chat.component';
 import { NotificationsComponent } from './Layout/Additions/notifications/notifications.component';
 import { AddFundByClientComponent } from './Layout/Pages/add-fund-by-client/add-fund-by-client.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
+import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -50,12 +51,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Layout/Pages/profile/profile.component').then(m => m.ProfileComponent)
       },
-      {path:'banned',component: BannedUsersComponent},
-      {path:'bandetails/:id',component: BanDetailsComponent},
+      {path:'banned',component: BannedUsersComponent,title:'Banned Users'},
+      {path:'bandetails/:id',component: BanDetailsComponent,title:'Ban Details'},
       {path:'admin-dashboard',component: AdminDashboardComponent},
       {path:'updateban/:id',component: UpdateBanComponent},
-      {path:'dashboard', component: UserDashboradComponent},
-      {path:'addfund', component: AddFundByClientComponent},
+      {path:'dashboard', component: UserDashboradComponent,title:'Dashboard'},
+      {path:'addfund', component: AddFundByClientComponent,title:'Add Fund'},
+      {path:'withdraw', component: WithdrawComponent,title:'Withdraw'},
       {path:'new',component: BiddingProjectNewComponent},
       {path:'details/:id',component: BiddingProjectDetailsComponent},
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent)},

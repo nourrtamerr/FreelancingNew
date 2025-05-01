@@ -117,13 +117,6 @@
 <button type="submit" class="pay-button" [disabled]="!paymentForm.valid&&selectedPaymentMethod==='card'" (click)="Fund()" >
   Confirm and pay ${{calculateTotal().toFixed(2)}} USD
 </button>
-<br>
-<br>
-<button type="submit" class="pay-button bg-success" [disabled]="!paymentForm.valid&&selectedPaymentMethod==='card'" (click)="withdraw()" >
-  Confirm and withdraw ${{calculateTotal().toFixed(2)}} USD
-</button>
-
-
       <p class="terms-text">
         You agree to authorize the use of your card for this deposit and future payments, and agree to be bound by the
         <a href="#">Terms & Conditions</a>.
