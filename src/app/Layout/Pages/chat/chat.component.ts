@@ -25,7 +25,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   receiverUsername: string = '';
   currentUserId: string ;
   currentUsername: string;
-  onlineUsers: string[] = [];
   isConnected = false;
   filesurl:string = '';
   selectedImage: string | null = null;
@@ -33,10 +32,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   truereceiverid:string="";
   receiverImage: string = '';
   private subscriptions = new Subscription();
+  isTyping = false;
+  typingTimeout: any;
+  onlineUsers: string[] = [];
+  showDeleteModal = false;
+  messageToDelete: number | null = null;
+  editingMessageId: number | null = null;
+  editedMessageText = '';
 
   constructor(
     private authService: AuthService,
-    private chatService: ChatService,
+    public chatService: ChatService,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService
@@ -53,22 +59,50 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadConversations();
   
   this.loadReceiverImage(); 
+   
+  this.chatService.onlineUsers$.subscribe(users => {
+    this.onlineUsers = users;
+  });
+
+    this.chatService.fetchAndSetOnlineUsers();
+    this.chatService.listenForReadReceipts();
+
+   this.chatService.connectionStatus$.subscribe(status => {
+      this.isConnected = status;
+      if (status) {
+        this.chatService.fetchAndSetOnlineUsers().subscribe(() => {
+          this.loadConversation(this.receiverId);
+        });
+      }
+    }
+
+     
+    );
+
+
   }
 
 
   loadReceiverImage(): void {
+    if (!this.receiverUsername) {
+      this.receiverImage = 'https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?w=186&h=180&c=7&r=0&o=5&pid=1.7';
+      return;
+    }
+  
     this.accountService.getImagebyUserName(this.receiverUsername).subscribe({
       next: (data) => {
-        const timestamp = new Date().getTime(); // force reload
-        this.receiverImage = `${this.filesurl}/${data.fileName}?t=${timestamp}`;
+        if (data?.fileName) {
+          this.receiverImage = `${this.filesurl}/${data.fileName}?t=${Date.now()}`;
+        } else {
+          this.receiverImage = 'https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?w=186&h=180&c=7&r=0&o=5&pid=1.7';
+        }
       },
       error: (err) => {
         console.error('Error loading receiver image:', err);
-        this.receiverImage = ''; // Optional: fallback to default
+        this.receiverImage = 'https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?w=186&h=180&c=7&r=0&o=5&pid=1.7';
       }
     });
   }
-  
   setupInitialConnection(): void {
     if (this.receiverId) {
       this.accountService.getIdByUserName(this.receiverId).subscribe({
@@ -94,6 +128,49 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
         this.scrollToBottom();
       }
     });
+
+    this.chatService.hubConnection.off("UserTyping");
+    this.chatService.hubConnection.on("UserTyping", (userId: string) => {
+   if (userId === this.truereceiverid) {
+    this.isTyping = true;
+    clearTimeout(this.typingTimeout);
+    this.typingTimeout = setTimeout(() => this.isTyping = false, 2000); // Reset after 2s
+  }
+});
+
+// Modify the UserStatusChanged handler
+this.chatService.hubConnection.on("UserStatusChanged", (userId: string, isOnline: boolean) => {
+  if (isOnline) {
+    if (!this.onlineUsers.includes(userId)) {
+      this.onlineUsers = [...this.onlineUsers, userId];
+    }
+  } else {
+    this.onlineUsers = this.onlineUsers.filter(u => u !== userId);
+  }
+});
+
+this.chatService.hubConnection.on("MessageUpdated", (updatedMessage: Chat) => {
+  this.messages = this.messages.map(msg => 
+    msg.id === updatedMessage.id ? updatedMessage : msg
+  );
+});
+
+
+this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
+  this.messages = this.messages.filter(msg => msg.id !== deletedId);
+  
+  this.conversations = this.conversations.filter(conv => {
+    if (conv.id === deletedId) {
+      this.loadConversations(); 
+      return false;
+    }
+    return true;
+  });
+});
+
+
+
+
   }
 
   ngAfterViewInit(): void {
@@ -142,6 +219,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chatService.getConversations(this.currentUsername, username).subscribe({
       next: (response: any) => {
         this.messages = response || [];
+        this.markMessagesAsRead();
         setTimeout(() => this.scrollToBottom(), 100);
       },
       error: (error: any) => {
@@ -234,13 +312,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
         }
   
         this.truereceiverid = data.id;
-        this.receiverId = data.id; // Keep for other uses (e.g., SignalR)
-        this.loadReceiverImage(); // Load the image for the new receiver
-  
+        this.loadReceiverImage()
+        this.chatService.fetchAndSetOnlineUsers().subscribe(() => {
+          this.loadConversation(username);
+        });
         // Update URL without reloading the page
         this.router.navigate(['/chathub', username], { replaceUrl: true });
   
-        this.loadConversation(username);
         this.setupMessageListener();
       },
       error: (err) => {
@@ -249,5 +327,108 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
         this.receiverUsername = 'User not found';
       }
     });
+  }
+
+ 
+  deleteChat(conversationId: number): void {
+    if (!confirm('Are you sure you want to delete this conversation?')) return;
+
+    this.chatService.deleteChat(conversationId).subscribe({
+      next: () => {
+        this.conversations = this.conversations.filter(c => c.id !== conversationId);
+        if (this.messages.length > 0 && this.conversations.every(c => c.id !== conversationId)) {
+          this.messages = [];
+          this.receiverUsername = '';
+          this.receiverImage = '';
+          this.truereceiverid = '';
+          this.router.navigate(['/chathub'], { replaceUrl: true });
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting conversation:', error);
+        alert('Failed to delete conversation. Please try again.');
+      }
+    });
+  }
+
+  sendTypingEvent() {
+    this.chatService.hubConnection.invoke("SendTypingNotification", this.truereceiverid)
+      .catch(err => console.error("Typing event error:", err));
+  }
+
+  
+
+  private markMessagesAsRead(): void {
+    const unreadMessages = this.messages.filter(
+      msg => !msg.isRead && msg.receiverId === this.currentUserId
+    );
+
+    if (unreadMessages.length > 0) {
+      this.chatService.markMessagesAsRead(this.truereceiverid).subscribe({
+        next: () => {
+          this.messages = this.messages.map(msg => ({
+            ...msg,
+            isRead: true
+          }));
+          this.chatService.hubConnection.invoke("SendReadReceipt", this.truereceiverid);
+        }
+      });
+    }
+  }
+
+  startEdit(message: Chat): void {
+    this.editingMessageId = message.id;
+    this.editedMessageText = message.message;
+  }
+
+  saveEdit(messageId: number): void {
+    if (!this.editedMessageText.trim()) {
+      alert('Message cannot be empty');
+      return;
+    }
+
+    this.chatService.updateMessage(messageId, this.editedMessageText).subscribe({
+      next: (updatedMessage) => {
+        this.messages = this.messages.map(msg =>
+          msg.id === messageId ? { ...msg, message: updatedMessage.message, isEdited: true } : msg
+        
+        );
+        this.cancelEdit();
+      },
+      error: (err) => {
+        console.error('Failed to update message:', err);
+        alert('Failed to update message. Please try again.');
+      }
+    });
+  }
+
+  cancelEdit(): void {
+    this.editingMessageId = null;
+    this.editedMessageText = '';
+  }
+
+  initiateDelete(messageId: number): void {
+    this.messageToDelete = messageId;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete(): void {
+    if (this.messageToDelete) {
+      this.chatService.deleteMessage(this.messageToDelete).subscribe({
+        next: () => {
+          this.messages = this.messages.filter(m => m.id !== this.messageToDelete);
+          this.cancelDelete();
+        },
+        error: (err) => {
+          console.error('Delete failed:', err);
+          alert('Failed to delete message. Please try again.');
+        }
+      });
+    }
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.messageToDelete = null;
   }
 }

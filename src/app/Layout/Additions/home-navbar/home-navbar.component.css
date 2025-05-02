@@ -1,6 +1,9 @@
 .external-login-container {
   margin: 20px 0;
   padding: 15px;
+  background-color: var(--neutral-white);
+  border-radius: 4px;
+  border: 1px solid var(--secondary-gray);
 }
 
 .role-selection {
@@ -14,6 +17,7 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
+  color: var(--neutral-dark);
 }
 
 .btn-group {

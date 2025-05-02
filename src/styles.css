@@ -1,3 +1,13 @@
+:root {
+  /* Professional Color Palette */
+  --primary-navy: #0A3161;
+  --secondary-gray: #6B7280;
+  --neutral-white: #F9FAFB;
+  --neutral-dark: #111827;
+  --accent-gold: #D4A017;
+  --accent-teal: #115E59;
+}
+
 @import 'ngx-toastr/toastr';
 
 /* Essential styles from the original template */
@@ -17,15 +27,16 @@
 .job-board-container {
   font-family: 'Poppins', sans-serif;
   line-height: 1.6;
-  color: #212529;
+  color: var(--neutral-dark);
+  background-color: var(--neutral-white);
 }
 
 /* Nice-select styles for dropdowns */
 .nice-select {
   -webkit-tap-highlight-color: transparent;
-  background-color: #fff;
+  background-color: var(--neutral-white);
   border-radius: 4px;
-  border: solid 1px #e8e8e8;
+  border: solid 1px var(--secondary-gray);
   box-sizing: border-box;
   clear: both;
   cursor: pointer;
@@ -42,22 +53,22 @@
   position: relative;
   text-align: left !important;
   transition: all 0.2s ease-in-out;
-  user-select: none;
+  
   white-space: nowrap;
   width: 100%;
 }
 
 .nice-select:hover {
-  border-color: #dbdbdb;
+  border-color: var(--primary-navy);
 }
 
 .nice-select.open, .nice-select:active, .nice-select:focus {
-  border-color: #999;
+  border-color: var(--primary-navy);
 }
 
 .nice-select:after {
-  border-bottom: 2px solid #999;
-  border-right: 2px solid #999;
+  border-bottom: 2px solid var(--secondary-gray);
+  border-right: 2px solid var(--secondary-gray);
   content: '';
   display: block;
   height: 8px;
@@ -105,5 +116,81 @@
 
 .delay-500ms {
   animation-delay: 500ms;
+}
+
+/* Global color application based on guidelines */
+body {
+  background-color: var(--neutral-white);
+  color: var(--neutral-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-navy);
+}
+
+a {
+  color: var(--primary-navy);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-teal);
+}
+
+button, .btn {
+  background-color: var(--primary-navy);
+  color: var(--neutral-white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background-color: #0D4280; /* Slightly lighter primary */
+}
+
+.btn-secondary {
+  background-color: var(--secondary-gray);
+}
+
+.btn-secondary:hover {
+  background-color: #7D8490; /* Slightly lighter secondary */
+}
+
+.btn-accent {
+  background-color: var(--accent-gold);
+}
+
+.btn-accent:hover {
+  background-color: #E5B02A; /* Slightly lighter accent */
+}
+
+.btn-success {
+  background-color: var(--accent-teal);
+}
+
+.btn-success:hover {
+  background-color: #147D76; /* Slightly lighter teal */
+}
+
+/* Borders and dividers */
+hr, .divider {
+  border-color: var(--secondary-gray);
+}
+
+/* Form elements */
+input, select, textarea {
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  padding: 8px 12px;
+  background-color: var(--neutral-white);
+  color: var(--neutral-dark);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary-navy);
+  outline: none;
 }
 
