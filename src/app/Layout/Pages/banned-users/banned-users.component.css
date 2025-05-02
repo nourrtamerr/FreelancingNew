@@ -1,0 +1,306 @@
+.banned-users-dashboard {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.dashboard-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.dashboard-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.dashboard-title {
+  font-size: 1.75rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.search-container {
+  flex-grow: 1;
+  max-width: 400px;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a5a6;
+}
+
+.table-container {
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.users-table th {
+  padding: 1rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.user-row {
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.user-row:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+}
+
+.user-row td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-name {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.user-id {
+  font-size: 0.85rem;
+  color: #95a5a6;
+}
+
+.date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-badge.active {
+  background: #e74c3c;
+  color: white;
+}
+
+.status-badge.expired {
+  background: #95a5a6;
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-view, .btn-update {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-view {
+  background: #3498db;
+  color: white;
+}
+
+.btn-update {
+  background: #2ecc71;
+  color: white;
+}
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+}
+.btn-delete:hover,
+.btn-view:hover,
+.btn-update:hover {
+  transform: translateY(-1px);
+  filter: brightness(110%);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #95a5a6;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+  .banned-users-dashboard {
+    padding: 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-container {
+    max-width: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .users-table {
+    display: block;
+  }
+
+  .users-table thead {
+    display: none;
+  }
+
+  .users-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0.5rem;
+  }
+
+  .users-table td {
+    display: flex;
+    padding: 0.5rem;
+    border: none;
+  }
+
+  .user-details {
+    align-items: center;
+  }
+
+  .date-group {
+    align-items: center;
+  }
+
+  .status-cell {
+    justify-content: center;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-view,
+  .btn-update,
+  .btn-delete:hover {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .btn-text {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .banned-users-dashboard {
+    padding: 0.5rem;
+  }
+
+  .dashboard-header {
+    padding: 1rem;
+  }
+
+  .dashboard-title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .date-item {
+    font-size: 0.85rem;
+  }
+}
+
+/* Dark mode support */
+/* @media (prefers-color-scheme: dark) {
+  .dashboard-container {
+    background: #1a1a1a;
+  }
+
+  .user-row {
+    background: #2d2d2d;
+  }
+
+  .user-row:hover {
+    background: #333;
+  }
+
+  .search-input {
+    background: #2d2d2d;
+    color: #fff;
+    border-color: #444;
+  }
+
+  .user-name {
+    color: #fff;
+  }
+
+  .date-item {
+    color: #ccc;
+  }
+} */

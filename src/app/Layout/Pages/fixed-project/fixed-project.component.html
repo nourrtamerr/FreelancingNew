@@ -58,6 +58,19 @@
             </div>
           </div>
         </div>
+
+
+        <div class="project-navigation container py-3 border-bottom">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/new" routerLinkActive="active">Bidding Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/fixed" routerLinkActive="active">Fixed Projects</a>
+            </li>
+           
+          </ul>
+        </div>
   
         <!-- Sidebar Filters -->
         <aside class="upwork-sidebar col-lg-4 col-md-5 col-sm-12 mb-4">
@@ -239,9 +252,10 @@
           <div *ngFor="let project of projects" class="upwork-project-card">
             <a [routerLink]="['/fixed-project', project.id]">
               <div class="project-card-header d-flex justify-content-between align-items-center">
-                <span class="posted-time">Posted </span>
-                <div class="project-actions d-flex">
-                    <i  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" 
+                <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+                <div *ngIf="this.role=='Freelancer'" class="project-actions d-flex">
+                    <i 
+                    (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" 
                     class="fa-bookmark fs-4"
                      [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
 
@@ -257,8 +271,17 @@
                   <i class="fa fa-check-circle"></i> Payment verified
                 </span>
                 <span class="meta">
-                  <i class="fa fa-star"></i> $0 spent
+                  <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+                    <i
+                      class="fa fa-star"
+                      [ngClass]="{'star-color': project.clientRating >= star, 'text-muted': project.clientRating < star}"
+                      style="margin-right:2px;"
+                    ></i>
+                  </ng-container>
+                  <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
                 </span>
+    
+                <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
               </div>
               
               <div class="project-meta d-flex flex-wrap align-items-center mb-3">

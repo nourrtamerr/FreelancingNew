@@ -161,7 +161,7 @@ formData2.append('Test', 'hello');
 return this._HttpClient.put<string>(`${this.apiUrl}/EditProfile`, formData);
 return this._HttpClient.post<string>(`${this.apiUrl}/Testingformdata`, formData2);
     }
-  
+
     MakeAdmin(userId: string): Observable<string> {
       return this._HttpClient.post<string>(`${this.apiUrl}/MakeAdmin`,{ UserId: userId });
     }
@@ -170,20 +170,20 @@ return this._HttpClient.post<string>(`${this.apiUrl}/Testingformdata`, formData2
     }
 
 
-    
+
     getIdByUserName(username: string): Observable<any> {
       return this._HttpClient.get<any>(`${this.apiUrl}/getIdByUserName/${username}`);
   }
-   
+
   getUserNameById(id: string): Observable<{ username: string }> {
     return this._HttpClient.get<{ username: string }>(`${this.apiUrl}/usernameById?id=${id}`);
   }
 
-  
+
     CreateAdminAccount(AdminData: FormData): Observable<CreateAdminResponse> {
       return this._HttpClient.post<CreateAdminResponse>(`${this.apiUrl}/CreateAdminAccount`, AdminData);
   }
-  
+
 
 
     Register(formData: FormData): Observable<any> {
@@ -251,7 +251,7 @@ checkExternalLogin(): void {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 
-  
+
 }
 
 

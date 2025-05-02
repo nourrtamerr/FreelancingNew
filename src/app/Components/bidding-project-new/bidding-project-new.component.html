@@ -14,6 +14,8 @@
 
 
 
+
+
 <div class="upwork-container">
   
   
@@ -53,12 +55,29 @@
                         <option value="price-high-low">Price: High to Low</option>
                         <option value="Latest">Date: Latest</option>
                         <option value="Oldest">Date: Oldest</option>
+                        <option value="remaining-low-high">Bid remaining time: Low to High</option>
+                        <option value="remaining-high-low">Bid remaining time: High to Low</option>
                         
                     </select>
                 </div>
             </div>
         </div>
 
+
+
+
+
+        <div class="project-navigation container py-3 border-bottom">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/new" routerLinkActive="active">Bidding Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/fixed" routerLinkActive="active">Fixed Projects</a>
+            </li>
+            
+          </ul>
+        </div>
 
 
 
@@ -308,10 +327,10 @@
             <a [routerLink]="['/details',project.id]">
             <div class="project-card-header d-flex justify-content-between align-items-center">
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
-              <div class="project-actions d-flex">
+              <span class="posted-time">Remaining Time: {{calculateRemainingTime(project.biddingEndDate)}}</span>
+              <div  *ngIf="this.role=='Freelancer'"  class="project-actions d-flex">
                 <i  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" class="fa-bookmark fs-4" [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
-               
-
+              
               </div>
             </div>
             <h3 class="project-title">{{project.title}}</h3>
@@ -331,7 +350,7 @@
                 <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
               </span>
   
-              <span class="meta"><i class="fa fa-map-marker"></i> {{project.clientCountry}}</span>
+              <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
             </div>
 
             

@@ -1,6 +1,6 @@
 // ... existing imports ...
 
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { CategoryService } from '../../Shared/Services/Category/category.service';
 import { Category } from '../../Shared/Interfaces/category';
 import { Country } from '../../Shared/Interfaces/Country';
@@ -19,10 +19,11 @@ import { BiddingProjectGetAll } from '../../Shared/Interfaces/BiddingProject/bid
 import { CommonModule } from '@angular/common';
 import { FilterPipe } from '../../Pipes/filter.pipe';
 import { TimeAgoPipe } from '../../Pipes/time-ago.pipe';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { WishlistService } from '../../Shared/Services/wishlist.service';
 import { ToastrService } from 'ngx-toastr';
 import { Wishlist } from '../../Shared/Interfaces/wishlist';
+import { AuthService } from '../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-bidding-project-new',
@@ -39,7 +40,10 @@ export class BiddingProjectNewComponent implements OnInit {
     private SkillsService:SkillService,
     private BiddingProjectService:BiddingProjectService,
     private wishlistService:WishlistService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService
   ){}
 
 
@@ -91,8 +95,87 @@ export class BiddingProjectNewComponent implements OnInit {
   userWishlist2: number[]=[];
 
 
+  selectedCategoryId: number | null = null;
+  selectedCategoryName: string = '';
+  loading = true;
+
+
+  role: string=''
 
   ngOnInit(): void {
+
+    const roles = this.authService.getRoles();
+    this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+    
+
+     // Load all necessary data first
+     this.loadInitialData().then(() => {
+      // Then handle route parameters
+      this.route.paramMap.subscribe(params => {
+        const categoryId = params.get('categoryId') ? +params.get('categoryId')! : null;
+        
+        if (categoryId) {
+          this.handleCategorySelection(categoryId);
+        } else {
+          // No category selected - load all projects
+          this.loadAllProjects();
+        }
+      });
+    });
+
+    this.BiddingProjectService.GetAllBiddingProjects(this.BiddingProjectFilter,1,12).subscribe({
+      next:(data)=>{this.projectsBeforeAnyFilters=data, this.projects=data,console.log(data)},
+      error: (err)=> console.log(err)
+
+    })
+
+   
+
+  }
+
+
+  private loadAllProjects(): void {
+  
+    this.filterProject();
+  }
+
+  private async loadInitialData(): Promise<void> {
+    try {
+      // Load all necessary data in parallel
+      const [categories, subcategories] = await Promise.all([
+        this.CategoryService.GetAllCategories().toPromise(),
+        this.SubCategoryService.getAllSubcategories().toPromise()
+      ]);
+
+      this.Categories = categories || [];
+      this.SubCategories = subcategories || [];
+
+      // Load other data that doesn't affect initial filtering
+      this.loadAdditionalData();
+    } catch (error) {
+      console.error('Error loading initial data:', error);
+    }
+  }
+
+
+  private loadAdditionalData(): void {
+    // Load other data that doesn't affect initial filtering
+
+
+
+
+    
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: Wishlist[]) => {
+        this.userWishlist2 = data.map(item => item.projectId); // Extract all project IDs
+        console.log("Loaded wishlist:", this.userWishlist2);
+      },
+      error: (err) => console.log(err)
+    });
+
+
+
+    
     this.CategoryService.GetAllCategories().subscribe({
       next: (data)=> this.Categories=data,
       error: (err) => console.log(err)
@@ -117,23 +200,39 @@ export class BiddingProjectNewComponent implements OnInit {
       next: (data)=> this.Skills=data,
       error: (err)=> console.log(err)
     });
-
-    this.BiddingProjectService.GetAllBiddingProjects(this.BiddingProjectFilter,1,12).subscribe({
-      next:(data)=>{this.projectsBeforeAnyFilters=data, this.projects=data,console.log(data)},
-      error: (err)=> console.log(err)
-
-    })
-
-    this.wishlistService.GetWishList().subscribe({
-      next: (data: Wishlist[]) => {
-        this.userWishlist2 = data.map(item => item.projectId); // Extract all project IDs
-        console.log("Loaded wishlist:", this.userWishlist2);
-      },
-      error: (err) => console.log(err)
-    });
-   
-
   }
+
+
+  private handleCategorySelection(categoryId: number): void {
+    // Find the category
+    const category = this.Categories.find(c => c.id === categoryId);
+    if (!category) {
+      this.router.navigate(['/new']); // Redirect if invalid category
+      return;
+    }
+
+    this.selectedCategoryId = categoryId;
+    this.selectedCategoryName = category.name;
+
+    // Get all subcategories for this category
+    const subcategoryIds = this.SubCategories
+      .filter(sc => sc.categoryId === categoryId)
+      .map(sc => sc.id);
+
+    // Apply filter
+    this.BiddingProjectFilter = {
+      ...this.BiddingProjectFilter,
+      SubCategory: subcategoryIds
+    };
+
+    this.filterProject();
+  }
+
+
+
+
+
+
 
   sortProducts(sortOption: string) {
     this.currentSort = sortOption;
@@ -159,6 +258,21 @@ export class BiddingProjectNewComponent implements OnInit {
           this.projects.sort((a, b) => b.postedFrom - a.postedFrom);
           // this.ApplyPagination();
           break;
+
+          case 'remaining-low-high':
+        this.projects.sort((a, b) => {
+          const timeA = new Date(a.biddingEndDate).getTime() - new Date().getTime();
+          const timeB = new Date(b.biddingEndDate).getTime() - new Date().getTime();
+          return timeA - timeB;
+        });
+        break;
+      case 'remaining-high-low':
+        this.projects.sort((a, b) => {
+          const timeA = new Date(a.biddingEndDate).getTime() - new Date().getTime();
+          const timeB = new Date(b.biddingEndDate).getTime() - new Date().getTime();
+          return timeB - timeA;
+        });
+        break;
 
       default:
         console.log("didnt enter")
@@ -422,6 +536,30 @@ export class BiddingProjectNewComponent implements OnInit {
         }
       })
     }
+
+
+    calculateRemainingTime(endDate: string): string {
+      const end = new Date(endDate);
+      const now = new Date();
+      const diff = end.getTime() - now.getTime();
+    
+      if (diff <= 0) {
+        return 'Bidding Ended';
+      }
+    
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    
+      if (days > 0) {
+        return `${days}d ${hours}h remaining`;
+      } else if (hours > 0) {
+        return `${hours}h ${minutes}m remaining`;
+      } else {
+        return `${minutes}m remaining`;
+      }
+    }
+
 
     toggleWishlist(projectid:number){
      const index= this.userWishlist2.indexOf(projectid);

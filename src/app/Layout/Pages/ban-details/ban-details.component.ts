@@ -33,10 +33,23 @@ export class BanDetailsComponent implements OnInit{
     this.location.back()
   }
 
+  // Delete(){
+  //   // confirm("Do You Want To Delete This Ban?");
+  //   this.banservice.deleteBan(Number(this.currentid));
+  // }
   Delete(){
     confirm("Do You Want To Delete This Ban?");
-    this.banservice.deleteBan(Number(this.currentid));
+    this.banservice.deleteBan(Number(this.currentid)).subscribe(
+      {
+        next:(value)=>{
+          console.log(value);
+          this.location.back()
+        }
+        ,
+        error:(err)=>{
+          console.log(err);
+        }
+    })
   }
-
 
 }

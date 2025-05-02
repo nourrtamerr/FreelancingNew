@@ -15,12 +15,14 @@ import { CategoryService } from '../../../Shared/Services/Category/category.serv
 import { SubCategoryService } from '../../../Shared/Services/SubCategory/sub-category.service';
 import { SubCategory2 } from '../../../Shared/Interfaces/sub-category2';
 import { Category } from '../../../Shared/Interfaces/category';
+import { AuthService } from '../../../Shared/Services/Auth/auth.service';
+import { TimeAgoPipe } from '../../../Pipes/time-ago.pipe';
 
 @Component({
   selector: 'app-fixed-project',
   templateUrl: './fixed-project.component.html',
   styleUrls: ['./fixed-project.component.css'],
-  imports: [CommonModule, FormsModule, RouterModule, FilterPipe],
+  imports: [CommonModule, FormsModule, RouterModule, FilterPipe, TimeAgoPipe],
   standalone: true,
 })
 export class FixedProjectComponent implements OnInit {
@@ -79,15 +81,21 @@ export class FixedProjectComponent implements OnInit {
   userWishlist2: number[]=[];
   subCategories:SubCategory2[]=[];
 
+  role: string='' // Initialize role to null or an empty string
+
   constructor(private projectService: FixedPriceProjectService,
     private wishlistService:WishlistService,
     private toaster: ToastrService,
     private categoryService: CategoryService,
-    private subcategoryService: SubCategoryService
+    private subcategoryService: SubCategoryService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadProjects();
+
+    const roles = this.authService.getRoles();
+    this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
     
   }
   getExperienceLevelLabel(level: ExperienceLevel): string {
