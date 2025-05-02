@@ -33,9 +33,10 @@ import { MyProposalsComponent } from './Layout/Pages/my-proposals/my-proposals.c
 import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
 import { adminGuard } from './Shared/Guards/admin/admin.guard';
 import { add } from 'date-fns';
-import { clientOrFreelancerGuard } from './Shared/Guards/Combination/clientOrFreelancerGuard';
 import { ReviewsDetectorComponent } from './Layout/Pages/AI/ai/reviewsdetector.component';
 
+import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
+import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -81,11 +82,13 @@ export const routes: Routes = [
       {path: 'login',component: LoginComponent},
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
+      {path: 'paymentsucess',component: PaymentsucessComponent},
+
     
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
      
-      {path:'withdraw', component: WithdrawComponent,title:'Withdraw'},
+      {path:'withdraw', component: WithdrawComponent,title:'Withdraw',canActivate: [clientGuard,freelancerGuard]},
      
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
