@@ -125,6 +125,10 @@
 .navbar-nav .icon-link i {
   font-size: 1.5rem;  /* Adjust this value as needed */
 }
+.centered{
+  display: flex;
+  justify-content:flex-end;
+}
 /* Sign Up Button */
 .signup-btn {
   background-color: #108a00;
@@ -134,6 +138,7 @@
   font-weight: 500;
   transition: background-color 0.2s ease;
 }
+
 
 
 .signup-btn:hover {
