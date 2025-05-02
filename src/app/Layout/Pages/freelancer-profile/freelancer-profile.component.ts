@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
 import { CountriesService } from '../../../Shared/Services/Countries/countries.service';
 import { CitiesService } from '../../../Shared/Services/Cities/cities.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { EducationService } from '../../../Shared/Services/Educations/education.service';
 import { ExperienceService } from '../../../Shared/Services/Experiences/experience.service';
@@ -33,11 +33,12 @@ import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLa
 
 @Component({
   selector: 'app-freelancer-profile',
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule,RouterModule,ReactiveFormsModule],
   templateUrl: './freelancer-profile.component.html',
   styleUrl: './freelancer-profile.component.css'
 })
 export class FreelancerProfileComponent implements OnInit  {
+  currentuserid:string|null=""
 constructor(
   private route: ActivatedRoute
     ,private router: Router
@@ -60,6 +61,8 @@ constructor(
 ){
 
 }
+
+showDeleteModal = false;
 username: string = '';
 picturesurl:string='';
 error:string='';
@@ -72,13 +75,13 @@ mylanguages:FreelancerLanguage[]=[]
     this.route.params.subscribe(params => {
       this.username = params['username'];
       // Now load the profile with username
-
+      this.initializeForm();
       this.loadProfile();
       this.initializeskills();
       this.initializeNonrecommendedskills();
     });
         this.picturesurl=Files.filesUrl;
-  
+  this.currentuserid=this.authservice.getUserId();
 
   }
   userCertificates:Certificate[]=[]
@@ -98,7 +101,12 @@ mylanguages:FreelancerLanguage[]=[]
   
   }
 
-
+  private initializeForm() {
+    this.editReviewForm = this.fb.group({
+      rating: ['', Validators.required],
+      comment: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
 nonrecommendedskills:nonrecommendedSkill[]=[]
   allskills:Skill[]=[]
   private initializeNonrecommendedskills(){
@@ -366,5 +374,111 @@ loadReviews()
       }
     }
   )
+}
+
+
+
+editReview(review: any) {
+  this.selectedReview = review;
+  this.selectedReview.revieweeId=this.profile.id;
+  console.log(this.selectedReview,'asfafffffffffffffffffffffffffffffffffffffffffffffff')
+  this.editReviewForm.patchValue({
+    rating: review.rating,
+    comment: review.comment
+  });
+}
+
+updateReview() {
+  if (this.editReviewForm.valid && this.selectedReview) {
+    const updatedReview = {
+      ...this.selectedReview,
+      rating: this.editReviewForm.get('rating')?.value,
+      comment: this.editReviewForm.get('comment')?.value
+      
+    };
+
+    // Call your review service to update
+    this.reviewservice.updateReview(updatedReview.id,updatedReview).subscribe({
+      next: () => {
+        // Update the review in the list
+        const index = this.reviews.findIndex(r => r.id === this.selectedReview.id);
+        if (index !== -1) {
+          this.reviews[index] = updatedReview;
+        }
+        this.closeEditModal();
+        this.toastr.success('Review updated successfully');
+      },
+      error: (error) => {
+        console.error('Error updating review:', error);
+        this.toastr.error('Failed to update review');
+      }
+    });
+  }
+}
+
+closeEditModal() {
+  this.selectedReview = null;
+  this.editReviewForm.reset();
+}
+
+
+editReviewForm!: FormGroup;
+selectedReview: any = null;
+private initializeEditForm() {
+  this.editReviewForm = this.fb.group({
+    rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+    comment: ['', [Validators.required, Validators.minLength(10)]]
+  });
+}
+
+
+
+reviewToDelete: any = null;
+
+deleteReview(review: number) {
+this.reviewToDelete = review;
+console.log(review);
+this.showDeleteModal = true;
+}
+
+closeDeleteModal() {
+this.showDeleteModal = false;
+this.reviewToDelete = null;
+}
+@ViewChild('carousel') carouselElement!: ElementRef;
+confirmDelete() {
+if (this.reviewToDelete) {
+  this.reviewservice.deleteReview(this.reviewToDelete).subscribe({
+    next: () => {
+      // Remove the review from the array
+      this.reviews = this.reviews.filter(review => review.id !== this.reviewToDelete);
+      
+      // Force carousel refresh
+      setTimeout(() => {
+        const carousel = document.querySelector('#clientReviewsCarousel');
+        if (carousel) {
+          // Remove all active classes first
+          carousel.querySelectorAll('.carousel-item').forEach(item => {
+            item.classList.remove('active');
+          });
+          
+          // Add active class to first item if exists
+          const firstItem = carousel.querySelector('.carousel-item');
+          if (firstItem) {
+            firstItem.classList.add('active');
+          }
+        }
+      });
+
+      this.closeDeleteModal();
+      this.toastr.success('Review deleted successfully');
+    },
+    error: (error) => {
+      console.error('Error deleting review:', error);
+      this.toastr.error('Failed to delete review');
+      this.closeDeleteModal();
+    }
+  });
+}
 }
 }

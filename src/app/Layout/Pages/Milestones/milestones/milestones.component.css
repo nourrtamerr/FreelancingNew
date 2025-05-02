@@ -987,3 +987,173 @@
     gap: 0.75rem;
   }
 }
+
+.file-preview {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+/* Add these specific overrides for video and file previews */
+.file-preview:has(video),
+.file-preview:has(a) {
+     pointer-events: all; 
+    cursor: pointer; 
+}
+
+.file-preview video,
+.file-preview a {
+    pointer-events: all;
+    z-index: 1;
+}
+
+.file-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+  align-items: flex-start; /* Add this to align items at the start */
+}
+
+.file-upload-placeholder {
+  width: 150px;
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 10px 0; /* Change margin to vertical only */
+}
+
+.file-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.file-preview, .file-upload-placeholder {
+  width: 150px;
+  height: 150px;
+  margin: 0;
+  justify-self: start;
+}
+
+.file-upload-section {
+  width: 150px;
+  height: 150px;
+  margin: 0;
+}
+
+
+
+
+
+.project-review-section {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc, #fff);
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.review-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.review-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.review-header i {
+  font-size: 2.5rem;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.review-header h3 {
+  color: #175b99;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.review-header p {
+  color: #64748b;
+}
+
+.stars {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.stars i {
+  font-size: 2rem;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stars i:hover,
+.stars i.active {
+  color: #fbbf24;
+  transform: scale(1.1);
+}
+
+.comment-container textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 120px;
+  margin-top: 0.5rem;
+}
+
+.comment-container textarea:focus {
+  outline: none;
+  border-color: #175b99;
+  box-shadow: 0 0 0 2px rgba(23, 91, 153, 0.1);
+}
+
+.submit-review-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #175b99;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.submit-review-btn:hover:not(:disabled) {
+  background: #1e6eb8;
+  transform: translateY(-1px);
+}
+
+.submit-review-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}

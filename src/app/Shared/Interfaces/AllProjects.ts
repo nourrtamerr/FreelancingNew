@@ -1,5 +1,6 @@
 
 import { ExperienceLevel } from "../Enums/FixedPriceProjectEnum";
+import { ProjectType } from "./Proposal";
 
   
 export enum ProjectStatus {
@@ -20,6 +21,7 @@ export enum ProjectStatus {
     clientId: string; 
     freelancerId?: string | null;  
     status: ProjectStatus;  
+    projectType:ProjectType
     // subcategoryId: number;
     // subcategory: Subcategory;  
     // milestones: Milestone[]; 

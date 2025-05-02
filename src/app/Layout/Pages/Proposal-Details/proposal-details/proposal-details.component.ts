@@ -179,7 +179,7 @@ confirmPayment() {
       const authToken = localStorage.getItem('token');
       this.paymentService.ClientPayFromStrip(this.ProposalId).subscribe({
         next: (data: any) => {
-          this.toaster.success('Payment successful');
+          this.toaster.success('Redirecting to stripe');
           this.closePaymentModal();
           window.location.href=data.url;
 

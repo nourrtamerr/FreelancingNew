@@ -20,6 +20,43 @@
       <span class="stat-label">Total Milestones</span>
     </div>
   </div>
+
+  <div class="project-review-section" *ngIf="areAllMilestonesCompleted()">
+    <div class="review-card">
+      <div class="review-header">
+        <h3>{{ existingReview ? 'Update Your Review' : 'Project Completed Successfully!' }}</h3>
+        <p>{{ existingReview ? 'Edit your review for the' : 'Share your experience working with the' }} 
+           {{ isProjectClient ? 'Freelancer' : 'Client' }}</p>
+      </div>
+  
+      <form [formGroup]="reviewForm" (ngSubmit)="submitProjectReview()">
+        <div class="rating-container">
+          <label>Rating:</label>
+          <div class="stars">
+            <i *ngFor="let star of [1,2,3,4,5]" 
+               class="fas fa-star"
+               [class.active]="star <= reviewForm.get('rating')?.value"
+               (click)="setRating(star)"></i>
+          </div>
+        </div>
+        
+        <div class="comment-container">
+          <label>Comment:</label>
+          <textarea 
+            formControlName="comment" 
+            rows="3" 
+            placeholder="Share your experience..."></textarea>
+          <div class="error-message" *ngIf="reviewForm.get('comment')?.touched && reviewForm.get('comment')?.invalid">
+            Please enter a comment (minimum 10 characters)
+          </div>
+        </div>
+  
+        <button type="submit" class="submit-review-btn" [disabled]="reviewForm.invalid">
+          {{ existingReview ? 'Update Review' : 'Submit Review' }}
+        </button>
+      </form>
+    </div>
+  </div>
   
   <div class="milestones-timeline" *ngIf="milestones.length > 0">
     <div class="milestone-card" *ngFor="let milestone of milestones; let i = index">
@@ -79,40 +116,40 @@
               <!-- Image files -->
               <div class="file-preview" *ngIf="getFileType(file) === 'image'" (click)="openImageModal(file)">
                 <img [src]="file" alt="Milestone Image">
-                <div class="file-actions" *ngIf="isProjectFreelancer && milestone.status === 0">
-                  <button class="action-btn" (click)="$event.stopPropagation(); openImageModal(file)">
-                    <i class="fas fa-eye"></i> Preview
-                  </button>
-                  <button class="action-btn delete-btn" (click)="$event.stopPropagation(); deleteFile(file)">
-                    <i class="fas fa-trash"></i> Delete
-                  </button>
-                </div>
+                <!-- <div class="file-actions" *ngIf="isProjectFreelancer && milestone.status === 0"> -->
+                  <button 
+                    *ngIf="isProjectFreelancer && milestone.status === 0" 
+                    class="delete-btn" 
+                    (click)="deleteFile(file)">
+                    <i class="fa fa-times"></i>
+                </button>
+                <!-- </div> -->
               </div>
               
               <!-- Video files -->
               <div class="file-preview" *ngIf="getFileType(file) === 'video'">
                 <video [src]="file" controls></video>
                 <button 
-                  *ngIf="isProjectFreelancer && milestone.status === 0" 
-                  class="delete-btn" 
-                  (click)="deleteFile(file)">
-                  <i class="fa fa-times"></i>
+                    *ngIf="isProjectFreelancer && milestone.status === 0" 
+                    class="delete-btn" 
+                    (click)="deleteFile(file)">
+                    <i class="fa fa-times"></i>
                 </button>
-              </div>
-              
-              <!-- Other files -->
-              <div class="file-preview" *ngIf="getFileType(file) === 'other'">
-                <a [href]="file" target="_blank">
-                  <i class="fa fa-file"></i>
-                  <span>Download File</span>
+            </div>
+            
+            <!-- Other files -->
+            <div class="file-preview" *ngIf="getFileType(file) === 'other'">
+                <a [href]="file" target="_blank" download>
+                    <i class="fa fa-file"></i>
+                    <span>Download File</span>
                 </a>
                 <button 
-                  *ngIf="isProjectFreelancer && milestone.status === 0" 
-                  class="delete-btn" 
-                  (click)="deleteFile(file)">
-                  <i class="fa fa-times"></i>
+                    *ngIf="isProjectFreelancer && milestone.status === 0" 
+                    class="delete-btn" 
+                    (click)="deleteFile(file)">
+                    <i class="fa fa-times"></i>
                 </button>
-              </div>
+            </div>
             </ng-container>
             
             <!-- File upload placeholder - now inside the file container -->

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } fr
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../../Shared/Services/Chat/chat.service';
 import { AuthService } from './../../../Shared/Services/Auth/auth.service';
-import { Subscription } from 'rxjs';
+import { retry, Subscription } from 'rxjs';
 import { Chat } from '../../../Shared/Interfaces/Chat';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -27,10 +27,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   currentUsername: string;
   onlineUsers: string[] = [];
   isConnected = false;
-  filesurl = Files.filesUrl;
+  filesurl:string = '';
   selectedImage: string | null = null;
   showSidebar = false;
   truereceiverid:string="";
+  receiverImage: string = '';
   private subscriptions = new Subscription();
 
   constructor(
@@ -44,13 +45,30 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     this.currentUsername = this.authService.getUserName() ?? '';
   }
   ngOnInit(): void {
+    this.filesurl = Files.filesUrl;
     this.receiverId = this.route.snapshot.paramMap.get('username')??"";
     this.receiverUsername = this.receiverId;
     
     this.setupInitialConnection();
     this.loadConversations();
+  
+  this.loadReceiverImage(); 
   }
 
+
+  loadReceiverImage(): void {
+    this.accountService.getImagebyUserName(this.receiverUsername).subscribe({
+      next: (data) => {
+        const timestamp = new Date().getTime(); // force reload
+        this.receiverImage = `${this.filesurl}/${data.fileName}?t=${timestamp}`;
+      },
+      error: (err) => {
+        console.error('Error loading receiver image:', err);
+        this.receiverImage = ''; // Optional: fallback to default
+      }
+    });
+  }
+  
   setupInitialConnection(): void {
     if (this.receiverId) {
       this.accountService.getIdByUserName(this.receiverId).subscribe({
@@ -82,21 +100,39 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     this.scrollToBottom();
   }
 
+  userImages: { [username: string]: string } = {}; 
+
   loadConversations(): void {
     this.chatService.getAllConversations(this.currentUsername).subscribe({
       next: (conversations) => {
         this.conversations = conversations || [];
+  
+        // Get all unique usernames
+        const usernames = new Set<string>();
+        this.conversations.forEach(conv => {
+          const name = conv.receiverName === this.currentUsername ? conv.senderName : conv.receiverName;
+          usernames.add(name? name : ''); // Avoid adding empty strings
+        });
+  
+        // Fetch images for each unique user
+        usernames.forEach(username => {
+          this.accountService.getImagebyUserName(username).subscribe({
+            next: (data) => {
+              this.userImages[username] = `${this.filesurl}/${data.fileName}`;
+            },
+            error: () => {
+              this.userImages[username] = 'https://th.bing.com/th/id/OIP.pu65piyuwGoBpHJ2SvvGvAHaHa?pid=ImgDet&w=192&h=192&c=7'; // fallback image
+            }
+          });
+        });
       },
       error: (error) => {
         console.error('Error loading conversations:', error);
         this.conversations = [];
-        if (error.status === 404) {
-          console.warn('No conversations found for user:', this.currentUsername);
-        }
       }
     });
   }
-
+  
   loadConversation(username: string): void {
     if (!username) {
       console.warn('Cannot load conversation: Missing username');
@@ -199,6 +235,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   
         this.truereceiverid = data.id;
         this.receiverId = data.id; // Keep for other uses (e.g., SignalR)
+        this.loadReceiverImage(); // Load the image for the new receiver
   
         // Update URL without reloading the page
         this.router.navigate(['/chathub', username], { replaceUrl: true });
