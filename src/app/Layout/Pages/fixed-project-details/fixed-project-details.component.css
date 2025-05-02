@@ -708,3 +708,20 @@
     font-weight: bold;
     margin: 24px 0 16px;
   }
+
+  .save-btn.saved {
+    background-color: #e4f1e4;
+    color: #14a800;
+    border-color: #14a800;
+  }
+
+  .save-btn.saved:hover{
+    background-color: #f0fdf0;
+    color: #14a800;
+    border-color: #14a800;
+  }
+
+  
+  .save-btn i {
+    margin-right: 8px;
+  }

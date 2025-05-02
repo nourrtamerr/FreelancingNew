@@ -100,10 +100,8 @@
             <div class="row">
                 <div class="col-lg-12">
                   <section>
-                    <h3 class="section-title">Skills and Expertise</h3>
-                    
-                    <span *ngFor="let skill of project.projectSkills" class="skill-tag">{{skill}}</span>
-                
+                    <h3 class="section-title">Skills and Expertise</h3>                   
+                    <span *ngFor="let skill of project.projectSkills" class="skill-tag">{{skill}}</span>                
                   </section>
                 </div>
               </div>
@@ -113,10 +111,22 @@
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
           <aside class="upwork-sidebar mb-4">
-            <a [routerLink]="['/proposal2',project.id]"><button   class="apply-btn mb-2">Apply now</button></a>
+            <!-- <a [routerLink]="['/proposal2',project.id]"> <button class="apply-btn mb-2">Apply now</button></a> -->
+            <a [routerLink]="(project?.freelancerId === null && !isBidEndDatePassed()) ? ['/proposal2', project.id] : []">
+              <button class="apply-btn mb-2" 
+                      [disabled]="project?.freelancerId !== null || isBidEndDatePassed()"
+                      [title]="getBidButtonTitle()"
+                      [class.disabled-button]="project?.freelancerId !== null || isBidEndDatePassed()">
+                {{ project?.freelancerId === null ? (isBidEndDatePassed() ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+              </button>
+            </a>
             
-            <button (click)="AddToWishlist(project.id)" class="save-btn mb-2">Save job</button>
-      
+            <button  class="save-btn mb-2" *ngIf="role=='Freelancer'"  
+            (click)="AddToWishlist(project.id)"
+            [class.saved]="isInWishlist()"  >
+            <i class="fa" [class.fa-check]="isInWishlist()" [class.fa-bookmark]="!isInWishlist()"></i>                   
+            {{ isInWishlist() ? 'Saved' : 'Save job' }}
+            </button>
   
             <div class="client-info">
               <p style="font-size: 22px; font-weight: bold;">About the client</p>

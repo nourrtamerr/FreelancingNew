@@ -8,11 +8,12 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { TimeAgoPipe } from '../../Pipes/time-ago.pipe';
 import { CommonModule } from '@angular/common';
 import { TimeLeftPipe } from '../../Pipes/time-left.pipe';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-proposal2',
-  imports: [RouterModule,RouterOutlet, TimeAgoPipe, FormsModule, CommonModule, TimeLeftPipe],
-
+  standalone: true,
+  imports: [RouterModule, RouterOutlet, TimeAgoPipe, FormsModule, CommonModule, TimeLeftPipe],
   templateUrl: './proposal2.component.html',
   styleUrls: ['./proposal2.component.css']
 })
@@ -28,16 +29,14 @@ export class Proposal2Component {
   projectType: string = '';
   isSubmitting: boolean = false;
   formErrors: any = {};
-  currentForm?: NgForm;
-
-
-  submitError: string | null = null;
+  formSubmitted: boolean = false;
 
   constructor(
     private biddingProjectDetailsService: BiddingProjectService,
     private route: ActivatedRoute,
     private fixedPriceService: FixedPriceProjectService,
-    private proposalService: ProposalService
+    private proposalService: ProposalService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -51,25 +50,25 @@ export class Proposal2Component {
   private loadProjectDetails(id: number): void {
     this.biddingProjectDetailsService.GetBiddingProjectById(id).subscribe({
       next: (data) => {
-        if (data.id === id) {
-          this.project = data;
-          this.proposal.projectId = data.id;
-          this.projectType = 'Bidding';
-          this.proposal.type = ProjectType.Bidding;
-        } 
-        else {
-          this.fixedPriceService.getProjectById(id).subscribe({
-            next: (data) => {
-              this.project = data;
-              this.proposal.projectId = data.id;
-              this.projectType = 'Fixed Price';
-              this.proposal.type = ProjectType.FixedPrice;
-            },
-            error: (err) => console.log(err)
-          });
-        }
+        this.project = data;
+        this.proposal.projectId = data.id;
+        this.projectType = 'Bidding';
+        this.proposal.type = ProjectType.Bidding;
       },
-      error: (err) => console.log(err)
+      error: (err) => {
+        this.fixedPriceService.getProjectById(id).subscribe({
+          next: (data) => {
+            this.project = data;
+            this.proposal.projectId = data.id;
+            this.projectType = 'Fixed Price';
+            this.proposal.type = ProjectType.FixedPrice;
+          },
+          error: (err) => {
+            this.toastr.error('Failed to load project details', 'Error');
+            console.error(err);
+          }
+        });
+      }
     });
   }
 
@@ -83,40 +82,30 @@ export class Proposal2Component {
   }
 
   addMilestone(): void {
-    // this.validateCurrentMilestone();
-    
-    if (this.isCurrentMilestoneValid()) {
-      this.proposal.suggestedMilestones.push(this.createEmptyMilestone());
-      this.clearMilestoneErrors();
-    } else {
-      this.showMilestoneError("Please complete all fields in the current milestone before adding a new one");
+    if (!this.isCurrentMilestoneValid()) {
+      this.toastr.warning('Please complete all fields in the current milestone before adding a new one', 'Incomplete Milestone');
+      this.markCurrentMilestoneAsTouched();
+      return;
     }
+    
+    this.proposal.suggestedMilestones.push(this.createEmptyMilestone());
+    this.clearMilestoneErrors();
+  }
+
+  private markCurrentMilestoneAsTouched(): void {
+    const lastIndex = this.proposal.suggestedMilestones.length - 1;
+    this.formErrors[`milestone_${lastIndex}_title`] = this.formErrors[`milestone_${lastIndex}_title`] || '';
+    this.formErrors[`milestone_${lastIndex}_description`] = this.formErrors[`milestone_${lastIndex}_description`] || '';
+    this.formErrors[`milestone_${lastIndex}_amount`] = this.formErrors[`milestone_${lastIndex}_amount`] || '';
+    this.formErrors[`milestone_${lastIndex}_duration`] = this.formErrors[`milestone_${lastIndex}_duration`] || '';
   }
 
   removeMilestone(index: number): void {
-    if (index > 0) {
+    if (index > 0 && this.proposal.suggestedMilestones.length > 1) {
       this.proposal.suggestedMilestones.splice(index, 1);
       this.clearMilestoneErrors();
     }
   }
-
-  // validateCurrentMilestone(): void {
-  //   const lastMilestone = this.proposal.suggestedMilestones[this.proposal.suggestedMilestones.length - 1];
-  //   this.formErrors.milestone = {};
-    
-  //   if (!lastMilestone.title.trim()) {
-  //     this.formErrors.milestone.title = 'Title is required';
-  //   }
-  //   if (!lastMilestone.description.trim()) {
-  //     this.formErrors.milestone.description = 'Description is required';
-  //   }
-  //   if (!lastMilestone.amount || lastMilestone.amount <= 0) {
-  //     this.formErrors.milestone.amount = 'Price must be greater than 0';
-  //   }
-  //   if (!lastMilestone.duration || lastMilestone.duration <= 0) {
-  //     this.formErrors.milestone.duration = 'Duration must be greater than 0';
-  //   }
-  // }
 
   isCurrentMilestoneValid(): boolean {
     const lastMilestone = this.proposal.suggestedMilestones[this.proposal.suggestedMilestones.length - 1];
@@ -154,50 +143,34 @@ export class Proposal2Component {
         this.formErrors[`milestone_${index}_duration`] = 'Duration must be greater than 0';
         isValid = false;
       }
-
-
     });
 
     return isValid;
   }
 
-  createProposal(): void {
+  createProposal(form: NgForm): void {
+    this.formSubmitted = true;
+    
     if (!this.validateForm()) {
-      this.submitError = 'Please fill all required fields before submitting';
+      this.toastr.error('Please fill all required fields correctly', 'Form Errors');
       return;
     }
   
     this.isSubmitting = true;
-    this.submitError = null;
-  
+    
     this.proposalService.CreateProposal(this.proposal).subscribe({
       next: (data) => {
         this.isSubmitting = false;
-        alert('Proposal submitted successfully!');
+        this.toastr.success('Proposal submitted successfully!', 'Success');
+        // Optionally navigate away or reset form
       },
       error: (err) => {
         this.isSubmitting = false;
-        console.log('Full error:', err); // For debugging
-        this.submitError = err.error?.message || 'Failed to submit proposal. Please try again.';
-
-        alert(this.submitError);
+        const errorMessage = err.error?.message || 'Failed to submit proposal. Please try again.';
+        this.toastr.error(errorMessage, 'Submission Error');
+        console.error('Submission error:', err);
       }
-      
     });
-  }
-
-  showMilestoneError(message: string): void {
-    this.formErrors.milestone = this.formErrors.milestone || {};
-    this.formErrors.milestone.general = message;
-  }
-
-  showFormError(message: string): void {
-    this.formErrors.general = message;
-  }
-
-  showSuccess(message: string): void {
-    // You can implement a toast or alert here
-    alert(message);
   }
 
   clearMilestoneErrors(): void {
@@ -205,10 +178,13 @@ export class Proposal2Component {
   }
 
   hasError(controlName: string, index?: number): boolean {
-    if (index !== undefined) {
-      return !!this.formErrors[`milestone_${index}_${controlName}`];
+    if (this.formSubmitted || (index !== undefined && this.proposal.suggestedMilestones[index])) {
+      if (index !== undefined) {
+        return !!this.formErrors[`milestone_${index}_${controlName}`];
+      }
+      return !!this.formErrors[controlName];
     }
-    return !!this.formErrors[controlName];
+    return false;
   }
 
   getError(controlName: string, index?: number): string {

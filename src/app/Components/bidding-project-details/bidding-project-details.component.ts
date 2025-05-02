@@ -13,6 +13,7 @@ import { FixedPriceProjectService } from '../../Shared/Services/FixedPriceProjec
 
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../Shared/Services/wishlist.service';
+import { AuthService } from '../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-bidding-project-details',
@@ -27,7 +28,8 @@ export class BiddingProjectDetailsComponent implements OnInit {
     private ReviewsService:ReviewService,
     private FixedService:FixedPriceProjectService,
     private wishlistService:WishlistService,
-    private toaster:ToastrService
+    private toaster:ToastrService,
+    private authService:AuthService,
     ){}
 
 
@@ -58,16 +60,18 @@ project: BiddingProjectGetById={
   clientProjectsTotalCount:0,
   clientId:'',
   expectedDuration:0,
-  endDate:''
+  endDate:'',
+  freelancerId:''
 };
 
 
   clientOtherProjNameId: {id:number, title:string, projectType:string} []=[];
 
-
+  userWishlist:any;
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
 
+  role:string="";
 
   ngOnInit(): void {
     // const code = +this.route.snapshot.paramMap.get('id')!;
@@ -75,6 +79,10 @@ project: BiddingProjectGetById={
       const id = +params.get('id')!;
       this.loadNgOnIt(id);
     });
+
+    const roles = this.authService.getRoles();
+    this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+ 
   
 
   }
@@ -83,6 +91,7 @@ project: BiddingProjectGetById={
     this.biddingProjectDetailsService.GetBiddingProjectById(id).subscribe({
       next: (data) => {
         this.project = data;
+        this.loadWishlist();
 
 
         if (this.project.clientId) {
@@ -144,15 +153,93 @@ project: BiddingProjectGetById={
     });
   }
 
-  AddToWishlist(projectid:number){
-    this.wishlistService.AddToWishlist(projectid).subscribe({
+  // AddToWishlist(projectid:number){
+  //   this.wishlistService.AddToWishlist(projectid).subscribe({
+  //     next:()=>{
+  //       this.toaster.success("Added to wishlist")
+  //     },
+  //     error:(err)=>{
+  //       console.log(err)
+  //     }
+  //   })
+  // }
+
+
+
+  loadWishlist(): void {
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: any[]) => {
+        // Ensure we're getting an array of project IDs
+        this.userWishlist = data.map(item => item.projectId);
+        console.log('Wishlist loaded:', this.userWishlist);
+      },
+      error: (err) => {
+        console.log('Error loading wishlist:', err);
+        this.userWishlist = []; // Initialize empty array on error
+      }
+    });
+  }
+
+  AddToWishlist(projectId: number) {
+    if (this.userWishlist.includes(projectId)) {
+      // Remove from wishlist
+      this.wishlistService.RemoveFromWishList(projectId).subscribe({
+        next: () => {
+          const index = this.userWishlist.indexOf(projectId);
+          if (index > -1) {
+            this.userWishlist.splice(index, 1);
+          this.toaster.success("Removed to wishlist");
+
+          }
+        }
+      });
+    } else {
+      // Add to wishlist
+      this.wishlistService.AddToWishlist(projectId).subscribe({
+        next: () => {
+          this.userWishlist.push(projectId);
+          this.toaster.success("Added to wishlist");
+        }
+      });
+    }
+  }
+
+  isInWishlist(): boolean {
+    return this.userWishlist.includes(this.project.id);
+  }
+
+  toggleWishlist(): void {
+    if (this.isInWishlist()) {
+      this.RemoveFromWishlist(this.project.id);
+    } else {
+      this.AddToWishlist(this.project.id);
+    }
+  }
+
+  RemoveFromWishlist(projectid:number){
+    this.wishlistService.RemoveFromWishList(projectid).subscribe({
       next:()=>{
-        this.toaster.success("Added to wishlist")
+        this.toaster.success("Removed from wishlist")
       },
       error:(err)=>{
         console.log(err)
       }
     })
+  }
+
+  isBidEndDatePassed(): boolean {
+    if (!this.project?.biddingEndDate) return false;
+    return new Date(this.project.biddingEndDate) < new Date();
+  }
+  
+  getBidButtonTitle(): string {
+    if (this.project?.freelancerId !== null) {
+      return 'This project has already been assigned';
+    }
+    if (this.isBidEndDatePassed()) {
+      return 'Bidding period has ended';
+    }
+    return 'Apply for this project';
   }
 
 }

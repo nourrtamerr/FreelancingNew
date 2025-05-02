@@ -38,5 +38,9 @@ export class ProjectsService {
     );
   }
 
+  GetProjectsByCategoryId(categoryId: number): Observable<number[]> {
+    return this.myClient.get<number[]>(`${this.apiURL}/Category/${categoryId}`);
+  }
+
 
 }

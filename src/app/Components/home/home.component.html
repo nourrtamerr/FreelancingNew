@@ -73,16 +73,19 @@
       Looking for work? <a href="#" class="browse-jobs-link">Browse jobs</a>
     </div>
     <div class="row g-4">
-      <div class="col-md-6 col-lg-3" *ngFor="let cat of browseCategories">
-        <div class="category-card-custom p-4 h-100">
-          <div class="category-card-title mb-3">{{ cat.name }}</div>
-          <div class="d-flex align-items-center gap-3">
-            <span class="category-rating">
-              <i class="fa fa-star"></i> {{ cat.rating }}/5
-            </span>
-            <span class="category-skills text-muted">{{ cat.skills }} skills</span>
+      <div class="col-md-6 col-lg-3" *ngFor="let cat of categories">
+        <a [routerLink]="['/new',cat.id]" >
+          <div class="category-card-custom p-4 h-100">
+            <div class="category-card-title mb-3">{{ cat.name }}</div>
+            <div class="d-flex align-items-center gap-3">
+              <span class="category-rating">
+                <i class="fa-solid fa-list"></i> {{ getSubcategoriesOfCategory(cat.id)  }} Subcategories
+              </span>
+              <span class="category-skills text-muted">{{ GetNumOfProjects(cat.id)}} projects</span>
+            </div>
           </div>
-        </div>
+        </a>
+        
       </div>
     </div>
   </div>
@@ -173,11 +176,11 @@
   <div class="container py-5">
     <div class="row">
       <div class="col-12">
-        <h2 class="fw-bold mb-4 text-center">Featured Projects</h2>
+        <h2 class="fw-bold mb-4 text-center">Latest Biddings</h2>
       </div>
     </div>
     <div class="row g-4">
-      <div class="col-md-4" *ngFor="let project of featuredProjects">
+      <div class="col-md-4" *ngFor="let project of LatestBiddings">
         <div class="fiverr-project-card h-100 p-4 rounded shadow-sm bg-white">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold">{{ project.title }}</span>
@@ -189,18 +192,18 @@
           </div>
           <div class="d-flex flex-wrap align-items-center mb-2 small text-secondary">
             <span class="me-2"><i class="fa fa-briefcase me-1"></i>{{ project.experienceLevel }}</span>
-            <span class="me-2"><i class="fa fa-dollar-sign me-1"></i>${{ project.minimumPrice }} - ${{ project.maximumprice }}</span>
+            <span class="me-2"><i class="fa fa-dollar-sign me-1"></i>{{ project.minimumPrice }} - {{ project.maximumprice }} {{project.currency}}</span>
             <span><i class="fa fa-users me-1"></i>{{ project.numOfBids }} Bids</span>
           </div>
           <div class="text-end">
-            <a [routerLink]="['/home2/details', project.id]" class="btn btn-outline-success btn-sm">View Details</a>
+            <a [routerLink]="['/details', project.id]" class="btn btn-outline-success btn-sm">View Details</a>
           </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-12 text-center mt-4">
-        <a routerLink="/home2/new" class="btn btn-outline-primary btn-lg">Browse All Projects</a>
+        <a routerLink="/new" class="btn btn-outline-primary btn-lg">Browse All Projects</a>
       </div>
     </div>
   </div>
@@ -245,16 +248,26 @@
       </div>
     </div>
     <div class="row g-4 justify-content-center">
-      <div class="col-md-4" *ngFor="let testimonial of testimonials">
+      <div class="col-md-4" *ngFor="let testimonial of reviews">
         <div class="testimonial-card-fiverr p-4 bg-white rounded shadow-sm h-100">
           <div class="d-flex align-items-center mb-3">
-            <img [src]="testimonial.avatar" alt="User" class="rounded-circle me-3" style="width:48px;height:48px;">
+            <!-- <img [src]="testimonial.avatar" alt="User" class="rounded-circle me-3" style="width:48px;height:48px;"> -->
             <div>
-              <div class="fw-bold">{{ testimonial.name }}</div>
-              <div class="text-muted small">{{ testimonial.role }}</div>
+              <div class="fw-bold">{{ testimonial.reviewerName }}</div>
+              <div class="text-warning pt-2">
+                <ng-container *ngFor="let star of [1,2,3,4,5]">
+                  <i class="fa-star" 
+                     [ngClass]="{
+                       'fa-solid': testimonial.rating >= star,
+                       'fa-regular': testimonial.rating < star
+                     }">
+                  </i>
+                </ng-container>
+                <!-- <span class="ms-1 text-muted">({{ testimonial.rating }})</span> -->
+              </div>
             </div>
           </div>
-          <p class="mb-0 fst-italic text-secondary">"{{ testimonial.text }}"</p>
+          <p class="mb-0 fst-italic text-secondary">"{{ testimonial.comment }}"</p>
         </div>
       </div>
     </div>

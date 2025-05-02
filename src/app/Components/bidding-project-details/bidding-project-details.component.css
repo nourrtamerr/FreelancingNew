@@ -708,3 +708,22 @@
     font-weight: bold;
     margin: 24px 0 16px;
   }
+
+
+  .apply-btn:disabled {
+    background-color: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+    border: 1px solid #ccc;
+    opacity: 0.7;
+  }
+  
+  .apply-btn:disabled:hover {
+    background-color: #e0e0e0;
+    transform: none;
+    box-shadow: none;
+  }
+
+
+
+  

@@ -19,8 +19,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         return EMPTY;
       }
       else if (error.error?.message) {
-        toastr.error(error.error.message);
+
+        if(!error.error.message.includes('Fixed price project with ID')){
+
+          toastr.error(error.error.message);
+        }
         return EMPTY;
+
       }
       return throwError(() => error);
     })

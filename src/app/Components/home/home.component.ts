@@ -3,6 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../Shared/Services/Auth/auth.service';
+import { CategoryService } from '../../Shared/Services/Category/category.service';
+import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
+import { map, Observable } from 'rxjs';
+import { Category } from '../../Shared/Interfaces/category';
+import { SubCategoryService } from '../../Shared/Services/SubCategory/sub-category.service';
+import { SubCategory2 } from '../../Shared/Interfaces/sub-category2';
+import { BiddingProjectService } from '../../Shared/Services/BiddingProject/bidding-project.service';
+import { BiddingProjectGetAll } from '../../Shared/Interfaces/BiddingProject/bidding-project-get-all';
+import { ReviewService } from '../../Shared/Services/Review/review.service';
+import { Review } from '../../Shared/Interfaces/Reviews';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +21,99 @@ import { AuthService } from '../../Shared/Services/Auth/auth.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  constructor(private AuthService:AuthService) { }
+  constructor(private AuthService:AuthService,
+     private categoryService: CategoryService,
+      private projectService:ProjectsService,
+      private subcategoryService:SubCategoryService,
+      private biddingProjectService: BiddingProjectService,
+      private reviweService:ReviewService
+    ) { }
+
+
+    categories:Category[]=[];
+    categoryProjectCounts: {[key: number]: number} = {};
+    
+    SubCategories: SubCategory2[] = []; 
+    SubcategoryProjectCounts: {[key: number]: number} = {};
+
+    LatestBiddings: BiddingProjectGetAll[]=[];
+
+    reviews: Review[]=[]
+
+
   ngOnInit(): void {
-    ;
+    
     console.log('UserId :',this.AuthService.getUserId() );
+
+    this.categoryService.GetAllCategories().subscribe({
+      next: (data)=>{
+        this.categories = data.slice(0, 8);
+        this.loadProjectCounts();
+      },
+      error: (err)=>{
+        console.log('Error :',err );
+      }
+    })
+    
+
+
+    this.biddingProjectService.GetAllBiddingProjects({}, 1, 3).subscribe({
+      next: (response) => {
+        this.LatestBiddings = response;
+        // Sort by posted date to ensure latest first
+        this.LatestBiddings.sort((a, b) => b.postedFrom - a.postedFrom);
+      },
+      error: (err) => {
+        console.log('Error loading latest projects:', err);
+      }
+    });
+
+    this.reviweService.getAllReviews().subscribe({
+      next: (data) => {
+        this.reviews = data.slice(0, 3);
+      },
+      error: (err) => {
+        console.log('Error loading reviews', err);
+      }
+    })
   }
+
+  loadProjectCounts() {
+    this.categories.forEach(cat => {
+      this.projectService.GetProjectsByCategoryId(cat.id).subscribe(
+        projects => this.categoryProjectCounts[cat.id] = projects.length
+      );
+    });
+
+    this.subcategoryService.getAllSubcategories().subscribe({
+      next: (data)=>{
+        this.SubCategories = data;
+      },
+      error: (err)=>{
+        console.log('Error :',err );
+      }
+    })
+  }
+  
+  GetNumOfProjects(categoryId: number): number {
+    return this.categoryProjectCounts[categoryId] || 0;
+  }
+
+  getSubcategoriesOfCategory(categoryId:number){
+    return this.SubCategories.filter(sc=>sc.categoryId==categoryId).length;
+  }
+
+
+  // GetNumOfProjects(categoryId: number): Observable<number> {
+  //   return this.projectService.GetProjectsByCategoryId(categoryId).pipe(
+  //     map(projects => projects.length)
+  //   );
+  // }
+
+
   searchTerm = '';
+
+
 
   trendingTags = [
     'website development',
@@ -71,16 +168,7 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  categories = [
-    { name: 'Programming & Tech', icon: 'fa fa-laptop-code', description: 'Web, mobile, and software development.' },
-    { name: 'Graphics & Design', icon: 'fa fa-paint-brush', description: 'Logos, branding, and creative design.' },
-    { name: 'Digital Marketing', icon: 'fa fa-bullhorn', description: 'SEO, social media, and advertising.' },
-    { name: 'Writing & Translation', icon: 'fa fa-pen-nib', description: 'Content, copywriting, and translation.' },
-    { name: 'Video & Animation', icon: 'fa fa-video', description: 'Explainers, animation, and video editing.' },
-    { name: 'Music & Audio', icon: 'fa fa-music', description: 'Voice over, mixing, and audio production.' },
-    { name: 'Business', icon: 'fa fa-briefcase', description: 'Business plans, consulting, and research.' },
-    { name: 'Consulting', icon: 'fa fa-user-tie', description: 'Strategy, operations, and management.' }
-  ];
+
 
   testimonials = [
     {

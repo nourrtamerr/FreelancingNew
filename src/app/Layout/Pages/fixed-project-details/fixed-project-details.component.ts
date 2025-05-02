@@ -9,11 +9,12 @@ import { BiddingProjectService } from '../../../Shared/Services/BiddingProject/b
 import { WishlistService } from '../../../Shared/Services/wishlist.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
+import { TimeAgoPipe } from '../../../Pipes/time-ago.pipe';
 
 @Component({
   selector: 'app-fixed-project-details',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TimeAgoPipe],
   templateUrl: './fixed-project-details.component.html',
   styleUrl: './fixed-project-details.component.css'
 })
@@ -29,12 +30,15 @@ export class FixedProjectDetailsComponent implements OnInit {
     private BiddingProjectService:BiddingProjectService,
     private wishlistService:WishlistService,
     private authService:AuthService,
-    private toaster:ToastrService
+    private toaster:ToastrService,
+    
   ) {}
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
 
   clientOtherProjNameId: {id:number, title:string, projectType:string} []=[];
+
+  userWishlist:any;
   
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -50,6 +54,9 @@ export class FixedProjectDetailsComponent implements OnInit {
       next: (data) => {
         this.project = data;
         console.log('Project details:', data);
+        this.loadWishlist();
+
+       
 
 
         if (this.project?.clientId) {
@@ -87,6 +94,7 @@ export class FixedProjectDetailsComponent implements OnInit {
                     },
                     error: (error) => {
                       console.error('vvvvvvvvvvvvvvvvv', error);
+                     
                     }
                   });
                 }
@@ -101,20 +109,84 @@ export class FixedProjectDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching project details:', error);
+        this.toaster.error(error.error.message);
       }
     });
 
     
   }
 
-  AddToWishlist(projectid:number){
-    this.wishlistService.AddToWishlist(projectid).subscribe({
+  loadWishlist(): void {
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: any[]) => {
+        // Ensure we're getting an array of project IDs
+        this.userWishlist = data.map(item => item.projectId);
+        console.log('Wishlist loaded:', this.userWishlist);
+      },
+      error: (err) => {
+        console.log('Error loading wishlist:', err);
+        this.userWishlist = []; // Initialize empty array on error
+      }
+    });
+  }
+
+  // AddToWishlist(projectid:number){
+  //   this.wishlistService.AddToWishlist(projectid).subscribe({
+  //     next:()=>{
+  //       this.toaster.success("Added to wishlist")
+  //     },
+  //     error:(err)=>{
+  //       console.log(err)
+  //     }
+  //   })
+  // }
+
+  AddToWishlist(projectId: number) {
+    if (this.userWishlist.includes(projectId)) {
+      // Remove from wishlist
+      this.wishlistService.RemoveFromWishList(projectId).subscribe({
+        next: () => {
+          const index = this.userWishlist.indexOf(projectId);
+          if (index > -1) {
+            this.userWishlist.splice(index, 1);
+          this.toaster.success("Removed to wishlist");
+
+          }
+        }
+      });
+    } else {
+      // Add to wishlist
+      this.wishlistService.AddToWishlist(projectId).subscribe({
+        next: () => {
+          this.userWishlist.push(projectId);
+          this.toaster.success("Added to wishlist");
+        }
+      });
+    }
+  }
+
+
+  RemoveFromWishlist(projectid:number){
+    this.wishlistService.RemoveFromWishList(projectid).subscribe({
       next:()=>{
-        this.toaster.success("Added to wishlist")
+        this.toaster.success("Removed from wishlist")
       },
       error:(err)=>{
         console.log(err)
       }
     })
+  }
+
+
+  isInWishlist(): boolean {
+    return this.userWishlist.includes(this.projectid);
+  }
+
+  toggleWishlist(): void {
+    if (this.isInWishlist()) {
+      this.RemoveFromWishlist(this.projectid);
+    } else {
+      this.AddToWishlist(this.projectid);
+    }
   }
 }

@@ -28,4 +28,5 @@ export interface BiddingProjectGetById {
   clientId:string
   expectedDuration:number
   endDate:string
+  freelancerId?:string
 }

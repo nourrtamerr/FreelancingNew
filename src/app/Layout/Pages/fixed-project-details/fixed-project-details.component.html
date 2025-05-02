@@ -18,8 +18,8 @@
             <h1 class="job-title">{{project.title}}</h1>
             
             <div class="job-meta">
-              <span class="posted-time">Posted yesterday</span>
-              <span><i class="fa-solid fa-location-dot"></i> Worldwide</span>
+              <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+              <span><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
             </div>
   
             <section class="job-section">
@@ -138,9 +138,11 @@
             </button>
           </a>
             
-          <button class="save-btn mb-2" *ngIf="role=='Freelancer'"  (click)="AddToWishlist(projectid)">
-            
-            Save job
+          <button  class="save-btn mb-2" *ngIf="role=='Freelancer'"  
+          (click)="AddToWishlist(projectid)"
+          [class.saved]="isInWishlist()"  >
+          <i class="fa" [class.fa-check]="isInWishlist()" [class.fa-bookmark]="!isInWishlist()"></i>                   
+          {{ isInWishlist() ? 'Saved' : 'Save job' }}
           </button>
 
           
