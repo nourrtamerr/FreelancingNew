@@ -33,10 +33,10 @@ import { MyProposalsComponent } from './Layout/Pages/my-proposals/my-proposals.c
 import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
 import { adminGuard } from './Shared/Guards/admin/admin.guard';
 import { add } from 'date-fns';
-import { clientOrFreelancerGuard } from './Shared/Guards/Combination/clientOrFreelancerGuard';
 import { ReviewsDetectorComponent } from './Layout/Pages/AI/ai/reviewsdetector.component';
 
 import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
+import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
