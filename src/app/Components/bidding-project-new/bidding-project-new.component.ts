@@ -1,6 +1,6 @@
 // ... existing imports ...
 
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { CategoryService } from '../../Shared/Services/Category/category.service';
 import { Category } from '../../Shared/Interfaces/category';
 import { Country } from '../../Shared/Interfaces/Country';

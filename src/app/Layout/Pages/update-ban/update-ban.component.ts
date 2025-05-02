@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Ban } from '../../../Shared/Interfaces/Bans';
 import { BansService } from '../../../Shared/Services/Bans/bans.service';
 import { CommonModule } from '@angular/common';
@@ -7,16 +7,18 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-update-ban',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,RouterModule],
   templateUrl: './update-ban.component.html',
   styleUrl: './update-ban.component.css'
 })
 export class UpdateBanComponent {
 
   constructor (private activatedroute:ActivatedRoute,
-    private banservice:BansService
+    private banservice:BansService,
+    private router:Router
   ){
   }
+  currentDate: Date = new Date();
   currentid:number = 0
     ban:Ban ={} as Ban
     ngOnInit() {
@@ -31,10 +33,12 @@ export class UpdateBanComponent {
     }
 
     Updateban ( ban:Ban){
-      this.banservice.updateBan(this.currentid,ban).subscribe({
+      if(ban.id != undefined){
+      this.banservice.updateBan(ban.id,ban).subscribe({
         next: (response) => {
           console.log(response);
-          alert("Ban updated successfully");
+          this.router.navigate(['/banned']);
+          // alert("Ban updated successfully");
         },
         error: (error) => {
           console.error(error);
@@ -43,4 +47,5 @@ export class UpdateBanComponent {
       }
       );
     }
+  }
 }

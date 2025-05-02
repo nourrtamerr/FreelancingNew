@@ -7,6 +7,8 @@ import { AppUser, UserRole } from '../../../Shared/Interfaces/Account';
 import { Files } from '../../../base/environment';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { BansService } from '../../../Shared/Services/Bans/bans.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-allusers',
@@ -18,6 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AllusersComponent implements OnInit {
   AllUsers: AppUser[] = [];
   searchedUser: AppUser[] = [];
+  // User: AppUser = {} as AppUser;
   date: Date = new Date();
   MyPath: string = '';
   newAdmin: { name: string; message: string } = { name: '', message: '' };
@@ -28,6 +31,7 @@ export class AllusersComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
     private AuthService: AuthService
   ) {}
 
@@ -70,7 +74,7 @@ export class AllusersComponent implements OnInit {
       }
     });
   }
-  
+
   removeAdmin(id: string) {
     this.accountService.RemoveAdmin(id).subscribe({
       next: (res: any) => {
@@ -89,17 +93,29 @@ export class AllusersComponent implements OnInit {
     this.AllUsers = this.AllUsers.map(user =>
       user.id === userId ? { ...user, role: newRole } : user
     );
-    
+
     // Update in searchedUser array
     this.searchedUser = this.searchedUser.map(user =>
       user.id === userId ? { ...user, role: newRole } : user
     );
-    
+
     this.cdr.detectChanges();
   }
 
   saveAdmin() {
     console.log('New Admin:', this.newAdmin);
     // You can implement save new admin here if needed
+  }
+
+  banUser(username: string) {
+    // this.accountService.getIdByUserName(username).subscribe(
+    //   (response) => {
+    //     this.User = response;
+    //   },
+    //   (error) => {
+    //     console.error('Error fetching user ID:', error);
+    //   }
+    // );
+    this.router.navigateByUrl(`/addban/${username}`);
   }
 }
