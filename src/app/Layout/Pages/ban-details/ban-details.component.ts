@@ -34,7 +34,7 @@ export class BanDetailsComponent implements OnInit{
   }
 
   Delete(){
-    confirm("Do You Want To Delete This Ban?");
+    // confirm("Do You Want To Delete This Ban?");
     this.banservice.deleteBan(Number(this.currentid));
   }
 

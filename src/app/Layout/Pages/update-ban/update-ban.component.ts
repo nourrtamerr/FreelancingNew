@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Ban } from '../../../Shared/Interfaces/Bans';
 import { BansService } from '../../../Shared/Services/Bans/bans.service';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-update-ban',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,RouterModule],
   templateUrl: './update-ban.component.html',
   styleUrl: './update-ban.component.css'
 })
