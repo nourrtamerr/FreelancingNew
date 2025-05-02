@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
@@ -81,6 +81,7 @@ export class ProfileComponent {
     ,private BiddingProjects:BiddingProjectService
     ,private fixedprojects:FixedPriceProjectService
     ,private freelancerlanguages:FreelancerlanguageService
+    ,private cdr: ChangeDetectorRef
   ) {
 
     
@@ -1163,20 +1164,22 @@ addSkill(skillId: number): void {
     }
 
   }
+  
   onProfilePictureChange(event: any) {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
         this.selectedFile = file;
         // Create preview
         const reader = new FileReader();
-        reader.onload = () => {
-            this.previewUrl = reader.result as string;
+        reader.onload = (e: any) => {
+            this.previewUrl = e.target.result;
+            // Force change detection if needed
+            this.cdr.detectChanges();
         };
         reader.readAsDataURL(file);
+    } else if (file) {
+        this.toastr.error('Please select a valid image file', 'Invalid File');
     }
-    else if (file) {
-      this.toastr.error('Please select a valid image file', 'Invalid File');
-  }
 }
 //skills
 newSkill: number = 0;
