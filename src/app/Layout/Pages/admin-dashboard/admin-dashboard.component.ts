@@ -12,8 +12,8 @@ import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLa
 import { MilestoneService } from '../../../Shared/Services/Milestone/milestone.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, forkJoin, of } from 'rxjs';
-import { map, catchError, finalize } from 'rxjs/operators';
-import { AppUsers } from '../../../Shared/Interfaces/Account';
+import { map, catchError, finalize, switchMap } from 'rxjs/operators';
+import { AppUsers, UsersRequestingVerificaiton } from '../../../Shared/Interfaces/Account';
 import { FixedPriceProject, ProjectsResponse } from '../../../Shared/Interfaces/FixedPriceProject';
 import { Certificate } from '../../../Shared/Interfaces/certificate';
 import { Skill } from '../../../Shared/Interfaces/Skill';
@@ -21,6 +21,7 @@ import { FreelancerLanguage } from '../../../Shared/Interfaces/freelancer-langua
 import { BiddingProjectService } from '../../../Shared/Services/BiddingProject/bidding-project.service';
 import { BiddingProjectGetAll, BiddingProjectsResponse } from '../../../Shared/Interfaces/BiddingProject/bidding-project-get-all';
 import { UserSkill } from '../../../Shared/Interfaces/UserSkill';
+import { ProjectsService } from '../../../Shared/Services/Projects/projects.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -62,6 +63,8 @@ export class AdminDashboardComponent implements OnInit {
     pending: 0,
     completed: 0,
     Working :0,
+    Fixed:0,
+    Bidding:0,
   };
 
   proposalStats = {
@@ -143,7 +146,8 @@ export class AdminDashboardComponent implements OnInit {
     private languageService: FreelancerlanguageService,
     private toastr: ToastrService,
     private biddingProjectService: BiddingProjectService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private bothTypesprojectservice:ProjectsService
   ) {}
 
   total: number = 0;
@@ -161,13 +165,13 @@ export class AdminDashboardComponent implements OnInit {
 
   loadDashboardData(): void {
     forkJoin([
+      this.loadRevenueData(),
       this.loadUserStatistics(),
       this.loadProjectStatistics(),
       this.loadProposalStatistics(),
       this.loadCertificateStatistics(),
       this.loadTopSkills(),
       this.loadLanguageDistribution(),
-      this.loadRevenueData()
     ]).subscribe({
       next: () => {
         this.proposalStats = {
@@ -214,93 +218,59 @@ export class AdminDashboardComponent implements OnInit {
   private loadProjectStatistics(): Observable<void> {
     this.isLoading.projects = true;
     this.hasError.projects = false;
-
-    const fixedProjects$ = this.projectService.getProjectsFixedDashBoard().pipe(
-      map((response: ProjectsResponse) => {
-        console.log('Fixed Projects Response:', response);
-        return response.projects || [];
-      }),
-      catchError(error => {
-        console.error('Error fetching fixed projects:', error);
-        return of([] as FixedPriceProject[]);
-      })
-    );
-
-    const biddingProjects$ = this.biddingProjectService.GetAllBiddingProjectsDashBoard({}, 10, 10).pipe(
-      map((response: BiddingProjectsResponse) => {
-        console.log('Bidding Projects Response:', response);
-        return response.projects || [];
-      }),
-      catchError(error => {
-        console.error('Error fetching bidding projects:', error);
-        return of([] as BiddingProjectGetAll[]);
-      })
-    );
-
-    return forkJoin([fixedProjects$, biddingProjects$]).pipe(
-      map(([fixedProjects, biddingProjects]) => {
+  
+    this.bothTypesprojectservice.getProjects().subscribe({
+      next: (data: any) => {
+        this.total = data.length;
         let pending = 0;
         let completed = 0;
-        let Working =0;
+        let Working = 0;
+        let Bidding=0;
+        let Fixed=0;
+        console.log(data);
+        data.forEach((project: any) => {
+          if (project.status === "Working") Working++;
+          else if (project.status === "Pending") pending++;
+          else completed++;
 
-        fixedProjects.forEach(project => {
-          const latestMilestone = project.milestones[project.milestones.length - 1];
-          if (latestMilestone) {
-            console.log('Fixed Project Milestone Status:', latestMilestone.status);
-            const status = latestMilestone.status.toString().toLowerCase();
-            if (status.includes('pending')) pending++;
-            else if (status.includes('completed')) completed++;
-            else if (status.includes('working')) Working++;
-          }
+          if(project.projectType=="bidding") Bidding++;
+          else Fixed++;
         });
-
-        // biddingProjects.forEach(project => {
-        //   console.log('Bidding Project Status:', project.status);
-        //   if (project.status) {
-        //     const status = project.status.toString().toLowerCase();
-        //     if (status.includes('pending')) pending++;
-        //     else if (status.includes('completed')) completed++;
-        //     else if (status.includes('working')) Working++;
-        //   } else {
-        //     pending++;
-        //   }
-        // });
-
-        this.total = fixedProjects.length + biddingProjects.length;
-
+    
         this.projectStats = {
           total: this.total,
           pending,
           completed,
-          Working
+          Working,
+          Bidding,
+          Fixed
         };
-
+    
         this.projectStatusChartData = {
           ...this.projectStatusChartData,
           datasets: [{
             ...this.projectStatusChartData.datasets[0],
-            data: [pending, completed ,Working]
+            data: [pending, completed, Working]
           }]
         };
-
+    
         this.cdr.detectChanges();
-      }),
-      catchError(error => {
-        console.error('Error combining project statistics:', error);
+      },
+      error: (err) => {
         this.hasError.projects = true;
         this.toastr.error('Failed to load project statistics');
-        this.projectStats = { total: 0, pending: 0, completed: 0 ,Working :0};
+        this.projectStats = { total: 0, pending: 0, completed: 0, Working: 0, Bidding:0,Fixed:0 };
         this.projectStatusChartData = {
           ...this.projectStatusChartData,
-          datasets: [{ ...this.projectStatusChartData.datasets[0], data: [0, 0] }]
+          datasets: [{ ...this.projectStatusChartData.datasets[0], data: [0, 0, 0] }]
         };
         this.cdr.detectChanges();
-        return of(void 0);
-      }),
-      map(() => {
-        this.isLoading.projects = false;
-      })
-    );
+      }
+    });
+    
+
+    return new Observable<void>;
+    
   }
 
   private loadProposalStatistics(): Observable<void> {
@@ -331,6 +301,24 @@ export class AdminDashboardComponent implements OnInit {
   private loadCertificateStatistics(): Observable<void> {
     this.isLoading.certificates = true;
     this.hasError.certificates = false;
+
+    return this.accountService.getUsersRequestingVerifications().pipe(
+      map((certificates: UsersRequestingVerificaiton) => {
+        this.pendingCertificates = certificates.length;
+        this.cdr.detectChanges();
+      }),
+      catchError(error => {
+        console.error('Error fetching certificates:', error);
+        this.hasError.certificates = true;
+        this.toastr.error('Failed to load certificate statistics');
+        this.pendingCertificates = 0;
+        return of(void 0);
+      }),
+      map(() => {
+        this.isLoading.certificates = false;
+      })
+    );
+
     return this.certificateService.getAllCertificates().pipe(
       map((certificates: Certificate[]) => {
         this.pendingCertificates = certificates.length;
@@ -430,49 +418,19 @@ export class AdminDashboardComponent implements OnInit {
     this.isLoading.revenue = true;
     this.hasError.revenue = false;
 
-    const fixedProjects$ = this.projectService.getProjectsFixedDashBoard().pipe(
-      map((response: ProjectsResponse) => {
-        console.log('Fixed Projects Response (Revenue):', response);
-        return response.projects || [];
-      }),
-      catchError(error => {
-        console.error('Error fetching fixed projects for revenue:', error);
-        return of([] as FixedPriceProject[]);
-      })
-    );
-
-    const biddingProjects$ = this.biddingProjectService.GetAllBiddingProjectsDashBoard({}, 1, 10).pipe(
-      map((response: BiddingProjectsResponse) => {
-        console.log('Bidding Projects Response (Revenue):', response);
-        return response.projects || [];
-      }),
-      catchError(error => {
-        console.error('Error fetching bidding projects for revenue:', error);
-        return of([] as BiddingProjectGetAll[]);
-      })
-    );
-
-    return forkJoin([fixedProjects$, biddingProjects$]).pipe(
-      map(([fixedProjects, biddingProjects]) => {
+    const fixedProjects$ = this.bothTypesprojectservice.getProjects().subscribe({
+      next: (data: any) => {
+        console.log(data);
         const monthlyRevenue = new Map<string, number>();
-
-        fixedProjects.forEach(project => {
-          project.milestones.forEach(milestone => {
+        data.forEach((project:any) => {
+          project.milestones.forEach((milestone:any) => {
             const month = new Date(milestone.startdate).toLocaleString('default', { month: 'short', year: 'numeric' });
             const revenue = monthlyRevenue.get(month) || 0;
             monthlyRevenue.set(month, revenue + milestone.amount);
           });
         });
-
-        // biddingProjects.forEach(project => {
-        //   if (project.status && project.status.toLowerCase().includes('completed')) {
-        //     const date = new Date(project.postedFrom);
-        //     const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-        //     const revenue = monthlyRevenue.get(month) || 0;
-        //     monthlyRevenue.set(month, revenue + project.bidAveragePrice);
-        //   }
-        // });
-
+        console.log(monthlyRevenue);
+    
         const sortedMonths = Array.from(monthlyRevenue.keys()).sort((a, b) => {
           const dateA = new Date(`01 ${a}`);
           const dateB = new Date(`01 ${b}`);
@@ -489,22 +447,22 @@ export class AdminDashboardComponent implements OnInit {
         };
 
         this.cdr.detectChanges();
-      }),
-      catchError(error => {
-        console.error('Error combining revenue data:', error);
-        this.hasError.revenue = true;
-        this.toastr.error('Failed to load revenue data');
-        this.revenueChartData = {
-          ...this.revenueChartData,
-          labels: [],
-          datasets: [{ ...this.revenueChartData.datasets[0], data: [] }]
+      },
+      error: (err) => {
+        this.hasError.projects = true;
+        this.toastr.error('Failed to load project statistics');
+        this.projectStats = { total: 0, pending: 0, completed: 0, Working: 0, Bidding:0,Fixed:0 };
+        this.projectStatusChartData = {
+          ...this.projectStatusChartData,
+          datasets: [{ ...this.projectStatusChartData.datasets[0], data: [0, 0, 0] }]
         };
         this.cdr.detectChanges();
-        return of(void 0);
-      }),
-      map(() => {
-        this.isLoading.revenue = false;
-      })
-    );
+      }
+    });
+    
+
+    return new Observable<void>;
+
+    
   }
 }

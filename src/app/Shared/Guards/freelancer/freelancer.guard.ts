@@ -6,8 +6,8 @@ export const freelancerGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const role = authService.getRole();
-  if (role === 'Freelancer') {
+  const roles = authService.getRoles();
+  if (roles?.some(role=>role === 'Freelancer' || role === 'Admin')) {
     return true;
   } else {
     router.navigate(['/home']);

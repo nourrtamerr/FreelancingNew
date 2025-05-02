@@ -4,7 +4,7 @@ import { AuthService } from "../../Services/Auth/auth.service";
 
 export const clientOrFreelancerGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  const role = authService.getRole();
+  const roles = authService.getRoles();
 
-  return role === 'Client' || role === 'Freelancer';
+  return roles?.some(role=>role === 'Client' || role === 'Freelancer'|| role === 'Admin')??false;
 };
