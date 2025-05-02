@@ -6,8 +6,8 @@ export const clientGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const role = authService.getRole();
-  if (role === 'Client') {
+  const roles = authService.getRoles();
+  if (roles?.some(role=>role === 'Client' || role === 'Admin')) {
     return true;
   } else {
     router.navigate(['/home']);

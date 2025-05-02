@@ -152,3 +152,15 @@ canvas {
   transition: width 0.3s ease;
 }
 
+
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+.card {
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
