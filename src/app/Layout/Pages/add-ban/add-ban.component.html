@@ -1,72 +1,31 @@
-<!-- <div class="container mt-5 mb-5">
-  <div class="col-12 float-left">
-    <div class="wt-proposalholder mt-5">
-      <span class="wt-featuredtag"><img src="images/featured.png" alt="img description" data-tipso="Plus Member" class="template-content tipso_style"></span>
-      <div class="wt-proposalhead">
-        <h2>Update Ban</h2>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 mx-auto">
-      <div class="card">
-        <div class="card-body">
-            <form class=" mb-4 mx-auto"  (submit)="Updateban(ban)" >
-              <div class="form-group">
-                <label for="banDescription">ID</label>
-                <input type="text" id="banDescription" value={{ban.id}} readonly name="id" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="banDescription">Banned User UserName</label>
-                <input type="text" id="banDescription" value={{ban.bannedUserName}} readonly name="username" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="banDescription">Ban Date</label>
-
-              </div>
-              <div class="form-group">
-                <label for="banDescription">Ban EndDate</label>
-
-              </div>
-              <div class="form-group">
-                <label for="banDescription">Description</label>
-
-              </div>
-              <button type="submit" class="btn btn-primary">Update Ban</button>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
- -->
- <main class="update-ban-dashboard">
+<main class="update-ban-dashboard">
   <div class="dashboard-container">
     <!-- Breadcrumb -->
     <nav class="breadcrumb-nav">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/banned']">Banned Users</a></li>
-        <li class="breadcrumb-item active">Update Ban</li>
+        <li class="breadcrumb-item"><a [routerLink]="['/allusers']">All Users</a></li>
+        <li class="breadcrumb-item active">Add Ban</li>
       </ol>
     </nav>
 
     <div class="form-card">
       <div class="card-header">
-        <h1 class="form-title">Update Ban Details</h1>
+        <h1 class="form-title">Add Ban Details</h1>
       </div>
 
       <div class="card-body">
-        <form class="ban-form" (ngSubmit)="Updateban(ban)">
+        <form class="ban-form" (ngSubmit)="addBan(ban)">
           <!-- Read-only Fields -->
           <div class="form-group readonly">
             <label for="banId">
               <i class="fas fa-id-badge"></i>
-              Ban ID
+              Ban UserID
             </label>
             <input
               type="text"
               id="banId"
-              [value]="ban.id"
+              [value]="currentid"
               readonly
               name="id"
               class="form-control"
@@ -88,16 +47,16 @@
             >
           </div>
 
-          <div class="form-group readonly">
+          <div class="form-group">
             <label for="banDate">
               <i class="fas fa-calendar-alt"></i>
               Ban Start Date
             </label>
             <input
-              type="text"
+              type="date"
               id="banDate"
-              [value]="ban.banDate | date:'mediumDate'"
-              readonly
+              [(ngModel)]="ban.banEndDate"
+              required=""
               name="bandate"
               class="form-control"
             >
@@ -117,7 +76,7 @@
               required
               name="banenddate"
               class="form-control"
-              
+
             >
           </div>
 
@@ -137,13 +96,13 @@
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn-cancel" [routerLink]="['/banned']">
+            <button type="button" class="btn-cancel" [routerLink]="['/allusers']">
               <i class="fas fa-times"></i>
               Cancel
             </button>
             <button type="submit" class="btn-update">
               <i class="fas fa-save"></i>
-              Update Ban
+              Add Ban
             </button>
           </div>
         </form>

@@ -48,5 +48,25 @@ getDateDiff(dateString: string): number {
   const diffDays = Math.floor(diffMilliseconds / (1000 * 60 ));
   return diffDays;
 }
-
+// Delete(id:number){
+//   // confirm("Do You Want To Delete This Ban?");
+//   this.banned.deleteBan(id).subscribe(
+//     {
+//       next:(value)=>{
+//         console.log(value);
+//         this.banned.getAllBans().subscribe(
+//           {
+//             next:(value)=>{
+//               this.bannedUsers = value
+//               this.searchedbans = value
+//             }
+//           }
+//         )
+//       }
+//       ,
+//       error:(err)=>{
+//         console.log(err);
+//       }
+//   })
+// }
 }
