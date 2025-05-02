@@ -708,3 +708,46 @@
     font-weight: bold;
     margin: 24px 0 16px;
   }
+
+  .review-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .review-actions button {
+    padding: 0.25rem 0.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  .review-actions button:hover {
+    transform: scale(1.1);
+  }
+  
+  .review-actions i {
+    font-size: 1rem;
+  }
+
+
+  .modal {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .stars {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .stars i {
+    cursor: pointer;
+    color: #ccc;
+  }
+  
+  .stars i.active {
+    color: #ffc107;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }

@@ -1,0 +1,79 @@
+:host {
+    display: block;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: white;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+  }
+  
+  .chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .card-title {
+    color: #2c3e50;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  .list-group-item {
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 0.75rem 0;
+  }
+  
+  .list-group-item:last-child {
+    border-bottom: none;
+  }
+  
+  .badge {
+    font-weight: 500;
+    padding: 0.5em 0.8em;
+  }
+  
+  .fas {
+    font-size: 1.2rem;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  @media (max-width: 768px) {
+    :host {
+      padding: 1rem;
+    }
+    
+    .chart-container {
+      height: 250px;
+    }
+  }
+
+  :host {
+    display: block;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 1200px) {
+    .container {
+      max-width: 95%;
+    }
+  }

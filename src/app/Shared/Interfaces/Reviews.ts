@@ -6,5 +6,7 @@ export interface Review {
     revieweeName?: string
     reviewerId: string
     reviewerName?: string
+    projectId?: number;
+    
   }
   

@@ -310,8 +310,7 @@
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
               <div class="project-actions d-flex">
                 <i  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" class="fa-bookmark fs-4" [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
-               
-
+              
               </div>
             </div>
             <h3 class="project-title">{{project.title}}</h3>
