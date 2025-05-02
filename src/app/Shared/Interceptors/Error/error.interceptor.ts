@@ -20,11 +20,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
       else if (error.error?.message) {
 
-        if(!error.error.message.includes('Fixed price project with ID')){
+        if(!error.error.message.includes('Fixed price project with ID') && !error.error.message.includes('No Bidding Project Found Hasing This Id')){
 
           toastr.error(error.error.message);
         }
         return EMPTY;
+
+        
 
       }
       return throwError(() => error);
