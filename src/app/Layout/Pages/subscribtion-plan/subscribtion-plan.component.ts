@@ -116,16 +116,30 @@ closePaymentOptions() {
 
 
 
+// payWithStripe() {
+//   if (this.selectedPlanId !== null) {
+//     this.subscriptionService.payWithStripe(this.selectedPlanId).subscribe({
+//       next: (res: any) => {
+//       //  if (res && res.url) {
+//           // After Stripe payment success, redirect to success page
+//          window.location.href = res.url; // Redirect to the Stripe URL
+//           console.log('Redirecting to Stripe URL:', res);
+//           this.router.navigate(['/paymentsucess']);
+//         //}
+//       },
+//       error: (err) => {
+//         console.error('Stripe error:', err);
+//       }
+//     });
+//   }
+// }
 payWithStripe() {
   if (this.selectedPlanId !== null) {
     this.subscriptionService.payWithStripe(this.selectedPlanId).subscribe({
       next: (res: any) => {
-      //  if (res && res.url) {
-          // After Stripe payment success, redirect to success page
-         window.location.href = res.url; // Redirect to the Stripe URL
-          console.log('Redirecting to Stripe URL:', res);
-          this.router.navigate(['/paymentsucess']);
-        //}
+        window.location.href = res.url; // ✅ Now works correctly
+        console.log('Redirecting to Stripe URL:', res);
+        this.router.navigate(['/paymentsucess']);
       },
       error: (err) => {
         console.error('Stripe error:', err);

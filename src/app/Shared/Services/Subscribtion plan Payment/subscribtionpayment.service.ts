@@ -18,10 +18,15 @@ export class SubscriptionPaymentService {
     });
   }
 
-  payWithStripe(planId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/PaySubscriptionFromStripe`, {
-      params: new HttpParams().set('planId', planId.toString()),
-      responseType: 'text' // to catch the redirect URL if needed
+  // payWithStripe(planId: number): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/PaySubscriptionFromStripe`, {
+  //     params: new HttpParams().set('planId', planId.toString()),
+  //     responseType: 'text' // to catch the redirect URL if needed
+  //   });
+  // }
+  payWithStripe(planId: number): Observable<{ url: string }> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/PaySubscriptionFromStripe`, {
+      params: new HttpParams().set('planId', planId.toString())
     });
   }
 
