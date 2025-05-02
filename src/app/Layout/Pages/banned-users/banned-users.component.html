@@ -1,5 +1,4 @@
-<main id="wt-main" class="w-75 mx-auto">
-				<!--Register Form Start-->
+<!-- <main id="wt-main" class="w-75 mx-auto">
 				<section class="wt-haslayout wt-dbsectionspace">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
@@ -44,7 +43,6 @@
                           <td>{{ban.banDate | date}}</td>
                           <td>{{ban.banEndDate| date}} </td>
 
-						  <!-- <td>{{ getDateDiff(ban.banEndDate) }} days ago</td> -->
 
                           @if(getDateDiff(ban.banEndDate)<0){
                             <td><span class="wt-draft">Active</span></td>
@@ -58,8 +56,7 @@
                               (click)="navigatetodetails(ban.id)" class="wt-addinfo wt-skillsaddinfo">view</a>
 
 
-                              <!-- <a href="javascript:void(0);" *ngIf="ban.id !== undefined"
-                              (click)="Update(ban.id)" class="wt-deleteinfo">Update</a> -->
+
 
 							  <a  [routerLink]="['/updateban',ban.id]" routerLinkActive="router-link-active"  *ngIf="ban.id !== undefined"
                              class="wt-deleteinfo">Update</a>
@@ -90,5 +87,93 @@
 						</div>
 					</div>
 				</section>
-				<!--Register Form End-->
-			</main>
+			</main> -->
+      <main class="banned-users-dashboard">
+        <div class="dashboard-container">
+          <div class="dashboard-header">
+            <div class="header-content">
+              <h1 class="dashboard-title">Banned Users Management</h1>
+              <div class="search-container">
+                <div class="search-wrapper">
+                  <i class="fas fa-search search-icon"></i>
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Search banned users..."
+                    (input)="search(searched.value)"
+                    #searched
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>User</th>
+                  <th>Ban Period</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (ban of searchedbans; track $index) {
+                  <tr class="user-row">
+                    <td>
+                    <span class="user-id">#{{ ban.id }}</span>
+                    </td>
+                    <td class="user-info">
+                      <div class="user-details">
+                        <span class="user-name">{{ ban.bannedUserName }}</span>
+                      </div>
+                    </td>
+                    <td class="ban-period">
+                      <div class="date-group">
+                        <div class="date-item">
+                          <i class="fas fa-calendar-alt"></i>
+                          <span>From: {{ ban.banDate | date:'mediumDate' }}</span>
+                        </div>
+                        <div class="date-item">
+                          <i class="fas fa-calendar-check"></i>
+                          <span>To: {{ ban.banEndDate | date:'mediumDate' }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="status-cell">
+                      <span class="status-badge" [class.active]="getDateDiff(ban.banEndDate)<0"
+                                              [class.expired]="getDateDiff(ban.banEndDate)>=0">
+                        {{ getDateDiff(ban.banEndDate) < 0 ? 'Active' : 'Expired' }}
+                      </span>
+                    </td>
+                    <td class="actions-cell">
+                      <div class="action-buttons">
+                        <button class="btn-view" (click)="navigatetodetails(ban.id)" *ngIf="ban.id !== undefined">
+                          <i class="fas fa-eye"></i>
+                          <span class="btn-text">View Details</span>
+                        </button>
+                        <button class="btn-update" [routerLink]="['/updateban', ban.id]" *ngIf="ban.id !== undefined">
+                          <i class="fas fa-edit"></i>
+                          <span class="btn-text">Update Ban</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+                @empty {
+                  <tr class="empty-row">
+                    <td colspan="4">
+                      <div class="empty-state">
+                        <i class="fas fa-user-slash"></i>
+                        <p>No Banned Users Found</p>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
