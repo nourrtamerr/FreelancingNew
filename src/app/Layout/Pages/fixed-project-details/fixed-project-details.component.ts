@@ -9,13 +9,14 @@ import { BiddingProjectService } from '../../../Shared/Services/BiddingProject/b
 import { WishlistService } from '../../../Shared/Services/wishlist.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
-import { TimeAgoPipe } from '../../../Pipes/time-ago.pipe';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ProjectsService } from '../../../Shared/Services/Projects/projects.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-fixed-project-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, TimeAgoPipe,ReactiveFormsModule],
+  imports: [CommonModule, RouterModule,ReactiveFormsModule],
   templateUrl: './fixed-project-details.component.html',
   styleUrl: './fixed-project-details.component.css'
 })
@@ -34,15 +35,13 @@ export class FixedProjectDetailsComponent implements OnInit {
     private wishlistService:WishlistService,
     private authService:AuthService,
     private toaster:ToastrService,
-    private fb:FormBuilder
+    private fb:FormBuilder,
+    private projectsService:ProjectsService
   ) {}
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
 
   clientOtherProjNameId: {id:number, title:string, projectType:string} []=[];
-
-  userWishlist:any;
-  
   currentuserid:string|null=""
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -67,11 +66,8 @@ export class FixedProjectDetailsComponent implements OnInit {
       next: (data) => {
         this.project = data;
         console.log('Project details:', data);
+
         this.loadWishlist();
-
-       
-
-
         if (this.project?.clientId) {
           this.ReviewsService.getRevieweeById(this.project.clientId).subscribe({
             next: (data) => {
@@ -94,124 +90,127 @@ export class FixedProjectDetailsComponent implements OnInit {
         if (this.project.clientOtherProjectsIdsNotAssigned && this.project.clientOtherProjectsIdsNotAssigned.length > 0) {
           console.log("ClientOtherProjectsIdsNotAssigned",this.project.clientOtherProjectsIdsNotAssigned);
           for (let projectId of this.project.clientOtherProjectsIdsNotAssigned) {
-            this.projectService.getProjectById(projectId).subscribe({
-              next: (projectData) => {
-                if(projectData!=null){
-                  console.log('awl if')
-                  this.clientOtherProjNameId.push({ id: projectData.id, title: projectData.title, projectType: projectData.projectType });
-                  console.log(this.clientOtherProjNameId)
+            
+            
+            // this.projectService.getProjectById(projectId).subscribe({
+            //   next: (projectData) => {
+            //     if(projectData!=null){
+            //       console.log('awl if')
+            //       this.clientOtherProjNameId.push({ id: projectData.id, title: projectData.title, projectType: projectData.projectType });
+            //       console.log(this.clientOtherProjNameId)
 
-                }
-                else{
-                  this.BiddingProjectService.GetBiddingProjectById(projectId).subscribe({
-                    next: (projectData) => {
-                      this.clientOtherProjNameId.push({ id: projectData.id, title: projectData.title, projectType: projectData.projectType });
-                    },
-                    error: (error) => {
-                      console.error('vvvvvvvvvvvvvvvvv', error);
-                     
-                    }
-                  });
-                }
+            //     }
+                
+            //   },
+            //   error: (error) => {
+            //     this.BiddingProjectService.GetBiddingProjectById(projectId).subscribe({
+            //       next: (projectData) => {
+            //         this.clientOtherProjNameId.push({ id: projectData.id, title: projectData.title, projectType: projectData.projectType });
+            //       },
+            //       error: (error) => {
+            //         console.error('vvvvvvvvvvvvvvvvv', error);
+            //       }
+            //     });
+            //     console.error('Error fetching project details:', error);
+            //   }
+            // });
+          
+
+            this.projectsService.getProjectById(projectId).pipe(
+              map((proj:any) => ({ id: proj.id, title: proj.title, projectType:proj.projectType })) // select only id and title (as name)
+              ).subscribe({
+              next: (data) => {
+                this.clientOtherProjNameId.push(data);
               },
-              error: (error) => {
-                this.BiddingProjectService.GetBiddingProjectById(projectId).subscribe({
-                  next: (projectData) => {
-                    this.clientOtherProjNameId.push({ id: projectData.id, title: projectData.title, projectType: projectData.projectType });
-                  },
-                  error: (error) => {
-                    console.error('vvvvvvvvvvvvvvvvv', error);
-                  }
-                });
-                console.error('Error fetching project details:', error);
+              error:(err)=>{
+                console.log(err)
               }
-            });
+            })
+          
+          
           }
         }
       },
       error: (error) => {
         console.error('Error fetching project details:', error);
-        this.toaster.error(error.error.message);
       }
     });
 
 
   }
+  userWishlist:any;
 
+
+
+
+  
+  
+  
+    RemoveFromWishlist(projectid:number){
+      this.wishlistService.RemoveFromWishList(projectid).subscribe({
+        next:()=>{
+          this.toaster.success("Removed from wishlist")
+        },
+        error:(err)=>{
+          this.toaster.error(err.error.message)
+          console.log(err)
+        }
+      })
+    }
+  
+  
+    isInWishlist(): boolean {
+      return this.userWishlist.includes(this.projectid);
+    }
+  
+    toggleWishlist(): void {
+      if (this.isInWishlist()) {
+        this.RemoveFromWishlist(this.projectid);
+      } else {
+        this.AddToWishlist(this.projectid);
+      }
+    }
+  
+  
   loadWishlist(): void {
-    this.wishlistService.GetWishList().subscribe({
-      next: (data: any[]) => {
-        // Ensure we're getting an array of project IDs
-        this.userWishlist = data.map(item => item.projectId);
-        console.log('Wishlist loaded:', this.userWishlist);
-      },
-      error: (err) => {
-        console.log('Error loading wishlist:', err);
-        this.userWishlist = []; // Initialize empty array on error
-      }
-    });
-  }
+      this.wishlistService.GetWishList().subscribe({
+        next: (data: any[]) => {
+          // Ensure we're getting an array of project IDs
+          this.userWishlist = data.map(item => item.projectId);
+          console.log('Wishlist loaded:', this.userWishlist);
+        },
+        error: (err) => {
+          console.log('Error loading wishlist:', err);
+          this.userWishlist = []; // Initialize empty array on error
+        }
+      });
+    }
 
-  // AddToWishlist(projectid:number){
-  //   this.wishlistService.AddToWishlist(projectid).subscribe({
-  //     next:()=>{
-  //       this.toaster.success("Added to wishlist")
-  //     },
-  //     error:(err)=>{
-  //       console.log(err)
-  //     }
-  //   })
-  // }
-
-  AddToWishlist(projectId: number) {
-    if (this.userWishlist.includes(projectId)) {
-      // Remove from wishlist
-      this.wishlistService.RemoveFromWishList(projectId).subscribe({
-        next: () => {
-          const index = this.userWishlist.indexOf(projectId);
-          if (index > -1) {
-            this.userWishlist.splice(index, 1);
-          this.toaster.success("Removed to wishlist");
-
+    AddToWishlist(projectId: number) {
+      if (this.userWishlist.includes(projectId)) {
+        // Remove from wishlist
+        this.wishlistService.RemoveFromWishList(projectId).subscribe({
+          next: () => {
+            const index = this.userWishlist.indexOf(projectId);
+            if (index > -1) {
+              this.userWishlist.splice(index, 1);
+            this.toaster.success("Removed to wishlist");
+  
+            }
           }
-        }
-      });
-    } else {
-      // Add to wishlist
-      this.wishlistService.AddToWishlist(projectId).subscribe({
-        next: () => {
-          this.userWishlist.push(projectId);
-          this.toaster.success("Added to wishlist");
-        }
-      });
-    }
-  }
-
-
-  RemoveFromWishlist(projectid:number){
-    this.wishlistService.RemoveFromWishList(projectid).subscribe({
-      next:()=>{
-        this.toaster.success("Removed from wishlist")
-      },
-      error:(err)=>{
-        this.toaster.error(err.error.message)
-        console.log(err)
+        });
+      } else {
+        // Add to wishlist
+        this.wishlistService.AddToWishlist(projectId).subscribe({
+          next: () => {
+            this.userWishlist.push(projectId);
+            this.toaster.success("Added to wishlist");
+          }
+        });
       }
-    })
-  }
-
-
-  isInWishlist(): boolean {
-    return this.userWishlist.includes(this.projectid);
-  }
-
-  toggleWishlist(): void {
-    if (this.isInWishlist()) {
-      this.RemoveFromWishlist(this.projectid);
-    } else {
-      this.AddToWishlist(this.projectid);
     }
-  }
+  
+
   showDeleteModal = false;
 reviewToDelete: any = null;
 
