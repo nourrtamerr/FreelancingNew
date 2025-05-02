@@ -14,6 +14,7 @@ import { FixedPriceProjectService } from '../../Shared/Services/FixedPriceProjec
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../Shared/Services/wishlist.service';
 import { AuthService } from '../../Shared/Services/Auth/auth.service';
+import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
 
 @Component({
   selector: 'app-bidding-project-details',
@@ -32,7 +33,8 @@ export class BiddingProjectDetailsComponent implements OnInit {
     private toaster:ToastrService,
     private authService:AuthService,
     private fb: FormBuilder,
-    private reviewservice:ReviewService
+    private reviewservice:ReviewService,
+    private projectsService: ProjectsService
     ){
 
       this.initializeEditForm();
@@ -90,6 +92,10 @@ project: BiddingProjectGetById={
     this.currentuserid=this.authService.getUserId();
   console.log(this.currentuserid);
 
+  const roles = this.authService.getRoles();
+            this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+            console.log(this.role);
+
   }
 
   isBiddingExpired(): boolean {
@@ -102,7 +108,7 @@ project: BiddingProjectGetById={
       next: (data) => {
         this.project = data;
 
-
+        this.loadWishlist();
         if (this.project.clientId) {
           this.ReviewsService.getRevieweeById(this.project.clientId).subscribe({
             next: (data) => {
@@ -118,67 +124,80 @@ project: BiddingProjectGetById={
         if (this.project.clientOtherProjectsIdsNotAssigned && this.project.clientOtherProjectsIdsNotAssigned.length > 0) {
           console.log('clientOtherProjectsIdsNotAssigned',this.project.clientOtherProjectsIdsNotAssigned)
           for (let projectId of this.project.clientOtherProjectsIdsNotAssigned) {
-            if(projectId !== id){
-              this.biddingProjectDetailsService.GetBiddingProjectById(projectId)
+            // if(projectId !== id){
+            //   this.biddingProjectDetailsService.GetBiddingProjectById(projectId)
               
-              .subscribe({
-                next: (data) => {
-                  console.log(data)
-                  if(data != null){
-                    this.clientOtherProjNameId.push(data);
-                    // If you want to store multiple, use an array instead
-                    console.log(this.project.clinetAccCreationDate)
+            //   .subscribe({
+            //     next: (data) => {
+            //       console.log(data)
+            //       if(data != null){
+            //         this.clientOtherProjNameId.push(data);
+            //         // If you want to store multiple, use an array instead
+            //         console.log(this.project.clinetAccCreationDate)
 
 
-                    if (this.project?.clientId) {
-                      this.ReviewsService.getRevieweeById(this.project.clientId).subscribe({
-                        next: (data) => {
-                          this.clientReviews = data;
-                          console.log(data);
-                          console.log("ddddddddddddddddddddd")
-                        },
-                        error: (err) => {console.log(err), console.log("no reviews")}
-                      });
-                      this.authService.getUserId()==this.project.clientId
-                      {
-                        this.isowner=true;
-                      }
-                      const roles = this.authService.getRoles();
-                      this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
-                      console.log(this.role);
-                    }
-                  }
-                  else{
-                    console.log("data is null")
-                    this.FixedService.getProjectById(projectId) .pipe(
-                      map(proj => ({ id: proj.id, title: proj.title, projectType:'Fixed Price' })) // select only id and title (as name)
-                    ).subscribe({
-                      next: (data)=> {
-                        this.clientOtherProjNameId.push(data);
-                      },
-                      error: (err)=> {console.log(err), console.log("niwnfoinewio")}
-                    })
+            //         if (this.project?.clientId) {
+            //           this.ReviewsService.getRevieweeById(this.project.clientId).subscribe({
+            //             next: (data) => {
+            //               this.clientReviews = data;
+            //               console.log(data);
+            //               console.log("ddddddddddddddddddddd")
+            //             },
+            //             error: (err) => {console.log(err), console.log("no reviews")}
+            //           });
+            //           this.authService.getUserId()==this.project.clientId
+            //           {
+            //             this.isowner=true;
+            //           }
+            //           const roles = this.authService.getRoles();
+            //           this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+            //           console.log(this.role);
+            //         }
+            //       }
+            //       else{
+            //         console.log("data is null")
+            //         this.FixedService.getProjectById(projectId) .pipe(
+            //           map(proj => ({ id: proj.id, title: proj.title, projectType:'Fixed Price' })) // select only id and title (as name)
+            //         ).subscribe({
+            //           next: (data)=> {
+            //             this.clientOtherProjNameId.push(data);
+            //           },
+            //           error: (err)=> {console.log(err), console.log("niwnfoinewio")}
+            //         })
                    
-                  }
-                },
-                error: (err) => {
-                  console.log(err);
-                  console.log("Fetching Fixed Price project fallback...");
+            //       }
+            //     },
+            //     error: (err) => {
+            //       console.log(err);
+            //       console.log("Fetching Fixed Price project fallback...");
                 
-                  this.FixedService.getProjectById(projectId).pipe(
-                    map(proj => ({ id: proj.id, title: proj.title, projectType: 'Fixed Price' }))
-                  ).subscribe({
-                    next: (data) => {
-                      this.clientOtherProjNameId.push(data);
-                    },
-                    error: (err) => {
-                      console.log("Error in FixedService fallback:", err);
-                    }
-                  });
-                }
+            //       this.FixedService.getProjectById(projectId).pipe(
+            //         map(proj => ({ id: proj.id, title: proj.title, projectType: 'Fixed Price' }))
+            //       ).subscribe({
+            //         next: (data) => {
+            //           this.clientOtherProjNameId.push(data);
+            //         },
+            //         error: (err) => {
+            //           console.log("Error in FixedService fallback:", err);
+            //         }
+            //       });
+            //     }
 
-              });
-            }
+            //   });
+            // }
+
+            this.projectsService.getProjectById(projectId).pipe(
+              map(proj => ({ id: proj.id, title: proj.title, projectType:proj.projectType })) // select only id and title (as name)
+              ).subscribe({
+              next: (data) => {
+                this.clientOtherProjNameId.push(data);
+              },
+              error:(err)=>{
+                console.log(err)
+              }
+            })
+
+
            
           }
         }
@@ -198,16 +217,7 @@ project: BiddingProjectGetById={
 
 
   
-  AddToWishlist(projectid:number){
-    this.wishlistService.AddToWishlist(projectid).subscribe({
-      next:()=>{
-        this.toaster.success("Added to wishlist")
-      },
-      error:(err)=>{
-        console.log(err)
-      }
-    })
-  }
+
 
   editReview(review: any) {
     this.selectedReview = review;
@@ -310,5 +320,91 @@ confirmDelete() {
     });
   }
 }
+
+
+userWishlist:any;
+
+
+
+
+AddToWishlist(projectId: number) {
+    if (this.userWishlist.includes(projectId)) {
+      // Remove from wishlist
+      this.wishlistService.RemoveFromWishList(projectId).subscribe({
+        next: () => {
+          const index = this.userWishlist.indexOf(projectId);
+          if (index > -1) {
+            this.userWishlist.splice(index, 1);
+          this.toaster.success("Removed to wishlist");
+
+          }
+        }
+      });
+    } else {
+      // Add to wishlist
+      this.wishlistService.AddToWishlist(projectId).subscribe({
+        next: () => {
+          this.userWishlist.push(projectId);
+          this.toaster.success("Added to wishlist");
+        }
+      });
+    }
+  }
+
+
+  RemoveFromWishlist(projectid:number){
+    this.wishlistService.RemoveFromWishList(projectid).subscribe({
+      next:()=>{
+        this.toaster.success("Removed from wishlist")
+      },
+      error:(err)=>{
+        this.toaster.error(err.error.message)
+        console.log(err)
+      }
+    })
+  }
+
+
+  isInWishlist(): boolean {
+    return this.userWishlist.includes(this.project.id);
+  }
+
+  toggleWishlist(): void {
+    if (this.isInWishlist()) {
+      this.RemoveFromWishlist(this.project.id);
+    } else {
+      this.AddToWishlist(this.project.id);
+    }
+  }
+
+
+loadWishlist(): void {
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: any[]) => {
+        // Ensure we're getting an array of project IDs
+        this.userWishlist = data.map(item => item.projectId);
+        console.log('Wishlist loaded:', this.userWishlist);
+      },
+      error: (err) => {
+        console.log('Error loading wishlist:', err);
+        this.userWishlist = []; // Initialize empty array on error
+      }
+    });
+  }
+
+  isBidEndDatePassed(): boolean {
+    if (!this.project?.biddingEndDate) return false;
+    return new Date(this.project.biddingEndDate) < new Date();
+  }
+  
+  getBidButtonTitle(): string {
+    if (this.project?.freelancerId !== null) {
+      return 'This project has already been assigned';
+    }
+    if (this.isBidEndDatePassed()) {
+      return 'Bidding period has ended';
+    }
+    return 'Apply for this project';
+  }
 }
 

@@ -333,7 +333,7 @@
   .testimonial-card-fiverr {
     border: 1.5px solid #e4ebe4;
     background: #fff;
-    min-height: 220px;
+    min-height: 180px;
     transition: box-shadow 0.2s, border-color 0.2s;
   }
   .testimonial-card-fiverr:hover {

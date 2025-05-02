@@ -10,8 +10,12 @@
     </div>
     <div class="proposals-header" style="justify-content: end;">
     <a   *ngIf="role=='Freelancer' && project" [routerLink]="['/proposal2',projectId]" routerLinkActive="router-link-active" >
-    <button class="apply-btn mb-2">
-      Apply Now
+    <button class="apply-btn mb-2"
+    [disabled]="project?.freelancerId !== null || isBidEnded"
+    [class.disabled-button]="project?.freelancerId !== null || isBidEnded">
+    
+    {{ project?.freelancerId === null ? (isBidEnded ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+
     </button>
   </a>
 </div>

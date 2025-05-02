@@ -113,27 +113,32 @@
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
           <aside class="upwork-sidebar mb-4"> 
-           <div  *ngIf="!isBiddingExpired()">
-  <a *ngIf="role === 'Freelancer'" [routerLink]="['/proposal2', project.id]">
-            <button class="apply-btn mb-2">
-             
-              Apply now
-            </button>
-          </a>
-
-          <a  [routerLink]="['/proposals',project.id]">
-            <button class="apply-btn mb-2">
-              View Proposals
-            </button>
-          </a>
+           <div  >
             
-          <button class="save-btn mb-2" *ngIf="role=='Freelancer'"  (click)="AddToWishlist(project.id)">
-            
-            Save job
-          </button>
-
-           </div>
+            <a *ngIf="role=='Freelancer'" [routerLink]="(project?.freelancerId === null && !isBidEndDatePassed()) ? ['/proposal2', project.id] : []">
+              <button class="apply-btn mb-2" 
+                      [disabled]="project?.freelancerId !== null || isBidEndDatePassed()"
+                      [title]="getBidButtonTitle()"
+                      [class.disabled-button]="project?.freelancerId !== null || isBidEndDatePassed()">
+                {{ project?.freelancerId === null ? (isBidEndDatePassed() ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+              </button>
+            </a>
+  
+            <a  [routerLink]="['/proposals',project.id]">
+              <button class="apply-btn mb-2">
+                View Proposals
+              </button>
+            </a>
+    
+          </div>
           
+          <button  class="save-btn mb-2" *ngIf="role=='Freelancer'"  
+          (click)="AddToWishlist(project.id)"
+          [class.saved]="isInWishlist()"  >
+          <i class="fa" [class.fa-check]="isInWishlist()" [class.fa-bookmark]="!isInWishlist()"></i>                   
+          {{ isInWishlist() ? 'Saved' : 'Save job' }}
+
+        </button>
       
       
   
@@ -271,7 +276,7 @@
          <section>
            <h3 class="section-title">Other open jobs by this Client</h3>
            <ul class="other-jobs-list">
-             <li *ngFor="let project of clientOtherProjNameId" ><a [routerLink]="project.projectType=='Bidding'?['/details', project.id]:['/fixed-project', project.id]">{{project.title}}</a> {{project.projectType}} Project</li>
+             <li *ngFor="let project of clientOtherProjNameId" ><a [routerLink]="project.projectType=='bidding'?['/details', project.id]:['/fixed-project', project.id]">{{project.title}}</a> {{project.projectType}} Project</li>
            </ul>
            
          </section>

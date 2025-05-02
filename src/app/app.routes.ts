@@ -84,12 +84,12 @@ export const routes: Routes = [
       {path: 'notification',component: NotificationsComponent},
       {path: 'paymentsucess',component: PaymentsucessComponent},
 
-    
+
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
-     
-      {path:'withdraw', component: WithdrawComponent,title:'Withdraw',canActivate: [clientGuard,freelancerGuard]},
-     
+
+      {path:'withdraw', component: WithdrawComponent,title:'Withdraw',canActivate: [clientOrFreelancerGuard]},
+
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
       {path:'myproposals',component:MyProposalsComponent},
