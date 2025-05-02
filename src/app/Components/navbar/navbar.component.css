@@ -10,8 +10,8 @@
 }
 
 .navbar-logo {
-  height: 32px;
-  width: auto;
+  height: 38px;
+  margin-left: 0;
 }
 
 /* Navigation Links */
@@ -26,6 +26,8 @@
 .nav-link:hover {
   color: #108a00;
 }
+
+
 
 /* Dropdown Styles */
 .dropdown-menu {
@@ -55,6 +57,7 @@
   position: relative;
   color: #001e00;
   transition: all 0.2s ease;
+  margin: 0 8px;
 }
 
 
@@ -74,7 +77,7 @@
 
 /* Balance Link */
 .balance-link {
-  background: #f2f7f2;
+  
   border-radius: 20px;
   padding: 0.5rem 1rem;
   color: #001e00;
@@ -116,7 +119,12 @@
   font-size: 0.9rem;
   color: #001e00;
 }
-
+.navbar-nav .nav-link {
+  font-size: 1.2rem;  /* Adjust this value as needed */
+}
+.navbar-nav .icon-link i {
+  font-size: 1.5rem;  /* Adjust this value as needed */
+}
 /* Sign Up Button */
 .signup-btn {
   background-color: #108a00;
@@ -127,6 +135,7 @@
   transition: background-color 0.2s ease;
 }
 
+
 .signup-btn:hover {
   background-color: #0c6b00;
 }
@@ -135,6 +144,7 @@
 @media (max-width: 991.98px) {
   .navbar-nav {
     padding: 1rem 0;
+    
   }
   
   .balance-link {

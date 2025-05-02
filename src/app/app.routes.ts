@@ -34,6 +34,8 @@ import { WithdrawComponent } from './Layout/Pages/withdraw/withdraw.component';
 import { adminGuard } from './Shared/Guards/admin/admin.guard';
 import { add } from 'date-fns';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/clientOrFreelancerGuard';
+import { ReviewsDetectorComponent } from './Layout/Pages/AI/ai/reviewsdetector.component';
+
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -87,6 +89,7 @@ export const routes: Routes = [
      
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
-      {path:'myproposals',component:MyProposalsComponent}
+      {path:'myproposals',component:MyProposalsComponent},
+      {path:'detector',component:ReviewsDetectorComponent}
 
 ];
