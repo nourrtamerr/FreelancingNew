@@ -1,14 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <div class="container">
-    <a class="navbar-brand" routerLink="/">
-      <img src="assets/images/L4.png" alt="logo" class="navbar-logo" />
+   <a class="navbar-brand" routerLink="/">
+      <img src="logo2.png" alt="logo" class="navbar-logo" />
     </a>
+  <div class="container ">
+   
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarContent">
+    <div class="collapse navbar-collapse " id="navbarContent">
       <!-- Client Navigation -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role === 'client'">
         <li class="nav-item dropdown">
@@ -63,13 +64,15 @@
           <a class="nav-link" [routerLink]="['/freelancers']">Freelancers</a>
         </li>
       </ul>
-
+<div>
+  
+</div>
       <!-- Right Side Navigation -->
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link balance-link" [routerLink]="['/withdraw']">
             <i class="fa-solid fa-wallet me-1"></i>
-            ${{balance}}
+            <!-- ${{balance}} -->
           </a>
         </li>
 
@@ -143,6 +146,7 @@
             <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
             <li *ngIf="role === 'client'"><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
             <li *ngIf="role === 'client'"><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
+            <li *ngIf="role === 'freelancer'"><a class="dropdown-item" routerLink="/wishlist">Saved Jobs</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
           </ul>
