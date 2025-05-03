@@ -108,26 +108,26 @@
 
       <!-- Freelancer Navigation -->
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center" *ngIf="role === 'freelancer'">
-        <!-- <li class="nav-item dropdown"> -->
-          <!-- <a
+        <li class="nav-item dropdown">
+          <a
             class="nav-link dropdown-toggle"
             data-bs-toggle="dropdown"
             href="#"
           >
             Find Work
-          </a> -->
-          <!-- <ul class="dropdown-menu"> -->
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/new']"
+          </a>
+          <ul class="dropdown-menu">
+            <li >
+              <a class="dropdown-item" [routerLink]="['/new']"
                 >Bidding Projects</a
               >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/fixed']"
+            <li >
+              <a class="dropdown-item" [routerLink]="['/fixed']"
                 >Fixed Price Projects</a
               >
-            <!-- </li> -->
-          <!-- </ul> -->
+            </li>
+          </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/freelancers']">Freelancers</a>

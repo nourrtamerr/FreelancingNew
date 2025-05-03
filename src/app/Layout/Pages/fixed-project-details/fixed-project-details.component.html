@@ -126,12 +126,11 @@
         <aside  class="upwork-sidebar mb-4">
           <a *ngIf="role=='Freelancer'"  [routerLink]="['/proposal2',project.id]">
             <button class="apply-btn mb-2">
-
               Apply now
             </button>
           </a>
 
-          <a *ngIf="role === 'client'" [routerLink]="['/proposals',project.id]">
+          <a [routerLink]="['/proposals',project.id]">
             <button class="apply-btn mb-2">
               View Proposals
             </button>
