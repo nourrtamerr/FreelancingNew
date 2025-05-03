@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoging = isLoggedIn;
       if (isLoggedIn) {
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/home']);
       }
     });
 
@@ -175,12 +175,12 @@ export class LoginComponent implements OnInit {
     this.authService.deCodeUserData(response.token);
     this._ToastrService.success('Login successful! Redirecting to your profile...', 'Welcome Back');
     setTimeout(() => {
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/home']);
     }, 500);
   }
 
   ExternalLogin(provider: 'Google' | 'Facebook'): void {
-    const returnUrl = `${this.frontendBase}/profile`;
+    const returnUrl = `${this.frontendBase}/home`;
     const errorUrl = `${this.frontendBase}/home`;
 
     console.log(`Initiating ${provider} login...`);

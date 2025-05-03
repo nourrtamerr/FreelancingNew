@@ -96,6 +96,7 @@ export const routes: Routes = [
 
       {path:'wishlist', component: WishlistComponent,title:'Favorites'},
       {path:'myproposals',component:MyProposalsComponent},
-      {path:'detector',component:ReviewsDetectorComponent}
+      {path:'detector',component:ReviewsDetectorComponent},
+      {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] }
 
 ];

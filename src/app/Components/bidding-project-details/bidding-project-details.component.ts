@@ -1,4 +1,4 @@
-import { Component, OnInit,viewChild,ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit,viewChild,ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { BiddingProjectService } from '../../Shared/Services/BiddingProject/bidding-project.service';
 import { BiddingProjectGetById } from '../../Shared/Interfaces/BiddingProject/bidding-project-get-by-id';
 import { ActivatedRoute, RouterModule, RouterOutlet } from '@angular/router';
@@ -15,6 +15,8 @@ import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../Shared/Services/wishlist.service';
 import { AuthService } from '../../Shared/Services/Auth/auth.service';
 import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
+import { bidchange, BiddinghubService } from '../../Shared/Services/bidding/biddinghub.service';
+import { HubConnection } from '@microsoft/signalr';
 
 @Component({
   selector: 'app-bidding-project-details',
@@ -22,7 +24,7 @@ import { ProjectsService } from '../../Shared/Services/Projects/projects.service
   templateUrl: './bidding-project-details.component.html',
   styleUrl: './bidding-project-details.component.css'
 })
-export class BiddingProjectDetailsComponent implements OnInit {
+export class BiddingProjectDetailsComponent implements OnInit,OnDestroy {
   editReviewForm!: FormGroup;
   selectedReview: any = null;
   constructor(private biddingProjectDetailsService:BiddingProjectService,
@@ -34,11 +36,11 @@ export class BiddingProjectDetailsComponent implements OnInit {
     private authService:AuthService,
     private fb: FormBuilder,
     private reviewservice:ReviewService,
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
+    private biddinghub:BiddinghubService
     ){
 
       this.initializeEditForm();
-
 
     }
     isowner:boolean=false;
@@ -71,16 +73,66 @@ project: BiddingProjectGetById={
   clientProjectsTotalCount:0,
   clientId:'',
   expectedDuration:0,
-  endDate:''
+  endDate:'',
+  currentBid:0
 };
 
+
+
+
+previousBid: number = 0;
+  previousAvgBid: number = 0;
+  previousNumOfBids: number = 0;
+  
+  // Add animation state flags
+  bidAnimationClass: string = '';
+  avgBidAnimationClass: string = '';
+  numBidsAnimationClass: string = '';
 
   clientOtherProjNameId: {id:number, title:string, projectType:string} []=[];
 
 
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
-
+  private applyAnimations(): void {
+    // Current bid animation
+    if (this.previousBid !== this.project.currentBid) {
+      this.bidAnimationClass = 'highlight-animation';
+      if (this.project.currentBid! < this.previousBid) {
+        this.bidAnimationClass += ' price-decrease';
+      } else if (this.project.currentBid! > this.previousBid) {
+        this.bidAnimationClass += ' price-increase';
+      }
+      
+      // Remove animation class after animation completes
+      setTimeout(() => {
+        this.bidAnimationClass = '';
+      }, 1500);
+    }
+    
+    // Average bid animation
+    if (this.previousAvgBid !== this.project.bidAveragePrice) {
+      this.avgBidAnimationClass = 'highlight-animation';
+      if (this.project.bidAveragePrice < this.previousAvgBid) {
+        this.avgBidAnimationClass += ' price-decrease';
+      } else if (this.project.bidAveragePrice > this.previousAvgBid) {
+        this.avgBidAnimationClass += ' price-increase';
+      }
+      
+      setTimeout(() => {
+        this.avgBidAnimationClass = '';
+      }, 1500);
+    }
+    
+    // Number of bids animation
+    if (this.previousNumOfBids !== this.project.numOfBids) {
+      this.numBidsAnimationClass = 'pulse-animation';
+      
+      setTimeout(() => {
+        this.numBidsAnimationClass = '';
+      }, 1500);
+    }
+  }
 
   ngOnInit(): void {
     // const code = +this.route.snapshot.paramMap.get('id')!;
@@ -88,7 +140,52 @@ project: BiddingProjectGetById={
       const id = +params.get('id')!;
       this.clientOtherProjNameId=[];
       this.loadNgOnIt(id);
+
+      this.biddinghub.joinBidGroup(id).then(() => {
+        console.log("Proceeding to next step...");
+        // Next steps here
+        this.biddinghub.hubConnection.on("BiddingChanged", (bidchange: bidchange) => {
+          console.log('New bidchange:', bidchange);
+  
+          this.previousBid = this.project.currentBid!;
+          this.previousAvgBid = this.project.bidAveragePrice;
+          this.previousNumOfBids = this.project.numOfBids;
+          
+          // Update values
+          this.project.currentBid = bidchange.price;
+          this.project.bidAveragePrice = Math.round(bidchange.average);
+          this.project.numOfBids =  this.project.numOfBids + 1;
+          
+          // Apply animations based on value changes
+          this.applyAnimations();
+          // const current = this.AllNotificaitions.getValue();
+          // this.AllNotificaitions.next([notification, ...current]);
+          // if (!notification.isRead) {
+          //   this.unreadNotifications.next(this.unreadNotifications.value + 1);
+          // }
+        });
+        
+      })
+      .catch(err => {
+        console.error("Failed to join bid group:", err);
+      });
+      
+      
+      
+
+      // if (this.biddinghub.hubConnection.state === 'Connected') {
+      //   this.joinBidGroup(id);
+      // } else {
+      //   this.biddinghub.hubConnection.start().then(() => {
+      //     this.joinBidGroup(id);
+      //   });
+      // }
+    
+
+
+      
     });
+
     this.currentuserid=this.authService.getUserId();
   console.log(this.currentuserid);
 
@@ -96,13 +193,23 @@ project: BiddingProjectGetById={
             this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
             console.log(this.role);
 
+
+
+
+
   }
 
+
+  
   isBiddingExpired(): boolean {
     return new Date(this.project.biddingEndDate) < new Date();
   }
-
-
+  
+  ngOnDestroy(): void {
+    if (this.biddinghub.hubConnection) {
+      this.biddinghub.hubConnection.off("BiddingChanged");
+    }
+  }
   private loadNgOnIt(id:number):void{
     this.biddingProjectDetailsService.GetBiddingProjectById(id).subscribe({
       next: (data) => {
@@ -126,7 +233,7 @@ project: BiddingProjectGetById={
           for (let projectId of this.project.clientOtherProjectsIdsNotAssigned) {
             // if(projectId !== id){
             //   this.biddingProjectDetailsService.GetBiddingProjectById(projectId)
-
+              
             //   .subscribe({
             //     next: (data) => {
             //       console.log(data)
@@ -164,13 +271,13 @@ project: BiddingProjectGetById={
             //           },
             //           error: (err)=> {console.log(err), console.log("niwnfoinewio")}
             //         })
-
+                   
             //       }
             //     },
             //     error: (err) => {
             //       console.log(err);
             //       console.log("Fetching Fixed Price project fallback...");
-
+                
             //       this.FixedService.getProjectById(projectId).pipe(
             //         map(proj => ({ id: proj.id, title: proj.title, projectType: 'Fixed Price' }))
             //       ).subscribe({
@@ -198,7 +305,7 @@ project: BiddingProjectGetById={
             })
 
 
-
+           
           }
         }
       },
@@ -216,7 +323,7 @@ project: BiddingProjectGetById={
   }
 
 
-
+  
 
 
   editReview(review: any) {
@@ -235,7 +342,7 @@ project: BiddingProjectGetById={
         ...this.selectedReview,
         rating: this.editReviewForm.get('rating')?.value,
         comment: this.editReviewForm.get('comment')?.value
-
+        
       };
 
       // Call your review service to update
@@ -291,7 +398,7 @@ confirmDelete() {
       next: () => {
         // Remove the review from the array
         this.clientReviews = this.clientReviews.filter(review => review.id !== this.reviewToDelete);
-
+        
         // Force carousel refresh
         setTimeout(() => {
           const carousel = document.querySelector('#clientReviewsCarousel');
@@ -300,7 +407,7 @@ confirmDelete() {
             carousel.querySelectorAll('.carousel-item').forEach(item => {
               item.classList.remove('active');
             });
-
+            
             // Add active class to first item if exists
             const firstItem = carousel.querySelector('.carousel-item');
             if (firstItem) {
@@ -396,7 +503,7 @@ loadWishlist(): void {
     if (!this.project?.biddingEndDate) return false;
     return new Date(this.project.biddingEndDate) < new Date();
   }
-
+  
   getBidButtonTitle(): string {
     if (this.project?.freelancerId !== null) {
       return 'This project has already been assigned';

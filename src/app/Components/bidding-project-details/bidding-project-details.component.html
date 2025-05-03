@@ -58,8 +58,8 @@
     <!-- <i class="fa fa-gavel"></i> -->
     <i class="fa-solid fa-tag"></i>
     <div>
-      <div class="info-modern-value">{{project?.minimumPrice}} - {{project?.maximumprice}} {{project.currency}}</div>
-      <div class="info-modern-label">{{project.projectType}} Range</div>
+      <div class="info-modern-value">{{project?.maximumprice}} {{project.currency}}</div>
+      <div class="info-modern-label">{{project.projectType}} start price</div>
     </div>
   </div>
 
@@ -67,7 +67,7 @@
     <!-- <i class="fa fa-dollar-sign"></i> -->
     <i class="fa-solid fa-money-bill-1-wave"></i>
     <div>
-      <div class="info-modern-value">{{project?.bidAveragePrice}} {{project.currency}}</div>
+      <div class="info-modern-value" [ngClass]="avgBidAnimationClass">{{project?.bidAveragePrice}} {{project.currency}}</div>
       <div class="info-modern-label">Avg Bid</div>
     </div>
   </div>
@@ -89,8 +89,15 @@
   <div class="project-info-modern-item">
     <i class="fa fa-users"></i>
     <div>
-      <div class="info-modern-value">{{project?.numOfBids}}</div>
+      <div class="info-modern-value" [ngClass]="numBidsAnimationClass">{{project?.numOfBids}}</div>
       <div class="info-modern-label">Bids</div>
+    </div>
+  </div>
+  <div class="project-info-modern-item">
+    <i class="fa-solid fa-arrow-trend-down"></i>
+    <div>
+      <div class="info-modern-value" [ngClass]="bidAnimationClass">{{project?.currentBid}}</div>
+      <div class="info-modern-label">Current Bid</div>
     </div>
   </div>
 </div>
