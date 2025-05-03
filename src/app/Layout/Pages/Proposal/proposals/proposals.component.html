@@ -10,15 +10,19 @@
     </div>
     <div class="proposals-header" style="justify-content: end;">
     <a   *ngIf="role=='Freelancer' && project" [routerLink]="['/proposal2',projectId]" routerLinkActive="router-link-active" >
-    <button class="apply-btn mb-2">
-      Apply Now
+    <button class="apply-btn mb-2"
+    [disabled]="project?.freelancerId !== null || isBidEnded"
+    [class.disabled-button]="project?.freelancerId !== null || isBidEnded">
+    
+    {{ project?.freelancerId === null ? (isBidEnded ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+
     </button>
   </a>
 </div>
     <div class="proposals-list" *ngIf="proposals.length > 0">
       <div class="proposal-card" *ngFor="let proposal of proposals">
         <div class="freelancer-info">
-          <img [src]="proposal.freelancerProfilePicture || 'assets/default-avatar.png'" 
+          <img [src]="proposal.freelancerProfilePicture? Files+'/'+proposal.freelancerProfilePicture : './images/default.jpg'" 
                alt="Freelancer" 
                class="freelancer-avatar">
           <div class="freelancer-details">

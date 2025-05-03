@@ -1,6 +1,6 @@
 // ... existing imports ...
 
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { CategoryService } from '../../Shared/Services/Category/category.service';
 import { Category } from '../../Shared/Interfaces/category';
 import { Country } from '../../Shared/Interfaces/Country';
@@ -19,10 +19,11 @@ import { BiddingProjectGetAll } from '../../Shared/Interfaces/BiddingProject/bid
 import { CommonModule } from '@angular/common';
 import { FilterPipe } from '../../Pipes/filter.pipe';
 import { TimeAgoPipe } from '../../Pipes/time-ago.pipe';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { WishlistService } from '../../Shared/Services/wishlist.service';
 import { ToastrService } from 'ngx-toastr';
 import { Wishlist } from '../../Shared/Interfaces/wishlist';
+import { AuthService } from '../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-bidding-project-new',
@@ -30,16 +31,24 @@ import { Wishlist } from '../../Shared/Interfaces/wishlist';
   templateUrl: './bidding-project-new.component.html',
   styleUrls: ['./bidding-project-new.component.css']
 })
-export class BiddingProjectNewComponent implements OnInit {
+export class BiddingProjectNewComponent implements OnInit,OnDestroy {
   // Add these properties for toggling
-
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
   constructor(private CategoryService:CategoryService,
     private CountryService: CountriesService,
     private SubCategoryService:SubCategoryService,
     private SkillsService:SkillService,
     private BiddingProjectService:BiddingProjectService,
     private wishlistService:WishlistService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+    private cd: ChangeDetectorRef
   ){}
 
 
@@ -91,8 +100,90 @@ export class BiddingProjectNewComponent implements OnInit {
   userWishlist2: number[]=[];
 
 
+  selectedCategoryId: number | null = null;
+  selectedCategoryName: string = '';
+  loading = true;
 
+
+  role: string=''
+  private timerInterval: any;
   ngOnInit(): void {
+
+    const roles = this.authService.getRoles();
+    this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
+    
+    this.timerInterval = setInterval(() => {
+      // Force view update
+      this.cd.detectChanges();
+    }, 1000);
+     // Load all necessary data first
+     this.loadInitialData().then(() => {
+      // Then handle route parameters
+      this.route.paramMap.subscribe(params => {
+        const categoryId = params.get('categoryId') ? +params.get('categoryId')! : null;
+        
+        if (categoryId) {
+          this.handleCategorySelection(categoryId);
+        } else {
+          // No category selected - load all projects
+          this.loadAllProjects();
+        }
+      });
+    });
+
+    this.BiddingProjectService.GetAllBiddingProjects(this.BiddingProjectFilter,1,12).subscribe({
+      next:(data)=>{this.projectsBeforeAnyFilters=data, this.projects=data,console.log(data)},
+      error: (err)=> console.log(err)
+
+    })
+
+   
+
+  }
+
+
+  private loadAllProjects(): void {
+  
+    this.filterProject();
+  }
+
+  private async loadInitialData(): Promise<void> {
+    try {
+      // Load all necessary data in parallel
+      const [categories, subcategories] = await Promise.all([
+        this.CategoryService.GetAllCategories().toPromise(),
+        this.SubCategoryService.getAllSubcategories().toPromise()
+      ]);
+
+      this.Categories = categories || [];
+      this.SubCategories = subcategories || [];
+
+      // Load other data that doesn't affect initial filtering
+      this.loadAdditionalData();
+    } catch (error) {
+      console.error('Error loading initial data:', error);
+    }
+  }
+
+
+  private loadAdditionalData(): void {
+    // Load other data that doesn't affect initial filtering
+
+
+
+
+    
+    this.wishlistService.GetWishList().subscribe({
+      next: (data: Wishlist[]) => {
+        this.userWishlist2 = data.map(item => item.projectId); // Extract all project IDs
+        console.log("Loaded wishlist:", this.userWishlist2);
+      },
+      error: (err) => console.log(err)
+    });
+
+
+
+    
     this.CategoryService.GetAllCategories().subscribe({
       next: (data)=> this.Categories=data,
       error: (err) => console.log(err)
@@ -117,23 +208,39 @@ export class BiddingProjectNewComponent implements OnInit {
       next: (data)=> this.Skills=data,
       error: (err)=> console.log(err)
     });
-
-    this.BiddingProjectService.GetAllBiddingProjects(this.BiddingProjectFilter,1,12).subscribe({
-      next:(data)=>{this.projectsBeforeAnyFilters=data, this.projects=data,console.log(data)},
-      error: (err)=> console.log(err)
-
-    })
-
-    this.wishlistService.GetWishList().subscribe({
-      next: (data: Wishlist[]) => {
-        this.userWishlist2 = data.map(item => item.projectId); // Extract all project IDs
-        console.log("Loaded wishlist:", this.userWishlist2);
-      },
-      error: (err) => console.log(err)
-    });
-   
-
   }
+
+
+  private handleCategorySelection(categoryId: number): void {
+    // Find the category
+    const category = this.Categories.find(c => c.id === categoryId);
+    if (!category) {
+      this.router.navigate(['/new']); // Redirect if invalid category
+      return;
+    }
+
+    this.selectedCategoryId = categoryId;
+    this.selectedCategoryName = category.name;
+
+    // Get all subcategories for this category
+    const subcategoryIds = this.SubCategories
+      .filter(sc => sc.categoryId === categoryId)
+      .map(sc => sc.id);
+
+    // Apply filter
+    this.BiddingProjectFilter = {
+      ...this.BiddingProjectFilter,
+      SubCategory: subcategoryIds
+    };
+
+    this.filterProject();
+  }
+
+
+
+
+
+
 
   sortProducts(sortOption: string) {
     this.currentSort = sortOption;
@@ -159,6 +266,21 @@ export class BiddingProjectNewComponent implements OnInit {
           this.projects.sort((a, b) => b.postedFrom - a.postedFrom);
           // this.ApplyPagination();
           break;
+
+          case 'remaining-low-high':
+        this.projects.sort((a, b) => {
+          const timeA = new Date(a.biddingEndDate).getTime() - new Date().getTime();
+          const timeB = new Date(b.biddingEndDate).getTime() - new Date().getTime();
+          return timeA - timeB;
+        });
+        break;
+      case 'remaining-high-low':
+        this.projects.sort((a, b) => {
+          const timeA = new Date(a.biddingEndDate).getTime() - new Date().getTime();
+          const timeB = new Date(b.biddingEndDate).getTime() - new Date().getTime();
+          return timeB - timeA;
+        });
+        break;
 
       default:
         console.log("didnt enter")
@@ -423,6 +545,30 @@ export class BiddingProjectNewComponent implements OnInit {
       })
     }
 
+
+    calculateRemainingTime(endDate: string): string {
+      const end = new Date(endDate);
+      const now = new Date();
+      const diff = end.getTime() - now.getTime();
+    
+      if (diff <= 0) {
+        return 'Bidding Ended';
+      }
+    
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    
+      if (days > 0) {
+        return `${days}d ${hours}h remaining`;
+      } else if (hours > 0) {
+        return `${hours}h ${minutes}m remaining`;
+      } else {
+        return `${minutes}m remaining`;
+      }
+    }
+
+
     toggleWishlist(projectid:number){
      const index= this.userWishlist2.indexOf(projectid);
      if(index > -1){
@@ -437,4 +583,136 @@ export class BiddingProjectNewComponent implements OnInit {
     }
 
 
+
+    // getBiddingStatus(startDate: string, endDate: string): { text: string; class: string } {
+    //   const start = new Date(startDate);
+    //   const end = new Date(endDate);
+    //   const now = new Date();
+    
+    //   if (now < start) {
+    //     // Bidding hasn't started yet
+    //     const diff = start.getTime() - now.getTime();
+    //     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    //     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     return {
+    //       text: `Starts in ${days}d ${hours}h`,
+    //       class: 'bidding-soon'
+    //     };
+    //   } else if (now > end) {
+    //     // Bidding has ended
+    //     return {
+    //       text: 'Bidding Ended',
+    //       class: 'bidding-ended'
+    //     };
+    //   } else {
+    //     // Bidding is active
+    //     const diff = end.getTime() - now.getTime();
+    //     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    //     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     return {
+    //       text: `${days}d ${hours}h remaining`,
+    //       class: 'bidding-active'
+    //     };
+    //   }
+    // }
+
+    getCountdownTime(endDate: string): string {
+      const end = new Date(endDate);
+      const now = new Date();
+      const diff = end.getTime() - now.getTime();
+    
+      if (diff <= 0) return '00:00:00';
+    
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+      return `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+
+    // Add these methods to your component class
+
+// Check if the auction is ending soon (less than 12 hours)
+isUrgent(endDateStr: string): boolean {
+  if (!endDateStr) return false;
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const hoursLeft = (endDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+  
+  return hoursLeft > 0 && hoursLeft < 12;
+}
+
+// Get countdown days
+getCountdownDays(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  return days.toString().padStart(2, '0');
+}
+
+// Get countdown hours
+getCountdownHours(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  return hours.toString().padStart(2, '0');
+}
+
+// Get countdown minutes
+getCountdownMinutes(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  return minutes.toString().padStart(2, '0');
+}
+
+// Get countdown seconds
+getCountdownSeconds(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  return seconds.toString().padStart(2, '0');
+}
+
+// Existing getBiddingStatus method should remain as is
+getBiddingStatus(startDateStr: string, endDateStr: string): { text: string, class: string } {
+  const now = new Date();
+  const startDate = startDateStr ? new Date(startDateStr) : new Date(0);
+  const endDate = endDateStr ? new Date(endDateStr) : new Date(0);
+  
+  if (now < startDate) {
+    return { text: 'Bidding Soon', class: 'bidding-soon' };
+  } else if (now >= startDate && now < endDate) {
+    return { text: 'Bidding Active', class: 'bidding-active' };
+  } else {
+    return { text: 'Bidding Ended', class: 'bidding-ended' };
+  }
+}
 }

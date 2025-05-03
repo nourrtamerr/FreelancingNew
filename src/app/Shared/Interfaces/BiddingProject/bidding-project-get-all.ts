@@ -16,6 +16,9 @@ export interface BiddingProjectGetAll {
   numOfBids:number
   clientIsVerified:boolean
   expectedDuration:number
+  biddingEndDate:string
+  biddingStartDate:string
+  currentBid?:number
 }
 
 export interface BiddingProjectsResponse {

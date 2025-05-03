@@ -1,9 +1,6 @@
-<!-- Wrapper Start -->
-<div id="wt-wrapper" class="wt-wrapper wt-haslayout">
-  <!-- Content Wrapper Start -->
+<!-- <div id="wt-wrapper" class="wt-wrapper wt-haslayout">
   <div class="wt-contentwrapper">
 
-    <!--Inner Home Banner Start-->
     <div class="wt-haslayout wt-innerbannerholder">
       <div class="container">
         <div class="row justify-content-md-center">
@@ -20,11 +17,9 @@
         </div>
       </div>
     </div>
-    <!--Inner Home End-->
-    <!--Main Start-->
+
     <main id="wt-main" class="wt-main wt-haslayout wt-innerbgcolor">
       <div class="wt-haslayout wt-main-section">
-        <!-- User Listing Start-->
         <div class="container">
           <div class="row">
             <div id="wt-twocolumns" class="wt-twocolumns wt-haslayout">
@@ -66,11 +61,92 @@
 
           </div>
         </div>
-        <!-- User Listing End-->
       </div>
     </main>
-    <!--Main End-->
   </div>
-  <!--Content Wrapper End-->
-</div>
-<!--Wrapper End-->
+</div> -->
+<main class="ban-details-dashboard">
+  <div class="dashboard-container">
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+          <li class="breadcrumb-item"><a [routerLink]="['/home2/banned']">Banned Users</a></li>
+          <li class="breadcrumb-item active">Ban Details</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- User Ban Details Card -->
+    <div class="details-card">
+      <div class="card-header">
+        <div class="user-title">
+          <h1 class="user-name">{{ban.bannedUserName}}</h1>
+          <!-- <span class="badge-status" [class.active]="getDateDiff(ban.banEndDate)<0">
+            {{ getDateDiff(ban.banEndDate) < 0 ? 'Active Ban' : 'Expired Ban' }}
+          </span> -->
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="details-section">
+          <h2 class="section-title">Ban Information</h2>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-id-card"></i>
+                <span>Ban ID</span>
+              </div>
+              <div class="info-value">#{{ban.id}}</div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-user"></i>
+                <span>User ID</span>
+              </div>
+              <div class="info-value">#{{ban.bannedUserId}}</div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Ban Start Date</span>
+              </div>
+              <div class="info-value">{{ban.banDate | date:'mediumDate'}}</div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-calendar-check"></i>
+                <span>Ban End Date</span>
+              </div>
+              <div class="info-value">{{ban.banEndDate | date:'mediumDate'}}</div>
+            </div>
+          </div>
+
+          <div class="description-section">
+            <h3 class="section-subtitle">Ban Description</h3>
+            <div class="description-content">
+              <i class="fas fa-info-circle"></i>
+              <p>{{ban.description}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn-back" (click)="goback()">
+            <i class="fas fa-arrow-left"></i>
+            Back to List
+          </button>
+          <button class="btn-delete" (click)="Delete()">
+            <i class="fas fa-trash-alt"></i>
+            Delete Ban
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -10,6 +10,9 @@ import { ProjectsService } from '../../../../Shared/Services/Projects/projects.s
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../../../Shared/Services/Account/account.service';
 import { AppUser } from '../../../../Shared/Interfaces/Account';
+import { Review } from '../../../../Shared/Interfaces/Reviews';
+import { ReviewService } from '../../../../Shared/Services/Review/review.service';
+import { GetReviewsByRevieweeIdDto } from '../../../../Shared/Interfaces/get-reviews-by-reviewee-id-dto';
 
 @Component({
   selector: 'app-milestones',
@@ -22,7 +25,8 @@ export class MilestonesComponent implements OnInit{
   projectId: number = 0;
   milestones: Milestone[] = [];
   FilesURL: string = "";
- 
+  reviewForm!: FormGroup;
+  isProjectReviewed: boolean = false;
   
   getStatusText(status: any): string {
     switch (status) {
@@ -37,17 +41,117 @@ export class MilestonesComponent implements OnInit{
     private milestoneService: MilestoneService,
   private projectService:ProjectsService,
 private toastr:ToastrService,
-private accountservice:AccountService) {}
+private accountservice:AccountService
+,private fb: FormBuilder
+,private reviewservice:ReviewService) {}
+
+areAllMilestonesCompleted(): boolean {
+  return this.milestones.length == 0 || 
+         this.milestones.every(milestone => milestone.status === 1);
+}
+
+setRating(rating: number): void {
+  this.reviewForm.patchValue({ rating });
+}
+
+submitProjectReview(): void {
+  if (this.reviewForm.valid) {
+    const review: Review = {
+      id:this.existingReview?this.existingReview.id:undefined,
+      rating: this.reviewForm.get('rating')?.value,
+      comment: this.reviewForm.get('comment')?.value,
+      revieweeId: this.isProjectClient ? this.projectdata.freelancerId : this.projectdata.clientId,
+      reviewerId: this.isProjectClient ? this.projectdata.clientId : this.projectdata.freelancerId,
+      projectId: this.projectdata.id
+    };
+    console.log(review);
+    if(!this.existingReview){
+    this.reviewservice.addReview(review).subscribe({
+      next: (response) => {
+        this.toastr.success('Review submitted successfully');
+        this.projectdata.isReviewed = true;
+        this.reviewForm.reset();
+      },
+      error: (error) => {
+        this.toastr.error('Failed to submit review');
+        console.error('Error submitting review:', error);
+      }
+    });
+  }
+  else{
+    this.reviewservice.updateReview(this.existingReview.id,review).subscribe({
+      next: (response) => {
+        this.toastr.success('Review submitted successfully');
+        this.projectdata.isReviewed = true;
+        this.reviewForm.reset();
+      },
+      error: (error) => {
+        this.toastr.error('Failed to submit review');
+        console.error('Error submitting review:', error);
+      }
+    });
+  }
+  }
+}
+
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = +params['projectId'];
       console.log(this.projectId);
+      this.initializeReviewForm();
       this.loadMilestones();
       this.loadproject();
+ 
     });
+
+
     this.FilesURL = Files.filesUrl;
     console.log(this.FilesURL);
+  }
+
+  private initializeReviewForm() {
+    this.reviewForm = this.fb.group({
+      rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+      comment: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
+  existingReview!:GetReviewsByRevieweeIdDto
+
+  private loadExistingReview() {
+    console.log('projectdataid',this.projectdata?.id);
+    if (this.projectdata?.id) {
+      this.reviewservice.getbyprojectId(this.projectdata.id).subscribe({
+        next: (reviews: GetReviewsByRevieweeIdDto[]) => {
+          console.log(this.projectdata.clientId,'client')
+          console.log(this.projectdata.freelancerId,'freelancer')
+
+          console.log(reviews,'reviews')
+
+          if (reviews.length > 0) {
+            const userReview = reviews.find(review => 
+              review.reviewerId === (this.isProjectClient ? this.projectdata.clientId : this.projectdata.freelancerId)
+            
+
+            );
+            userReview?.id
+            console.log("this.projectidasddddddddddddddddddddddd",userReview);
+            if (userReview) {
+              this.existingReview = userReview;
+              console.log("existing review is",userReview,this.existingReview);
+              this.reviewForm.patchValue({
+                rating: userReview.rating,
+                comment: userReview.comment
+              });
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error loading reviews:', error);
+          this.toastr.error('Failed to load review data');
+        }
+      });
+    }
   }
 
   selectedImage: string | null = null;
@@ -146,7 +250,7 @@ private accountservice:AccountService) {}
   
   loadproject()
   {
-    console.log(this.projectId);
+    
     this.accountservice.myPorfile().subscribe({
       next:(data2:AppUser)=>{
         console.log(data2);
@@ -164,6 +268,8 @@ private accountservice:AccountService) {}
           {
             this.isProjectFreelancer=true;
           }
+          
+          this.loadExistingReview();
         },
         error:(err)=>console.log(err)
       })

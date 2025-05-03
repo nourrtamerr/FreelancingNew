@@ -1,89 +1,229 @@
 <div class="chat-container">
   <!-- Left Sidebar: Chat History -->
-  <div class="chat-sidebar">
+  <audio #ringAudio src="ring.mp3" hidden></audio>
+  <div class="chat-sidebar" [class.show]="showSidebar">
     <div class="sidebar-header">
-      <h2>Chats</h2>
-    </div>
-    <div class="chat-list">
-      <div *ngFor="let conversation of conversations" 
-            
-           class="chat-item d-flex align-items-center "  
-           
-           [class.active]="(conversation.receiverId === truereceiverid || conversation.senderId === truereceiverid)"
-
-           (click)="switchConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
-
-           <img class="profile-image" [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '']"
-            />
-           
-           <div class="chat-item-content">
-          <div class="chat-item-name ms-2">
-            
-            {{ conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName }}
-          </div>
-          <div class="chat-item-preview">
-            <!-- {{ conversation.message | slice:0:30 }}{{ conversation.message.length > 30 ? '...' : '' }} -->
-          </div>
+      <div class="header-content">
+        <h2>Conversations</h2>
+        <div class="user-status">
+          <span class="status-indicator online"></span>
+          <span class="username">{{ currentUsername }}</span>
         </div>
-        <div class="chat-item-time">
-          {{ conversation.sentAt | date:'shortTime' }}
+      </div>
+      <button class="toggle-sidebar" (click)="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+    
+    <div class="chat-list">
+      <div *ngFor="let conversation of conversations"
+           class="chat-item"
+           [class.active]="(conversation.receiverId === truereceiverid || conversation.senderId === truereceiverid)"
+           (click)="switchConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
+        <div class="chat-avatar">
+          <img class="profile-image" 
+               [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || './images/default.jpg']??'./images/default.jpg'" 
+               alt="Profile" />
+          <span class="online-dot" *ngIf="onlineUsers.includes((conversation.receiverId === currentUserId ? conversation.senderId : conversation.receiverId) || '')"></span>
+        </div>
+        <div class="chat-info">
+          <div class="chat-header">
+            <h4 class="chat-name">{{ conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName }}</h4>
+            <span class="chat-time">{{ conversation.sentAt | date:'shortTime' }}</span>
+          </div>
+          <div class="chat-preview">
+            <p class="message-preview">{{ conversation.message | slice:0:30 }}{{ conversation.message.length > 30 ? '...' : '' }}</p>
+            <button class="delete-conversation" 
+                    (click)="deleteConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Right Chat Area -->
-  <div class="chat-main">
-    <div class="chat-header d-flex  align-items-center">
-      <img
-      class="profile-image"
-      [src]="receiverImage ? receiverImage: 'https://th.bing.com/th/id/OIP.pu65piyuwGoBpHJ2SvvGvAHaHa?pid=ImgDet&w=192&h=192&c=7'"
-      alt="Profile Image"
-    />
-      <h3>
-        {{ receiverUsername || 'Select a conversation' }}
-        <span *ngIf="onlineUsers.includes(truereceiverid)" class="online-status">● Online</span>
-      </h3>
-    </div>
-    <div class="messages-container" #messagesContainer>
-      <div *ngIf="!messages.length" class="no-messages">
-        No messages yet. Start a conversation!
-      </div>
-      <div *ngFor="let message of messages" 
-           class="message" 
-           [class.sent]="message.senderId === currentUserId"
-           [class.received]="message.senderId !== currentUserId">
-        <div *ngIf="message.imageUrl" class="message-image">
-          <img [src]="filesurl+'/'+message.imageUrl" 
-               alt="Attached image" 
-               (click)="openImageModal(message.imageUrl)">
+  <div class="chat-main position-relative">
+    <!-- Chat Header -->
+    <div class="chat-header position-absolute start-0 top-0 w-100 d-flex justify-content-between align-items-center">
+      <div class="header-left">
+        <button class="menu-toggle" (click)="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="recipient-info">
+          <div class="avatar-container">
+            <img class="profile-image" 
+                 [src]="receiverImage??'./images/default.jpg'" 
+                 alt="Profile" />
+            <span class="online-status" 
+                  [class.online]="onlineUsers.includes(truereceiverid)"
+                  [class.offline]="!onlineUsers.includes(truereceiverid)"></span>
+          </div>
+          <div class="recipient-details">
+            <h3 class="recipient-name">{{ receiverUsername || 'Select a conversation' }}</h3>
+            <p class="typing-indicator" *ngIf="isTyping">typing...</p>
+            <p class="status-text" *ngIf="!isTyping">
+              {{ onlineUsers.includes(truereceiverid) ? 'Online' : 'Offline' }}
+            </p>
+          </div>
         </div>
-        <div *ngIf="message.message" class="message-text">{{ message.message }}</div>
-        <div class="message-time">{{ message.sentAt | date:'shortTime' }}</div>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-icon video-call-btn" 
+                *ngIf="receiverUsername && videoCallStatus === 'idle'"
+                (click)="startVideoCall()"
+                title="Start Video Call">
+          <i class="fas fa-video"></i>
+        </button>
+        <button class="btn btn-icon video-call-btn" 
+                *ngIf="videoCallStatus !== 'idle'"
+                (click)="endVideoCall()"
+                title="End Video Call">
+          <i class="fas fa-video-slash"></i>
+        </button>
       </div>
     </div>
-    <div class="message-input">
-      <input type="text" 
-             [(ngModel)]="newMessage" 
-             placeholder="Type a message..." 
-             (keyup.enter)="sendMessage()">
-      <input type="file" 
-             accept="image/*" 
-             #fileInput
-             (change)="handleFileInput($event)" 
-             style="display: none;">
-      <button class="attach-button" (click)="fileInput.click()">
-        <i class="fa fa-paperclip"></i>
-      </button>
-      <button class="send-button" (click)="sendMessage()">Send</button>
+
+    <!-- Video Call Container -->
+    <div class="video-call-container" *ngIf="showVideoCall">
+      <div class="video-wrapper">
+        <video #localVideo autoplay muted playsinline class="local-video"></video>
+        <video #remoteVideo autoplay playsinline class="remote-video"></video>
+      </div>
+      <div class="video-controls">
+        <button class="btn btn-danger" (click)="endVideoCall()">End Call</button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="messages-container h-50" #messagesContainer [class.video-active]="showVideoCall">
+      <div *ngIf="!messages.length" class="empty-state">
+        <i class="fas fa-comment-slash"></i>
+        <p>No messages yet</p>
+        <p class="subtext">Start the conversation by sending a message</p>
+      </div>
+
+      <div *ngFor="let message of messages" 
+           class="message"
+           [class.outgoing]="message.senderId === currentUserId"
+           [class.incoming]="message.senderId !== currentUserId">
+        <div class="message-bubble">
+          <div class="message-header">
+            <div class="message-actions">
+              <button class="action-btn edit" 
+                      *ngIf="message.senderId === currentUserId"
+                      (click)="startEdit(message)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="action-btn delete"
+                      *ngIf="message.senderId === currentUserId"
+                      (click)="initiateDelete(message.id)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="message-content">
+            <ng-container *ngIf="editingMessageId === message.id; else showMessage">
+              <div class="edit-container">
+                <input type="text" 
+                       [(ngModel)]="editedMessageText"
+                       class="edit-input"
+                       placeholder="Edit message..."
+                       (keyup.enter)="saveEdit(message.id)" />
+                <div class="edit-actions">
+                  <button class="btn btn-sm btn-primary" (click)="saveEdit(message.id)">
+                    Save
+                  </button>
+                  <button class="btn btn-sm btn-ghost" (click)="cancelEdit()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #showMessage>
+              <div class="message-body">
+                <div class="message-text">{{ message.message }}</div>
+                <div class="message-image" *ngIf="message.imageUrl">
+                  <img [src]="filesurl + '/' + message.imageUrl" 
+                       alt="Attachment"
+                       (click)="openImageModal(message.imageUrl)" />
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="message-footer">
+            <span class="message-time">{{ message.sentAt | date:'shortTime' }}</span>
+            <span class="status-indicators">
+              <span *ngIf="message.isEdited" class="edited">edited</span>
+              <span *ngIf="message.senderId === currentUserId" 
+                    class="read-status">
+                {{ message.isRead ? '✓✓' : '✓' }}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Input -->
+    <div class="message-input-container">
+      <div class="input-wrapper">
+        <button class="btn btn-icon attachment-btn" 
+                (click)="fileInput.click()"
+                title="Attach file">
+          <i class="fas fa-paperclip"></i>
+        </button>
+        
+        <input type="file" 
+               accept="image/*" 
+               #fileInput 
+               (change)="handleFileInput($event)"
+               hidden />
+        
+        <input type="text" 
+               [(ngModel)]="newMessage"
+               placeholder="Write a message..."
+               (input)="sendTypingEvent()"
+               (keyup.enter)="sendMessage()" />
+        
+        <button class="btn btn-primary send-btn" 
+                (click)="sendMessage()"
+                [disabled]="!newMessage.trim() && !selectedFile">
+          Send
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Image Modal -->
-  <div class="image-modal" *ngIf="selectedImage" (click)="closeImageModal()">
-    <div class="modal-content">
-      <span class="close-button" (click)="closeImageModal()">×</span>
-      <img [src]="filesurl+'/'+selectedImage" alt="Full size image">
+  <!-- Modals -->
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="confirmation-modal">
+      <div class="modal-header">
+        <h3>Delete Message</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this message? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="image-modal-backdrop" *ngIf="selectedImage" (click)="closeImageModal()">
+    <div class="image-modal" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeImageModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      <img [src]="filesurl + '/' + selectedImage" 
+           alt="Full size preview"
+           class="modal-image" />
     </div>
   </div>
 </div>

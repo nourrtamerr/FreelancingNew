@@ -986,3 +986,31 @@
 .carousel-button.next {
   right: 15px;
 }
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
+
+.stars {
+  display: flex;
+  gap: 5px;
+}
+
+.stars i {
+  cursor: pointer;
+  color: #ddd;
+}
+
+.stars i.active {
+  color: #f5c34e;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

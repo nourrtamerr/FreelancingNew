@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { SubscriptionPaymentService } from '../../../Shared/Services/Subscribtion plan Payment/subscribtionpayment.service';
+import { FormsModule } from '@angular/forms'; // Required for ngModel
+import { CardPaymentDTO } from '../../../Shared/Interfaces/CardPaymentDTO';
 
 @Component({
   selector: 'app-subscribtion-plan',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './subscribtion-plan.component.html',
   styleUrls: ['./subscribtion-plan.component.css']
 })
@@ -58,14 +61,121 @@ export class SubscribtionPlanComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router) {}
+  selectedPlanId: number | null = null;
+  showCardForm = false;
+
+  cardData: CardPaymentDTO = {
+    amount: 0,
+    cardnumber: '',
+    cvv: 0
+  };
+
+  constructor(
+    private router: Router,
+    private subscriptionService: SubscriptionPaymentService
+  ) {}
 
   ngOnInit(): void {}
 
-  selectPlan(planId: number) {
-    // Here you can implement the logic to handle plan selection
-    // For example, navigate to payment page or save selection
-    console.log(`Selected plan: ${planId}`);
-    // this.router.navigate(['/payment'], { queryParams: { planId: planId } });
+  showPaymentOptions(planId: number) {
+    this.selectedPlanId = planId;
+    this.showCardForm = false;
+    const selectedPlan = this.plans.find(p => p.id === planId);
+    if (selectedPlan) {
+      this.cardData.amount = selectedPlan.price;
+    }
   }
+
+  closeModal() {
+    this.selectedPlanId = null;
+    this.showCardForm = false;
+  }
+
+
+
+
+  // ... existing code ...
+
+closePaymentOptions() {
+  // Reset the selected plan ID to null to hide the payment options
+  this.selectedPlanId = null;
+  
+  // Reset the card form visibility
+  this.showCardForm = false;
+  
+  // Reset any card data if it exists
+  if (this.cardData) {
+    this.cardData = {
+      amount: 0,
+      cardnumber: '',
+      cvv: 0
+     
+    };
+  }
+}
+
+
+
+// payWithStripe() {
+//   if (this.selectedPlanId !== null) {
+//     this.subscriptionService.payWithStripe(this.selectedPlanId).subscribe({
+//       next: (res: any) => {
+//       //  if (res && res.url) {
+//           // After Stripe payment success, redirect to success page
+//          window.location.href = res.url; // Redirect to the Stripe URL
+//           console.log('Redirecting to Stripe URL:', res);
+//           this.router.navigate(['/paymentsucess']);
+//         //}
+//       },
+//       error: (err) => {
+//         console.error('Stripe error:', err);
+//       }
+//     });
+//   }
+// }
+payWithStripe() {
+  if (this.selectedPlanId !== null) {
+    this.subscriptionService.payWithStripe(this.selectedPlanId).subscribe({
+      next: (res: any) => {
+        window.location.href = res.url; // ✅ Now works correctly
+        console.log('Redirecting to Stripe URL:', res);
+        this.router.navigate(['/paymentsucess']);
+      },
+      error: (err) => {
+        console.error('Stripe error:', err);
+      }
+    });
+  }
+}
+
+payWithBalance() {
+  if (this.selectedPlanId !== null) {
+    this.subscriptionService.payWithBalance(this.selectedPlanId).subscribe({
+      next: () => {
+        this.closeModal();
+        this.router.navigate(['/paymentsucess']);
+      },
+      error: (err) => {
+        alert('Failed to pay from balance: ' + err.error);
+      }
+    });
+  }
+}
+
+payWithCard() {
+  if (this.selectedPlanId !== null) {
+    this.subscriptionService.payWithCard(this.selectedPlanId, this.cardData).subscribe({
+      next: (res) => {
+        this.closeModal();
+        this.router.navigate(['/paymentsucess']);
+      },
+      error: (err) => {
+        console.error('Card payment error:', err);
+        alert('Payment failed');
+      }
+    });
+  }
+}
+
+
 }

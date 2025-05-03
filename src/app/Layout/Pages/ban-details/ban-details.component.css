@@ -1,0 +1,299 @@
+.ban-details-dashboard {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Breadcrumb Styles */
+.breadcrumb-container {
+  margin-bottom: 2rem;
+}
+
+.breadcrumb {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.breadcrumb-item {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.breadcrumb-item a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+  color: #2980b9;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/";
+  padding: 0 0.5rem;
+  color: #6c757d;
+}
+
+.breadcrumb-item.active {
+  color: #2c3e50;
+}
+
+/* Details Card Styles */
+.details-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.user-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  font-size: 1.75rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.badge-status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #95a5a6;
+  color: white;
+}
+
+.badge-status.active {
+  background: #e74c3c;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-item {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.description-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.description-content {
+  display: flex;
+  gap: 1rem;
+  color: #7f8c8d;
+}
+
+.description-content i {
+  margin-top: 0.25rem;
+}
+
+.description-content p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-back,
+.btn-delete {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-back {
+  background: #3498db;
+  color: white;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-back:hover,
+.btn-delete:hover {
+  transform: translateY(-1px);
+  filter: brightness(110%);
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+  .ban-details-dashboard {
+    padding: 1.5rem;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .ban-details-dashboard {
+    padding: 1rem;
+  }
+
+  .user-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .user-name {
+    font-size: 1.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-back,
+  .btn-delete {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ban-details-dashboard {
+    padding: 0.5rem;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 1rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+  }
+
+  .user-name {
+    font-size: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .info-item {
+    padding: 0.75rem;
+  }
+
+  .info-value {
+    font-size: 1rem;
+  }
+
+  .description-section {
+    padding: 1rem;
+  }
+}
+
+/* Dark mode support */
+/* @media (prefers-color-scheme: dark) {
+  .ban-details-dashboard {
+    background: #1a1a1a;
+  }
+
+  .details-card {
+    background: #2d2d2d;
+  }
+
+  .user-name,
+  .section-title,
+  .section-subtitle {
+    color: #fff;
+  }
+
+  .info-item,
+  .description-section {
+    background: #333;
+  }
+
+  .info-value {
+    color: #fff;
+  }
+
+  .description-content {
+    color: #ccc;
+  }
+} */

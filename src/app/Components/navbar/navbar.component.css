@@ -10,8 +10,9 @@
 }
 
 .navbar-logo {
-  height: 38px;
-  margin-left: 0;
+  height: 30px;
+  padding-left: 20px;
+  /* margin-left: 0; */
 }
 
 /* Navigation Links */
@@ -77,7 +78,7 @@
 
 /* Balance Link */
 .balance-link {
-  
+
   border-radius: 20px;
   padding: 0.5rem 1rem;
   color: #001e00;
@@ -125,6 +126,10 @@
 .navbar-nav .icon-link i {
   font-size: 1.5rem;  /* Adjust this value as needed */
 }
+.centered{
+  display: flex;
+  justify-content:flex-end;
+}
 /* Sign Up Button */
 .signup-btn {
   background-color: #108a00;
@@ -136,6 +141,7 @@
 }
 
 
+
 .signup-btn:hover {
   background-color: #0c6b00;
 }
@@ -144,14 +150,14 @@
 @media (max-width: 991.98px) {
   .navbar-nav {
     padding: 1rem 0;
-    
+
   }
-  
+
   .balance-link {
     display: inline-block;
     margin: 0.5rem 0;
   }
-  
+
   .icon-link {
     padding: 0.75rem;
   }

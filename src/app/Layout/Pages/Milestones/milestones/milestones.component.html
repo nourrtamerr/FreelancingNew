@@ -20,6 +20,43 @@
       <span class="stat-label">Total Milestones</span>
     </div>
   </div>
+
+  <div class="project-review-section" *ngIf="areAllMilestonesCompleted()">
+    <div class="review-card">
+      <div class="review-header">
+        <h3>{{ existingReview ? 'Update Your Review' : 'Project Completed Successfully!' }}</h3>
+        <p>{{ existingReview ? 'Edit your review for the' : 'Share your experience working with the' }} 
+           {{ isProjectClient ? 'Freelancer' : 'Client' }}</p>
+      </div>
+  
+      <form [formGroup]="reviewForm" (ngSubmit)="submitProjectReview()">
+        <div class="rating-container">
+          <label>Rating:</label>
+          <div class="stars">
+            <i *ngFor="let star of [1,2,3,4,5]" 
+               class="fas fa-star"
+               [class.active]="star <= reviewForm.get('rating')?.value"
+               (click)="setRating(star)"></i>
+          </div>
+        </div>
+        
+        <div class="comment-container">
+          <label>Comment:</label>
+          <textarea 
+            formControlName="comment" 
+            rows="3" 
+            placeholder="Share your experience..."></textarea>
+          <div class="error-message" *ngIf="reviewForm.get('comment')?.touched && reviewForm.get('comment')?.invalid">
+            Please enter a comment (minimum 10 characters)
+          </div>
+        </div>
+  
+        <button type="submit" class="submit-review-btn" [disabled]="reviewForm.invalid">
+          {{ existingReview ? 'Update Review' : 'Submit Review' }}
+        </button>
+      </form>
+    </div>
+  </div>
   
   <div class="milestones-timeline" *ngIf="milestones.length > 0">
     <div class="milestone-card" *ngFor="let milestone of milestones; let i = index">

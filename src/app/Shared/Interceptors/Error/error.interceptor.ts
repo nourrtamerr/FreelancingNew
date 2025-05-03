@@ -18,12 +18,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         toastr.error('Session expired. Please log in again.');
         return EMPTY;
       }
-      else if (error.error?.Message) {
-        console.log(error)
-        toastr.error(error.error.message);
-        // toastr.error(error.message);
+      else if (error.error?.message) {
 
-        return EMPTY;
+        if(!error.error.message.includes('Fixed price project with ID') && !error.error.message.includes('No Bidding Project Found Hasing This Id')){
+
+          toastr.error(error.error.message);
+        }
+        if(!error.error.message.includes('No Bidding Project Found Hasing This Id'))
+        {
+          return EMPTY;
+        }
+
+        
+
       }
       return throwError(() => error);
     })

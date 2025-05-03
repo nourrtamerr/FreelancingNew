@@ -84,17 +84,17 @@ export class LoginComponent implements OnInit {
     }
 
     let strength = 0;
-    
+
     if (password.length >= 8) strength += 1;
     if (password.length >= 12) strength += 1;
-    
+
     if (/[A-Z]/.test(password)) strength += 1;
     if (/[a-z]/.test(password)) strength += 1;
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-    
+
     this.passwordStrength = Math.min(5, strength);
-    
+
     if (strength <= 1) this.passwordStrengthText = 'Very Weak';
     else if (strength === 2) this.passwordStrengthText = 'Weak';
     else if (strength === 3) this.passwordStrengthText = 'Medium';
@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoging = isLoggedIn;
       if (isLoggedIn) {
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/home']);
       }
     });
 
@@ -175,19 +175,19 @@ export class LoginComponent implements OnInit {
     this.authService.deCodeUserData(response.token);
     this._ToastrService.success('Login successful! Redirecting to your profile...', 'Welcome Back');
     setTimeout(() => {
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/home']);
     }, 500);
   }
 
   ExternalLogin(provider: 'Google' | 'Facebook'): void {
-    const returnUrl = `${this.frontendBase}/profile`;
+    const returnUrl = `${this.frontendBase}/home`;
     const errorUrl = `${this.frontendBase}/home`;
-  
+
     console.log(`Initiating ${provider} login...`);
     this._ToastrService.info(`Redirecting to ${provider} login...`, 'Please wait');
-  
+
     this.authService.logout();
-  
+
     this._AccountService.ExternalLogin(provider, undefined, returnUrl, errorUrl)
       .pipe(
         catchError((error) => {
@@ -302,7 +302,7 @@ export class LoginComponent implements OnInit {
     // for backward compatibility with the old UI
     const loginBtn = document.getElementById('wt-loginbtn');
     if (!loginBtn) return;
-    
+
     const dropdownContainer = loginBtn.closest('.wt-loginarea')?.querySelector('.wt-loginformhold');
     if (dropdownContainer?.classList.contains('show')) {
       loginBtn.click();
@@ -314,7 +314,7 @@ export class LoginComponent implements OnInit {
    */
   private handleError(error: HttpErrorResponse, defaultMessage: string): void {
     console.error('API Error:', error);
-    
+
     if (error.error?.message) {
       this.errorMessage = String(error.error.message);
     } else if (error.error?.errors) {
@@ -324,14 +324,14 @@ export class LoginComponent implements OnInit {
     } else {
       this.errorMessage = defaultMessage;
     }
-    
+
     this._ToastrService.error(this.errorMessage || 'An error occurred. Please try again later.', 'Error', { timeOut: 7000 });
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
-      
+
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
       }

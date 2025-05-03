@@ -24,6 +24,10 @@ export class ReviewService {
     return this._HttpClient.get<GetReviewsByRevieweeIdDto[]>(`${this.apiUrl}Reviews/reviewee/${id}`);
   }
 
+  getbyprojectId(id: number): Observable<GetReviewsByRevieweeIdDto[]> {
+    return this._HttpClient.get<GetReviewsByRevieweeIdDto[]>(`${this.apiUrl}Reviews/project/${id}`);
+  }
+
   getReviewerById(id: string): Observable<Review[]> {
     return this._HttpClient.get<Review[]>(`${this.apiUrl}Reviews/reviewer/${id}`);
   }
@@ -38,6 +42,7 @@ export class ReviewService {
     return this._HttpClient.put<Review>(`${this.apiUrl}Reviews/${id}`, review);
   }
   deleteReview(id: number): Observable<void> {
+    console.log(id);
     return this._HttpClient.delete<void>(`${this.apiUrl}Reviews/${id}`);
   }
 }

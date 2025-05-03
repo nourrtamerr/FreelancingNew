@@ -19,6 +19,9 @@ export interface Milestone {
     proposalsCount: number;
     projectSkills: string[];
     milestones: Milestone[];
+    clientCountry:string;
+    clientRating:number
+    postedFrom:number
   }
   // get project by id
   export interface FixedPriceProjectById {

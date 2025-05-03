@@ -22,17 +22,17 @@
         <div class="col-lg-8 col-md-12">
           <div class="upwork-job-details mb-4">
             <h1 class="job-title">{{project?.title}}</h1>
-            
+
             <div class="job-meta">
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
 
               <span> <i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
             </div>
 
-           
-  
+
+
             <section class="job-section">
-              
+
               <p>
                 {{project?.description}}
               </p>
@@ -40,9 +40,9 @@
 
 
             <!--newww-->
-            
-         
-          
+
+
+
 <div class="project-info-bar-modern">
 
     <div class="project-info-modern-item">
@@ -50,7 +50,7 @@
         <div>
           <div class="info-modern-value">{{project?.experienceLevel}}</div>
           <div class="info-modern-label">Experience Level</div>
-    
+
         </div>
       </div>
 
@@ -58,8 +58,8 @@
     <!-- <i class="fa fa-gavel"></i> -->
     <i class="fa-solid fa-tag"></i>
     <div>
-      <div class="info-modern-value">{{project?.minimumPrice}} - {{project?.maximumprice}} {{project.currency}}</div>
-      <div class="info-modern-label">{{project.projectType}} Range</div>
+      <div class="info-modern-value">{{project?.maximumprice}} {{project.currency}}</div>
+      <div class="info-modern-label">{{project.projectType}} start price</div>
     </div>
   </div>
 
@@ -67,7 +67,7 @@
     <!-- <i class="fa fa-dollar-sign"></i> -->
     <i class="fa-solid fa-money-bill-1-wave"></i>
     <div>
-      <div class="info-modern-value">{{project?.bidAveragePrice}} {{project.currency}}</div>
+      <div class="info-modern-value" [ngClass]="avgBidAnimationClass">{{project?.bidAveragePrice}} {{project.currency}}</div>
       <div class="info-modern-label">Avg Bid</div>
     </div>
   </div>
@@ -78,7 +78,7 @@
 </div>
 
 <div class="project-info-bar-modern">
-    
+
   <div class="project-info-modern-item">
     <i class="fa-regular fa-hourglass-half"></i>
     <div>
@@ -89,54 +89,66 @@
   <div class="project-info-modern-item">
     <i class="fa fa-users"></i>
     <div>
-      <div class="info-modern-value">{{project?.numOfBids}}</div>
+      <div class="info-modern-value" [ngClass]="numBidsAnimationClass">{{project?.numOfBids}}</div>
       <div class="info-modern-label">Bids</div>
+    </div>
+  </div>
+  <div class="project-info-modern-item">
+    <i class="fa-solid fa-arrow-trend-down"></i>
+    <div>
+      <div class="info-modern-value" [ngClass]="bidAnimationClass">{{project?.currentBid}}</div>
+      <div class="info-modern-label">Current Bid</div>
     </div>
   </div>
 </div>
 
 <hr>
-  
+
             <div class="row">
                 <div class="col-lg-12">
                   <section>
                     <h3 class="section-title">Skills and Expertise</h3>
-                    
+
                     <span *ngFor="let skill of project.projectSkills" class="skill-tag">{{skill}}</span>
-                
+
                   </section>
                 </div>
               </div>
           </div>
         </div>
-  
+
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
-          <aside class="upwork-sidebar mb-4"> 
-           <div  *ngIf="!isBiddingExpired()">
-  <a *ngIf="role === 'Freelancer'" [routerLink]="['/proposal2', project.id]">
-            <button class="apply-btn mb-2">
-             
-              Apply now
-            </button>
-          </a>
+          <aside class="upwork-sidebar mb-4">
+           <div  >
 
-          <a  [routerLink]="['/proposals',project.id]">
-            <button class="apply-btn mb-2">
-              View Proposals
-            </button>
-          </a>
-            
-          <button class="save-btn mb-2" *ngIf="role=='Freelancer'"  (click)="AddToWishlist(project.id)">
-            
-            Save job
-          </button>
+            <a *ngIf="role=='Freelancer'" [routerLink]="(project?.freelancerId === null && !isBidEndDatePassed()) ? ['/proposal2', project.id] : []">
+              <button class="apply-btn mb-2"
+                      [disabled]="project?.freelancerId !== null || isBidEndDatePassed()"
+                      [title]="getBidButtonTitle()"
+                      [class.disabled-button]="project?.freelancerId !== null || isBidEndDatePassed()">
+                {{ project?.freelancerId === null ? (isBidEndDatePassed() ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+              </button>
+            </a>
 
-           </div>
-          
-      
-      
-  
+            <a  [routerLink]="['/proposals',project.id]">
+              <button class="apply-btn mb-2">
+                View Proposals
+              </button>
+            </a>
+
+          </div>
+
+          <button  class="save-btn mb-2" *ngIf="role=='Freelancer'"
+          (click)="AddToWishlist(project.id)"
+          [class.saved]="isInWishlist()"  >
+          <i class="fa" [class.fa-check]="isInWishlist()" [class.fa-bookmark]="!isInWishlist()"></i>
+          {{ isInWishlist() ? 'Saved' : 'Save job' }}
+
+        </button>
+
+
+
             <div class="client-info">
               <p style="font-size: 22px; font-weight: bold;">About the client</p>
               <div class="client-meta">
@@ -151,7 +163,7 @@
                 <span>{{project.clientProjectsTotalCount}} jobs posted</span>
               </div>
               <div class="client-stats">
-                
+
             </div>
               <div class="client-member-since">
                 Member since {{project.clinetAccCreationDate|date:'mediumDate'}}
@@ -174,14 +186,14 @@
           </aside>
         </div>
       </div>
-  
+
      <!-- Skills and Expertise -->
      <hr>
-     
 
 
 
-    
+
+
 
 
 
@@ -191,61 +203,71 @@
   <div class="col-lg-12">
     <section>
       <h3 class="section-title mb-4">Client's recent history</h3>
-      <div id="clientReviewsCarousel" class="carousel slide" data-bs-ride="carousel" *ngIf="clientReviews.length > 0">
+      <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" *ngIf="clientReviews?.length??0 > 0">
         <div class="carousel-inner">
-          <div
-            class="carousel-item"
-            *ngFor="let review of clientReviews; let i = index"
-            [class.active]="i === 0"
-          >
-          
+          <div class="carousel-item" *ngFor="let review of clientReviews; let i = index" [class.active]="i === 0">
 
-           
-<div class="card review-card mx-auto">
+
+
+            <div class="review-card">
   <div class="card-body">
-    <a [routerLink]="['/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
-      {{ review.projectTitle }} 
-    </a>
+
+    <div class="d-flex justify-content-between align-items-start mb-2">
+
+      <a [routerLink]="['/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
+        {{ review.projectTitle }}
+      </a>
+      <div class="review-actions" *ngIf="review.reviewerId === currentuserid">
+        <button class="btn btn-link text-primary p-1" (click)="editReview(review)">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-link text-danger p-1" (click)="deleteReview(review.id)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+
+
     <div class="d-flex align-items-center mb-2">
-      <!-- <span >
-        By: {{ review.reviewerName }}
-      </span> -->
       <span class="history-rating ms-auto text-warning">
         <ng-container *ngFor="let star of [1,2,3,4,5]; let idx = index">
-          <i
-            class="fa-star"
-            [ngClass]="{
-              'fa': true,
-              'fa-solid': review.rating >= star,
-              'fa-regular': review.rating < star
-            }"
-          ></i>
+          <i class="fa-star"
+             [ngClass]="{
+               'fa': true,
+               'fa-solid': review.rating >= star,
+               'fa-regular': review.rating < star
+             }"></i>
         </ng-container>
         <span class="rating-number ms-1">{{ review.rating }}/5</span>
       </span>
     </div>
+
     <p class="mb-2 fst-italic text-secondary">
       {{ review.comment !== null ? review.comment : 'No comment' }}
     </p>
+
     <div class="d-flex justify-content-between align-items-center">
-      <!-- Removed View Project button -->
       <span></span>
       <span class="history-details small text-muted">{{ review.date | date: 'mediumDate' }}</span>
     </div>
   </div>
 </div>
+</div>
 
 
-            
-          </div>
+
         </div>
         <!-- Carousel controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#clientReviewsCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#clientReviewsCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
-        </button>
+        <ng-container *ngIf="clientReviews.length > 1">
+          <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </ng-container>
       </div>
       <div *ngIf="clientReviews.length === 0" class="text-muted">Client hasn't done any reviews yet</div>
     </section>
@@ -254,16 +276,16 @@
 
 <!-- ... existing code ... -->
 
-     
+
      <!-- Other open jobs -->
      <div class="row mt-5" style="border-top: 1px solid #efefef;">
        <div class="col-lg-12">
          <section>
            <h3 class="section-title">Other open jobs by this Client</h3>
            <ul class="other-jobs-list">
-             <li *ngFor="let project of clientOtherProjNameId" ><a [routerLink]="['/home2/details', project.id]">{{project.title}}</a> {{project.projectType}} Project</li>
+             <li *ngFor="let project of clientOtherProjNameId" ><a [routerLink]="project.projectType=='bidding'?['/details', project.id]:['/fixed-project', project.id]">{{project.title}}</a> {{project.projectType}} Project</li>
            </ul>
-           
+
          </section>
        </div>
      </div>
@@ -272,3 +294,71 @@
 
     </div>
   </div>
+
+
+  <div class="modal fade" [class.show]="selectedReview" [style.display]="selectedReview ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Review</h5>
+          <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="editReviewForm" (ngSubmit)="updateReview()">
+            <div class="rating-container mb-3">
+              <label>Rating:</label>
+              <div class="stars">
+                <i *ngFor="let star of [1,2,3,4,5]"
+                   class="fas fa-star"
+                   [class.active]="star <= editReviewForm.get('rating')?.value"
+                   (click)="editReviewForm.patchValue({rating: star})"></i>
+              </div>
+            </div>
+
+            <div class="comment-container mb-3">
+              <label>Comment:</label>
+              <textarea
+                formControlName="comment"
+                class="form-control"
+                rows="3"
+                placeholder="Share your experience..."></textarea>
+              <div class="error-message" *ngIf="editReviewForm.get('comment')?.touched && editReviewForm.get('comment')?.invalid">
+                Please enter a comment (minimum 10 characters)
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="editReviewForm.invalid">
+                Update Review
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop fade show" *ngIf="selectedReview"></div>
+
+
+
+  <div class="modal fade" [class.show]="showDeleteModal" [style.display]="showDeleteModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Delete</h5>
+          <button type="button" class="btn-close" (click)="closeDeleteModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this review?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop fade show" *ngIf="showDeleteModal"></div>

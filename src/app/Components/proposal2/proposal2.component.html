@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row gx-4 gy-4">
       <div class="col-lg-12 col-md-12">
-        <div class="upwork-job-details mb-4">
+        <div class="">
           <h1 class="job-title">Submit a proposal</h1>
 
           <!-- General Error Message -->
@@ -19,9 +19,16 @@
                 <span class="proposal-summary-value">{{projectType}} project</span>
               </div>
               <div class="proposal-summary-item">
-                <i class="fa-solid fa-dollar-sign"></i>
-                <span class="proposal-summary-label">Price:</span>
-                <span class="proposal-summary-value">{{projectType=='Bidding'?  (project?.minimumPrice + ' - ' + project?.maximumprice) : project?.price}}</span>
+                @if(projectType=="Bidding")
+                {
+                  <i class="fa-solid fa-arrow-trend-down"></i>
+                }
+                @else {
+
+                  <i class="fa-solid fa-dollar-sign"></i>
+                }
+                <span class="proposal-summary-label">{{projectType=='Bidding'?  'Current bid' : 'Price'}}:</span>
+                <span class="proposal-summary-value">{{projectType=='Bidding'?  ( project?.currentBid) : project?.price}}</span>
               </div>
               <div class="proposal-summary-item">
                 <i class="fa-regular fa-clock"></i>
@@ -29,8 +36,8 @@
                 <span class="proposal-summary-value">{{project?.expectedDuration}} Days</span>
               </div>
               <div class="proposal-summary-item">
-                <i class="fa-solid fa-hourglass"></i>
-                <span class="proposal-summary-label">Bid End Date:</span>
+                <i class="fa-solid fa-hourglass" *ngIf="projectType==`Bidding`"></i>
+                <span class="proposal-summary-label" *ngIf="projectType==`Bidding`">Bid End Date:</span>
                 <span class="proposal-summary-value">{{project?.biddingEndDate | date:'mediumDate'}}</span>
               </div>
             </div>
@@ -50,7 +57,8 @@
                 #coverLetterModel="ngModel" 
                 class="proposal-details-textarea"
                 rows="8"
-                required></textarea>
+                required
+                (input)="clearMilestoneTotalError()"></textarea>
               <div *ngIf="coverLetterModel.invalid && (coverLetterModel.dirty || coverLetterModel.touched)" class="text-danger small mt-1">
                 {{ getError('coverLetter') }}
               </div>
@@ -63,8 +71,8 @@
             <h2 class="proposal-terms-title">Milestones*</h2>
             
             <!-- Milestone General Error -->
-            <div *ngIf="formErrors.milestone?.general" class="alert alert-warning">
-              {{ formErrors.milestone.general }}
+            <div *ngIf="formErrors.milestone?.general" class="alert alert-danger">
+              {{ this.milestoneerror }}
             </div>
             
             <div class="proposal-milestone-section">
@@ -89,6 +97,7 @@
                       class="proposal-milestone-description"
                       [class.is-invalid]="descriptionModel.invalid && (descriptionModel.dirty || descriptionModel.touched)"
                       placeholder="Milestone description"
+                      (input)="clearMilestoneTotalError()"
                       required></textarea>
                     <div *ngIf="descriptionModel.invalid && (descriptionModel.dirty || descriptionModel.touched)" class="text-danger small mt-1">
                       {{ getError('description', i) }}
@@ -105,6 +114,7 @@
                                class="proposal-milestone-input"
                                [class.is-invalid]="titleModel.invalid && (titleModel.dirty || titleModel.touched)"
                                placeholder="Milestone title"
+                               (input)="clearMilestoneTotalError()"
                                required>
                                <div *ngIf="titleModel.invalid && (titleModel.dirty || titleModel.touched)" class="text-danger small mt-1">
                                 {{ getError('title', i) }}
@@ -117,6 +127,7 @@
                                  [name]="'milestone-amount-' + i"
                                  [id]="'milestone-amount-' + i"
                                 #priceModel="ngModel"
+                                (input)="clearMilestoneTotalError()"
                                 [class.is-invalid]="priceModel.invalid && (priceModel.dirty || priceModel.touched)"
 
                                  type="number"
@@ -136,6 +147,7 @@
                                  [name]="'milestone-due-' + i"
                                  [id]="'milestone-due-' + i"
                                  #durationModel="ngModel"
+                                 (input)="clearMilestoneTotalError()"
                                  [class.is-invalid]="durationModel.invalid && (durationModel.dirty || durationModel.touched)"
  
                                  type="number"
@@ -143,7 +155,8 @@
                                 
                                  placeholder="Duration"
                                  min="1"
-                                 required>
+                                 required
+                                 (input)="clearMilestoneTotalError()">
                                  <div *ngIf="durationModel.invalid && (durationModel.dirty || durationModel.touched)" class="text-danger small mt-1">
                                   {{ getError('duration', i) }}
                                 </div>
@@ -158,26 +171,44 @@
               <button type="button" 
                       class="proposal-milestone-add-btn" 
                       (click)="addMilestone()"
-                      [disabled]="!isCurrentMilestoneValid()"
-                      [title]="!isCurrentMilestoneValid() ? 'Complete current milestone first' : ''">
+                      
+                      [title]="!isCurrentMilestoneValid() ? 'Complete current milestone first' : ''" 
+                      style="color:#2563eb">
                 + Add milestone
               </button>
             </div>
           </div>
 
-          <!-- Submit Button -->
-          <div class="proposal-submit-actions pt-4">
-            <div *ngIf="submitError" class="alert alert-danger">
-              <i class="fa fa-exclamation-circle"></i> {{ submitError }}
+
+          <div class="proposal-summary-section">
+            <div class="proposal-summary-totals">
+              <div class="proposal-summary-item">
+                <span class="proposal-summary-label">Total Duration:</span>
+                <span class="proposal-summary-value">{{getTotalDuration()}} days</span>
+              </div>
+              <div class="proposal-summary-item">
+                <span class="proposal-summary-label">Total Amount:</span>
+                <span class="proposal-summary-value">${{getTotalAmount()}}</span>
+              </div>
+              <div class="proposal-summary-item" *ngIf="projectType === 'Bidding'">
+                <span class="proposal-summary-label">Current Bid:</span>
+                <span class="proposal-summary-value">${{project?.currentBid}}</span>
+              </div>
             </div>
+          </div>
+          <!-- Submit Button -->
+          <div *ngIf="submitError" class="alert alert-danger col-6">
+            <i class="fa fa-exclamation-circle"></i> {{ milestonestotal? milestonestotal:submitError }}
+          </div>
+          <div class="proposal-submit-actions pt-4">
             
             <!-- Submit button remains unchanged -->
             <button class="proposal-send-btn" 
                     (click)="createProposal()"
-                    [disabled]="!validateForm() || isSubmitting">
+                    >
               Apply proposal
             </button>
-            <button type="button" class="proposal-cancel-link">
+            <button type="button" class="proposal-cancel-link" (click)="back()">
               Cancel
             </button>
           </div>

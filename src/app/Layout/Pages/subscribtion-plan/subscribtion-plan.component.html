@@ -1,197 +1,448 @@
 <div class="subscription-container">
-    <h1 class="subscription-title">Choose Your Plan</h1>
-    <p class="subscription-subtitle">Select the perfect plan for your freelancing journey</p>
-
-    <div class="plans-container">
-        <div *ngFor="let plan of plans" class="plan-card" [class.featured]="plan.id === 2">
-            <div *ngIf="plan.id === 2" class="featured-badge">Most Popular</div>
-            <div class="plan-header">
-                <h2>{{plan.name}}</h2>
-                <div class="price">
-                    <span class="currency">$</span>
-                    <span class="amount">{{plan.price}}</span>
-                    <span class="period">/{{plan.duration}} days</span>
-                </div>
-            </div>
-            <div class="plan-features">
-                <ul>
-                    <li *ngFor="let feature of plan.features">
-                        <i class="fas fa-check"></i> {{feature}}
-                    </li>
-                </ul>
-            </div>
-            <button 
-                class="plan-button" 
-                [class.featured-button]="plan.id === 2"
-                (click)="selectPlan(plan.id)"
-            >
-                {{plan.id === 1 ? 'Get Started Free' : plan.id === 2 ? 'Choose Pro' : 'Go Elite'}}
-            </button>
-        </div>
+    <div class="subscription-header">
+      <h1>Choose the plan that works for you</h1>
+      <p>Access Freelancing features that help you find work and grow your business</p>
     </div>
-</div>
+  
+    <div class="plans-container">
+      <div *ngFor="let plan of plans" class="plan-card" [class.featured]="plan.id === 2">
+        <div *ngIf="plan.id === 2" class="featured-badge">
+          <i class="fas fa-star"></i>
+          Most Popular
+        </div>
+  
+        <div class="plan-header">
+          <h2>{{plan.name}}</h2>
+          <div class="price-container">
+            <div class="price">
+              <span class="currency">$</span>
+              <span class="amount">{{plan.price}}</span>
+            </div>
+            <span class="period">/{{plan.duration}} days</span>
+          </div>
+          <p class="plan-description">Perfect for {{plan.id === 1 ? 'getting started' : plan.id === 2 ? 'growing freelancers' : 'professional freelancers'}}</p>
+        </div>
+  
+        <div class="plan-features">
+            <ul>
+              <li *ngFor="let feature of plan.features">
+                <i class="fas fa-check-circle"></i>
+                <span>{{feature}}</span>
+              </li>
+            </ul>
+          </div>
+    
+          <!-- Only show button for non-starter plans -->
+          <button *ngIf="plan.id !== 1" class="plan-button" [class.featured-button]="plan.id === 2" (click)="showPaymentOptions(plan.id)">
+            <span>Choose Plan</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+    
+          <div *ngIf="plan.id === 1" class="starter-badge">
+            <i class="fas fa-check"></i>
+            <span>Current Plan</span>
+          </div>
+  
+        <div *ngIf="selectedPlanId === plan.id" class="payment-options">
+          <div class="payment-header">
+            <h3>Select Payment Method</h3>
+            <button class="close-payment" (click)="closePaymentOptions() ">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="payment-methods">
+            <div class="payment-option-card" (click)="payWithStripe()">
+              <div class="payment-icon">
+                <i class="fab fa-stripe"></i>
+              </div>
+              <div class="payment-details">
+                <h4>Pay with Stripe</h4>
+                <p>Fast and secure payment via Stripe</p>
+              </div>
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </div>
+    
+            <div class="payment-option-card" (click)="payWithBalance()">
+              <div class="payment-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="payment-details">
+                <h4>Pay with Balance</h4>
+                <p>Use your available account balance</p>
+              </div>
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </div>
+    
+            <div class="payment-option-card" (click)="showCardForm = true">
+              <div class="payment-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="payment-details">
+                <h4>Credit Card</h4>
+                <p>Pay directly with your card</p>
+              </div>
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </div>
+          </div>
+
+          <div *ngIf="showCardForm" class="card-form">
+            <div class="form-group">
+              <label>Card Number</label>
+              <div class="input-wrapper">
+                <i class="fas fa-credit-card"></i>
+                <input type="text" placeholder="1234 5678 9012 3456" [(ngModel)]="cardData.cardnumber" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="number" placeholder="123" [(ngModel)]="cardData.cvv" />
+              </div>
+            </div>
+            <button class="submit-button" (click)="payWithCard()">
+              <i class="fas fa-lock"></i>
+              Complete Secure Payment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <style>
 .subscription-container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  font-family: 'Neue Plak', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: #f9f9f9;
 }
 
-.subscription-title {
-    text-align: center;
-    color: #14a800;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+.subscription-header {
+  text-align: center;
+  margin-bottom: 60px;
 }
 
-.subscription-subtitle {
-    text-align: center;
-    color: #666;
-    font-size: 1.1rem;
-    margin-bottom: 40px;
+.subscription-header h1 {
+  font-size: 42px;
+  color: #001e00;
+  margin-bottom: 16px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.subscription-header p {
+  font-size: 20px;
+  color: #5e6d55;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .plans-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    padding: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  margin-top: 32px;
 }
 
 .plan-card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
 }
 
 .plan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
-.featured {
-    border: 2px solid #14a800;
-    transform: scale(1.05);
+.plan-card.featured {
+  border: 2px solid #14a800;
 }
 
 .featured-badge {
-    position: absolute;
-    top: -12px;
-    right: 20px;
-    background: #14a800;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  background: #14a800;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.2);
 }
 
 .plan-header {
-    text-align: center;
-    margin-bottom: 30px;
+  text-align: left;
+  margin-bottom: 32px;
 }
 
 .plan-header h2 {
-    color: #333;
-    font-size: 1.8rem;
-    margin-bottom: 15px;
+  font-size: 28px;
+  color: #001e00;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.price-container {
+  margin-bottom: 20px;
 }
 
 .price {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 5px;
+  font-size: 56px;
+  font-weight: 700;
+  color: #001e00;
+  display: flex;
+  align-items: flex-start;
 }
 
 .currency {
-    color: #666;
-    font-size: 1.5rem;
-}
-
-.amount {
-    color: #14a800;
-    font-size: 3.5rem;
-    font-weight: bold;
+  font-size: 28px;
+  margin-right: 4px;
+  margin-top: 8px;
 }
 
 .period {
-    color: #666;
-    font-size: 1rem;
+  color: #5e6d55;
+  font-size: 16px;
+  margin-top: 8px;
+  display: block;
+}
+
+.plan-description {
+  color: #5e6d55;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .plan-features {
-    margin-bottom: 30px;
+  margin: 32px 0;
 }
 
 .plan-features ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .plan-features li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: #444;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  color: #001e00;
+  font-size: 16px;
 }
 
 .plan-features i {
-    color: #14a800;
-    font-size: 1.1rem;
+  color: #14a800;
+  font-size: 20px;
 }
 
 .plan-button {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #14a800;
-    border-radius: 25px;
-    background: transparent;
-    color: #14a800;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 32px;
+  background: #14a800;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
 }
 
 .plan-button:hover {
-    background: #14a800;
-    color: white;
+  background: #3c8224;
+  transform: translateY(-2px);
 }
 
-.featured-button {
-    background: #14a800;
-    color: white;
+.payment-options {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
 }
 
-.featured-button:hover {
-    background: transparent;
-    color: #14a800;
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.payment-header h3 {
+  font-size: 20px;
+  color: #001e00;
+  margin: 0;
+  font-weight: 600;
+}
+
+.close-payment {
+  background: none;
+  border: none;
+  color: #5e6d55;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+
+.close-payment:hover {
+  color: #001e00;
+}
+
+.payment-methods {
+  display: grid;
+  gap: 16px;
+}
+
+.payment-option-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-option-card:hover {
+  border-color: #14a800;
+  background: #f9fff9;
+  transform: translateY(-2px);
+}
+
+.payment-icon {
+  width: 48px;
+  height: 48px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.payment-icon i {
+  font-size: 24px;
+  color: #14a800;
+}
+
+.payment-details {
+  flex: 1;
+}
+
+.payment-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: #001e00;
+  font-weight: 600;
+}
+
+.payment-details p {
+  margin: 0;
+  font-size: 14px;
+  color: #5e6d55;
+}
+
+.arrow-icon {
+  color: #5e6d55;
+  font-size: 16px;
+  margin-left: 16px;
+}
+
+.card-form {
+  margin-top: 24px;
+  padding: 24px;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #001e00;
+  font-weight: 500;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5e6d55;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.input-wrapper input:focus {
+  border-color: #14a800;
+  outline: none;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 16px;
+  background: #14a800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #3c8224;
 }
 
 @media (max-width: 768px) {
-    .plans-container {
-        grid-template-columns: 1fr;
-        padding: 10px;
-    }
-
-    .featured {
-        transform: none;
-    }
-
-    .plan-card {
-        padding: 20px;
-    }
-
-    .subscription-title {
-        font-size: 2rem;
-    }
+  .subscription-header h1 {
+    font-size: 32px;
+  }
+  
+  .subscription-header p {
+    font-size: 18px;
+  }
+  
+  .plans-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .plan-card {
+    padding: 24px;
+  }
 }
 </style>

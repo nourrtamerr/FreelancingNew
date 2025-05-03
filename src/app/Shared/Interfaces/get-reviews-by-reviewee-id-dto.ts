@@ -7,4 +7,7 @@ export interface GetReviewsByRevieweeIdDto {
   projectId: number
   projectTitle: string
   projectType: string
+  reviewerId?:string
+  revieweeId?:string
 }
+

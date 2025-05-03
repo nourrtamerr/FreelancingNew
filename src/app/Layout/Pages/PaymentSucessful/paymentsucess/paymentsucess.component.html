@@ -1,0 +1,167 @@
+<div class="success-container">
+    <div class="success-card">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      
+      <h1>Payment Successful!</h1>
+      <p>Your payment has been processed successfully. Thank you for your subscription.</p>
+      <!-- <p>You have subscribed to the <strong>{{ selectedPlanName }}</strong> plan for <strong>${{ selectedPlanPrice }}</strong>.</p> -->
+      <p>We appreciate your support and look forward to serving you.</p>
+    
+      
+      
+      <div class="success-details">
+        <div class="detail-item">
+          <i class="fas fa-clock"></i>
+          <span>Transaction Date: {{currentDate }}</span>
+        </div>
+        <div class="detail-item">
+          <i class="fas fa-shield-alt"></i>
+          <span>Transaction ID: {{transactionId}}</span>
+        </div>
+      </div>
+  
+      <div class="action-buttons">
+        <button class="primary-button" [routerLink]="['/home']">
+         
+
+          <i class="fas fa-home"></i>
+          Back to Home
+        </button>
+        <button class="secondary-button" routerLink="/payments">
+          <i class="fas fa-credit-card"></i>
+          View Payments
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+  .success-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #f9f9f9;
+  }
+  
+  .success-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .success-icon {
+    font-size: 64px;
+    color: #14a800;
+    margin-bottom: 24px;
+    animation: scaleIn 0.5s ease;
+  }
+  
+  @keyframes scaleIn {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .success-card h1 {
+    color: #001e00;
+    font-size: 28px;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  
+  .success-card p {
+    color: #5e6d55;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+  
+  .success-details {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: #001e00;
+    font-size: 14px;
+  }
+  
+  .detail-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .detail-item i {
+    color: #14a800;
+    font-size: 18px;
+  }
+  
+  .action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .primary-button, .secondary-button {
+    padding: 16px;
+    border: none;
+    border-radius: 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .primary-button {
+    background: #14a800;
+    color: white;
+  }
+  
+  .primary-button:hover {
+    background: #3c8224;
+    transform: translateY(-2px);
+  }
+  
+  .secondary-button {
+    background: white;
+    color: #14a800;
+    border: 2px solid #14a800;
+  }
+  
+  .secondary-button:hover {
+    background: #f9fff9;
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 480px) {
+    .success-card {
+      padding: 24px;
+    }
+  
+    .action-buttons {
+      grid-template-columns: 1fr;
+    }
+  }
+  </style>
