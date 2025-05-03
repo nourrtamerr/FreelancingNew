@@ -325,20 +325,32 @@
 
           <div *ngFor="let project of projects" class="upwork-project-card">
             <a [routerLink]="['/details',project.id]">
-              <div class="project-card-header d-flex justify-content-between align-items-center">
+              <div class="project-card-header">
                 <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
                 
-                <!-- Timer with original styling -->
-                <div class="bidding-status" [ngClass]="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class">
-                  <i class="fas" [ngClass]="{
-                    'fa-clock': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-soon',
-                    'fa-hourglass-half': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-active',
-                    'fa-hourglass-end': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-ended'
-                  }"></i>
-                  <span>{{ getBiddingStatus(project.biddingStartDate, project.biddingEndDate).text }}</span>
-                  <span class="countdown-timer" *ngIf="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class !== 'bidding-ended'">
-                    {{ getCountdownDays(project.biddingEndDate) }}d:{{ getCountdownHours(project.biddingEndDate) }}h:{{ getCountdownMinutes(project.biddingEndDate) }}m
-                  </span>
+                <div class="bidding-status-container flex-row" style="display: flex; flex-direction: row;">
+                  <!-- Bidding status -->
+                  <div class="bidding-status" [ngClass]="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class">
+                    <i class="fas" [ngClass]="{
+                      'fa-clock': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-soon',
+                      'fa-hourglass-half': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-active',
+                      'fa-hourglass-end': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-ended'
+                    }"></i>
+                    <span>{{ getBiddingStatus(project.biddingStartDate, project.biddingEndDate).text }}</span>
+                    <span class="countdown-timer" *ngIf="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class !== 'bidding-ended'">
+                      {{ getCountdownDays(project.biddingEndDate) }}d:{{ getCountdownHours(project.biddingEndDate) }}h:{{ getCountdownMinutes(project.biddingEndDate) }}m
+                    </span>
+                  </div>
+                  
+                  <!-- Bookmark button right after the bidding status -->
+                  <button *ngIf="this.role=='Freelancer'" class="save-project-btn mt-2" 
+                    (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()">
+                    <i class="fa-bookmark" 
+                      [class.fa-regular]="!userWishlist2.includes(project.id,0)" 
+                      [class.fa-solid]="userWishlist2.includes(project.id,0)" 
+                      [style.color]="userWishlist2.includes(project.id,0) ? '#175b99' : '#6c757d'">
+                    </i>
+                  </button>
                 </div>
               </div>
               
@@ -379,7 +391,7 @@
               </div>
             </a>
             
-            <!-- Footer with metrics and bookmark button directly below -->
+            <!-- Footer with metrics only (bookmark button moved to header) -->
             <div class="project-card-footer">
               <div class="project-metrics">
                 <div class="project-metric">
@@ -390,16 +402,6 @@
                   <div class="metric-value">{{project.numOfBids}}</div>
                   <div class="metric-label">Bids</div>
                 </div>
-                
-                <!-- Bookmark button moved here -->
-                <button *ngIf="this.role=='Freelancer'" class="save-project-btn" 
-                  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()">
-                  <i class="fa-bookmark" 
-                    [class.fa-regular]="!userWishlist2.includes(project.id,0)" 
-                    [class.fa-solid]="userWishlist2.includes(project.id,0)" 
-                    [style.color]="userWishlist2.includes(project.id,0) ? '#175b99' : '#6c757d'">
-                  </i>
-                </button>
               </div>
             </div>
           </div>
