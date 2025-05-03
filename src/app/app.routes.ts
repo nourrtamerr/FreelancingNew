@@ -71,7 +71,7 @@ export const routes: Routes = [
       {path: 'bandetails/:id',component: BanDetailsComponent,canActivate: [adminGuard]},
       {path: 'admin-dashboard',component: AdminDashboardComponent,canActivate: [adminGuard]},
       {path: 'updateban/:id',component: UpdateBanComponent,canActivate: [adminGuard]},
-      {path: 'dashboard', component: UserDashboradComponent,canActivate: [clientOrFreelancerGuard] },
+      {path: 'dashboard', component: UserDashboradComponent,canActivate: [clientGuard] },
       {path: 'addfund', component: AddFundByClientComponent,canActivate: [clientGuard]},
       {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },

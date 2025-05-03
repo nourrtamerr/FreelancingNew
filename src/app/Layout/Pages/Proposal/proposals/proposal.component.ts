@@ -7,6 +7,7 @@ import { ProjectsService } from '../../../../Shared/Services/Projects/projects.s
 import { FixedPriceProjectById } from '../../../../Shared/Interfaces/FixedPriceProject';
 import { AuthService } from '../../../../Shared/Services/Auth/auth.service';
 import { BiddingProjectService } from '../../../../Shared/Services/BiddingProject/bidding-project.service';
+import { Environment, Files } from '../../../../base/environment';
 
 
 @Component({
@@ -22,7 +23,7 @@ proposalId: number = 0;
 isowner:boolean=false;
 role:string="";
 project: any;
-
+Files:string=Files.filesUrl;
 isBidEnded:boolean=false;
 
 

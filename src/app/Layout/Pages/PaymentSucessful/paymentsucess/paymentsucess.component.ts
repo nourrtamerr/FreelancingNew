@@ -26,15 +26,27 @@ export class PaymentsucessComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const sessionId = params['sessionId'];
       const planId = Number(params['planId']);
-
-      this.transactionId = sessionId ?? 'N/A';
-
-      const selectedPlan = this.plans.find(p => p.id === planId);
-      if (selectedPlan) {
-        this.selectedPlanName = selectedPlan.name;
-        this.selectedPlanPrice = selectedPlan.price;
+      
+      if (sessionId) {
+        if(sessionId.length>30)
+        this.transactionId = sessionId.slice(0,30)+". . .";
+      else
+      {
+        this.transactionId = sessionId
       }
+        
+        // Find the plan details
+        console.log(sessionId,'asiodjhasiodjasopidjasopdjasopdjopasdjaopsdjpoasdjop');
+        const selectedPlan = this.plans.find(p => p.id === planId);
+        if (selectedPlan) {
+          this.selectedPlanName = selectedPlan.name;
+          this.selectedPlanPrice = selectedPlan.price;
+        } else {
+          console.warn('Plan not found for ID:', planId);
+        }
+      } 
     });
+    console.log(this.route.queryParams);
   }
 
   goToHome() {
