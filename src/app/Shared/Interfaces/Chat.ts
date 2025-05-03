@@ -3,7 +3,7 @@ export interface Chat {
     senderId?: string 
     senderName?: string 
     receiverId?: string
-    receiverName?: string
+    receiverName: string
     message?: any
     image?:File
     imageUrl?: string

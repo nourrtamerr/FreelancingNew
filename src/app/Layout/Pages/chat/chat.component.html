@@ -1,5 +1,6 @@
 <div class="chat-container">
   <!-- Left Sidebar: Chat History -->
+  <audio #ringAudio src="ring.mp3" hidden></audio>
   <div class="chat-sidebar" [class.show]="showSidebar">
     <div class="sidebar-header">
       <div class="header-content">
@@ -21,7 +22,7 @@
            (click)="switchConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
         <div class="chat-avatar">
           <img class="profile-image" 
-               [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '']" 
+               [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || './defaultUser.jpeg']" 
                alt="Profile" />
           <span class="online-dot" *ngIf="onlineUsers.includes((conversation.receiverId === currentUserId ? conversation.senderId : conversation.receiverId) || '')"></span>
         </div>
@@ -33,7 +34,7 @@
           <div class="chat-preview">
             <p class="message-preview">{{ conversation.message | slice:0:30 }}{{ conversation.message.length > 30 ? '...' : '' }}</p>
             <button class="delete-conversation" 
-                    (click)="deleteChat(conversation.id); $event.stopPropagation()">
+                    (click)="deleteConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
               <i class="fas fa-trash"></i>
             </button>
           </div>
@@ -58,10 +59,6 @@
             <span class="online-status" 
                   [class.online]="onlineUsers.includes(truereceiverid)"
                   [class.offline]="!onlineUsers.includes(truereceiverid)"></span>
-
-                  <!-- Update online status display -->
-<!-- <span *ngIf="onlineUsers.includes(truereceiverid)" class="online-status">● Online</span>
-<span *ngIf="!onlineUsers.includes(truereceiverid)" class="offline-status">● Offline</span> -->
           </div>
           <div class="recipient-details">
             <h3 class="recipient-name">{{ receiverUsername || 'Select a conversation' }}</h3>
@@ -72,10 +69,35 @@
           </div>
         </div>
       </div>
+      <div class="header-right">
+        <button class="btn btn-icon video-call-btn" 
+                *ngIf="receiverUsername && videoCallStatus === 'idle'"
+                (click)="startVideoCall()"
+                title="Start Video Call">
+          <i class="fas fa-video"></i>
+        </button>
+        <button class="btn btn-icon video-call-btn" 
+                *ngIf="videoCallStatus !== 'idle'"
+                (click)="endVideoCall()"
+                title="End Video Call">
+          <i class="fas fa-video-slash"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Call Container -->
+    <div class="video-call-container" *ngIf="showVideoCall">
+      <div class="video-wrapper">
+        <video #localVideo autoplay muted playsinline class="local-video"></video>
+        <video #remoteVideo autoplay playsinline class="remote-video"></video>
+      </div>
+      <div class="video-controls">
+        <button class="btn btn-danger" (click)="endVideoCall()">End Call</button>
+      </div>
     </div>
 
     <!-- Messages Container -->
-    <div class="messages-container h-50" #messagesContainer>
+    <div class="messages-container h-50" #messagesContainer [class.video-active]="showVideoCall">
       <div *ngIf="!messages.length" class="empty-state">
         <i class="fas fa-comment-slash"></i>
         <p>No messages yet</p>
