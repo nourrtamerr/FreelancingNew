@@ -35,6 +35,7 @@ import { adminGuard } from './Shared/Guards/admin/admin.guard';
 import { add } from 'date-fns';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/clientOrFreelancerGuard';
 import { ReviewsDetectorComponent } from './Layout/Pages/AI/ai/reviewsdetector.component';
+import { AllPaymentsComponent } from './Layout/Pages/AllPayments/all-payments/all-payments.component';
 
 
 export const routes: Routes = [
@@ -81,6 +82,7 @@ export const routes: Routes = [
       {path: 'login',component: LoginComponent},
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
+      {path: 'Allpayments',component: AllPaymentsComponent },
     
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
