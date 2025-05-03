@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { BansService } from '../../../Shared/Services/Bans/bans.service';
 import { Ban } from '../../../Shared/Interfaces/Bans';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ban-details',
@@ -14,6 +15,7 @@ export class BanDetailsComponent implements OnInit{
   constructor (
     private activatedroute:ActivatedRoute,
     private location:Location,
+    private toaster:ToastrService,
     private banservice:BansService
   ) {}
   currentid:number|null = 0
@@ -39,17 +41,35 @@ export class BanDetailsComponent implements OnInit{
   // }
   Delete(){
     confirm("Do You Want To Delete This Ban?");
-    this.banservice.deleteBan(Number(this.currentid)).subscribe(
-      {
-        next:(value)=>{
-          console.log(value);
-          this.location.back()
+    this.ban.banEndDate = new Date(2003,1,1);
+    if(this.ban.id !== undefined){
+      this.banservice.updateBan(this.ban.id,this.ban).subscribe(
+        {
+          next:(value)=>{
+            // console.log(value);
+          }
+          ,
+          error:(err)=>{
+            console.log(err);
+            this.toaster.error("Error terminating ban")
+          }
         }
-        ,
-        error:(err)=>{
-          console.log(err);
-        }
-    })
+      )
+      this.toaster.success("Ban terminated Successfully")
+      this.location.back()
+    }
+    // this.banservice.deleteBan(Number(this.currentid)).subscribe(
+    //   {
+    //     next:(value)=>{
+    //       // console.log(value);
+    //       this.ban.banEndDate = new Date(2003,1,1);
+    //       this.toaster.success("Ban terminated Successfully")
+    //       this.location.back()
+    //     }
+    //     ,
+    //     error:(err)=>{
+    //       console.log(err);
+    //     }
+    // })
   }
-
 }
