@@ -67,33 +67,34 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Layout/Pages/profile/profile.component').then(m => m.ProfileComponent)
       },
-      {path: 'banned',component: BannedUsersComponent,canActivate: [adminGuard]},
-      {path: 'bandetails/:id',component: BanDetailsComponent,canActivate: [adminGuard]},
+      {path: 'banned',component: BannedUsersComponent,title:'Banned Users',canActivate: [adminGuard]},
+      {path: 'bandetails/:id',component: BanDetailsComponent,title:'Ban Details',canActivate: [adminGuard]},
       {path: 'admin-dashboard',component: AdminDashboardComponent,canActivate: [adminGuard]},
-      {path: 'updateban/:id',component: UpdateBanComponent,canActivate: [adminGuard]},
-      {path: 'dashboard', component: UserDashboradComponent,canActivate: [clientGuard] },
-      {path: 'addfund', component: AddFundByClientComponent,canActivate: [clientGuard]},
+      {path: 'updateban/:id',component: UpdateBanComponent,title:'Ban Update',canActivate: [adminGuard]},
+      {path: 'dashboard', component: UserDashboradComponent,title:'Freelancer Statistics',canActivate: [clientGuard] },
+      {path: 'addfund', component: AddFundByClientComponent,title:'Add Fund',canActivate: [clientGuard]},
       {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
-      {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),canActivate: [adminGuard]},
-      {path:'addban/:username',component:AddBanComponent,canActivate: [adminGuard]},
+      {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),title:'All Users',canActivate: [adminGuard]},
+      {path:'addban/:username',component:AddBanComponent,title:'Adding Ban',canActivate: [adminGuard]},
       {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},
       {path: 'proposal2/:id',component: Proposal2Component,canActivate: [clientOrFreelancerGuard] },
-      {path: 'freelancers',component: FreelancersComponent,canActivate: [clientOrFreelancerGuard] },
+      {path: 'freelancers',component: FreelancersComponent,title:'All Freelancers',canActivate: [clientOrFreelancerGuard] },
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [clientOrFreelancerGuard]},
-      {path: 'login',component: LoginComponent},
+      {path: 'login',component: LoginComponent,title:'Login'},
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
       {path: 'paymentsucess',component: PaymentsucessComponent},
 
 
-    {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
+    {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent),title:'Register'},
 
 
       {path:'withdraw', component: WithdrawComponent,title:'Withdraw',canActivate: [clientOrFreelancerGuard]},
 
-      {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
-      {path:'wishlist', component: WishlistComponent},
+      // {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
+
+      {path:'wishlist', component: WishlistComponent,title:'Favorites'},
       {path:'myproposals',component:MyProposalsComponent},
       {path:'detector',component:ReviewsDetectorComponent}
 
