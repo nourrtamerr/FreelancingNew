@@ -65,7 +65,7 @@ export const routes: Routes = [
     {
         path: 'profile',
         loadComponent: () =>
-          import('./Layout/Pages/profile/profile.component').then(m => m.ProfileComponent)
+          import('./Layout/Pages/profile/profile.component').then(m => m.ProfileComponent),title:'My Profile'
       },
       {path: 'banned',component: BannedUsersComponent,title:'Banned Users',canActivate: [adminGuard]},
       {path: 'bandetails/:id',component: BanDetailsComponent,title:'Ban Details',canActivate: [adminGuard]},
