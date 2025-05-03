@@ -1,75 +1,139 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-   
-  <div class="container ">
-    <a class="navbar-brand" routerLink="/">
-      <img src="l.png" alt="logo" class="navbar-logo" />
-    </a>
-    
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+  <a class="navbar-brand" routerLink="/">
+    <img src="l.png" alt="logo" class="navbar-logo" />
+  </a>
+  <div class="container">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarContent">
       <!-- Client Navigation -->
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center"> 
-      <!-- *ngIf="role === 'client'"> -->
-      <li class="nav-item dropdown pe-4">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-          Jobs
-        </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item text-center" [routerLink]="['/myprojects']">My Jobs</a></li>
-          <li><a class="dropdown-item text-center" [routerLink]="['/createproject']">Post a Job</a></li>
-          <li><a class="dropdown-item text-center" [routerLink]="['/new']">Bidding Projects</a></li>
-          <li><a class="dropdown-item text-center" [routerLink]="['/fixed']">Fixed price Projects</a></li>
-          <li><a class="dropdown-item text-center" href="#">All Contracts</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item text-center" href="#">Bring Your Own Talent</a></li>
-        </ul>
-      </li>
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center"
+      *ngIf="role === 'client'">
+        <!-- *ngIf="role === 'client'"> -->
+        <li class="nav-item dropdown pe-4">
+          <a
+            class="nav-link dropdown-toggle"
+            data-bs-toggle="dropdown"
+            href="#"
+          >
+            Jobs
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a
+                class="dropdown-item text-center"
+                [routerLink]="['/myprojects']"
+                >My Jobs</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item text-center"
+                [routerLink]="['/createproject']"
+                >Post a Job</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item text-center" [routerLink]="['/new']"
+                >Bidding Projects</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item text-center" [routerLink]="['/fixed']"
+                >Fixed price Projects</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item text-center" href="#">All Contracts</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item text-center" href="#"
+                >Bring Your Own Talent</a
+              >
+            </li>
+          </ul>
+        </li>
 
         <li class="nav-item dropdown pe-4">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+          <a
+            class="nav-link dropdown-toggle"
+            data-bs-toggle="dropdown"
+            href="#"
+          >
             Talent
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" [routerLink]="['/freelancers']">Discover</a></li>
-            <li><a class="dropdown-item" href="#">Saved Talent ({{savedTalent}})</a></li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/freelancers']"
+                >Discover</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="#"
+                >Saved Talent ({{ savedTalent }})</a
+              >
+            </li>
             <li><a class="dropdown-item" href="#">Recently Viewed</a></li>
           </ul>
         </li>
 
         <li class="nav-item dropdown pe-4">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+          <a
+            class="nav-link dropdown-toggle"
+            data-bs-toggle="dropdown"
+            href="#"
+          >
             Reports
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Transaction History</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/addfund']">Billing & Payments</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/addfund']"
+                >Billing & Payments</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
             <li><a class="dropdown-item" href="#">Connect History</a></li>
           </ul>
         </li>
       </ul>
 
       <!-- Freelancer Navigation -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role === 'freelancer'">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center" *ngIf="role === 'freelancer'">
+        <!-- <li class="nav-item dropdown"> -->
+          <!-- <a
+            class="nav-link dropdown-toggle"
+            data-bs-toggle="dropdown"
+            href="#"
+          >
             Find Work
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" [routerLink]="['/new']">Bidding Projects</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/fixed']">Fixed Price Projects</a></li>
-          </ul>
+          </a> -->
+          <!-- <ul class="dropdown-menu"> -->
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/new']"
+                >Bidding Projects</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/fixed']"
+                >Fixed Price Projects</a
+              >
+            <!-- </li> -->
+          <!-- </ul> -->
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/freelancers']">Freelancers</a>
         </li>
       </ul>
-<div>
-  
-</div>
+      <div></div>
       <!-- Right Side Navigation -->
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item" *ngIf="isLoggedIn">
@@ -88,69 +152,123 @@
 
         <!-- Messages -->
         <li class="nav-item">
-          <a class="nav-link icon-link" routerLink="/chathub">
+          <a class="nav-link icon-link" routerLink="/chathub/{{username}}">
             <i class="fas fa-comment-dots"></i>
-            <span class="badge bg-success" *ngIf="unreadMessages > 0">{{unreadMessages}}</span>
+            <span class="badge bg-success" *ngIf="unreadMessages > 0">{{
+              unreadMessages
+            }}</span>
           </a>
         </li>
 
         <!-- Notifications -->
         <div class="nav-item dropdown">
-          <a class="nav-link icon-link dropdown-toggle"
-             role="button"
-             data-bs-toggle="dropdown"
-             aria-expanded="false"
-             title="Notifications">
+          <a
+            class="nav-link icon-link dropdown-toggle"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="Notifications"
+          >
             <i class="fa-solid fa-bell"></i>
-            <span *ngIf="unreadNotifications > 0" class="badge bg-danger rounded-pill notification-badge">{{unreadNotifications}}</span>
+            <span
+              *ngIf="unreadNotifications > 0"
+              class="badge bg-danger rounded-pill notification-badge"
+              >{{ unreadNotifications }}</span
+            >
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
-            <div class="notification-header d-flex justify-content-between align-items-center p-2">
+            <div
+              class="notification-header d-flex justify-content-between align-items-center p-2"
+            >
               <h6 class="m-0">Notifications</h6>
-              <a href="#" class="text-primary small" (click)="markAllAsRead($event)">Mark all as read</a>
+              <a
+                href="#"
+                class="text-primary small"
+                (click)="markAllAsRead($event)"
+                >Mark all as read</a
+              >
             </div>
-            <div class="notification-body" style="max-height: 300px; overflow-y: auto;">
-              <div *ngIf="notifications.length === 0" class="p-3 text-center text-muted">
+            <div
+              class="notification-body"
+              style="max-height: 300px; overflow-y: auto"
+            >
+              <div
+                *ngIf="notifications.length === 0"
+                class="p-3 text-center text-muted"
+              >
                 No notifications
               </div>
-              <li *ngFor="let notification of notifications" class="d-flex justify-content-between align-items-center list-group-item-action">
-                <a class="flex-grow-1 text-decoration-none text-dark p-2" 
-                   [ngClass]="{'unread': !notification.isRead}" 
-                   (click)="markAsRead(notification.id)">
+              <li
+                *ngFor="let notification of notifications"
+                class="d-flex justify-content-between align-items-center list-group-item-action"
+              >
+                <a
+                  class="flex-grow-1 text-decoration-none text-dark p-2"
+                  [ngClass]="{ unread: !notification.isRead }"
+                  (click)="markAsRead(notification.id)"
+                >
                   <div class="d-flex align-items-center">
-                    <i class="fas fa-bell me-3" [ngClass]="{'text-primary': !notification.isRead, 'text-muted': notification.isRead}"></i>
-                    <span [ngClass]="{'fw-semibold': !notification.isRead}">{{notification.message}}</span>
+                    <i
+                      class="fas fa-bell me-3"
+                      [ngClass]="{
+                        'text-primary': !notification.isRead,
+                        'text-muted': notification.isRead
+                      }"
+                    ></i>
+                    <span [ngClass]="{ 'fw-semibold': !notification.isRead }">{{
+                      notification.message
+                    }}</span>
                   </div>
                 </a>
                 <div class="d-flex align-items-center ms-2">
-                  <button class="btn btn-link text-danger p-1" 
-                          title="Delete Notification"
-                          (click)="deleteNotification(notification.id)">
+                  <button
+                    class="btn btn-link text-danger p-1"
+                    title="Delete Notification"
+                    (click)="deleteNotification(notification.id)"
+                  >
                     <i class="fas fa-times fa-fw"></i>
                   </button>
                 </div>
               </li>
-              
             </div>
             <div class="notification-footer p-2 text-center">
-              <a routerLink="/notification" class="text-primary">View all notifications</a>
+              <a routerLink="/notification" class="text-primary"
+                >View all notifications</a
+              >
             </div>
           </ul>
         </div>
 
         <!-- User Menu -->
         <li class="nav-item dropdown">
-          <a class="nav-link icon-link dropdown-toggle" data-bs-toggle="dropdown">
+          <a
+            class="nav-link icon-link dropdown-toggle"
+            data-bs-toggle="dropdown"
+          >
             <i class="fas fa-user-circle"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" [routerLink]="['/profile']">View Profile</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/myprojects']">My Projects</a></li>
-            <li *ngIf="role === 'client'"><a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a></li>
-            <li *ngIf="role === 'client'"><a class="dropdown-item" routerLink="/withdraw">Withdraw</a></li>
-            <li *ngIf="role === 'freelancer'"><a class="dropdown-item" routerLink="/wishlist">Saved Jobs</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/profile']"
+                >View Profile</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/myprojects']"
+                >My Projects</a
+              >
+            </li>
+            <li *ngIf="role === 'client'">
+              <a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a>
+            </li>
+            <li *ngIf="role === 'client'">
+              <a class="dropdown-item" routerLink="/withdraw">Withdraw</a>
+            </li>
+            <li *ngIf="role === 'freelancer'">
+              <a class="dropdown-item" routerLink="/wishlist">Saved Jobs</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
             <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
           </ul>
         </li>
@@ -160,7 +278,9 @@
           <a class="nav-link" routerLink="/login">Log In</a>
         </li>
         <li class="nav-item" *ngIf="!isLoggedIn">
-          <a class="btn btn-primary signup-btn" routerLink="/register">Sign Up</a>
+          <a class="btn btn-primary signup-btn" routerLink="/register"
+            >Sign Up</a
+          >
         </li>
       </ul>
     </div>

@@ -80,7 +80,7 @@ project: BiddingProjectGetById={
 
 
   clientReviews: GetReviewsByRevieweeIdDto[]=[];
-  
+
 
   ngOnInit(): void {
     // const code = +this.route.snapshot.paramMap.get('id')!;
@@ -101,7 +101,7 @@ project: BiddingProjectGetById={
   isBiddingExpired(): boolean {
     return new Date(this.project.biddingEndDate) < new Date();
   }
-  
+
 
   private loadNgOnIt(id:number):void{
     this.biddingProjectDetailsService.GetBiddingProjectById(id).subscribe({
@@ -126,7 +126,7 @@ project: BiddingProjectGetById={
           for (let projectId of this.project.clientOtherProjectsIdsNotAssigned) {
             // if(projectId !== id){
             //   this.biddingProjectDetailsService.GetBiddingProjectById(projectId)
-              
+
             //   .subscribe({
             //     next: (data) => {
             //       console.log(data)
@@ -164,13 +164,13 @@ project: BiddingProjectGetById={
             //           },
             //           error: (err)=> {console.log(err), console.log("niwnfoinewio")}
             //         })
-                   
+
             //       }
             //     },
             //     error: (err) => {
             //       console.log(err);
             //       console.log("Fetching Fixed Price project fallback...");
-                
+
             //       this.FixedService.getProjectById(projectId).pipe(
             //         map(proj => ({ id: proj.id, title: proj.title, projectType: 'Fixed Price' }))
             //       ).subscribe({
@@ -198,7 +198,7 @@ project: BiddingProjectGetById={
             })
 
 
-           
+
           }
         }
       },
@@ -216,7 +216,7 @@ project: BiddingProjectGetById={
   }
 
 
-  
+
 
 
   editReview(review: any) {
@@ -235,7 +235,7 @@ project: BiddingProjectGetById={
         ...this.selectedReview,
         rating: this.editReviewForm.get('rating')?.value,
         comment: this.editReviewForm.get('comment')?.value
-        
+
       };
 
       // Call your review service to update
@@ -291,7 +291,7 @@ confirmDelete() {
       next: () => {
         // Remove the review from the array
         this.clientReviews = this.clientReviews.filter(review => review.id !== this.reviewToDelete);
-        
+
         // Force carousel refresh
         setTimeout(() => {
           const carousel = document.querySelector('#clientReviewsCarousel');
@@ -300,7 +300,7 @@ confirmDelete() {
             carousel.querySelectorAll('.carousel-item').forEach(item => {
               item.classList.remove('active');
             });
-            
+
             // Add active class to first item if exists
             const firstItem = carousel.querySelector('.carousel-item');
             if (firstItem) {
@@ -396,7 +396,7 @@ loadWishlist(): void {
     if (!this.project?.biddingEndDate) return false;
     return new Date(this.project.biddingEndDate) < new Date();
   }
-  
+
   getBidButtonTitle(): string {
     if (this.project?.freelancerId !== null) {
       return 'This project has already been assigned';

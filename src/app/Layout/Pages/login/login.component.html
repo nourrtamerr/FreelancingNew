@@ -27,27 +27,28 @@
           <!-- Login Form -->
           <form *ngIf="currentForm === 'login'" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="needs-validation">
             <h3 class="mb-4 text-center">Welcome Back</h3>
-            
+
             <div class="form-floating mb-3">
-              <input 
+              <input
                 type="text"
                 id="usernameEmail"
-                class="form-control" 
+                class="form-control"
                 placeholder="Email or Username"
                 formControlName="Usernameoremail"
                 [class.is-invalid]="loginForm.get('Usernameoremail')?.invalid && loginForm.get('Usernameoremail')?.touched"
+                
               />
               <label for="usernameEmail">Email or Username</label>
               <div class="invalid-feedback">
                 Username or email is required
               </div>
             </div>
-            
+
             <div class="form-floating mb-3">
-              <input 
+              <input
                 type="password"
-                id="loginPassword" 
-                class="form-control" 
+                id="loginPassword"
+                class="form-control"
                 placeholder="Password"
                 formControlName="loginPassword"
                 [class.is-invalid]="loginForm.get('loginPassword')?.invalid && loginForm.get('loginPassword')?.touched"
@@ -57,18 +58,18 @@
                 Password is required and must be at least 6 characters
               </div>
             </div>
-            
+
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" id="rememberMe">
               <label class="form-check-label" for="rememberMe">
                 Keep me logged in
               </label>
             </div>
-            
+
             <div *ngIf="errorMessage && currentForm === 'login'" class="alert alert-danger">
               <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
             </div>
-            
+
             <div class="d-grid mb-3">
               <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading || loginForm.invalid">
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
@@ -81,11 +82,11 @@
                 Forgot password?
               </a>
             </div>
-            
+
             <div class="divider d-flex align-items-center my-4">
               <span class="mx-3 text-muted">OR CONTINUE WITH</span>
             </div>
-            
+
             <!-- Social Login Buttons -->
             <div class="d-flex justify-content-center gap-3 mb-3">
               <button type="button" (click)="ExternalLogin('Google')" class="btn btn-outline-danger">
@@ -95,7 +96,7 @@
                 <i class="fab fa-facebook-f me-2"></i>Facebook
               </button>
             </div>
-            
+
             <div class="text-center mt-4">
               <span class="text-muted">Don't have an account?</span>
               <a routerLink="/register" class="ms-2 fw-bold text-decoration-none">Sign Up</a>
@@ -106,12 +107,12 @@
           <form *ngIf="currentForm === 'forgotPassword'" [formGroup]="forgetPassword" class="needs-validation">
             <h3 class="mb-4 text-center">Recover Your Password</h3>
             <p class="text-muted text-center mb-4">Enter your email address and we'll send you a link to reset your password.</p>
-            
+
             <div class="form-floating mb-3">
-              <input 
+              <input
                 type="email"
                 id="forgotEmail"
-                class="form-control" 
+                class="form-control"
                 placeholder="Enter Your Email"
                 formControlName="email"
                 [class.is-invalid]="forgetPassword.get('email')?.invalid && forgetPassword.get('email')?.touched"
@@ -122,18 +123,18 @@
                 <div *ngIf="forgetPassword.get('email')?.errors?.['email']">Invalid email format.</div>
               </div>
             </div>
-            
+
             <div *ngIf="errorMessage && currentForm === 'forgotPassword'" class="alert alert-danger">
               <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
             </div>
-            
+
             <div class="d-grid mb-4">
               <button type="button" (click)="getPassword()" class="btn btn-primary btn-lg" [disabled]="isLoading || forgetPassword.invalid">
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 {{ isLoading ? "Sending..." : "Send Reset Link" }}
               </button>
             </div>
-            
+
             <div class="text-center">
               <a href="javascript:void(0);" (click)="showLogin()" class="text-decoration-none">
                 <i class="fas fa-arrow-left me-2"></i>Back to Login
@@ -145,7 +146,7 @@
           <form *ngIf="currentForm === 'resetPassword'" [formGroup]="resetPassword" class="needs-validation">
             <h3 class="mb-4 text-center">Create New Password</h3>
             <p class="text-muted text-center mb-4">Your new password must be different from previous passwords.</p>
-            
+
             <div class="alert alert-info mb-4">
               <i class="fas fa-info-circle me-2"></i>Resetting password for: <strong>{{ resetPassword.get('email')?.value }}</strong>
             </div>
@@ -153,12 +154,12 @@
             <!-- Hidden Fields -->
             <input type="hidden" formControlName="email">
             <input type="hidden" formControlName="token">
-            
+
             <div class="form-floating mb-3">
-              <input 
+              <input
                 type="password"
                 id="newPassword"
-                class="form-control" 
+                class="form-control"
                 placeholder="New Password"
                 formControlName="newPassword"
                 [class.is-invalid]="resetPassword.get('newPassword')?.invalid && resetPassword.get('newPassword')?.touched"
@@ -171,14 +172,14 @@
                   Must include uppercase, lowercase, number, and special character.
                 </div>
               </div>
-              
+
               <!-- Password Strength Indicator -->
               <div *ngIf="resetPassword.get('newPassword')?.value" class="mt-2">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <small>Password Strength: <span class="fw-bold">{{passwordStrengthText}}</span></small>
                 </div>
                 <div class="progress" style="height: 5px;">
-                  <div class="progress-bar" 
+                  <div class="progress-bar"
                        [ngClass]="{
                          'bg-danger': passwordStrength <= 2,
                          'bg-warning': passwordStrength === 3,
@@ -189,15 +190,15 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="form-floating mb-3">
-              <input 
+              <input
                 type="password"
                 id="confirmNewPassword"
-                class="form-control" 
+                class="form-control"
                 placeholder="Confirm New Password"
                 formControlName="confirmNewPassword"
-                [class.is-invalid]="(resetPassword.get('confirmNewPassword')?.invalid && resetPassword.get('confirmNewPassword')?.touched) || 
+                [class.is-invalid]="(resetPassword.get('confirmNewPassword')?.invalid && resetPassword.get('confirmNewPassword')?.touched) ||
                                    (resetPassword.hasError('mismatch') && resetPassword.get('confirmNewPassword')?.touched)"
               />
               <label for="confirmNewPassword">Confirm New Password</label>
@@ -212,14 +213,14 @@
             <div *ngIf="errorMessage && currentForm === 'resetPassword'" class="alert alert-danger">
               <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
             </div>
-            
+
             <div class="d-grid mb-4">
               <button type="button" (click)="resetPasswordSubmit()" class="btn btn-primary btn-lg" [disabled]="isLoading || resetPassword.invalid">
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 {{ isLoading ? "Resetting..." : "Reset Password" }}
               </button>
             </div>
-            
+
             <div class="text-center">
               <a href="javascript:void(0);" (click)="showLogin()" class="text-decoration-none">
                 <i class="fas fa-arrow-left me-2"></i>Back to Login

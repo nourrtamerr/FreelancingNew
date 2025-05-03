@@ -19,7 +19,7 @@
                                 <small>Pay a fixed price for your project</small>
                             </span>
                         </label>
-    
+
                         <label class="radio-card">
                             <input type="radio" formControlName="projectType" value="bidding" (change)="onProjectTypeChange('bidding')" />
                             <span class="radio-content">
@@ -29,7 +29,7 @@
                             </span>
                         </label>
                     </div>
-    
+
                     <div *ngIf="isBiddingProject" class="bidding-dates">
                         <div class="form-row">
                             <div class="form-group">
@@ -39,7 +39,7 @@
                                     Start date is required
                                 </small>
                             </div>
-                    
+
                             <div class="form-group">
                                 <label for="biddingEndDate">Bidding End Date</label>
                                 <input type="date" id="biddingEndDate" formControlName="biddingEndDate" class="form-control"/>
@@ -47,7 +47,7 @@
                                     End date is required
                                 </small>
                             </div>
-                    
+
                             <div class="form-group">
                                 <label for="minPrice">Minimum Price</label>
                                 <input type="number" id="minPrice" formControlName="minPrice" class="form-control"/>
@@ -56,7 +56,7 @@
                                     <span *ngIf="projectForm.get('minPrice')?.errors?.['min']">Minimum price must be greater than 0</span>
                                 </small>
                             </div>
-                    
+
                             <div class="form-group">
                                 <label for="maxPrice">Maximum Price</label>
                                 <input type="number" id="maxPrice" formControlName="maxPrice" class="form-control"/>
@@ -68,10 +68,10 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="title">Project Title</label>
-                    <input type="text" id="title" formControlName="title" 
+                    <input type="text" id="title" formControlName="title"
                            placeholder="Enter a clear title describing your project"
                            class="form-control" />
                     <small class="form-hint">Example: Build a responsive website using React</small>
@@ -83,7 +83,7 @@
 
                 <div class="form-group">
                     <label for="description">Project Description</label>
-                    <textarea id="description" formControlName="description" 
+                    <textarea id="description" formControlName="description"
                               placeholder="Describe your project in detail"
                               class="form-control" rows="6"></textarea>
                     <small class="form-hint">Be specific about your requirements and expectations</small>
@@ -96,7 +96,7 @@
 
             <div class="form-section">
                 <h2>Project Details</h2>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="currency">Currency</label>
@@ -113,7 +113,7 @@
 
                     <div class="form-group">
                         <label for="expectedDuration">Duration (in months)</label>
-                        <input type="number" id="expectedDuration" formControlName="expectedDuration" 
+                        <input type="number" id="expectedDuration" formControlName="expectedDuration"
                                placeholder="Expected months" class="form-control"/>
                         <small class="error-message" *ngIf="projectForm.get('expectedDuration')?.invalid && projectForm.get('expectedDuration')?.touched">
                             <span *ngIf="projectForm.get('expectedDuration')?.errors?.['required']">Duration is required</span>
@@ -165,7 +165,7 @@
                     <select id="subcategoryID" formControlName="subcategoryID" class="form-control">
                         <option *ngFor="let sub of subcategories" [value]="sub.id">{{ sub.name }}</option>
                       </select>
-                    
+
                     <small class="form-hint">Choose a subcategory for your project</small>
 
                     <small class="error-message" *ngIf="projectForm.get('subcategoryID')?.invalid && projectForm.get('subcategoryID')?.touched">
@@ -200,8 +200,8 @@
     </small>
 </div>
 
-          
-            
+
+
             <div class="form-actions">
             </div>
             <button type="submit"  class="btn-primary" [disabled]="projectForm.invalid">
@@ -211,8 +211,8 @@
                 <i class="fas fa-arrow-right"></i>
             </button>
             <div class="form-actions">
-               
-                
+
+
                 <!-- Navigation buttons -->
                 <div class="navigation-buttons">
                     <button type="button" class="btn-secondary" routerLink="/fixed">
@@ -223,375 +223,14 @@
                         <i class="fas fa-list"></i>
                         Go to Bidding Projects
                     </button>
-                   
+
                     <button *ngIf="createdProjectId" class="btn btn-secondary" [routerLink]="['/fixed-project', createdProjectId]">
                         <i class="fas fa-info-circle"></i>
                         View Project Details
                       </button>
                       </div>
-              
             </div>
         </div>
-
-        
     </form>
 </div>
 
-
-
-
-<style>
-
-.create-project-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-.create-project-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.create-project-header h1 {
-    color: #14a800;
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-
-.create-project-header p {
-    color: #666;
-    font-size: 16px;
-}
-
-.form-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 30px;
-    margin-bottom: 20px;
-}
-
-.form-section {
-    margin-bottom: 40px;
-}
-
-.form-section h2 {
-    color: #001e00;
-    font-size: 20px;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-.form-group {
-    margin-bottom: 24px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-label {
-    display: block;
-    color: #001e00;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-.form-control:focus {
-    border-color: #14a800;
-    box-shadow: 0 0 0 2px rgba(20, 168, 0, 0.1);
-    outline: none;
-}
-
-.form-hint {
-    display: block;
-    color: #666;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-/* Experience Level and Project Type Sections */
-.experience-level-selector,
-.project-type-selector {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.radio-card {
-    cursor: pointer;
-    position: relative;
-}
-
-.radio-card input {
-    position: absolute;
-    opacity: 0;
-}
-
-.radio-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    text-align: center;
-    transition: all 0.2s;
-}
-
-.radio-content i {
-    font-size: 24px;
-    color: #14a800;
-    margin-bottom: 10px;
-}
-
-.radio-content span {
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-.radio-content small {
-    color: #666;
-    font-size: 12px;
-}
-
-.radio-card input:checked + .radio-content {
-    border-color: #14a800;
-    background: rgba(20, 168, 0, 0.05);
-}
-
-/* Skills and Subcategory Sections */
-.form-section .form-group {
-    margin-bottom: 20px;
-}
-
-.skills-container, .subcategory-container {
-    display: flex;
-    height: 20px;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.skills-container select, .subcategory-container select {
-    width: 100%;
-    padding: 12px;
-    height: auto;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-.skills-container select:focus, .subcategory-container select:focus {
-    border-color: #14a800;
-    box-shadow: 0 0 0 2px rgba(20, 168, 0, 0.1);
-    outline: none;
-}
-
-/* Bidding Dates */
-.bidding-dates {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
-}
-
-/* Form Actions */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 30px;
-}
-
-.btn-primary,
-.btn-secondary {
-    padding: 12px 24px;
-    border-radius: 20px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-primary {
-    background: #14a800;
-    color: white;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: #138f00;
-    transform: translateY(-1px);
-}
-
-.btn-secondary {
-    background: white;
-    color: #666;
-    border: 1px solid #e0e0e0;
-}
-
-.btn-secondary:hover {
-    background: #f5f5f5;
-}
-
-.btn-primary:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
-}
-
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .create-project-container {
-        padding: 20px 15px;
-    }
-
-    .form-card {
-        padding: 20px;
-    }
-
-    .experience-level-selector,
-    .project-type-selector {
-        grid-template-columns: 1fr;
-    }
-}
-
-.skills-select-container {
-    position: relative;
-}
-
-.selected-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.skill-tag {
-    background: #e8f5e9;
-    color: #14a800;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.skill-tag i {
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.skill-tag:hover {
-    background: #c8e6c9;
-}
-
-/* تحسينات حقل السعر */
-.price-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.currency-symbol {
-    position: absolute;
-    left: 12px;
-    color: #666;
-    font-weight: 500;
-}
-
-.price-input {
-    padding-left: 28px !important;
-}
-
-.validation-feedback {
-    margin-top: 8px;
-}
-
-.error-message {
-    color: #dc3545;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-}
-
-.error-message i {
-    font-size: 14px;
-}
-
-/* تحسين حجم حقل اختيار المهارات المتعدد */
-select[multiple] {
-    height: 120px !important;
-    padding: 8px;
-}
-
-select[multiple] option {
-    padding: 8px;
-    margin-bottom: 4px;
-    border-radius: 4px;
-}
-
-select[multiple] option:hover {
-    background-color: #f5f5f5;
-}
-
-.navigation-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.navigation-buttons .btn-secondary {
-    flex: 1;
-    justify-content: center;
-    background: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    color: #333;
-    padding: 12px 20px;
-    border-radius: 20px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.navigation-buttons .btn-secondary:hover {
-    background: #e0e0e0;
-    transform: translateY(-1px);
-}
-
-.navigation-buttons .btn-secondary i {
-    font-size: 16px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .navigation-buttons {
-        flex-direction: column;
-    }
-}
-</style>
