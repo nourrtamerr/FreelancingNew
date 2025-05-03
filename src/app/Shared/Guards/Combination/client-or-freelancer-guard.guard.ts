@@ -6,5 +6,5 @@ export const clientOrFreelancerGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const roles = authService.getRoles();
 
-  return roles?.some(role=>role === 'Client' || role === 'Freelancer'|| role === 'Admin')??false;
+  return roles?.some(role=>role === 'Client' || role === 'Freelancer'|| role === 'Admin')? true:false;
 };

@@ -32,6 +32,7 @@ export class AddBanComponent {
     )
     this.account.getIdByUserName(this.currentusername).subscribe(
       (response)=>{
+        
         this.currentid = response.id;
       },
       (error)=>{
@@ -50,6 +51,7 @@ export class AddBanComponent {
     // this.ban.banDate = this.date;
   }
   addBan(ban: Ban) {
+    this.ban.bannedUserId=this.currentid;
     this.banservice.addBan(ban).subscribe({
       next: (response) => {
         this.ban= response;

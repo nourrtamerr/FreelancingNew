@@ -28,7 +28,7 @@ export class AllusersComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private modalService: NgbModal,
+    // private modalService: NgbModal,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
     private router: Router,
@@ -53,7 +53,7 @@ export class AllusersComponent implements OnInit {
   }
 
   openAddAdminModal(content: any) {
-    this.modalService.open(content);
+    // this.modalService.open(content);
   }
 
   search(searched: string) {
