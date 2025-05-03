@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="container mt-5 pt-5">
+  <div class="row mb-4">
+    <div class="col">
+      <h2 class="fw-bold">Payment History</h2>
+      <p class="text-muted">Track all your transactions in one place</p>
+    </div>
+  </div>
+
+  <!-- No Payments Message -->
+  <div class="text-center py-5" *ngIf="allPayments.length === 0">
+    <i class="fas fa-receipt fs-1 text-muted d-block mb-3"></i>
+    <h4 class="text-muted">No payment history found</h4>
+    <p class="text-muted">When you make or receive payments, they will appear here</p>
+  </div>
+
+  <!-- Payments Table -->
+  <div class="table-responsive" *ngIf="allPayments.length > 0">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Date</th>
+          <th>Transaction ID</th>
+          <th>Payment Method</th>
+          <th>Transaction Type</th>
+          <th class="text-end">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of allPayments">
+          <td>{{ payment.date | date: 'MMM d, y' }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-exchange-alt me-2 text-primary"></i>
+              <div>
+                 <span class="fw-bold">{{(getTransactionDetails(payment)) }}</span> 
+        
+                
+              </div>
+            </div>
+          </td>
+          <td>
+            
+            <span class="badge bg-success">{{ (payment.paymentMethod) }}</span>
+          </td>
+          <td>
+            <span class="badge bg-primary">{{ (getTransactionType(payment))}}</span>
+          </td>
+          <td class="text-end fw-bold">
+            <span [ngClass]="{
+              'text-success': getTransactionType(payment) === 'Add Funds',
+              'text-danger': getTransactionType(payment) !== 'Add Funds'
+            }">
+              {{ getTransactionType(payment) === 'Add Funds' ? '+' : '-' }}${{ payment.amount }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
