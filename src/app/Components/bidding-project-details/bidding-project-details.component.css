@@ -766,3 +766,53 @@ a{
   transform: none !important;
   box-shadow: none !important;
 }
+
+.bid-update-animation {
+  animation: bidUpdate 0.5s ease-in-out;
+}
+
+@keyframes bidUpdate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: #28a745; }
+  100% { transform: scale(1); }
+}
+
+
+
+/* Add these animation styles to your existing CSS */
+@keyframes highlight-value {
+  0% { background-color: rgba(23, 91, 153, 0.2); transform: scale(1.05); }
+  50% { background-color: rgba(23, 91, 153, 0.3); transform: scale(1.1); }
+  100% { background-color: transparent; transform: scale(1); }
+}
+
+@keyframes pulse-text {
+  0% { color: #175b99; transform: scale(1.1); }
+  100% { color: inherit; transform: scale(1); }
+}
+
+.highlight-animation {
+  animation: highlight-value 1.5s ease-out;
+}
+
+.pulse-animation {
+  animation: pulse-text 1.5s ease-out;
+}
+
+/* Style for the value containers to make animations look better */
+.info-modern-value {
+  transition: all 0.3s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Add a special animation for price increases */
+.price-increase {
+  color: #14a800 !important;
+}
+
+/* Add a special animation for price decreases */
+.price-decrease {
+  color: #d32f2f !important;
+}

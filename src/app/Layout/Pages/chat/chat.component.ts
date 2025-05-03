@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedImage: string | null = null;
   showSidebar = false;
   truereceiverid:string="";
-  receiverImage: string = '';
+  receiverImage: string|null = '';
   private subscriptions = new Subscription();
   isTyping = false;
   typingTimeout: any;
@@ -116,7 +116,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
 
   loadReceiverImage(): void {
     if (!this.receiverUsername) {
-      this.receiverImage = './defaultUser.jpeg';
+      this.receiverImage = null;
+      console.log('this.receiverImage');
       return;
     }
   
@@ -125,12 +126,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
         if (data?.fileName) {
           this.receiverImage = `${this.filesurl}/${data.fileName}?t=${Date.now()}`;
         } else {
-          this.receiverImage = './defaultUser.jpeg';
+          
+          this.receiverImage = null;
         }
       },
       error: (err) => {
+        console.log('trying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to sc')
         console.error('Error loading receiver image:', err);
-        this.receiverImage = './defaultUser.jpeg';
+        this.receiverImage = null;
       }
     });
   }
@@ -221,7 +224,7 @@ this.chatService.hubConnection.on("ConversationDeleted", (userId1: string, userI
     this.scrollToBottom();
   }
 
-  userImages: { [username: string]: string } = {}; 
+  userImages: { [username: string]: string|null } = {}; 
 
   loadConversations(): void {
     this.chatService.getAllConversations(this.currentUsername).subscribe({
@@ -239,9 +242,12 @@ this.chatService.hubConnection.on("ConversationDeleted", (userId1: string, userI
         usernames.forEach(username => {
           this.accountService.getImagebyUserName(username).subscribe({
             next: (data) => {
-              this.userImages[username] = `${this.filesurl}/${data.fileName}`;
+              console.log(data);
+              
+              this.userImages[username] = data!=null? `${this.filesurl}/${data.fileName}` : null;
             },
             error: () => {
+              console.log("are we here yet")
               this.userImages[username] = 'https://th.bing.com/th/id/OIP.pu65piyuwGoBpHJ2SvvGvAHaHa?pid=ImgDet&w=192&h=192&c=7'; // fallback image
             }
           });

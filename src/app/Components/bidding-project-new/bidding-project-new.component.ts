@@ -1,6 +1,6 @@
 // ... existing imports ...
 
-import { Component, NgModule, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { CategoryService } from '../../Shared/Services/Category/category.service';
 import { Category } from '../../Shared/Interfaces/category';
 import { Country } from '../../Shared/Interfaces/Country';
@@ -31,9 +31,13 @@ import { AuthService } from '../../Shared/Services/Auth/auth.service';
   templateUrl: './bidding-project-new.component.html',
   styleUrls: ['./bidding-project-new.component.css']
 })
-export class BiddingProjectNewComponent implements OnInit {
+export class BiddingProjectNewComponent implements OnInit,OnDestroy {
   // Add these properties for toggling
-
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
   constructor(private CategoryService:CategoryService,
     private CountryService: CountriesService,
     private SubCategoryService:SubCategoryService,
@@ -43,7 +47,8 @@ export class BiddingProjectNewComponent implements OnInit {
     private toaster: ToastrService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cd: ChangeDetectorRef
   ){}
 
 
@@ -101,13 +106,16 @@ export class BiddingProjectNewComponent implements OnInit {
 
 
   role: string=''
-
+  private timerInterval: any;
   ngOnInit(): void {
 
     const roles = this.authService.getRoles();
     this.role = roles?.includes("Freelancer") ? "Freelancer":roles?.includes("Client")? "Client" :roles?.includes("Admin")?"Admin": "";
     
-
+    this.timerInterval = setInterval(() => {
+      // Force view update
+      this.cd.detectChanges();
+    }, 1000);
      // Load all necessary data first
      this.loadInitialData().then(() => {
       // Then handle route parameters
@@ -575,4 +583,136 @@ export class BiddingProjectNewComponent implements OnInit {
     }
 
 
+
+    // getBiddingStatus(startDate: string, endDate: string): { text: string; class: string } {
+    //   const start = new Date(startDate);
+    //   const end = new Date(endDate);
+    //   const now = new Date();
+    
+    //   if (now < start) {
+    //     // Bidding hasn't started yet
+    //     const diff = start.getTime() - now.getTime();
+    //     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    //     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     return {
+    //       text: `Starts in ${days}d ${hours}h`,
+    //       class: 'bidding-soon'
+    //     };
+    //   } else if (now > end) {
+    //     // Bidding has ended
+    //     return {
+    //       text: 'Bidding Ended',
+    //       class: 'bidding-ended'
+    //     };
+    //   } else {
+    //     // Bidding is active
+    //     const diff = end.getTime() - now.getTime();
+    //     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    //     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     return {
+    //       text: `${days}d ${hours}h remaining`,
+    //       class: 'bidding-active'
+    //     };
+    //   }
+    // }
+
+    getCountdownTime(endDate: string): string {
+      const end = new Date(endDate);
+      const now = new Date();
+      const diff = end.getTime() - now.getTime();
+    
+      if (diff <= 0) return '00:00:00';
+    
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+      return `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+
+    // Add these methods to your component class
+
+// Check if the auction is ending soon (less than 12 hours)
+isUrgent(endDateStr: string): boolean {
+  if (!endDateStr) return false;
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const hoursLeft = (endDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+  
+  return hoursLeft > 0 && hoursLeft < 12;
+}
+
+// Get countdown days
+getCountdownDays(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  return days.toString().padStart(2, '0');
+}
+
+// Get countdown hours
+getCountdownHours(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  return hours.toString().padStart(2, '0');
+}
+
+// Get countdown minutes
+getCountdownMinutes(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  return minutes.toString().padStart(2, '0');
+}
+
+// Get countdown seconds
+getCountdownSeconds(endDateStr: string): string {
+  if (!endDateStr) return '00';
+  
+  const endDate = new Date(endDateStr);
+  const now = new Date();
+  const diff = endDate.getTime() - now.getTime();
+  
+  if (diff <= 0) return '00';
+  
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  return seconds.toString().padStart(2, '0');
+}
+
+// Existing getBiddingStatus method should remain as is
+getBiddingStatus(startDateStr: string, endDateStr: string): { text: string, class: string } {
+  const now = new Date();
+  const startDate = startDateStr ? new Date(startDateStr) : new Date(0);
+  const endDate = endDateStr ? new Date(endDateStr) : new Date(0);
+  
+  if (now < startDate) {
+    return { text: 'Bidding Soon', class: 'bidding-soon' };
+  } else if (now >= startDate && now < endDate) {
+    return { text: 'Bidding Active', class: 'bidding-active' };
+  } else {
+    return { text: 'Bidding Ended', class: 'bidding-ended' };
+  }
+}
 }

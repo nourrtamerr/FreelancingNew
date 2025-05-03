@@ -26,7 +26,6 @@ export class PaymentsucessComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const sessionId = params['sessionId'];
       const planId = Number(params['planId']);
-      
       if (sessionId) {
         if(sessionId.length>30)
         this.transactionId = sessionId.slice(0,30)+". . .";

@@ -18,6 +18,7 @@ export interface BiddingProjectGetAll {
   expectedDuration:number
   biddingEndDate:string
   biddingStartDate:string
+  currentBid?:number
 }
 
 export interface BiddingProjectsResponse {

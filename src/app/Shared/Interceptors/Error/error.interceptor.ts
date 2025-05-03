@@ -24,7 +24,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
           toastr.error(error.error.message);
         }
-        return EMPTY;
+        if(!error.error.message.includes('No Bidding Project Found Hasing This Id'))
+        {
+          return EMPTY;
+        }
 
         
 

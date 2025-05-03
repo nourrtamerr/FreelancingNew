@@ -22,7 +22,7 @@
            (click)="switchConversation((conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || '')">
         <div class="chat-avatar">
           <img class="profile-image" 
-               [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || './defaultUser.jpeg']" 
+               [src]="userImages[(conversation.receiverId === currentUserId ? conversation.senderName : conversation.receiverName) || './images/default.jpg']??'./images/default.jpg'" 
                alt="Profile" />
           <span class="online-dot" *ngIf="onlineUsers.includes((conversation.receiverId === currentUserId ? conversation.senderId : conversation.receiverId) || '')"></span>
         </div>
@@ -54,7 +54,7 @@
         <div class="recipient-info">
           <div class="avatar-container">
             <img class="profile-image" 
-                 [src]="receiverImage" 
+                 [src]="receiverImage??'./images/default.jpg'" 
                  alt="Profile" />
             <span class="online-status" 
                   [class.online]="onlineUsers.includes(truereceiverid)"
@@ -111,12 +111,12 @@
         <div class="message-bubble">
           <div class="message-header">
             <div class="message-actions">
-              <button class="action-btn" 
+              <button class="action-btn edit" 
                       *ngIf="message.senderId === currentUserId"
                       (click)="startEdit(message)">
                 <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="action-btn"
+              <button class="action-btn delete"
                       *ngIf="message.senderId === currentUserId"
                       (click)="initiateDelete(message.id)">
                 <i class="fas fa-trash"></i>

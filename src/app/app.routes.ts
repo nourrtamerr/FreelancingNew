@@ -95,6 +95,7 @@ export const routes: Routes = [
       {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
       {path:'wishlist', component: WishlistComponent},
       {path:'myproposals',component:MyProposalsComponent},
-      {path:'detector',component:ReviewsDetectorComponent}
+      {path:'detector',component:ReviewsDetectorComponent},
+      {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] }
 
 ];
