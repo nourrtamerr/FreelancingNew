@@ -45,7 +45,7 @@
     <nav class="breadcrumb-nav">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/home2/banned']">Banned Users</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/banned']">Banned Users</a></li>
         <li class="breadcrumb-item active">Update Ban</li>
       </ol>
     </nav>
@@ -56,7 +56,7 @@
       </div>
 
       <div class="card-body">
-        <form class="ban-form" (submit)="Updateban(ban)">
+        <form class="ban-form" (ngSubmit)="Updateban(ban)">
           <!-- Read-only Fields -->
           <div class="form-group readonly">
             <label for="banId">
@@ -117,7 +117,7 @@
               required
               name="banenddate"
               class="form-control"
-              min="{{ban.banEndDate | date:'yyyy-MM-dd'}}"
+              
             >
           </div>
 

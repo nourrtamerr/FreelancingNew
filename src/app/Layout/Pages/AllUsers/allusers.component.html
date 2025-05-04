@@ -201,7 +201,7 @@
         <thead>
           <tr>
             <th class="select-column">
-              
+
             </th>
             <th>Profile</th>
             <th>User Details</th>
@@ -226,7 +226,7 @@
             </td>
             <td class="user-details">
               <div class="user-info">
-                <h3 class="user-name">{{user.userName}}</h3>
+                <h3 class="user-name" >{{user.userName}}</h3>
                 <span class="user-id">#{{user.id}}</span>
               </div>
             </td>
@@ -249,7 +249,7 @@
             </td>
             <td class="actions-column">
               <div class="action-buttons">
-                @if (user.role === 'Admin') {
+                <!-- @if (user.role === 'Admin') {
                   <button class="btn-remove" (click)="removeAdmin(user.id)">
                     <i class="fas fa-user-minus"></i>
                     Remove Admin
@@ -259,11 +259,14 @@
                     <i class="fas fa-user-plus"></i>
                     Make Admin
                   </button>
-                }
-                <button class="btn-ban">
+                } -->
+                @if(user.role!=='Admin'){
+                <button class="btn-ban"
+                 (click)="banUser(user.userName)">
                   <i class="fas fa-ban"></i>
                   Ban User
                 </button>
+              }
               </div>
             </td>
           </tr>

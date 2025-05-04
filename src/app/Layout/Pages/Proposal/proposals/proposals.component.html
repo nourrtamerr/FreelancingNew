@@ -76,7 +76,7 @@
     <div class="proposal-card" *ngFor="let proposal of filteredProposals">
       <div class="proposal-header">
         <div class="freelancer-info">
-          <img [src]="proposal.freelancerProfilePicture || 'assets/default-avatar.png'" 
+          <img [src]="proposal.freelancerProfilePicture? Files+'/'+proposal.freelancerProfilePicture : './images/default.jpg'" 
                alt="Freelancer" 
                class="freelancer-avatar">
           <div class="freelancer-details">

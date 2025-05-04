@@ -8,6 +8,7 @@ import { FixedPriceProjectById } from '../../../../Shared/Interfaces/FixedPriceP
 import { AuthService } from '../../../../Shared/Services/Auth/auth.service';
 import { BiddingProjectService } from '../../../../Shared/Services/BiddingProject/bidding-project.service';
 import { RankEnum } from '../../../../Shared/Interfaces/Account';
+import { Environment, Files } from '../../../../base/environment';
 
 
 @Component({
@@ -25,6 +26,7 @@ role:string="";
 project: any;
 isBiddingStarted: boolean = false;
 
+Files:string=Files.filesUrl;
 isBidEnded:boolean=false;
 
 ranks=RankEnum

@@ -17,6 +17,8 @@ import { AccountService } from '../../../Shared/Services/Account/account.service
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
+  @ViewChild('localVideo') localVideo!: ElementRef<HTMLVideoElement>;
+  @ViewChild('remoteVideo') remoteVideo!: ElementRef<HTMLVideoElement>;
   messages: Chat[] = [];
   conversations: Chat[] = [];
   newMessage = '';
@@ -30,7 +32,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedImage: string | null = null;
   showSidebar = false;
   truereceiverid:string="";
-  receiverImage: string = '';
+  receiverImage: string|null = '';
   private subscriptions = new Subscription();
   isTyping = false;
   typingTimeout: any;
@@ -39,7 +41,10 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   messageToDelete: number | null = null;
   editingMessageId: number | null = null;
   editedMessageText = '';
-
+  videoCallStatus: string = 'idle';
+  showVideoCall = false;
+ 
+  private ringAudio: HTMLAudioElement = new Audio('ring.mp3');
   constructor(
     private authService: AuthService,
     public chatService: ChatService,
@@ -49,6 +54,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.currentUserId = this.authService.getUserId() ?? '';
     this.currentUsername = this.authService.getUserName() ?? '';
+    this.ringAudio.loop = true;
   }
   ngOnInit(): void {
     this.filesurl = Files.filesUrl;
@@ -79,13 +85,40 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
      
     );
 
+    this.chatService.videoCallStatus$.subscribe(status => {
+      this.videoCallStatus = status;
+      this.showVideoCall = status !== 'idle' && status !== 'error';
+      if (status.startsWith('incoming:')) {
+        const callerId = status.split(':')[1];
+        if (confirm(`Incoming video call from ${callerId}. Accept?`)) {
+          this.ringAudio.pause(); 
+          this.ringAudio.currentTime = 0; //
+          this.chatService.acceptVideoCall(callerId).then(() => {
+            this.setupVideoStreams();
+          });
+        } else {
+          this.ringAudio.pause(); // Stop ring when accepted
+          this.ringAudio.currentTime = 0; //
+          this.chatService.stopVideoCall();
+        }
+      } else if (status === 'active' || status === 'calling') {
+        this.setupVideoStreams();
+      }
+    });
+
+    this.chatService.remoteStream$.subscribe(stream => {
+      if (stream && this.remoteVideo) {
+        this.remoteVideo.nativeElement.srcObject = stream;
+      }
+    });
 
   }
 
 
   loadReceiverImage(): void {
     if (!this.receiverUsername) {
-      this.receiverImage = 'https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?w=186&h=180&c=7&r=0&o=5&pid=1.7';
+      this.receiverImage = null;
+      console.log('this.receiverImage');
       return;
     }
   
@@ -94,12 +127,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
         if (data?.fileName) {
           this.receiverImage = `${this.filesurl}/${data.fileName}?t=${Date.now()}`;
         } else {
-          this.receiverImage = 'https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?w=186&h=180&c=7&r=0&o=5&pid=1.7';
+          
+          this.receiverImage = null;
         }
       },
       error: (err) => {
+        console.log('trying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to scrying to sc')
         console.error('Error loading receiver image:', err);
-        this.receiverImage = 'https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?w=186&h=180&c=7&r=0&o=5&pid=1.7';
+        this.receiverImage = null;
       }
     });
   }
@@ -168,7 +203,20 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
   });
 });
 
-
+this.chatService.hubConnection.on("ConversationDeleted", (userId1: string, userId2: string) => {
+  const currentUserId = this.authService.getUserId() ?? '';
+  
+  if ([userId1, userId2].includes(currentUserId)) {
+    // Refresh conversations list
+    this.loadConversations();
+    
+    // Clear messages if viewing deleted conversation
+    if (this.receiverId === userId1 || this.receiverId === userId2) {
+      this.messages = [];
+      this.receiverUsername = '';
+    }
+  }
+});
 
 
   }
@@ -177,7 +225,7 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
     this.scrollToBottom();
   }
 
-  userImages: { [username: string]: string } = {}; 
+  userImages: { [username: string]: string|null } = {}; 
 
   loadConversations(): void {
     this.chatService.getAllConversations(this.currentUsername).subscribe({
@@ -195,9 +243,12 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
         usernames.forEach(username => {
           this.accountService.getImagebyUserName(username).subscribe({
             next: (data) => {
-              this.userImages[username] = `${this.filesurl}/${data.fileName}`;
+              console.log(data);
+              
+              this.userImages[username] = data!=null? `${this.filesurl}/${data.fileName}` : null;
             },
             error: () => {
+              console.log("are we here yet")
               this.userImages[username] = 'https://th.bing.com/th/id/OIP.pu65piyuwGoBpHJ2SvvGvAHaHa?pid=ImgDet&w=192&h=192&c=7'; // fallback image
             }
           });
@@ -293,6 +344,8 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
     this.chatService.hubConnection.off("ReceiveMessage");
+    this.ringAudio.pause(); 
+    this.ringAudio.currentTime = 0;
   }
   
   
@@ -303,7 +356,6 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
     }
   
     this.receiverUsername = username;
-  
     this.accountService.getIdByUserName(username).subscribe({
       next: (data: any) => {
         if (!data || !data.id) {
@@ -330,25 +382,28 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
   }
 
  
-  deleteChat(conversationId: number): void {
-    if (!confirm('Are you sure you want to delete this conversation?')) return;
+  deleteConversation(username: string): void {
+    if (confirm('Are you sure you want to delete this entire conversation?')) {
+      this.chatService.deleteConversation(username).subscribe({
+        next: () => {
+          // Remove from conversations list
+          this.conversations = this.conversations.filter(c => 
+            c.receiverName !== username && c.senderName !== username
+          );
+          
+          // Clear messages if viewing this conversation
+          if (this.receiverUsername === username) {
+            this.messages = [];
+            this.receiverUsername = '';
+          this.loadConversation(username);
+            
 
-    this.chatService.deleteChat(conversationId).subscribe({
-      next: () => {
-        this.conversations = this.conversations.filter(c => c.id !== conversationId);
-        if (this.messages.length > 0 && this.conversations.every(c => c.id !== conversationId)) {
-          this.messages = [];
-          this.receiverUsername = '';
-          this.receiverImage = '';
-          this.truereceiverid = '';
-          this.router.navigate(['/chathub'], { replaceUrl: true });
-        }
-      },
-      error: (error) => {
-        console.error('Error deleting conversation:', error);
-        alert('Failed to delete conversation. Please try again.');
-      }
-    });
+          }
+          
+        },
+        error: (err) => console.error('Delete conversation failed:', err)
+      });
+    }
   }
 
   sendTypingEvent() {
@@ -357,23 +412,14 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
   }
 
   
-
   private markMessagesAsRead(): void {
-    const unreadMessages = this.messages.filter(
-      msg => !msg.isRead && msg.receiverId === this.currentUserId
-    );
-
-    if (unreadMessages.length > 0) {
-      this.chatService.markMessagesAsRead(this.truereceiverid).subscribe({
-        next: () => {
-          this.messages = this.messages.map(msg => ({
-            ...msg,
-            isRead: true
-          }));
-          this.chatService.hubConnection.invoke("SendReadReceipt", this.truereceiverid);
-        }
-      });
-    }
+    if (!this.truereceiverid) return;
+  
+    this.chatService.markMessagesAsRead(this.truereceiverid).subscribe({
+      next: () => {
+      },
+      error: (err) => console.error('Mark read failed:', err)
+    });
   }
 
   startEdit(message: Chat): void {
@@ -431,4 +477,27 @@ this.chatService.hubConnection.on("MessageDeleted", (deletedId: number) => {
     this.showDeleteModal = false;
     this.messageToDelete = null;
   }
+
+  startVideoCall(): void {
+    if (this.truereceiverid) {
+      this.chatService.startVideoCall(this.truereceiverid).then(() => {
+        this.setupVideoStreams();
+      });
+    }
+  }
+
+  endVideoCall(): void {
+    this.ringAudio.pause(); // Stop ring when ending call
+    this.ringAudio.currentTime = 0;
+    this.chatService.hubConnection.invoke("EndVideoCall", this.truereceiverid)
+      .then(() => this.chatService.stopVideoCall())
+      .catch(err => console.error("End video call error:", err));
+  }
+
+  setupVideoStreams(): void {
+    if (this.localVideo && this.chatService.localStream) {
+      this.localVideo.nativeElement.srcObject = this.chatService.localStream;
+    }
+  }
+
 }

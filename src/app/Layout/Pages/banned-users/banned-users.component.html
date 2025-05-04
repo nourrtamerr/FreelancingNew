@@ -143,9 +143,9 @@
                       </div>
                     </td>
                     <td class="status-cell">
-                      <span class="status-badge" [class.active]="getDateDiff(ban.banEndDate)<0"
-                                              [class.expired]="getDateDiff(ban.banEndDate)>=0">
-                        {{ getDateDiff(ban.banEndDate) < 0 ? 'Active' : 'Expired' }}
+                      <span class="status-badge" [class.active]="getDateDiff(ban.banEndDate.toString())<0"
+                      [class.expired]="getDateDiff(ban.banEndDate.toString())>=0">
+                        {{ getDateDiff(ban.banEndDate.toString()) < 0 ? 'Active' : 'Expired' }}
                       </span>
                     </td>
                     <td class="actions-cell">
@@ -154,10 +154,16 @@
                           <i class="fas fa-eye"></i>
                           <span class="btn-text">View Details</span>
                         </button>
-                        <button class="btn-update" [routerLink]="['/updateban', ban.id]" *ngIf="ban.id !== undefined">
+                        <button class="btn-update" [routerLink]="['/updateban', ban.id]" *ngIf="ban.id !== undefined && getDateDiff(ban.banEndDate.toString()) < 0">
                           <i class="fas fa-edit"></i>
                           <span class="btn-text">Update Ban</span>
                         </button>
+                        <!-- <button class="btn-delete"
+                        *ngIf="ban.id !== undefined && getDateDiff(ban.banEndDate) > 0"
+                         (click)="Delete(ban.id)">
+                          <i class="fas fa-trash-alt"></i>
+                          Delete Ban
+                        </button> -->
                       </div>
                     </td>
                   </tr>

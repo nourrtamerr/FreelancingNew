@@ -41,10 +41,11 @@ onWindowScroll() {
   }
 }
 
+  username!:string;
   constructor(
     private AuthService: AuthService,
     private notificationsService: NotificationsService,
-    private projectService: ProjectsService, 
+    private projectService: ProjectsService,
     private router: Router
   ){
     this.isLoggedIn = this.AuthService.isLoggedIn();
@@ -54,7 +55,7 @@ onWindowScroll() {
       this.AuthService.isLoggedIn$.subscribe((status :any) => {
         this.isLoggedIn = status;
         console.log(status);
-        
+
         if (status) {
           // this.loadNotifications();
         } else {
@@ -66,6 +67,7 @@ onWindowScroll() {
   }
 
   ngOnInit(): void {
+    this.username = this.AuthService.getUserName() || '';
     this.AuthService.userData.subscribe((user) => {
       if (user) {
         const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
@@ -76,14 +78,14 @@ onWindowScroll() {
       this.notificationsService.AllNotificaitions.subscribe(notifications => {
         this.notifications = notifications;
       }),
-      
+
       this.notificationsService.unreadNotifications.subscribe(count => {
         this.unreadNotifications = count;
       })
     );
     if (this.isLoggedIn) {
       this.loadNotifications();
-      
+
       // Listen for real-time notifications
       this.notificationsService.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
         console.log('New notification received:', notification);
@@ -119,7 +121,7 @@ onWindowScroll() {
       this.notificationsService.getNotifications().subscribe({
         next: (data: Notifications[]) => {
 
-      
+
           this.notifications = data
 
           this.unreadNotifications = data.filter(n => !n.isRead).length;
@@ -154,7 +156,7 @@ onWindowScroll() {
 
   markAllAsRead(event: Event): void {
     event.preventDefault();
-    
+
     this.subscriptions.push(
       this.notificationsService.MarkAsReadAllNotifications().subscribe({
         next: (result) => {

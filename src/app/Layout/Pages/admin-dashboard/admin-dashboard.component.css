@@ -4,6 +4,39 @@ canvas {
   height: auto !important;
 }
 
+/* Admin Actions Navigation */
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.admin-actions .btn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.admin-actions .btn i {
+  margin-right: 8px;
+}
+
+.admin-actions .btn-primary {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.admin-actions .btn-primary:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+
 /* Ensure charts are responsive */
 .chart-container {
   position: relative;
@@ -54,6 +87,16 @@ canvas {
 @media (max-width: 768px) {
   .chart-container {
     height: 250px;
+  }
+  
+  .admin-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .admin-actions .btn {
+    width: 100%;
+    margin-bottom: 8px;
   }
 }
 
@@ -151,8 +194,6 @@ canvas {
 .progress-bar {
   transition: width 0.3s ease;
 }
-
-
 
 .chart-container {
   position: relative;

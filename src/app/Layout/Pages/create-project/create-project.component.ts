@@ -61,7 +61,7 @@ experienceLevel= ExperienceLevel
       subcategoryID: [null, Validators.required], // 🔥 Add this
       projectSkills: [[], Validators.required],     // 🔥 And this
       fixedPrice: [null, [Validators.required, Validators.min(1)]],
-      minPrice: [null, Validators.min(1)],   // ✅ ADD THIS
+      // minPrice: [null, Validators.min(1)],   // ✅ ADD THIS
       maxPrice: [null, Validators.min(1)]    // ✅ ADD THIS
 
       
@@ -92,7 +92,7 @@ experienceLevel= ExperienceLevel
         // Add validators for bidding project fields
         this.projectForm.get('biddingStartDate')?.setValidators([Validators.required]);
         this.projectForm.get('biddingEndDate')?.setValidators([Validators.required]);
-        this.projectForm.get('minPrice')?.setValidators([Validators.required, Validators.min(1)]);
+        // this.projectForm.get('minPrice')?.setValidators([Validators.required, Validators.min(1)]);
         this.projectForm.get('maxPrice')?.setValidators([Validators.required, Validators.min(1)]);
         // Remove validators from fixed price
         this.projectForm.get('fixedPrice')?.clearValidators();
@@ -100,7 +100,7 @@ experienceLevel= ExperienceLevel
         // Remove validators from bidding fields
         this.projectForm.get('biddingStartDate')?.clearValidators();
         this.projectForm.get('biddingEndDate')?.clearValidators();
-        this.projectForm.get('minPrice')?.clearValidators();
+        // this.projectForm.get('minPrice')?.clearValidators();
         this.projectForm.get('maxPrice')?.clearValidators();
         // Add validators to fixed price
         this.projectForm.get('fixedPrice')?.setValidators([Validators.required, Validators.min(1)]);
@@ -109,7 +109,7 @@ experienceLevel= ExperienceLevel
     // Update form validation
     this.projectForm.get('biddingStartDate')?.updateValueAndValidity();
     this.projectForm.get('biddingEndDate')?.updateValueAndValidity();
-    this.projectForm.get('minPrice')?.updateValueAndValidity();
+    // this.projectForm.get('minPrice')?.updateValueAndValidity();
     this.projectForm.get('maxPrice')?.updateValueAndValidity();
     this.projectForm.get('fixedPrice')?.updateValueAndValidity();
 }
@@ -179,7 +179,7 @@ experienceLevel= ExperienceLevel
         title: formValue.title,
         description: formValue.description,
         currency: formValue.currency,
-        minimumPrice: formValue.minPrice,  // ✅
+        minimumPrice: 0,  // ✅
         maximumPrice: formValue.maxPrice,  // ✅
         biddingStartDate: formValue.biddingStartDate,
         biddingEndDate: formValue.biddingEndDate,
@@ -188,7 +188,7 @@ experienceLevel= ExperienceLevel
         projectSkillsIds: formValue.projectSkills, // ✅ must be array of skill IDs
         subcategoryId: formValue.subcategoryID // ✅ single subcategory ID
       };
-
+console.log(projectData);
       this.biddingProjectService.CreateBiddingProject(projectData).subscribe({
         next: (response) => {
           console.log('Bidding project created successfully', response);
