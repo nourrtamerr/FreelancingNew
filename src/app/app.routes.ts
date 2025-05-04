@@ -84,7 +84,7 @@ export const routes: Routes = [
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),title:'All Users',canActivate: [adminGuard]},
       {path:'addban/:username',component:AddBanComponent,title:'Adding Ban',canActivate: [adminGuard]},
-      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},
+      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard] ,title:"Add Admin"},
       {path: 'proposal2/:id',component: Proposal2Component,canActivate: [clientOrFreelancerGuard] },
       {path: 'freelancers',component: FreelancersComponent,title:'All Freelancers',canActivate: [clientOrFreelancerGuard] },
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [clientOrFreelancerGuard]},
