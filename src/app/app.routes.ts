@@ -39,7 +39,7 @@ import { AllPaymentsComponent } from './Layout/Pages/AllPayments/all-payments/al
 import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 import { AddBanComponent } from './Layout/Pages/add-ban/add-ban.component';
-
+import { AdminDataManagementComponent } from './Layout/Pages/admin-data-management/admin-data-management.component';
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: '', component: HomeComponent },
@@ -70,7 +70,8 @@ export const routes: Routes = [
       },
       {path: 'banned',component: BannedUsersComponent,title:'Banned Users',canActivate: [adminGuard]},
       {path: 'bandetails/:id',component: BanDetailsComponent,title:'Ban Details',canActivate: [adminGuard]},
-      {path: 'admin-dashboard',component: AdminDashboardComponent,canActivate: [adminGuard]},
+      {path: 'admin-dashboard',component: AdminDashboardComponent, canActivate: [adminGuard]},
+      {path: 'admin-data-management',component: AdminDataManagementComponent, canActivate: [adminGuard]},
       {path: 'updateban/:id',component: UpdateBanComponent,title:'Ban Update',canActivate: [adminGuard]},
       {path: 'dashboard', component: UserDashboradComponent,title:'Freelancer Statistics',canActivate: [freelancerGuard] },
       {path: 'addfund', component: AddFundByClientComponent,title:'Add Fund',canActivate: [clientGuard]},
@@ -100,7 +101,6 @@ export const routes: Routes = [
       {path:'withdraw', component: WithdrawComponent,title:'Withdraw',canActivate: [clientOrFreelancerGuard]},
 
       // {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
-
       {path:'wishlist', component: WishlistComponent,title:'Favorites'},
       {path:'myproposals',component:MyProposalsComponent},
       {path:'detector',component:ReviewsDetectorComponent},
