@@ -241,14 +241,18 @@
                 >My Projects</a
               >
             </li>
-            
-            <li *ngIf="role === 'client'">
-              <a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a>
+
+            <li *ngIf="role === 'freelancer'">
+              <a class="dropdown-item" [routerLink]="['/myproposals']"
+                >My Proposals</a
+              >
             </li>
+            
+            
             <li *ngIf="role === 'client'">
               <a class="dropdown-item" routerLink="/addfund">Add Funds</a>
             </li>
-            <li *ngIf="role === 'client'||role === 'freelanceer'">
+            <li *ngIf="role === 'client'||role === 'freelancer'">
               <a class="dropdown-item" routerLink="/withdraw">Withdraw</a>
             </li>
             <li *ngIf="role === 'freelancer'">
