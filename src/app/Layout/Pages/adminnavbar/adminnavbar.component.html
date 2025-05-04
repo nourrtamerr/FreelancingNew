@@ -321,8 +321,8 @@
           <li class="nav-item" *ngIf="profile.role == 'Admin'">
             <a
               class="nav-link"
-              [class.active]="activeTab === 'bannedusers'"
-              (click)="setActiveTab('bannsedusers')"
+              [class.active]="activeTab === 'banned'"
+              (click)="setActiveTab('banned')"
             >
               <i class="fa fa-folder"></i> BannedUsers
             </a>
@@ -375,7 +375,7 @@
             <app-allusers></app-allusers>
           </div>
 
-          <div *ngIf="activeTab === 'bannedusers'">
+          <div *ngIf="activeTab === 'banned'">
             <app-banned-users></app-banned-users>
           </div>
 
