@@ -43,6 +43,7 @@ import { ReviewsListComponent } from './Layout/Pages/Reviews/reviews-list/review
 import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.component';
 import { AdminDataManagementComponent } from './Layout/Pages/admin-data-management/admin-data-management.component';
 import { DisputesystemComponent } from './Layout/Pages/disputesystem/disputesystem.component';
+import { AdminnavbarComponent } from './Layout/Pages/adminnavbar/adminnavbar.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -78,23 +79,25 @@ export const routes: Routes = [
       {path: 'admin-data-management',component: AdminDataManagementComponent, canActivate: [adminGuard]},
       {path: 'updateban/:id',component: UpdateBanComponent,title:'Ban Update',canActivate: [adminGuard]},
       {path: 'dashboard', component: UserDashboradComponent,title:'Freelancer Statistics',canActivate: [freelancerGuard] },
-      {path: 'addfund', component: AddFundByClientComponent,title:'Add Fund',canActivate: [clientGuard]},
+      {path: 'addfund', component: AddFundByClientComponent,title:'Add Fund',canActivate: [clientOrFreelancerGuard]},
       {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),title:'All Users',canActivate: [adminGuard]},
       {path:'addban/:username',component:AddBanComponent,title:'Adding Ban',canActivate: [adminGuard]},
-      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},
+      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard] ,title:"Add Admin"},
       {path: 'proposal2/:id',component: Proposal2Component,canActivate: [clientOrFreelancerGuard] },
       {path: 'freelancers',component: FreelancersComponent,title:'All Freelancers',canActivate: [clientOrFreelancerGuard] },
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [clientOrFreelancerGuard]},
       {path: 'login',component: LoginComponent,title:'Login'},
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
+      {path: 'adminnavbar',component: AdminnavbarComponent},
+
 
       {path: 'Allpayments',component: AllPaymentsComponent },
       {path: 'reviews',component: ReviewsListComponent },
-    
+
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
       {path: 'paymentsucess',component: PaymentsucessComponent},
