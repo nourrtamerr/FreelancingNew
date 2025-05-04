@@ -1,73 +1,100 @@
 <div class="subscription-container">
-    <div class="subscription-header">
-      <h1>Choose the plan that works for you</h1>
-      <p>Access Freelancing features that help you find work and grow your business</p>
-    </div>
+  <div class="subscription-header">
+    <h1>Choose the plan that works for you</h1>
+    <p>Access Freelancing features that help you find work and grow your business</p>
+  </div>
   
-    <div class="plans-container">
-      <div *ngFor="let plan of plans" class="plan-card" [class.featured]="plan.id === 2">
-        <div *ngIf="plan.id === 2" class="featured-badge">
-          <i class="fas fa-star"></i>
-          Most Popular
-        </div>
+  <div class="view-plan-container">
+    <button class="view-plan-button" (click)="viewCurrentPlan()">
+      <i class="fas fa-eye"></i>
+      View My Current Plan
+    </button>
   
-        <div class="plan-header">
-          <h2>{{plan.name}}</h2>
-          <div class="price-container">
-            <div class="price">
-              <span class="currency">$</span>
-              <span class="amount">{{plan.price}}</span>
-            </div>
-            <span class="period">/{{plan.duration}} days</span>
-          </div>
-          <p class="plan-description">Perfect for {{plan.id === 1 ? 'getting started' : plan.id === 2 ? 'growing freelancers' : 'professional freelancers'}}</p>
-        </div>
-  
-        <div class="plan-features">
-            <ul>
-              <li *ngFor="let feature of plan.features">
-                <i class="fas fa-check-circle"></i>
-                <span>{{feature}}</span>
-              </li>
-            </ul>
-          </div>
-    
-          <!-- Only show button for non-starter plans -->
-          <button *ngIf="plan.id !== 1" class="plan-button" [class.featured-button]="plan.id === 2" (click)="showPaymentOptions(plan.id)">
-            <span>Choose Plan</span>
-            <i class="fas fa-arrow-right"></i>
-          </button>
-    
-          <div *ngIf="plan.id === 1" class="starter-badge">
-            <i class="fas fa-check"></i>
-            <span>Current Plan</span>
-          </div>
-  
-        <div *ngIf="selectedPlanId === plan.id" class="payment-options">
-          <div class="payment-header">
-            <h3>Select Payment Method</h3>
-            <button class="close-payment" (click)="closePaymentOptions() ">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
+<!-- Modal shown only when currentPlanDetails is set -->
+<div *ngIf="currentPlanDetails" class="plan-modal">
+  <div class="alert alert-primary" role="alert">
+  <div class="plan-modal-content">
 
-          <div class="payment-methods">
-            <div class="payment-option-card" (click)="payWithStripe()">
-              <div class="payment-icon">
-                <i class="fab fa-stripe"></i>
-              </div>
-              <div class="payment-details">
-                <h4>Pay with Stripe</h4>
-                <p>Fast and secure payment via Stripe</p>
-              </div>
-              <i class="fas fa-chevron-right arrow-icon"></i>
-            </div>
+    <!-- Bootstrap Alert -->
+      A simple primary alert—check it out!
+    </div>
+
+    <h3>Current Subscription Plan</h3>
+    <p><strong>Name:</strong> {{ currentPlanDetails.name }}</p>
+    <p><strong>Description:</strong> {{ currentPlanDetails.description }}</p>
+    <p><strong>Price:</strong> ${{ currentPlanDetails.price }}</p>
+    <p><strong>Duration:</strong> {{ currentPlanDetails.duration }} days</p>
+    <p><strong>Total Limit:</strong> {{ currentPlanDetails.totalNumber }}</p>
+    <button class="btn btn-primary mt-3" (click)="currentPlanDetails = null">Close</button>
     
-            <div class="payment-option-card" (click)="payWithBalance()">
-              <div class="payment-icon">
-                <i class="fas fa-wallet"></i>
-              </div>
-              <div class="payment-details">
+  </div>
+</div>
+
+  
+  <div class="plans-container">
+    <div *ngFor="let plan of plans" class="plan-card" [class.featured]="plan.id === 2">
+      <div *ngIf="plan.id === 2" class="featured-badge">
+        <i class="fas fa-star"></i>
+        Most Popular
+      </div>
+      
+      <div class="plan-header">
+        <h2>{{plan.name}}</h2>
+        <div class="price-container">
+          <div class="price">
+            <span class="currency">$</span>
+            <span class="amount">{{plan.price}}</span>
+          </div>
+          <span class="period">/{{plan.duration}} days</span>
+        </div>
+        <p class="plan-description">Perfect for {{plan.id === 1 ? 'getting started' : plan.id === 2 ? 'growing freelancers' : 'professional freelancers'}}</p>
+      </div>
+      
+      <div class="plan-features">
+        <ul>
+          <li *ngFor="let feature of plan.features">
+            <i class="fas fa-check-circle"></i>
+            <span>{{feature}}</span>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Only show button for non-starter plans -->
+      <button *ngIf="plan.id !== 1" class="plan-button" [class.featured-button]="plan.id === 2" (click)="showPaymentOptions(plan.id)">
+        <span>Choose Plan</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+      
+      <div *ngIf="plan.id === 1" class="starter-badge">
+        <i class="fas fa-check"></i>
+        <span>Current Plan</span>
+      </div>
+      
+      <div *ngIf="selectedPlanId === plan.id" class="payment-options">
+        <div class="payment-header">
+          <h3>Select Payment Method</h3>
+          <button class="close-payment" (click)="closePaymentOptions() ">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="payment-methods">
+          <div class="payment-option-card" (click)="payWithStripe()">
+            <div class="payment-icon">
+              <i class="fab fa-stripe"></i>
+            </div>
+            <div class="payment-details">
+              <h4>Pay with Stripe</h4>
+              <p>Fast and secure payment via Stripe</p>
+            </div>
+            <i class="fas fa-chevron-right arrow-icon"></i>
+          </div>
+          
+          <div class="payment-option-card" (click)="payWithBalance()">
+            <div class="payment-icon">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <div class="payment-details">
                 <h4>Pay with Balance</h4>
                 <p>Use your available account balance</p>
               </div>
@@ -109,9 +136,63 @@
         </div>
       </div>
     </div>
+    
   </div>
+  
+  <style>
+    .btn-primary {
+  background-color: #175b99;
+  color: white;
+  border: none; /* Optional: removes default border */
+}
 
-<style>
+.btn-primary:hover {
+  background-color: #0e4677;
+}
+    .view-plan-container {
+      text-align: center;
+  margin-top: 48px;
+  padding: 20px;
+}
+
+.view-plan-button {
+  padding: 16px 32px;
+  border: 2px solid #175b99;
+  border-radius: 32px;
+  background: transparent;
+  color: #175b99;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px #175b99(20, 168, 0, 0.1);
+}
+
+.view-plan-button i {
+  font-size: 18px;
+}
+
+.view-plan-button:hover {
+  background: #175b99;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .view-plan-container {
+    margin-top: 32px;
+  }
+  
+  .view-plan-button {
+    width: 100%;
+    max-width: 320px;
+  }
+}
 .subscription-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -135,7 +216,7 @@
 
 .subscription-header p {
   font-size: 20px;
-  color: #5e6d55;
+  color: #175b99;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -162,14 +243,14 @@
 }
 
 .plan-card.featured {
-  border: 2px solid #14a800;
+  border: 2px solid #175b99;
 }
 
 .featured-badge {
   position: absolute;
   top: -12px;
   right: 24px;
-  background: #14a800;
+  background: #175b99;
   color: white;
   padding: 6px 16px;
   border-radius: 20px;
@@ -178,7 +259,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.2);
+  box-shadow: 0 4px 12px #175b99(20, 168, 0, 0.2);
 }
 
 .plan-header {
@@ -212,14 +293,14 @@
 }
 
 .period {
-  color: #5e6d55;
+  color: #175b99;
   font-size: 16px;
   margin-top: 8px;
   display: block;
 }
 
 .plan-description {
-  color: #5e6d55;
+  color: #175b99;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -243,7 +324,7 @@
 }
 
 .plan-features i {
-  color: #14a800;
+  color: #175b99;
   font-size: 20px;
 }
 
@@ -252,7 +333,7 @@
   padding: 16px 24px;
   border: none;
   border-radius: 32px;
-  background: #14a800;
+  background: #175b99;
   color: white;
   font-size: 16px;
   font-weight: 600;
@@ -265,7 +346,7 @@
 }
 
 .plan-button:hover {
-  background: #3c8224;
+  background: #175b99;
   transform: translateY(-2px);
 }
 
@@ -292,7 +373,7 @@
 .close-payment {
   background: none;
   border: none;
-  color: #5e6d55;
+  color: #175b99;
   cursor: pointer;
   padding: 8px;
   transition: color 0.3s ease;
@@ -319,7 +400,7 @@
 }
 
 .payment-option-card:hover {
-  border-color: #14a800;
+  border-color: #175b99;
   background: #f9fff9;
   transform: translateY(-2px);
 }
@@ -337,7 +418,7 @@
 
 .payment-icon i {
   font-size: 24px;
-  color: #14a800;
+  color: #175b99;
 }
 
 .payment-details {
@@ -354,11 +435,11 @@
 .payment-details p {
   margin: 0;
   font-size: 14px;
-  color: #5e6d55;
+  color: #175b99;
 }
 
 .arrow-icon {
-  color: #5e6d55;
+  color: #175b99;
   font-size: 16px;
   margin-left: 16px;
 }
@@ -390,7 +471,7 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #5e6d55;
+  color: #0e4677;
 }
 
 .input-wrapper input {
@@ -403,14 +484,14 @@
 }
 
 .input-wrapper input:focus {
-  border-color: #14a800;
+  border-color: #175b99;
   outline: none;
 }
 
 .submit-button {
   width: 100%;
   padding: 16px;
-  background: #14a800;
+  background: #175b99;
   color: white;
   border: none;
   border-radius: 8px;
@@ -425,7 +506,7 @@
 }
 
 .submit-button:hover {
-  background: #3c8224;
+  background: #0e4677;
 }
 
 @media (max-width: 768px) {

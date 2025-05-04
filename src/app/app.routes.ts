@@ -38,6 +38,7 @@ import { ReviewsDetectorComponent } from './Layout/Pages/AI/ai/reviewsdetector.c
 import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 import { AddBanComponent } from './Layout/Pages/add-ban/add-ban.component';
+import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -77,7 +78,7 @@ export const routes: Routes = [
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),canActivate: [adminGuard]},
       {path:'addban/:username',component:AddBanComponent,canActivate: [adminGuard]},
-      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},
+      {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard,freelancerGuard]},
       {path: 'proposal2/:id',component: Proposal2Component,canActivate: [clientOrFreelancerGuard] },
       {path: 'freelancers',component: FreelancersComponent,canActivate: [clientOrFreelancerGuard] },
       {path: 'Freelancerprofile/:username',component: FreelancerProfileComponent,canActivate: [clientOrFreelancerGuard]},
@@ -85,6 +86,8 @@ export const routes: Routes = [
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
       {path: 'paymentsucess',component: PaymentsucessComponent},
+      {path: 'chatbot',component: ChatbotComponent},
+
 
 
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
