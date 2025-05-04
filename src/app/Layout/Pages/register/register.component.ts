@@ -13,7 +13,11 @@ import { AccountService } from '../../../Shared/Services/Account/account.service
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CountriesService } from '../../../Shared/Services/Countries/countries.service';
-
+import { Files } from '../../../base/environment';
+import { UserRole } from '../../../Shared/Interfaces/Account';
+import { AuthService } from '../../../Shared/Services/Auth/auth.service';
+import { catchError, of } from 'rxjs';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-register',
@@ -31,7 +35,8 @@ export class RegisterComponent implements OnInit {
     private _Router: Router,
     private _toaste: ToastrService,
     private _CountriesService: CountriesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService:AuthService
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +87,8 @@ export class RegisterComponent implements OnInit {
       );
     }
   });
+  this.roleModal = new bootstrap.Modal(document.getElementById('roleSelectionModal'));
+  
   }
 
   passwordMatchValidator(form: AbstractControl) {
@@ -112,7 +119,37 @@ export class RegisterComponent implements OnInit {
       this.selectedFile = file;
     }
   }
-
+  
+  errorMessage:string=""
+  frontendBase = 'http://localhost:4200';
+  provider:string="Google"
+  private roleModal: any;
+  externalLoginValueCapture(provider: 'Google' | 'Facebook')
+  {
+  this.provider=provider;
+  this.roleModal.show();
+  }
+  ExternalLogin(role:UserRole): void {
+      const returnUrl = `${this.frontendBase}/home`;
+      const errorUrl = `${this.frontendBase}/home`;
+  
+      console.log(`Initiating ${this.provider} login...`);
+      this._toaste.info(`Redirecting to ${this.provider} login...`, 'Please wait');
+  
+      this.authService.logout();
+  
+      this._AccountService.ExternalLogin(this.provider, role, returnUrl, errorUrl)
+        .pipe(
+          catchError((error) => {
+            this.errorMessage = 'External login initiation failed. Please try again.';
+            this._toaste.error(this.errorMessage, `${this.provider} Login Failed`);
+            // this.currentForm = 'login';
+            return of(null);
+          })
+        )
+        .subscribe();
+    }
+    roles=UserRole;
   onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -127,6 +164,7 @@ export class RegisterComponent implements OnInit {
       this._toaste.error('You must be at least 18 years old to register.');
       return;
     }
+
 
     const formData = new FormData();
     formData.append('firstname', values.firstname);

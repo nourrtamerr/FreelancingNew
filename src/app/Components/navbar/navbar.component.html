@@ -79,6 +79,16 @@
             <li><a class="dropdown-item" [routerLink]="['/addfund']">Billing & Payments</a></li>
           </ul>
         </li>
+        <li class="nav-item dropdown pe-4" *ngIf="role === 'admin'">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+            Manage
+          </a>
+          <ul class="dropdown-menu">
+
+            <li><a class="dropdown-item" [routerLink]="['/admin-dashboard']">Dashboard</a></li>
+          </ul>
+        </li>
+        
       </ul>
 
       <!-- Rest of the navbar content -->
@@ -208,7 +218,7 @@
             data-bs-toggle="dropdown"
           >
             <!-- <i class="fas fa-user-circle"></i> -->
-            <img [src]="userImage ? files + '/' + userImage : 'assets/default-avatar.png'" 
+            <img [src]="userImage ? files + '/' + userImage : 'images/default.jpg'" 
             alt="Profile" 
             class="user-avatar">          </a>
           <ul class="dropdown-menu dropdown-menu-end">
@@ -224,7 +234,7 @@
                 >View Profile</a
               >
             </li>
-            <li>
+            <li *ngIf="role === 'freelancer' || role === 'client'">
               <a class="dropdown-item" [routerLink]="['/myprojects']"
                 >My Projects</a
               >
@@ -238,7 +248,7 @@
             <li *ngIf="role === 'freelancer'">
               <a class="dropdown-item" routerLink="/wishlist">Saved Jobs</a>
             </li>
-            <li>
+            <li *ngIf="role === 'freelancer' || role === 'client'">
               <a class="dropdown-item" routerLink="/subscribtion">Subscription plan</a>
             </li>
 

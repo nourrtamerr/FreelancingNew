@@ -13,6 +13,8 @@ import { CreateSubCategoryDTO } from '../../../Shared/Interfaces/Subcategory';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { CountriesService } from '../../../Shared/Services/Countries/countries.service';
+import { Skill, skillcreatedto } from '../../../Shared/Interfaces/Skill';
+import { SkillService } from '../../../Shared/Services/Skill/skill.service';
 
 
 @Component({
@@ -29,10 +31,15 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
   cities: City[] = [];
   subCategories: any[] = [];
   countries:Country[] = [];
+  skills:Skill[]=[];
   // Form models
   newCategory: CreateCategoryDTO = { name: '', isDeleted: false };
   updateCategoryModel: UpdateCategory = { id: 0, name: '' , isDeleted: false };
   
+  newSkill:skillcreatedto ={name:''}
+  updateSkillModel:skillcreatedto ={id:0,name:''}
+
+
   newSubCategory: CreateSubCategoryDTO = { name: '', categoryId: 0 };
   updateSubCategoryModel: any = { id: 0, name: '', categoryId: 0 };
   
@@ -49,6 +56,7 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
   selectedCity: any = null;
   selectedCountry: any = null;
   selectedSubCategory: any = null;
+  selectedSkill: any=null;
   showAddCategoryModal: boolean = false;
   showUpdateCategoryModal: boolean = false;
   showDeleteCategoryModal: boolean = false;
@@ -58,7 +66,9 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
   showAddSubCategoryModal: boolean = false;
   showUpdateSubCategoryModal: boolean = false;
   showDeleteSubCategoryModal: boolean = false;
-
+  showAddSkillModal: boolean = false;
+  showUpdateSkillModal: boolean = false;
+  showDeleteSkillModal: boolean = false;
   showAddCountryModal: boolean = false;
   showUpdateCountryModal: boolean = false;
   showDeleteCountryModal: boolean = false;
@@ -69,7 +79,8 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
     private httpClient: HttpClient,
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
-    private countriesService: CountriesService 
+    private countriesService: CountriesService ,
+    private skillService:SkillService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +98,7 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
     this.loadCities();
     this.loadSubCategories();
     this.loadCountries();
+    this.loadSkills();
   }
 
   toggleModal(modalName: string, state: boolean): void {
@@ -105,6 +117,15 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
         break;
       case 'deleteCategory':
         this.showDeleteCategoryModal = state;
+        break;
+        case 'addSkill':
+        this.showAddSkillModal = state;
+        break;
+      case 'updateSkill':
+        this.showUpdateSkillModal = state;
+        break;
+      case 'deleteSkill':
+        this.showDeleteSkillModal = state;
         break;
       case 'addCity':
         this.showAddCityModal = state;
@@ -154,12 +175,97 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
       }
     });
   }
+  loadSkills(): void {
+    this.skillService.getSkills().subscribe({
+      next: (data) => {
+        this.skills = data;
+      },
+      error: (err) => {
+        console.error('Error loading categories:', err);
+      }
+    });
+  }
+
+  addSkill(): void {
+    if (!this.newSkill.name.trim()) {
+      this.toastr.error('Skill name is required');
+      return;
+    }
+  
+    this.skillService.addSkill(this.newSkill).subscribe({
+      next: () => {
+
+        this.loadSkills();
+        this.toggleModal('addSkill', false);
+        this.newSkill = { name: '' };
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error adding Skill:', err);
+        alert('Failed to add Skill: ' + (err.message || 'Unknown error'));
+      },
+      complete: () => {
+        this.toastr.success('Add Skill operation completed');
+      },
+    });
+  }
+  selectSkillForUpdate(skill: any): void {
+    this.selectedSkill = skill;
+    this.updateSkillModel = { id: skill.id, name: skill.name};
+    this.toggleModal('updateSkill', true);
+  }
+
+
+  updateSkill(): void {
+    console.log(this.updateSkillModel);
+    this.skillService.updateSkill(this.updateSkillModel.id!,this.updateSkillModel).subscribe({
+      next: () => {
+        this.loadSkills();
+        this.toggleModal('updateSkill', false);
+        this.selectedSkill = null;
+        this.toastr.success('Skill updated successfully');
+      },
+      error: (err) => {
+        console.error('Error updating Skill:', err);
+        alert('Failed to update Skill: ' + (err.message || 'Unknown error'));
+      }
+    });
+  }
+
+  selectSkillForDelete(skill: any): void {
+    this.selectedSkill = skill;
+    this.toggleModal('deleteSkill', true);
+  }
+
+
+  deleteSkill(): void {
+    console.log('Deleting skill with ID:', this.selectedSkill.id);
+    this.skillService.deleteSkill(this.selectedSkill.id).subscribe({
+      next: (response) => {
+
+        this.toggleModal('deleteskillselectedSkill', false);
+        this.selectedSkill = null;
+        this.showDeleteSkillModal=false;
+        this.loadSkills();
+        this.cdr.detectChanges(); // Force change detection
+        this.closeAllModals();
+      },
+      error: (err) => {
+        console.error('Error deleting skillselectedSkill:', err);
+      },
+      complete: () => { 
+        this.toastr.success('skillselectedSkill deleted successfully');
+      },
+    });
+  }
 
   selectCategoryForUpdate(category: any): void {
     this.selectedCategory = category;
     this.updateCategoryModel = { id: category.id, name: category.name, isDeleted: category.isDeleted ?? false};
     this.toggleModal('updateCategory', true);
   }
+
+
 
 
   addCategory(): void {
@@ -325,6 +431,10 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
   }
 
   // Modal management
+  openAddSkillModal(): void {
+    this.newSkill = { name: '' };
+    this.toggleModal('addSkill', true);
+  }
   openAddCategoryModal(): void {
     this.newCategory = { name: '', isDeleted: false };
     this.toggleModal('addCategory', true);
@@ -355,6 +465,12 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
     this.toggleModal('updateCity', true);
   }
 
+  openUpdateSkillModal(skill: any): void {
+    this.selectedSkill = skill;
+    this.updateSkillModel = { id: skill.id, name: skill.name };
+    this.toggleModal('updateSkill', true);
+  }
+
   closeAllModals(): void {
     this.showAddCategoryModal = false;
     this.showUpdateCategoryModal = false;
@@ -365,6 +481,12 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
     this.showAddSubCategoryModal = false;
     this.showUpdateSubCategoryModal = false;
     this.showDeleteSubCategoryModal = false;
+    this.showAddSkillModal = false;
+    this.showUpdateSkillModal = false;
+    this.showDeleteSkillModal = false;
+    this.showAddCountryModal = false;
+    this.showUpdateCountryModal = false;
+    this.showDeleteCountryModal = false;
   }
 
   getCategoryName(categoryId: number): string {
@@ -451,6 +573,8 @@ updateCity(): void {
     this.selectedCity = city;
     this.toggleModal('deleteCity', true);
   }
+
+
 
   selectCountryForDelete(country: any): void {
     this.selectedCountry = country;

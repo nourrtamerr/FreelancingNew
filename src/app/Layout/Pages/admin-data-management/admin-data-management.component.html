@@ -16,6 +16,9 @@
     <button class="tab-btn" [class.active]="activeTab === 'cities'" (click)="setActiveTab('cities')">
       <i class="fas fa-city"></i> Cities
     </button>
+    <button class="tab-btn" [class.active]="activeTab === 'skills'" (click)="setActiveTab('skills')">
+      <i class="fas fa-code"></i> Skills
+        </button>
   </div>
 
   <!-- Categories Tab -->
@@ -175,6 +178,46 @@
             </tr>
             <tr *ngIf="countries.length === 0">
               <td colspan="3" class="no-data">No countries found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="tab-content" *ngIf="activeTab === 'skills'">
+    <div class="card">
+      <div class="card-header">
+        <h2>Skills</h2>
+        <button class="add-btn" (click)="openAddSkillModal()">
+          <i class="fas fa-plus"></i> Add Skill
+        </button>
+      </div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Skill of skills; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{Skill.name}}</td>
+              <td class="actions-cell">
+                <button class="action-btn edit-btn" (click)="selectSkillForUpdate(Skill)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete-btn" (click)="selectSkillForDelete(Skill)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="skills.length === 0">
+              <td colspan="3" class="no-data">No skills found</td>
             </tr>
           </tbody>
         </table>
@@ -647,3 +690,125 @@
   </div>
 
 </div> 
+
+
+
+
+
+
+
+
+  <!-- Add Skill Modal -->
+
+  <div class="modal-overlay" *ngIf="showAddSkillModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Add Skill</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">×</button>
+      </div>
+      <form #skillForm="ngForm" (ngSubmit)="addSkill()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="skillName">Skill Name</label>
+            <input
+              type="text"
+              id="skillName"
+              name="skillName"
+              [(ngModel)]="newSkill.name"
+              #skillName="ngModel"
+              placeholder="Enter category name"
+              required
+              minlength="1"
+              class="form-control"
+              [ngClass]="{'is-invalid': skillName.invalid && (skillName.dirty || skillName.touched)}"
+            />
+            <div
+              *ngIf="skillName.invalid && (skillName.dirty || skillName.touched)"
+              class="invalid-feedback"
+            >
+              Skill name is required.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAllModals()">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="skillForm.invalid"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Category Modal -->
+  <!-- Update Category Modal -->
+<div class="modal-overlay" *ngIf="showUpdateSkillModal">
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-header">
+      <h3>Update Skill</h3>
+      <button type="button" class="close-btn" (click)="closeAllModals()">×</button>
+    </div>
+    <form #updateSkillForm="ngForm" (ngSubmit)="updateSkill()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="updateSkillName">Skill Name</label>
+          <input
+            type="text"
+            id="updateSkillName"
+            name="updateSkillName"
+            [(ngModel)]="updateSkillModel.name"
+            #updateSkillName="ngModel"
+            placeholder="Enter Skill name"
+            required
+            minlength="1"
+            class="form-control"
+            [ngClass]="{'is-invalid': updateSkillName.invalid && (updateSkillName.dirty || updateSkillName.touched)}"
+          />
+          <div
+            *ngIf="updateSkillName.invalid && (updateSkillName.dirty || updateSkillName.touched)"
+            class="invalid-feedback"
+          >
+            Skill name is required.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="updateSkillForm.invalid"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+  <!-- Delete Skill Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteSkillModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Delete Skill</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-message">Are you sure you want to delete the Skill "{{selectedSkill.id}}"?</p>
+        <p class="warning-message">This action cannot be undone!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteSkill()">Delete</button>
+      </div>
+    </div>
+  </div>

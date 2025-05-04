@@ -12,4 +12,7 @@ export interface Skill {
     freelancerId: string
     skillName: string
   }
-  
+  export interface skillcreatedto{
+    id?:number
+    name:string
+  }
