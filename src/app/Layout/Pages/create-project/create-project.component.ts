@@ -155,8 +155,8 @@ experienceLevel= ExperienceLevel
         expectedDuration: formValue.expectedDuration,
         experienceLevel: formValue.experienceLevel,
 
-        projectSkills: [], // Assuming project skills are handled elsewhere
-        subcategoryId: 1, // Example subcategoryId, you may need to bind this to a form control
+        projectSkills: formValue.projectSkills, // Assuming project skills are handled elsewhere
+        subcategoryId: formValue.subcategoryID, // Example subcategoryId, you may need to bind this to a form control
        price: formValue.fixedPrice, 
       };
 

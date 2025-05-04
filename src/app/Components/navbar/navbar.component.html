@@ -134,8 +134,17 @@
       <div></div>
       <!-- Right Side Navigation -->
       <ul class="navbar-nav ms-auto align-items-center">
+
+        <li class="nav-item " *ngIf="isLoggedIn && role=='freelancer'">
+          <a class="nav-link icon-link " [routerLink]="['/wishlist']">
+            <i class="fa-solid fa-bookmark"></i>
+
+          </a>
+        </li>
+
+
         <li class="nav-item" *ngIf="isLoggedIn">
-          <a class="nav-link balance-link" [routerLink]="['/withdraw']">
+          <a class="nav-link icon-link" [routerLink]="['/withdraw']">
             <i class="fa-solid fa-wallet me-1"></i>
             <!-- ${{balance}} -->
           </a>
@@ -244,9 +253,18 @@
             class="nav-link icon-link dropdown-toggle"
             data-bs-toggle="dropdown"
           >
-            <i class="fas fa-user-circle"></i>
-          </a>
+            <!-- <i class="fas fa-user-circle"></i> -->
+            <img [src]="userImage ? files + '/' + userImage : 'assets/default-avatar.png'" 
+            alt="Profile" 
+            class="user-avatar">          </a>
           <ul class="dropdown-menu dropdown-menu-end">
+
+            <li class="dropdown-item2">
+               
+                Hello, {{username}}
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+
             <li>
               <a class="dropdown-item" [routerLink]="['/profile']"
                 >View Profile</a

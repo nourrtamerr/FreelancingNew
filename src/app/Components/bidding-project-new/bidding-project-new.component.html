@@ -351,6 +351,7 @@
             <a [routerLink]="['/details',project.id]">
               <div class="project-card-header">
                 <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+
                 
                 <div class="bidding-status-container flex-row" style="display: flex; flex-direction: row;">
                   <!-- Bidding status -->
@@ -378,19 +379,49 @@
                   </div>
                   
                   <!-- Bookmark button right after the bidding status -->
-                  <button *ngIf="this.role=='Freelancer'" class="save-project-btn mt-2" 
+                  <!-- <button *ngIf="this.role=='Freelancer'" class="save-project-btn mt-2" 
                     (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()">
                     <i class="fa-bookmark" 
                       [class.fa-regular]="!userWishlist2.includes(project.id,0)" 
                       [class.fa-solid]="userWishlist2.includes(project.id,0)" 
                       [style.color]="userWishlist2.includes(project.id,0) ? '#175b99' : '#6c757d'">
                     </i>
-                  </button>
+                  </button> -->
                 </div>
               </div>
               
               <h3 class="project-title">{{project.title}}</h3>
           
+
+              <div class=" d-flex flex-wrap align-items-center mb-3">
+                <div class="bid-info-container">
+                  <div class="bid-info-item bid-start">
+                    <i class="fas fa-flag-checkered"></i>
+                    <div class="bid-info-content">
+                      <span class="bid-info-label">Start Price</span>
+                      <span class="bid-info-value">{{project.maximumprice | currency:project.currency}}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="bid-info-item bid-current">
+                    <i class="fas fa-gavel"></i>
+                    <div class="bid-info-content">
+                      <span class="bid-info-label">Current Bid</span>
+                      <span class="bid-info-value">{{ (project.currentBid | currency:project.currency) || (project.minimumPrice | currency:project.currency)}}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="bid-info-item bid-count">
+                    <i class="fas fa-users"></i>
+                    <div class="bid-info-content">
+                      <span class="bid-info-label">Bids</span>
+                      <span class="bid-info-value">{{project.numOfBids}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
               <!-- Rest of project details remain unchanged -->
               <div class="project-meta d-flex gap-3 align-items-center mb-3">
                 <span class="meta"> <i [ngClass]="project.clientIsVerified? 'fa fa-credit-card' : 'fa-regular fa-circle-xmark'" class="text-black"> </i> {{project.clientIsVerified ? 'Payment verified' : 'Payment unverified'}}</span>
@@ -407,13 +438,11 @@
                 </span>
           
                 <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
+                <!-- <span class="meta dot">{{project.experienceLevel}}</span>  -->
+
               </div>
           
-              <div class="project-meta d-flex flex-wrap align-items-center mb-3">
-                <span class="meta dot">{{project.experienceLevel}}</span> 
-                <span class="meta dot">Average Bid: ${{project.bidAveragePrice}}</span> 
-                <span class="meta dot">Budget: ${{project.minimumPrice}} -  ${{project.maximumprice}}</span> 
-              </div>
+              
           
               <div class="project-meta d-flex flex-wrap align-items-center mb-1">
                 <div class="project-description mb-1">
@@ -421,13 +450,34 @@
                 </div>
               </div>
               
-              <div class="project-tags mb-4">     
-                <span *ngFor="let skill of project.projectSkills" class="gap-2">{{skill}}</span>            
+              <div class="d-flex flex-row justify-content-between">
+
+                <div class="project-tags mb-4 mt-4">     
+                  <span *ngFor="let skill of project.projectSkills" class="gap-2">{{skill}}</span>            
+                </div>
+
+
+
+
+                <div class="mt-4 align-items-end">
+
+                  <button *ngIf="this.role=='Freelancer'" class="save-project-btn mt-2" 
+                  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()">
+                  <i class="fa-bookmark" 
+                    [class.fa-regular]="!userWishlist2.includes(project.id,0)" 
+                    [class.fa-solid]="userWishlist2.includes(project.id,0)" 
+                    [style.color]="userWishlist2.includes(project.id,0) ? '#175b99' : '#6c757d'">
+                  </i>
+                </button>
+                </div>
+
               </div>
+              
+             
             </a>
             
             <!-- Footer with metrics only (bookmark button moved to header) -->
-            <div class="project-card-footer">
+            <!-- <div class="project-card-footer">
               <div class="project-metrics">
                 <div class="project-metric">
                   <div class="metric-value">${{project.currentBid || project.minimumPrice}}</div>
@@ -438,7 +488,7 @@
                   <div class="metric-label">Bids</div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
         </section>
