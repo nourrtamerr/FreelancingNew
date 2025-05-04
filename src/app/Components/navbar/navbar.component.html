@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" routerLink="/">
-    <img src="kkkk.png" alt="logo" class="navbar-logo" />
-  </a>
   <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <img src="kkkk.png" alt="logo" class="navbar-logo" />
+    </a>
     <button
       class="navbar-toggler"
       type="button"
@@ -101,18 +101,17 @@
 
         <li class="nav-item " *ngIf="isLoggedIn && role=='freelancer'">
           <a class="nav-link icon-link " [routerLink]="['/wishlist']">
-            <i class="fa-solid fa-bookmark"></i>
+            <i class="fa-regular fa-bookmark"></i>
 
           </a>
         </li>
 
-
+<!-- 
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link icon-link" [routerLink]="['/withdraw']">
-            <i class="fa-solid fa-wallet me-1"></i>
-            <!-- ${{balance}} -->
+            <i class="fa-regular fa-wallet me-1"></i>
           </a>
-        </li>
+        </li> -->
 
         <!-- Search -->
         <!-- <li class="nav-item">
@@ -124,7 +123,10 @@
         <!-- Messages -->
         <li class="nav-item">
           <a class="nav-link icon-link" routerLink="/chathub/{{username}}">
-            <i class="fas fa-comment-dots"></i>
+            <!-- <i class="fas fa-comment-dots"></i> -->
+            <!-- <i class="fa-regular fa-comment"></i> -->
+            <i class="fa-regular fa-comment-dots"></i>
+            <!-- <i class="fa-regular fa-message"></i> -->
             <span class="badge bg-success" *ngIf="unreadMessages > 0">{{
               unreadMessages
             }}</span>
@@ -140,7 +142,7 @@
             aria-expanded="false"
             title="Notifications"
           >
-            <i class="fa-solid fa-bell"></i>
+          <i class="fa-regular fa-bell"></i>
             <span
               *ngIf="unreadNotifications > 0"
               class="badge bg-danger rounded-pill notification-badge"
@@ -239,11 +241,18 @@
                 >My Projects</a
               >
             </li>
+            
             <li *ngIf="role === 'client'">
               <a class="dropdown-item" [routerLink]="['/addfund']">Add Funds</a>
             </li>
             <li *ngIf="role === 'client'">
+              <a class="dropdown-item" routerLink="/addfund">Add Funds</a>
+            </li>
+            <li *ngIf="role === 'client'||role === 'freelanceer'">
               <a class="dropdown-item" routerLink="/withdraw">Withdraw</a>
+            </li>
+            <li *ngIf="role === 'freelancer'">
+              <a class="dropdown-item" routerLink="/dashboard">Dashboard</a>
             </li>
             <li *ngIf="role === 'freelancer'">
               <a class="dropdown-item" routerLink="/wishlist">Saved Jobs</a>
