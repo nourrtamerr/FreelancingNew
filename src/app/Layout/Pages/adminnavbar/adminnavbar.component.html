@@ -1,0 +1,399 @@
+<div class="admin-layout mt-2">
+  <!-- Sidebar Navigation -->
+  <!-- <nav class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="sidebar-header">
+      <img src="assets/images/logo.png" alt="Logo" class="sidebar-logo">
+      <button class="sidebar-toggle" (click)="toggleSidebar()">
+        <i class="fas" [class.fa-bars]="isSidebarCollapsed" [class.fa-times]="!isSidebarCollapsed"></i>
+      </button>
+    </div>
+
+    <div class="sidebar-menu">
+      <a routerLink="/admin-data-management" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-database"></i>
+        <span>Data Management</span>
+      </a>
+      <a routerLink="/banned" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-ban"></i>
+        <span>Banned Users</span>
+      </a>
+      <a routerLink="/allusers" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-users"></i>
+        <span>All Users</span>
+      </a>
+      <a routerLink="/addAdmin" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-user-plus"></i>
+        <span>Add Admin</span>
+      </a>
+      <a routerLink="/VerificationRequests" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-id-card"></i>
+        <span>Verification Requests</span>
+      </a>
+      <a routerLink="/Allpayments" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-credit-card"></i>
+        <span>All Payments</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="admin-profile">
+        <img [src]="adminAvatar || 'assets/images/default-avatar.png'" alt="Admin" class="admin-avatar">
+        <div class="admin-info" *ngIf="!isSidebarCollapsed">
+          <h4>{{adminName || 'Admin User'}}</h4>
+          <span>Administrator</span>
+        </div>
+      </div>
+    </div>
+  </nav> -->
+
+  <!-- Main Content -->
+  <!-- <main class="main-content" [class.expanded]="isSidebarCollapsed">
+    <div class="container py-4">
+
+      <div class="container py-4 text-center "> -->
+
+  <!-- <div class="row mb-4  mt-5 ">
+          <div class="offset-lg-3 col-6">
+            <div class="card ">
+              <div class="card-body">
+                <h1 class="h2 mb-0">Admin Dashboard</h1>
+                <p class="text-muted">Welcome to your administration panel</p>
+                <p>last updated: {{ lastUpdated | date:'medium' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div> -->
+
+  <!-- <div class="row mb-4">
+
+          <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">User Statistics</h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Clients
+                    <span class="badge bg-primary rounded-pill">{{ userCounts.clients }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Freelancers
+                    <span class="badge bg-success rounded-pill">{{ userCounts.freelancers }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Admins
+                    <span class="badge bg-info rounded-pill">{{ userCounts.admins }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+  <!-- Project Stats -->
+  <!-- <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Project Statistics</h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Total Projects
+                    <span class="badge bg-secondary rounded-pill">{{ projectStats.total }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Pending
+                    <span class="badge bg-warning rounded-pill">{{ projectStats.pending }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Completed
+                    <span class="badge bg-success rounded-pill">{{ projectStats.completed }}</span>
+                  </div>
+
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Working
+                    <span class="badge bg-info rounded-pill">{{ projectStats.Working }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+  <!-- Proposal Stats -->
+  <!-- <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Proposal Statistics</h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Total Proposals
+                    <span class="badge bg-primary rounded-pill">{{ proposalStats.total }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Avg. proposals per Project
+                    <span class="badge bg-info rounded-pill">{{ proposalStats.averagePerProject | number:'1.1-1' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+  <!-- Certificate Stats -->
+  <!-- <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Identity Statistics</h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Pending Identity Verification Requests
+                    <span class="badge bg-warning rounded-pill">{{ pendingCertificates }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+  <!-- Charts Row -->
+  <!-- <div class="row mb-4"> -->
+
+  <!-- Revenue Chart -->
+  <!-- <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Top 5 Freelancer Skills</h5>
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Skill</th>
+                        <th>Usage Count</th>
+                        <th>Progress</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let skill of topSkills">
+                        <td>{{ skill.name }}</td>
+                        <td>{{ skill.count }}</td>
+                        <td>
+                          <div class="progress">
+                            <div class="progress-bar" role="progressbar" -->
+  <!-- [style.width.%]="(skill.count / topSkills[0].count) * 100"
+                                 [attr.aria-valuenow]="skill.count"
+                                 aria-valuemin="0"
+                                 [attr.aria-valuemax]="topSkills[0].count">
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div> -->
+  <!-- Project Status Chart -->
+  <!-- <div class="col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Project Status Distribution</h5>
+                <div class="chart-container">
+                  <canvas baseChart
+                    [data]="projectStatusChartData"
+                    [options]="pieChartOptions"
+                    type="pie">
+                  </canvas>
+                </div>
+              </div>
+            </div> -->
+  <!-- </div>
+          <div class="col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Language Distribution</h5>
+                <div class="chart-container">
+                  <canvas baseChart
+                    [data]="languageChartData"
+                    [options]="pieChartOptions"
+                    type="pie">
+                  </canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+  <!-- Bottom Row -->
+  <!-- <div class="row"> -->
+  <!-- Projects Types Card -->
+  <!-- <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Projects Types</h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Total Projects
+                    <span class="badge bg-primary rounded-pill">{{ projectStats.Bidding+projectStats.Fixed }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Total Bidding Projects
+                    <span class="badge bg-primary rounded-pill">{{ projectStats.Bidding }}</span>
+                  </div>
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Total Fixed Price Projects -->
+  <!-- <span class="badge bg-info rounded-pill">{{ projectStats.Fixed }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+  <!-- Monthly Revenue Chart -->
+
+  <!-- </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div> -->
+
+  <div class="profile-container mt-5">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <div class="profile-picture-container">
+              <img
+                [src]="
+                  previewUrl ||
+                  (profile.profilePicture
+                    ? picturesurl + '/' + profile.profilePicture
+                    : 'images/default.jpg')
+                "
+                alt="Profile Picture"
+                class="profile-image"
+              />
+              <div class="overlay">
+                <label for="profilePicture" class="upload-label">
+                  <i class="fa fa-camera"></i>
+                </label>
+                <input
+                  type="file"
+                  id="profilePicture"
+                  (change)="onProfilePictureChange($event)"
+                  accept="image/*"
+                  hidden
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="profile-basic-info">
+              <h1>{{ profile.firstname }} {{ profile.lastname }}</h1>
+              <div class="profile-title" *ngIf="profile.title">
+                <i class="fa fa-briefcase"></i>
+                <span>{{ profile.title }}</span>
+              </div>
+              <div class="role-badge mb-3">
+                <i class="fa fa-user-circle"></i>
+                <span>{{ profile.role }}</span>
+                <i
+                  *ngIf="profile.isVerified"
+                  class="fa fa-check-circle text-success mx-2"
+                ></i>
+              </div>
+              <div class="location">
+                <i class="fa fa-map-marker"></i> {{ profile.city }},
+                {{ profile.country }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Tab Navigation -->
+    <div class="container d-flex flex-row">
+      <div class="profile-tabs mt-2 col-3">
+        <div class="container">
+          <ul class="nav nav-tabs d-flex flex-column">
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
+              [class.active]="activeTab === 'bannedusers'"
+              (click)="setActiveTab('bannsedusers')"
+            >
+              <i class="fa fa-folder"></i> BannedUsers
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
+              [class.active]="activeTab === 'allusers'"
+              (click)="setActiveTab('allusers')"
+            >
+              <i class="fa fa-briefcase"></i> All Users
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
+              [class.active]="activeTab === 'addadmin'"
+              (click)="setActiveTab('addadmin')"
+            >
+              <i class="fa fa-graduation-cap"></i> Add Admin
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
+              [class.active]="activeTab === 'validation'"
+              (click)="setActiveTab('validation')"
+            >
+              <i class="fa fa-certificate"></i> Validation Requests
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
+              [class.active]="activeTab === 'allpayments'"
+              (click)="setActiveTab('allpayments')"
+            >
+              <i class="fa fa-certificate"></i> All Payments
+            </a>
+          </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container mt-4 col-9">
+      <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-12">
+          <div *ngIf="activeTab === 'allusers'">
+            <app-allusers></app-allusers>
+          </div>
+
+          <div *ngIf="activeTab === 'bannedusers'">
+            <app-banned-users></app-banned-users>
+          </div>
+
+          <div *ngIf="activeTab === 'addadmin'" class="card">
+            <app-add-admin></app-add-admin>
+          </div>
+
+          <div *ngIf="activeTab === 'validation'" class="card">
+            <app-identity-verification-deicision></app-identity-verification-deicision>
+          </div>
+
+          <div *ngIf="activeTab === 'allpayments'" class="card">
+            <app-all-payments></app-all-payments>
+          </div>
+        </div>
+
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

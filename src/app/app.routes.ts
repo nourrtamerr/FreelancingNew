@@ -43,6 +43,7 @@ import { ReviewsListComponent } from './Layout/Pages/Reviews/reviews-list/review
 import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.component';
 import { AdminDataManagementComponent } from './Layout/Pages/admin-data-management/admin-data-management.component';
 import { DisputesystemComponent } from './Layout/Pages/disputesystem/disputesystem.component';
+import { AdminnavbarComponent } from './Layout/Pages/adminnavbar/adminnavbar.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -91,10 +92,12 @@ export const routes: Routes = [
       {path: 'login',component: LoginComponent,title:'Login'},
       {path: 'chathub/:username',component: ChatComponent},
       {path: 'notification',component: NotificationsComponent},
+      {path: 'adminnavbar',component: AdminnavbarComponent},
+
 
       {path: 'Allpayments',component: AllPaymentsComponent },
       {path: 'reviews',component: ReviewsListComponent },
-    
+
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
       {path: 'paymentsucess',component: PaymentsucessComponent},
