@@ -349,11 +349,13 @@
 
           <div *ngFor="let project of projects" class="upwork-project-card">
             <a [routerLink]="['/details',project.id]">
-              <div class="project-card-header">
-                <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+              
+              <div class="project-card-header pt-4 pb-2">
 
+                <h3 class="project-title">{{project.title}}</h3>
                 
                 <div class="bidding-status-container flex-row" style="display: flex; flex-direction: row;">
+                                  
                   <!-- Bidding status -->
                   <div class="bidding-status" [ngClass]="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class">
                     <i class="fas" [ngClass]="{
@@ -377,20 +379,13 @@
 
                     </span>
                   </div>
-                  
-                  <!-- Bookmark button right after the bidding status -->
-                  <!-- <button *ngIf="this.role=='Freelancer'" class="save-project-btn mt-2" 
-                    (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()">
-                    <i class="fa-bookmark" 
-                      [class.fa-regular]="!userWishlist2.includes(project.id,0)" 
-                      [class.fa-solid]="userWishlist2.includes(project.id,0)" 
-                      [style.color]="userWishlist2.includes(project.id,0) ? '#175b99' : '#6c757d'">
-                    </i>
-                  </button> -->
+
                 </div>
+
+
               </div>
               
-              <h3 class="project-title">{{project.title}}</h3>
+              
           
 
               <div class=" d-flex flex-wrap align-items-center mb-3">
@@ -439,6 +434,7 @@
           
                 <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
                 <!-- <span class="meta dot">{{project.experienceLevel}}</span>  -->
+                <span class="meta "><i class="fas fa-star-half-alt"></i>{{ project.experienceLevel }}</span>
 
               </div>
           

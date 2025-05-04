@@ -269,26 +269,62 @@
         <section class="upwork-results col-lg-8 col-md-7 col-sm-12">
           <div *ngFor="let project of projects" class="upwork-project-card">
             <a [routerLink]="['/fixed-project', project.id]">
-              <div class="project-card-header d-flex justify-content-between align-items-center">
-                <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
-                <div *ngIf="this.role=='Freelancer'" class="project-actions d-flex">
-                    <i 
-                    (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" 
-                    class="fa-bookmark fs-4"
-                     [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
 
-                  <!-- <button class="action-btn"><i class="fa fa-thumbs-down"></i></button>
-                  <button class="action-btn"><i class="fa fa-heart"></i></button> -->
-                </div>
+
+              <!-- <div class="project-card-header d-flex justify-content-between align-items-center">
+                <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+
+              
               </div>
               
-              <h3 class="project-title">{{ project.title }}</h3>
+              <h3 class="project-title">{{ project.title }}</h3> -->
+
+              <div class="project-card-header py-3">
+
+                <h3 class="project-title">{{project.title}}</h3>
+
+                <div class="bidding-status-container flex-row" style="display: flex; flex-direction: row;">
+                  <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+
+                </div>
+
+              </div>
+
+
+              <div class=" d-flex flex-wrap align-items-center mb-3">
+                <div class="bid-info-container">
+                  <div class="bid-info-item bid-start">
+                    <!-- <i class="fas fa-flag-checkered"></i> -->
+                    <i class="fa-solid fa-money-bill-1-wave"></i>
+                    <div class="bid-info-content">
+                      <span class="bid-info-label">Price</span>
+                      <span class="bid-info-value">{{project.price | currency:project.currency}}</span>
+                    </div>
+                  </div>
+                  
+                
+                  
+                  <div class="bid-info-item bid-count">
+                    <i class="fas fa-users"></i>
+                    <div class="bid-info-content">
+                      <span class="bid-info-label">Proposals</span>
+                      <span class="bid-info-value">{{project.proposalsCount}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
               
               <div class="project-meta d-flex gap-3 align-items-center mb-3">
-                <span class="meta">
+                <span class="meta ">
                   <i class="fa fa-check-circle"></i> Payment verified
                 </span>
-                <span class="meta">
+                <span class="meta ">
                   <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
                     <i
                       class="fa fa-star"
@@ -299,14 +335,17 @@
                   <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
                 </span>
     
-                <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
+                <span class="meta "><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
+
+                <span class="meta "><i class="fas fa-star-half-alt"></i>{{ project.experienceLevel }}</span>
+
               </div>
               
-              <div class="project-meta d-flex flex-wrap align-items-center mb-3">
+              <!-- <div class="project-meta d-flex flex-wrap align-items-center mb-3">
                 <span class="meta dot">{{ project.experienceLevel }}</span>
                 <span class="meta dot">Price: {{ project.price }} {{ project.currency }}</span>
                 <span class="meta dot">Est. Time: {{ project.expectedDuration }} months</span>
-              </div>
+              </div> -->
               
               <div class="project-meta d-flex flex-wrap align-items-center mb-1">
              
@@ -315,14 +354,26 @@
                 </div>
               </div>
               
-              <div class="d-flex justify-content-between row pt-4">
-                <div class="project-tags mb-4 col-lg-10 col-md-10 col-sm-12">
+              <div class="d-flex justify-content-between ">
+
+
+                <div class="project-tags mb-4 mt-4 col-lg-10 col-md-10 col-sm-12">
                   <span *ngFor="let skill of project.projectSkills" class="gap-2">{{ skill }}</span>
                 </div>
-                <div class="proposals-count d-flex justify-content-end col-lg-2 col-md-2 col-sm-12">
-                 {{ project.proposalsCount }} Proposals
+          
+                <div class="mt-4 align-items-end">
+                  <div *ngIf="this.role=='Freelancer'" class="project-actions d-flex">
+                    <i 
+                    (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" 
+                    class="fa-bookmark fs-4"
+                    [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
+    
+                  </div>
                 </div>
+
               </div>
+
+
             </a>
           </div>
   

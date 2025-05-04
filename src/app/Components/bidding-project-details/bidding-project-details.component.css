@@ -448,6 +448,7 @@ a{
   padding: 24px 0 24px 0;
   margin-bottom: 24px;
   align-items: flex-start;
+  /* justify-content: space-evenlyf; */
   /* border-bottom: 1px solid #e4ebe4; */
   flex-wrap: wrap;
 }
@@ -455,7 +456,7 @@ a{
 .project-info-modern-item {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 2px;
   min-width: 160px;
 }
 
