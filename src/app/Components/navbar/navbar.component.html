@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
   <a class="navbar-brand" routerLink="/">
-    <img src="l.png" alt="logo" class="navbar-logo" />
+    <img src="kkkk.png" alt="logo" class="navbar-logo" />
   </a>
   <div class="container">
     <button
@@ -13,124 +13,78 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarContent">
-      <!-- Client Navigation -->
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center"
-      *ngIf="role === 'client'">
-        <!-- *ngIf="role === 'client'"> -->
-        <li class="nav-item dropdown pe-4">
-          <a
-            class="nav-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-            href="#"
-          >
-            Jobs
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a
-                class="dropdown-item text-center"
-                [routerLink]="['/myprojects']"
-                >My Jobs</a
-              >
-            </li>
-            <li>
-              <a
-                class="dropdown-item text-center"
-                [routerLink]="['/createproject']"
-                >Post a Job</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item text-center" [routerLink]="['/new']"
-                >Bidding Projects</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item text-center" [routerLink]="['/fixed']"
-                >Fixed price Projects</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item text-center" href="#">All Contracts</a>
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item text-center" href="#"
-                >Bring Your Own Talent</a
-              >
-            </li>
-          </ul>
-        </li>
+      <!-- Main Navigation Menu -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center">
+        <!-- Client Menu Items -->
+        <ng-container *ngIf="role === 'client'">
+          <li class="nav-item dropdown pe-4">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+              Jobs
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item text-center" [routerLink]="['/myprojects']">My Jobs</a>
+              </li>
+              <li>
+                <a class="dropdown-item text-center" [routerLink]="['/createproject']">Post a Job</a>
+              </li>
+              <li>
+                <a class="dropdown-item text-center" [routerLink]="['/new']">Bidding Projects</a>
+              </li>
+              <li>
+                <a class="dropdown-item text-center" [routerLink]="['/fixed']">Fixed price Projects</a>
+              </li>
+            </ul>
+          </li>
 
-        <li class="nav-item dropdown pe-4">
-          <a
-            class="nav-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-            href="#"
-          >
-            Talent
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" [routerLink]="['/freelancers']"
-                >Discover</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="#"
-                >Saved Talent ({{ savedTalent }})</a
-              >
-            </li>
-            <li><a class="dropdown-item" href="#">Recently Viewed</a></li>
-          </ul>
-        </li>
+          <li class="nav-item dropdown pe-4">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+              Talent
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" [routerLink]="['/freelancers']">Discover</a>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
 
+        <!-- Freelancer Menu Items -->
+        <ng-container *ngIf="role === 'freelancer'">
+          <li class="nav-item dropdown pe-4">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+              Find Work
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" [routerLink]="['/new']">Bidding Projects</a>
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="['/fixed']">Fixed Price Projects</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item pe-4">
+            <a class="nav-link" [routerLink]="['/freelancers']">Freelancers</a>
+          </li>
+        </ng-container>
+
+        <!-- Reports Menu (Common for both roles) -->
         <li class="nav-item dropdown pe-4">
-          <a
-            class="nav-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-            href="#"
-          >
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
             Reports
           </a>
           <ul class="dropdown-menu">
-
             <li><a class="dropdown-item" [routerLink]="['/Allpayments']">Transaction History</a></li>
             <li><a class="dropdown-item" [routerLink]="['/addfund']">Billing & Payments</a></li>
-            <li><hr class="dropdown-divider"></li>
-
-            <li><a class="dropdown-item" href="#">Connect History</a></li>
           </ul>
         </li>
       </ul>
+
+      <!-- Rest of the navbar content -->
 
       <!-- Freelancer Navigation -->
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-100 justify-content-center" *ngIf="role === 'freelancer'">
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-            href="#"
-          >
-            Find Work
-          </a>
-          <ul class="dropdown-menu">
-            <li >
-              <a class="dropdown-item" [routerLink]="['/new']"
-                >Bidding Projects</a
-              >
-            </li>
-            <li >
-              <a class="dropdown-item" [routerLink]="['/fixed']"
-                >Fixed Price Projects</a
-              >
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/freelancers']">Freelancers</a>
-        </li>
-      </ul>
+    
       <div></div>
       <!-- Right Side Navigation -->
       <ul class="navbar-nav ms-auto align-items-center">
@@ -266,6 +220,10 @@
             <li *ngIf="role === 'freelancer'">
               <a class="dropdown-item" routerLink="/wishlist">Saved Jobs</a>
             </li>
+            <li>
+              <a class="dropdown-item" routerLink="/subscribtion">Subscription plan</a>
+            </li>
+
             <li><hr class="dropdown-divider" /></li>
             <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
           </ul>
