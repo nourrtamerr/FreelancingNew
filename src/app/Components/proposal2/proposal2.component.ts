@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BiddingProjectService } from '../../Shared/Services/BiddingProject/bidding-project.service';
-import { ActivatedRoute, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { FixedPriceProjectService } from '../../Shared/Services/FixedPriceProject/fixed-price-project.service';
 import { ProposalService } from '../../Shared/Services/Proposal/proposal.service';
 import { CreateProposalDTO, CreateSuggestedMilestoneDTO, ProjectType } from '../../Shared/Interfaces/Proposal';
@@ -9,6 +9,7 @@ import { TimeAgoPipe } from '../../Pipes/time-ago.pipe';
 import { CommonModule } from '@angular/common';
 import { TimeLeftPipe } from '../../Pipes/time-left.pipe';
 import { bidchange, BiddinghubService } from '../../Shared/Services/bidding/biddinghub.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-proposal2',
@@ -39,7 +40,9 @@ export class Proposal2Component {
     private route: ActivatedRoute,
     private fixedPriceService: FixedPriceProjectService,
     private proposalService: ProposalService,
-    private biddinghub:BiddinghubService
+    private biddinghub:BiddinghubService,
+    private toaster: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -217,7 +220,10 @@ export class Proposal2Component {
     this.proposalService.CreateProposal(this.proposal).subscribe({
       next: (data) => {
         this.isSubmitting = false;
-        alert('Proposal submitted successfully!');
+        // alert('Proposal submitted successfully!');
+        this.toaster.success('Proposal submitted successfully!');
+        this.router.navigate(['/myproposals']);
+        console.log('Proposal created:', data);
       },
       error: (err) => {
         this.isSubmitting = false;

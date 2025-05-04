@@ -16,7 +16,7 @@ import { BiddingProjectService } from '../../Shared/Services/BiddingProject/bidd
 import { filter, map } from 'rxjs';
 import { BiddingProjectFilter } from '../../Shared/Interfaces/BiddingProject/bidding-project-filter';
 import { BiddingProjectGetAll } from '../../Shared/Interfaces/BiddingProject/bidding-project-get-all';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FilterPipe } from '../../Pipes/filter.pipe';
 import { TimeAgoPipe } from '../../Pipes/time-ago.pipe';
 import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
@@ -27,7 +27,7 @@ import { AuthService } from '../../Shared/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-bidding-project-new',
-  imports:[CommonModule, FormsModule,FilterPipe,TimeAgoPipe, RouterOutlet, RouterModule],
+  imports:[CommonModule, FormsModule,FilterPipe,TimeAgoPipe, RouterOutlet, RouterModule, CurrencyPipe],
   templateUrl: './bidding-project-new.component.html',
   styleUrls: ['./bidding-project-new.component.css']
 })

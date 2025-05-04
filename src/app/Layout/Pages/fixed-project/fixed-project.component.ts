@@ -46,7 +46,7 @@ export class FixedProjectComponent implements OnInit {
     maxDuration?: number;
     skillIds?: number[];
   } = {pageNumber: 1,
-    pageSize: 10};
+    pageSize: 10000};
 
   ExperienceLevel = ExperienceLevel;
   Currency = Currency;

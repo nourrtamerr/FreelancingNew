@@ -1,4 +1,4 @@
-<div class="wishlist-container">
+<!-- <div class="wishlist-container">
     <div class="wishlist-header">
       <h1><i class="fas fa-bookmark"></i> Saved Jobs</h1>
       <p>Your curated collection of potential opportunities</p>
@@ -34,6 +34,117 @@
                   <span class="value">{{project.experienceLevel}}</span>
                 </div>
               </div>
+            </div>
+            @if(project.type === 'fixed'){
+            <div class="card-actions">
+              <button class="btn-view"
+              [routerLink]="['/fixed', project.projectId]"
+              >
+                <i class="fas fa-external-link-alt"></i>
+                View Details
+              </button>
+              <button class="btn-remove" (click)="removeFromWishlist(project.projectId)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          }@else {
+            <div class="card-actions">
+              <button class="btn-view"
+              [routerLink]="['/details', project.projectId]"
+              >
+                <i class="fas fa-external-link-alt"></i>
+                View Details
+              </button>
+              <button class="btn-remove" (click)="removeFromWishlist(project.projectId)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          }
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noItems>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="far fa-bookmark"></i>
+          </div>
+          <h2>No Saved Projects Yet</h2>
+          <p>Explore and save projects that match your expertise</p>
+          <button routerLink="/projects" class="btn-browse">
+            <i class="fas fa-search"></i> Discover Projects
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div> -->
+  <div class="jobs-available-section">
+    <div class="hero-overlay"></div>
+    <div class="jobs-available-content">
+  
+      <div class="jobs-illustration">
+        <div>
+          <h1 class="jobs-count">Your curated collection of potential opportunities</h1>
+  
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+
+
+
+  <div class="wishlist-container mt-5">
+    <div class="wishlist-header text-center">
+      <h1><i class="fas fa-bookmark"></i> Saved Jobs</h1>
+      <!-- <p>Your curated collection of potential opportunities</p> -->
+    </div>
+
+    <div class="wishlist-content">
+      <ng-container *ngIf="UserWishList.length > 0; else noItems">
+        <div class="wishlist-grid">
+          <div class="project-card" *ngFor="let project of UserWishList">
+            <div class="card-header">
+              <div class="title-section">
+                <h3>{{project.title}}</h3>
+              </div>
+              <div class="date-badge">
+                <i class="far fa-calendar-alt"></i>
+                <span>{{project.createdAt | date:'MMM d'}}</span>
+              </div>
+            </div>
+
+            <div class="project-details">
+              <div class="detail-item">
+                <i class="fas fa-tag"></i>
+                <div class="detail-content">
+                  <span class="label">Budget</span>
+                  <span class="value">{{project.price}} {{project.currency}}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-user-tie"></i>
+                <div class="detail-content">
+                  <span class="label">Experience</span>
+                  <span class="value">{{project.experienceLevel}}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-briefcase"></i>
+                <div class="detail-content">
+                  <span class="label">Project Type</span>
+                  <span class="value">{{project.type}}</span>
+                </div>
+              </div>
+              <!-- <div class="detail-item">
+                <i class="fas fa-clock"></i>
+                <div class="detail-content">
+                  <span class="label">Duration</span>
+                  <span class="value">{{project.expectedDuration}} months</span>
+                </div>
+              </div> -->
             </div>
             @if(project.type === 'fixed'){
             <div class="card-actions">
