@@ -1403,15 +1403,16 @@
 }
 
 .bidding-soon .countdown-timer {
-  color: #1557b0;
+  /* background: linear-gradient(135deg, #f8fafc, #e2e8f0); */
+  color: #475569;
 }
 
 /* Ended biddings - muted gray */
 .bidding-ended {
-  background: linear-gradient(135deg, #6c757d, #495057);
+  background-color: rgb(255, 0, 0);
   color: white;
   border: none;
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .bidding-ended .countdown-timer {
@@ -1435,7 +1436,7 @@
 /* Extra emphasis for active biddings on hover */
 .bidding-active:hover {
   box-shadow: 0 8px 16px rgba(26, 115, 232, 0.25);
-  background: linear-gradient(135deg, #1557b0, #1a73e8);
+  /* background: linear-gradient(135deg, #1557b0, #1a73e8); */
 }
 
 .bidding-active {
@@ -1453,7 +1454,7 @@
 /* Extra emphasis for active biddings on hover */
 .bidding-active:hover {
   box-shadow: 0 8px 16px rgba(49, 130, 228, 0.3);
-  background: linear-gradient(135deg, #1e62b0, #3182e4);
+  /* background: linear-gradient(135deg, #1e62b0, #3182e4); */
 }
 
 .bidding-active {
@@ -1471,11 +1472,12 @@
 /* Extra emphasis for active biddings on hover */
 .bidding-active:hover {
   box-shadow: 0 8px 16px rgba(46, 125, 50, 0.3);
-  background: linear-gradient(135deg, #1b5e20, #2e7d32);
+  /* background: linear-gradient(135deg, #1b5e20, #2e7d32); */
 }
 
 .bidding-active {
   background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  /* background-color: #c8e6c9; */
   color: #2e7d32;
   border: 2px solid rgba(46, 125, 50, 0.3);
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
@@ -1493,7 +1495,8 @@
   transform: translateY(-2px);
 }
 .bidding-active {
-  background: linear-gradient(135deg, #e8f7e8, #c2e3c1);
+  /* background: linear-gradient(135deg, #e8f7e8, #c2e3c1); */
+  background-color: #c2e3c1;
   color: #1e5620;
   border: 2px solid rgba(46, 125, 50, 0.25);
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.12);
@@ -1507,14 +1510,16 @@
 /* Extra emphasis for active biddings on hover */
 .bidding-active:hover {
   box-shadow: 0 8px 16px rgba(46, 125, 50, 0.18);
-  background: linear-gradient(135deg, #c2e3c1, #e8f7e8);
+  /* background: linear-gradient(135deg, #c2e3c1, #e8f7e8); */
   transform: translateY(-2px);
 }
 
 
 .bidding-active {
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
-  color: white;
+    /* background: linear-gradient(135deg, #e8f7e8, #c2e3c1); */
+    background-color: #c2e3c1;
+  color: #15803d;
+  /* color: white; */
   border: none;
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
 }
@@ -1527,28 +1532,30 @@
 /* Extra emphasis for active biddings on hover */
 .bidding-active:hover {
   box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
-  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  /* background: linear-gradient(135deg, #2e7d32, #4caf50); */
   transform: translateY(-2px);
 }
 
 
 /* Active biddings - softer green style */
 .bidding-active {
-  background: linear-gradient(135deg, #66bb6a, #388e3c);
-  color: white;
+  /* background: linear-gradient(135deg, #e8f7e8, #c2e3c1); */
+  background-color: #c2e3c1;  color: #15803d;
+  /* color: white; */
   border: none;
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
 
 .bidding-active .countdown-timer {
-  color: rgba(255, 255, 255, 0.95);
+  /* background-color: linear-gradient(135deg, #dcfce7, #bbf7d0); */
+  color: #15803d;
   border-left: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Extra emphasis for active biddings on hover */
 .bidding-active:hover {
   box-shadow: 0 8px 16px rgba(76, 175, 80, 0.25);
-  background: linear-gradient(135deg, #388e3c, #66bb6a);
+  /* background: linear-gradient(135deg, #388e3c, #66bb6a); */
   transform: translateY(-2px);
 }
 
@@ -1827,17 +1834,18 @@
 }
 
 .bidding-soon {
-  background-color: #e0f7fa;
-  color: #0097a7;
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  color: #475569;
 }
 
 .bidding-active {
-  background-color: #e8f5e9;
-  color: white;
+    /* background: linear-gradient(135deg, #e8f7e8, #c2e3c1); */
+    background-color: #c2e3c1;
+  color: #15803d;
 }
 
 .bidding-ended {
-  background-color: #ffebee;
+  background-color: green;
   color: black;
 }
 

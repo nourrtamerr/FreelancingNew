@@ -1,0 +1,131 @@
+<div class="disputes-container">
+  <h1>Dispute Resolution Center</h1>
+  
+  <div class="disputes-list">
+    <div class="dispute-card" *ngFor="let dispute of disputes">
+      <div class="dispute-header">
+        <div class="project-info">
+          <h2>{{dispute.title}}</h2>
+          <span class="status-badge" [class]="dispute.status.toLowerCase()">{{dispute.status}}</span>
+        </div>
+        <div class="amount-display">
+          <span class="amount-label">Disputed Amount</span>
+          <span class="amount-value">${{dispute.amount}}</span>
+        </div>
+      </div>
+
+      <div class="project-description">{{dispute.description}}</div>
+
+      <div class="parties-container">
+        <div class="party client" data-role="Client">
+          <div class="party-profile">
+            <img [src]="dispute.clientpicture? Files+dispute.clientpicture : './images/default.jpg'" alt="Client">
+            <div class="party-details">
+              <span class="name">{{dispute.clientname}}</span>
+              <div class="rank-badge">
+                <i [class]="getRankIcon(dispute.clietrank)"></i>
+                <span>{{dispute.clietrank}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="party-role">Client</div>
+        </div>
+
+        <div class="party freelancer" data-role="Freelancer">
+          <div class="party-profile">
+            <img [src]="dispute.freelancerpicture ? Files+dispute.freelancerpicture : './images/default.jpg'" alt="Freelancer">
+            <div class="party-details">
+              <span class="name">{{dispute.freelancername}}</span>
+              <div class="rank-badge">
+                <i [class]="getRankIcon(dispute.freelancerrank)"></i>
+                <span>{{dispute.freelancerrank}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="party-role">Freelancer</div>
+        </div>
+      </div>
+
+      <div class="dispute-content">
+        <div class="complaint-section">
+          <h3>Dispute Details</h3>
+          <p>{{dispute.complaint}}</p>
+        </div>
+      </div>
+
+
+      <div class="dispute-content">
+        <div class="complaint-section">
+          <h3>Dispute Details</h3>
+          <p>{{dispute.complaint}}</p>
+        </div>
+    
+        <!-- Add resolution section -->
+        <div class="resolution-section">
+          <h3>Resolve Dispute</h3>
+          <div class="resolution-form">
+            <textarea 
+              [(ngModel)]="resolutionComment" 
+              placeholder="Add your resolution comment here..." 
+              class="resolution-comment">
+            </textarea>
+            
+            <div class="resolution-buttons">
+              <button 
+                class="favor-client" 
+                (click)="resolveDispute(dispute.id, 'Client', resolutionComment)"
+                [disabled]="!resolutionComment">
+                <i class="fas fa-gavel"></i>
+                Favor Client
+              </button>
+              <button 
+                class="favor-freelancer" 
+                (click)="resolveDispute(dispute.id, 'Freelancer', resolutionComment)"
+                [disabled]="!resolutionComment">
+                <i class="fas fa-gavel"></i>
+                Favor Freelancer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="attachments" *ngIf="dispute.files?.length">
+        <h3>Supporting Documents</h3>
+        <div class="files-grid">
+          <ng-container *ngFor="let file of dispute.files">
+              <div class="file-preview" *ngIf="getFileType(file) === 'image'" (click)="openImageModal(file)">
+                <img [src]="Files+file" alt="Evidence">
+                <div class="file-overlay">
+                  <i class="fas fa-search-plus"></i>
+                </div>
+              </div>
+              
+              <div class="file-preview" *ngIf="getFileType(file) === 'video'">
+                <video [src]="Files+file" controls></video>
+                <div class="file-type-indicator">
+                  <i class="fas fa-video"></i>
+                </div>
+              </div>
+            
+              <div class="file-preview document" *ngIf="getFileType(file) === 'other'">
+                <a [href]="Files+file" target="_blank" download>
+                  <i class="fas fa-file-alt"></i>
+                  <span>View Document</span>
+                </a>
+              </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="image-modal" [class.show]="selectedImage" (click)="closeImageModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-modal" (click)="closeImageModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <img *ngIf="selectedImage" [src]="Files+selectedImage" alt="Full size evidence">
+  </div>
+</div>

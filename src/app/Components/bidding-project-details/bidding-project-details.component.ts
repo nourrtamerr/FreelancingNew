@@ -74,6 +74,7 @@ project: BiddingProjectGetById={
   clientId:'',
   expectedDuration:0,
   endDate:'',
+  biddingStartDate:'',
   currentBid:0
 };
 
@@ -210,11 +211,200 @@ previousBid: number = 0;
       this.biddinghub.hubConnection.off("BiddingChanged");
     }
   }
-  private loadNgOnIt(id:number):void{
+
+
+
+showDeleteModal = false;
+reviewToDelete: any = null;
+
+@ViewChild('carousel') carouselElement!: ElementRef;
+
+
+
+userWishlist:any;
+
+
+
+
+
+  // Add these properties to your component class
+  timeLeft = {
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  };
+  private countdownInterval: any;
+  
+  // Add this method to your component class
+  private startCountdown(): void {
+    // Clear any existing interval
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  
+    // Update countdown immediately
+    this.updateCountdown();
+  
+    // Set interval to update countdown every second
+    this.countdownInterval = setInterval(() => {
+      this.updateCountdown();
+    }, 1000);
+  }
+  
+  // Add these methods to your component class
+  
+  // Check if auction has started
+  isAuctionStarted(): boolean {
+    if (!this.project?.biddingStartDate) return true; // Default to started if no start date
+    try {
+      const startDate = new Date(this.project.biddingStartDate);
+      const now = new Date();
+      return startDate <= now;
+    } catch (error) {
+      console.error('Error parsing BiddingStartDate:', error);
+      return true; // Default to started if there's an error
+    }
+  }
+  
+  
+
+
+  
+  // Check if auction has ended
+  isAuctionEnded(): boolean {
+    if (!this.project?.biddingEndDate) return false;
+    try {
+      const endDate = new Date(this.project.biddingEndDate);
+      const now = new Date();
+      return endDate < now;
+    } catch (error) {
+      console.error('Error parsing biddingEndDate:', error);
+      return false; // Default to not ended if there's an error
+    }
+  }
+
+  getAuctionStatusIcon(): string {
+    if (this.isBidEndDatePassed()) {
+      return 'fa-hourglass-end';
+    } else if (this.isAuctionStarted()) {
+      return 'fa-hourglass-half';
+    } else {
+      return 'fa-clock';
+    }
+  }
+  getBidButtonTitle(): string {
+    if (this.project?.freelancerId !== null) {
+      return 'This project has already been assigned';
+    }
+    if (!this.isAuctionStarted()) {
+      return 'Bidding period has not started yet';
+    }
+    if (this.isBidEndDatePassed()) {
+      return 'Bidding period has ended';
+    }
+    return 'Apply for this project';
+  }
+  // Get the appropriate text for the auction status
+  getAuctionStatusText(): string {
+    if (this.isBidEndDatePassed()) {
+      return 'Bidding ended';
+    } else if (this.isAuctionStarted()) {
+      return 'Bidding ends in';
+    } else {
+      return 'Bidding starts in';
+    }
+  }
+  getAuctionStatusClass(): string {
+    if (this.isBidEndDatePassed()) {
+      return 'bidding-ended';
+    } else if (this.isAuctionStarted()) {
+      return 'bidding-active';
+    } else {
+      return 'bidding-soon';
+    }
+  }
+  private updateCountdown(): void {
+    if (!this.project) return;
+    
+    const now = new Date().getTime();
+    
+    // If auction hasn't started yet, count down to start date
+    if (!this.isAuctionStarted()) {
+      try {
+        const startDate = new Date(this.project.biddingStartDate).getTime();
+        const distance = startDate - now;
+        
+        if (distance <= 0) {
+          // When start date is reached, switch to counting down to end date
+          this.calculateTimeLeft(0);
+          return;
+        }
+        
+        this.calculateTimeLeft(distance);
+        return; // Important: return here to prevent counting down to end date
+      } catch (error) {
+        console.error('Error calculating start date countdown:', error);
+        this.timeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+        return;
+      }
+    }
+    
+    // If auction has started, count down to end date
+    try {
+      const endDate = new Date(this.project.biddingEndDate).getTime();
+      const distance = endDate - now;
+      
+      if (distance <= 0) {
+        this.calculateTimeLeft(0);
+        if (this.countdownInterval) {
+          clearInterval(this.countdownInterval);
+        }
+        return;
+      }
+      
+      this.calculateTimeLeft(distance);
+    } catch (error) {
+      console.error('Error calculating end date countdown:', error);
+      this.timeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+  }
+  
+  // Helper method to calculate time units
+  private calculateTimeLeft(distance: number): void {
+    if (distance <= 0) {
+      this.timeLeft = {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      };
+      return;
+    }
+    
+    this.timeLeft = {
+      days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((distance % (1000 * 60)) / 1000)
+    };
+  }
+  
+  // Add this method to check if bidding end date has passed
+  // isBidEndDatePassed(): boolean {
+  //   if (!this.project.biddingEndDate) return false;
+  //   return new Date(this.project.biddingEndDate) < new Date();
+  // }
+  
+  // Modify your loadNgOnIt method to start the countdown after loading the project
+  private loadNgOnIt(id: number): void {
     this.biddingProjectDetailsService.GetBiddingProjectById(id).subscribe({
       next: (data) => {
         this.project = data;
-
+        
+        // Start countdown after project is loaded
+        this.startCountdown();
+        
         this.loadWishlist();
         if (this.project.clientId) {
           this.ReviewsService.getRevieweeById(this.project.clientId).subscribe({
@@ -378,8 +568,8 @@ previousBid: number = 0;
   }
 
 
-showDeleteModal = false;
-reviewToDelete: any = null;
+// showDeleteModal = false;
+// reviewToDelete: any = null;
 
 deleteReview(review: number) {
   this.reviewToDelete = review;
@@ -391,7 +581,7 @@ closeDeleteModal() {
   this.showDeleteModal = false;
   this.reviewToDelete = null;
 }
-@ViewChild('carousel') carouselElement!: ElementRef;
+// @ViewChild('carousel') carouselElement!: ElementRef;
 confirmDelete() {
   if (this.reviewToDelete) {
     this.ReviewsService.deleteReview(this.reviewToDelete).subscribe({
@@ -429,7 +619,7 @@ confirmDelete() {
 }
 
 
-userWishlist:any;
+// userWishlist:any;
 
 
 
@@ -504,14 +694,6 @@ loadWishlist(): void {
     return new Date(this.project.biddingEndDate) < new Date();
   }
   
-  getBidButtonTitle(): string {
-    if (this.project?.freelancerId !== null) {
-      return 'This project has already been assigned';
-    }
-    if (this.isBidEndDatePassed()) {
-      return 'Bidding period has ended';
-    }
-    return 'Apply for this project';
-  }
+
 }
 

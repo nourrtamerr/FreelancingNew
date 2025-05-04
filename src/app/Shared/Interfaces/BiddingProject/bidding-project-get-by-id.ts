@@ -12,6 +12,7 @@ export interface BiddingProjectGetById {
   postedFrom: number
   clientTotalNumberOfReviews: number
   clientRating: number
+  biddingStartDate:string
   biddingEndDate: string
   clientIsverified: boolean
   clientCountry: string
