@@ -14,16 +14,15 @@
     <h4 class="text-muted">No payment history found</h4>
     <p class="text-muted">When you make or receive payments, they will appear here</p>
   </div>
-
-  <!-- Payments Table -->
   <div class="table-responsive" *ngIf="allPayments.length > 0">
     <table class="table table-hover">
       <thead class="table-light">
         <tr>
           <th>Date</th>
-          <th>Transaction ID</th>
           <th>Payment Method</th>
           <th>Transaction Type</th>
+          <th>Card Number</th>
+          <th>CVV</th>
           <th class="text-end">Amount</th>
         </tr>
       </thead>
@@ -31,21 +30,30 @@
         <tr *ngFor="let payment of allPayments">
           <td>{{ payment.date | date: 'MMM d, y' }}</td>
           <td>
-            <div class="d-flex align-items-center">
-              <i class="fas fa-exchange-alt me-2 text-primary"></i>
-              <div>
-                 <span class="fw-bold">{{(getTransactionDetails(payment)) }}</span> 
-        
-                
-              </div>
+            <span class="badge" [ngClass]="{
+              'bg-success': payment.paymentMethod !== 'Cash',
+              'bg-info': payment.paymentMethod === 'Cash'
+            }">{{ payment.paymentMethod }}</span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': getTransactionType(payment) === 'Add Funds',
+              'bg-danger': getTransactionType(payment) === 'Withdraw',
+              'bg-warning': getTransactionType(payment) === 'Subscription Payment',
+              'bg-info': getTransactionType(payment) === 'Propsal Payment',
+              
+            }">{{ getTransactionType(payment) }}</span>
+          </td>
+          <td>
+            <div class="d-flex align-items-center" *ngIf="payment.paymentMethod !== 'Cash'">
+              <i class="fas fa-credit-card me-2 text-primary"></i>
+              <span class="fw-bold">{{ getCardNumber(payment) }}</span>
             </div>
           </td>
           <td>
-            
-            <span class="badge bg-success">{{ (payment.paymentMethod) }}</span>
-          </td>
-          <td>
-            <span class="badge bg-primary">{{ (getTransactionType(payment))}}</span>
+            <span class="fw-bold" *ngIf="payment.paymentMethod !== 'Cash'">
+              {{ getCVV(payment) }}
+            </span>
           </td>
           <td class="text-end fw-bold">
             <span [ngClass]="{

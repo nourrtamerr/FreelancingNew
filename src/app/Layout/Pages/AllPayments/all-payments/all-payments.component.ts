@@ -13,22 +13,39 @@ export class AllPaymentsComponent {
   constructor(private allPayment: AllPaymentsService) { }
 
   allPayments: any[] = [];
-  getTransactionDetails(payment: any): string {
-    if (payment.paymentMethod === '2') { // Stripe
-      return `Session ID: ${payment.sessionId}`;
-    } else if (payment.paymentMethod === '0') { // Credit Card
-      return `Card ending in ${payment.lastFourDigits}`;
+  
+  getCardNumber(payment: any): string {
+    if (payment.paymentMethod !== 'Cash' && payment.transactionId) {
+     // return payment.transactionId.slice(0, 16);
+     return payment.transactionId.split(',')[0];
     }
-    return payment.transactionId;
+    return '';
+  }
+
+
+
+  getCVV(payment: any): string {
+    if (payment.paymentMethod !== 'Cash' && payment.transactionId) {
+    //  return payment.transactionId.slice(17);
+    const parts = payment.transactionId.split(',');
+      return parts.length > 1 ? parts[1] : payment.transactionId.slice(16);
+    }
+    return '';
   }
 
   getTransactionType(payment: any): string {
     if (payment.transactionType === 'AddFunds') { 
       return 'Add Funds';
     } else if (payment.transactionType === 'Withdrawal') {
-      return 'Withdraw'; 
-     
+      return 'Withdraw';
     }
+    else if (payment.transactionType === 'SubscriptionPayment') {
+      return 'Subscription Payment';
+    }
+    else if (payment.transactionType === 'PropsalConfirmationPayment') {
+      return 'Propsal Payment';
+    }
+
     return 'Other Payment Method';
   }
  
@@ -38,5 +55,4 @@ export class AllPaymentsComponent {
       console.log(this.allPayments);
     }); 
   }
-
 }

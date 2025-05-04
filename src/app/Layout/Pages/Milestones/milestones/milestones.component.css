@@ -4,6 +4,80 @@
     padding: 20px;
     font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   }
+  .sentiment-feedback {
+    margin: 15px 0;
+    text-align: center;
+  }
+  .sentiment-feedback {
+    margin: 15px 0;
+    text-align: center;
+  }
+  
+  .sentiment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  
+  .sentiment-badge.positive {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+  }
+  
+  .sentiment-badge.negative {
+    background-color: #fce8e8;
+    color: #dc3545;
+  }
+  
+  .sentiment-badge.neutral {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+  
+  .sentiment-badge i {
+    font-size: 1.2em;
+  }
+  
+  .sentiment-badge small {
+    opacity: 0.8;
+    margin-left: 5px;
+  }
+  
+  .sentiment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  
+  .sentiment-badge.positive {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+  }
+  
+  .sentiment-badge.negative {
+    background-color: #fce8e8;
+    color: #dc3545;
+  }
+  
+  .sentiment-badge.neutral {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+  
+  .sentiment-badge i {
+    font-size: 1.2em;
+  }
+  
+  .sentiment-badge small {
+    opacity: 0.8;
+    margin-left: 5px;
+  }
   
   .milestones-header {
     margin-bottom: 28px;

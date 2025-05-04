@@ -8,6 +8,8 @@ export interface GetReviewsByRevieweeIdDto {
   projectTitle: string
   projectType: string
   reviewerId?:string
+  sentiment?: string;       // "Positive" or "Negative"
+  sentimentScore?: number;  // Confidence score (0.0 - 1.0)
   revieweeId?:string
 }
 

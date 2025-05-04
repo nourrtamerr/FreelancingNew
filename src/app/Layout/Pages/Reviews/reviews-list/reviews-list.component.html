@@ -1,0 +1,8 @@
+<div *ngFor="let review of reviews">
+    <p>{{ review.comment }}</p>
+    <span class="sentiment-tag" [ngClass]="getSentimentLabel(review.sentiment ?? '')">
+      {{ getSentimentLabel(review.sentiment ?? '') }}
+    </span>
+  </div>
+  
+  
