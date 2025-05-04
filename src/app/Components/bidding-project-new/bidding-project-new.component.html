@@ -20,7 +20,7 @@
   
   
     <!-- Search Bar and Filters -->
-    <div class="container pt-5">
+    <!-- <div class="container pt-5">
       <div class="row justify-content-center align-items-center mb-3">
         <div class="col-lg-8 col-md-8 col-sm-12">
           <div class="upwork-searchbar d-flex">
@@ -30,10 +30,34 @@
             </button>
           </div>
         </div>
+      </div>
+    </div> -->
 
 
+
+    <div class="container pt-5">
+      <div class="row justify-content-center align-items-center mb-3">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <div class="upwork-searchbar d-flex">
+            <input 
+              type="text" 
+              placeholder="Search for jobs" 
+              class="form-control border-0 shadow-none" 
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()"
+              name="searchTerm"
+            />
+            <button class="search-btn" (click)="onSearch()">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
+
+
+
+
   
     <!-- Main Content -->
     <div class="container">
@@ -323,67 +347,98 @@
 
         <section class="upwork-results col-lg-8 col-md-7 col-sm-12">
 
-          <div *ngFor="let project of projects" class="upwork-project-card ">
+          <div *ngFor="let project of projects" class="upwork-project-card">
             <a [routerLink]="['/details',project.id]">
-            <div class="project-card-header d-flex justify-content-between align-items-center">
-              <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
-              <span class="posted-time">Remaining Time: {{calculateRemainingTime(project.biddingEndDate)}}</span>
-              <div  *ngIf="this.role=='Freelancer'"  class="project-actions d-flex">
-                <i  (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()" class="fa-bookmark fs-4" [class.fa-regular]="!userWishlist2.includes(project.id,0)" [class.fa-solid]="userWishlist2.includes(project.id,0)" [style.color]="'#175b99'"></i>
-              
+              <div class="project-card-header">
+                <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+                
+                <div class="bidding-status-container flex-row" style="display: flex; flex-direction: row;">
+                  <!-- Bidding status -->
+                  <div class="bidding-status" [ngClass]="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class">
+                    <i class="fas" [ngClass]="{
+                      'fa-clock': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-soon',
+                      'fa-hourglass-half': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-active',
+                      'fa-hourglass-end': getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-ended'
+                    }"></i>
+                    <span>{{ getBiddingStatus(project.biddingStartDate, project.biddingEndDate).text }}</span>
+                    <span class="countdown-timer" *ngIf="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class !== 'bidding-ended'">
+                     
+                      @if(getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-active')
+                      {
+
+                        {{getCountdownDays(project.biddingEndDate) }}d:{{ getCountdownHours(project.biddingEndDate) }}h:{{ getCountdownMinutes(project.biddingEndDate)}}m:{{getCountdownSeconds(project.biddingEndDate)}}s
+                      }
+                      @else {
+
+                        {{getCountdownDays(project.biddingStartDate) }}d:{{ getCountdownHours(project.biddingStartDate) }}h:{{ getCountdownMinutes(project.biddingStartDate) }}m:{{getCountdownSeconds(project.biddingStartDate)}}s
+                      }
+                  
+
+                    </span>
+                  </div>
+                  
+                  <!-- Bookmark button right after the bidding status -->
+                  <button *ngIf="this.role=='Freelancer'" class="save-project-btn mt-2" 
+                    (click)="toggleWishlist(project.id); $event.preventDefault(); $event.stopPropagation()">
+                    <i class="fa-bookmark" 
+                      [class.fa-regular]="!userWishlist2.includes(project.id,0)" 
+                      [class.fa-solid]="userWishlist2.includes(project.id,0)" 
+                      [style.color]="userWishlist2.includes(project.id,0) ? '#175b99' : '#6c757d'">
+                    </i>
+                  </button>
+                </div>
               </div>
-            </div>
-            <h3 class="project-title">{{project.title}}</h3>
-
-
-            <div class="project-meta d-flex gap-3 align-items-center mb-3">
-              <span class="meta"> <i [ngClass]="project.clientIsVerified? 'fa fa-credit-card' : 'fa-regular fa-circle-xmark'" class="text-black"> </i> {{project.clientIsVerified ? 'Payment verified' : 'Payment unverified'}}</span>
               
-              <span class="meta">
-                <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
-                  <i
-                    class="fa fa-star"
-                    [ngClass]="{'star-color': project.clientRating >= star, 'text-muted': project.clientRating < star}"
-                    style="margin-right:2px;"
-                  ></i>
-                </ng-container>
-                <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
-              </span>
-  
-              <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
-            </div>
-
-            
-            <div class="project-meta d-flex flex-wrap align-items-center mb-3">
-              <span class="meta dot">{{project.experienceLevel}}</span> 
-
-              <span class="meta dot">Average Bid: ${{project.bidAveragePrice}}</span> 
-           
-               <span class="meta dot">Budget: ${{project.minimumPrice}} -  ${{project.maximumprice}}</span> 
-             
-            </div>
-
-            <div class="project-meta d-flex flex-wrap align-items-center mb-1">
-             
-              <div class="project-description mb-1">
-                {{project.description}}
-              </div>
-            </div>
-            
+              <h3 class="project-title">{{project.title}}</h3>
           
-
-            <div class="d-flex justify-content-between row pt-4">      
-
-              <div class="project-tags mb-4 col-lg-10 col-md-10 col-sm-12">     
-                <span *ngFor="let skill of project.projectSkills" class=" gap-2 ">{{skill}}</span>            
+              <!-- Rest of project details remain unchanged -->
+              <div class="project-meta d-flex gap-3 align-items-center mb-3">
+                <span class="meta"> <i [ngClass]="project.clientIsVerified? 'fa fa-credit-card' : 'fa-regular fa-circle-xmark'" class="text-black"> </i> {{project.clientIsVerified ? 'Payment verified' : 'Payment unverified'}}</span>
+                
+                <span class="meta">
+                  <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+                    <i
+                      class="fa fa-star"
+                      [ngClass]="{'star-color': project.clientRating >= star, 'text-muted': project.clientRating < star}"
+                      style="margin-right:2px;"
+                    ></i>
+                  </ng-container>
+                  <span class="ms-1" style="font-size:13px;">({{project.clientRating | number:'1.1-1'}})</span>
+                </span>
+          
+                <span class="meta"><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
               </div>
-
-              <div class="proposals-count  d-flex justify-content-end col-lg-2 col-md-2 col-sm-12 ">{{project.numOfBids}} Bids</div>
-
+          
+              <div class="project-meta d-flex flex-wrap align-items-center mb-3">
+                <span class="meta dot">{{project.experienceLevel}}</span> 
+                <span class="meta dot">Average Bid: ${{project.bidAveragePrice}}</span> 
+                <span class="meta dot">Budget: ${{project.minimumPrice}} -  ${{project.maximumprice}}</span> 
+              </div>
+          
+              <div class="project-meta d-flex flex-wrap align-items-center mb-1">
+                <div class="project-description mb-1">
+                  {{project.description}}
+                </div>
+              </div>
+              
+              <div class="project-tags mb-4">     
+                <span *ngFor="let skill of project.projectSkills" class="gap-2">{{skill}}</span>            
+              </div>
+            </a>
+            
+            <!-- Footer with metrics only (bookmark button moved to header) -->
+            <div class="project-card-footer">
+              <div class="project-metrics">
+                <div class="project-metric">
+                  <div class="metric-value">${{project.currentBid || project.minimumPrice}}</div>
+                  <div class="metric-label">Current Bid</div>
+                </div>
+                <div class="project-metric">
+                  <div class="metric-value">{{project.numOfBids}}</div>
+                  <div class="metric-label">Bids</div>
+                </div>
+              </div>
             </div>
-
-
-          </a>
           </div>
 
         </section>

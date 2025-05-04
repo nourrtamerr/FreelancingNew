@@ -83,6 +83,8 @@ export class FixedProjectComponent implements OnInit {
 
   role: string='' // Initialize role to null or an empty string
 
+  searchTerm: string = '';
+
   constructor(private projectService: FixedPriceProjectService,
     private wishlistService:WishlistService,
     private toaster: ToastrService,
@@ -411,6 +413,20 @@ onPageChange(page: number): void {
   this.filters.pageNumber = page;
   this.filters.pageSize = this.itemsPerPage;
   this.loadProjects(this.filters);
+}
+
+
+onSearch() {
+  if (!this.searchTerm?.trim()) {
+    this.projects = [...this.projectsBeforeAnyFilters];
+    return;
+  }
+
+  const searchTermLower = this.searchTerm.toLowerCase();
+  this.projects = this.projectsBeforeAnyFilters.filter(project => 
+    project.title.toLowerCase().includes(searchTermLower) ||
+    project.description.toLowerCase().includes(searchTermLower)
+  );
 }
 
   

@@ -33,6 +33,7 @@ export interface SuggestedMilestone {
 }
 
 
+
 export interface CreateProposalDTO {
     coverLetter: string
     projectId: number

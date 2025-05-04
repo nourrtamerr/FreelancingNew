@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Ban } from '../../../Shared/Interfaces/Bans';
 import { BansService } from '../../../Shared/Services/Bans/bans.service';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
@@ -20,6 +20,7 @@ export class AddBanComponent {
   constructor (
     private banservice:BansService,
     private activatedroute:ActivatedRoute,
+    private router:Router,
     private account:AccountService,
     private toastr:ToastrService,
   ){}
@@ -32,6 +33,7 @@ export class AddBanComponent {
     )
     this.account.getIdByUserName(this.currentusername).subscribe(
       (response)=>{
+
         this.currentid = response.id;
       },
       (error)=>{
@@ -50,11 +52,13 @@ export class AddBanComponent {
     // this.ban.banDate = this.date;
   }
   addBan(ban: Ban) {
+    this.ban.bannedUserId=this.currentid;
     this.banservice.addBan(ban).subscribe({
       next: (response) => {
         this.ban= response;
-        console.log(response);
-        alert('Ban added successfully');
+        // console.log(response);
+        this.toastr.success('Ban added successfully');
+        this.router.navigate(['/banned']);
       },
       error: (error) => {
         console.error(error);

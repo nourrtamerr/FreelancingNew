@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Environment } from '../../../base/environment';
-import { AppUser, AppUsers, ClientsFilter, ClientsView, ClientView, CreateAdminDTO, EditProfileDTO, FilteredClients, FilteredFreelancers, ForgotPasswordDTO, Freelancers, FreelancersFilter, FreelancerView, IdentityVerificationRequest, LoginDTO, RefreshTokenDTO, RegisterDTO, ResetPasswordDTO, SingularFreelancer, Tokens, UserRole, UsersRequestingVerificaiton, VerificationDecision } from '../../Interfaces/Account';
+import { AppUser, AppUsers, ClientsFilter, ClientsView, ClientView, CreateAdminDTO, EditProfileDTO, FilteredClients, FilteredFreelancers, ForgotPasswordDTO, Freelancers, FreelancersFilter, FreelancerView, IdentityVerificationRequest, LoginDTO, RankEnum, RefreshTokenDTO, RegisterDTO, ResetPasswordDTO, SingularFreelancer, Tokens, UserRole, UsersRequestingVerificaiton, VerificationDecision } from '../../Interfaces/Account';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { DisputeDTO } from '../../../Layout/Pages/disputesystem/disputesystem.component';
 interface CreateAdminResponse {
   message: string;
 }
@@ -115,6 +116,10 @@ export class AccountService {
 
     }
 
+    resolveDispute(disputeDTO:DisputeDTO)
+    {
+      return this._HttpClient.post<string>(`${this.apiUrl}/DisputeDecision`,disputeDTO);
+    }
 
     EditProfile(profileData:EditProfileDTO):Observable<string>{
       const formData = new FormData();
@@ -262,6 +267,42 @@ getImagebyUserName(userName: string): Observable<{ fileName: string }> {
 }
 
 
+
+Dispute(milestoneid: number,Complaint:string): Observable<string> {
+  console.log(Complaint);
+  
+  return this._HttpClient.post<string>( `${this.apiUrl}/Dispute/${milestoneid}`,
+    JSON.stringify(Complaint), // ensures it's a raw JSON string like "casdoijasd"
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  );
+}
+
+
+getDisputes(): Observable<Disputes> {
+  
+  return this._HttpClient.get<Disputes>( `${this.apiUrl}/Disputes`);
+}
+
+
+}
+export type Disputes = Dispute[]
+
+export interface Dispute {
+  id:number
+  complaint: string
+  files: string[]
+  clientpicture?: string
+  freelancerpicture?: string
+  clientname: string
+  freelancername: string
+  freelancerrank: RankEnum
+  clietrank: RankEnum
+  amount: number
+  description: string
+  title: string
+  status: string
 }
 
     // getProfile(): Observable<EditProfileDTO> {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FixedPriceProjectService } from '../../../Shared/Services/FixedPriceProject/fixed-price-project.service';
@@ -9,6 +9,10 @@ import { SkillService } from '../../../Shared/Services/Skill/skill.service';
 import { SubCategoryService } from '../../../Shared/Services/SubCategory/sub-category.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { Currency } from '../../../Shared/Enums/currency';
+import { ExperienceLevel } from '../../../Shared/Enums/experience-level';
+// import { ExperienceLevel } from '../../../Shared/Enums/FixedPriceProjectEnum';
+// import { ExperienceLevel } from '../../Shared/Enums/experience-level';
 
 
 
@@ -19,7 +23,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-create-project',
   standalone: true,  // Make sure this is true for standalone component
-  imports: [CommonModule, ReactiveFormsModule,RouterModule],  // Import ReactiveFormsModule here
+  imports: [CommonModule, ReactiveFormsModule,RouterModule, FormsModule],  // Import ReactiveFormsModule here
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.css']
 })
@@ -39,6 +43,8 @@ export class CreateProjectComponent implements OnInit {
   availableSkills: any[] = [];
 subcategories: any[] = [];
 createdProjectId: number | null = null;
+currencies=Currency
+experienceLevel= ExperienceLevel
 
 
   ngOnInit(): void {
@@ -55,7 +61,7 @@ createdProjectId: number | null = null;
       subcategoryID: [null, Validators.required], // 🔥 Add this
       projectSkills: [[], Validators.required],     // 🔥 And this
       fixedPrice: [null, [Validators.required, Validators.min(1)]],
-      minPrice: [null, Validators.min(1)],   // ✅ ADD THIS
+      // minPrice: [null, Validators.min(1)],   // ✅ ADD THIS
       maxPrice: [null, Validators.min(1)]    // ✅ ADD THIS
 
       
@@ -70,12 +76,12 @@ createdProjectId: number | null = null;
     });
   }
 
-  currencies = [
-    { id: 1, name: 'USD' },
-    { id: 2, name: 'EUR' },
-    { id: 3, name: 'GBP' },
-    { id: 4, name: 'INR' },
-  ];  
+  // currencies = [
+  //   { id: 1, name: 'USD' },
+  //   { id: 2, name: 'EUR' },
+  //   { id: 3, name: 'GBP' },
+  //   { id: 4, name: 'INR' },
+  // ];  
   
 
   // Handle project type change (fixed/bidding)
@@ -86,7 +92,7 @@ createdProjectId: number | null = null;
         // Add validators for bidding project fields
         this.projectForm.get('biddingStartDate')?.setValidators([Validators.required]);
         this.projectForm.get('biddingEndDate')?.setValidators([Validators.required]);
-        this.projectForm.get('minPrice')?.setValidators([Validators.required, Validators.min(1)]);
+        // this.projectForm.get('minPrice')?.setValidators([Validators.required, Validators.min(1)]);
         this.projectForm.get('maxPrice')?.setValidators([Validators.required, Validators.min(1)]);
         // Remove validators from fixed price
         this.projectForm.get('fixedPrice')?.clearValidators();
@@ -94,7 +100,7 @@ createdProjectId: number | null = null;
         // Remove validators from bidding fields
         this.projectForm.get('biddingStartDate')?.clearValidators();
         this.projectForm.get('biddingEndDate')?.clearValidators();
-        this.projectForm.get('minPrice')?.clearValidators();
+        // this.projectForm.get('minPrice')?.clearValidators();
         this.projectForm.get('maxPrice')?.clearValidators();
         // Add validators to fixed price
         this.projectForm.get('fixedPrice')?.setValidators([Validators.required, Validators.min(1)]);
@@ -103,7 +109,7 @@ createdProjectId: number | null = null;
     // Update form validation
     this.projectForm.get('biddingStartDate')?.updateValueAndValidity();
     this.projectForm.get('biddingEndDate')?.updateValueAndValidity();
-    this.projectForm.get('minPrice')?.updateValueAndValidity();
+    // this.projectForm.get('minPrice')?.updateValueAndValidity();
     this.projectForm.get('maxPrice')?.updateValueAndValidity();
     this.projectForm.get('fixedPrice')?.updateValueAndValidity();
 }
@@ -124,6 +130,12 @@ createdProjectId: number | null = null;
     }
     return '';
   }
+
+
+  getEnumValues(enumObj: any): number[] {
+    return Object.values(enumObj).filter(value => typeof value === 'number') as number[];
+    }
+
   onSubmit(): void {
     if (this.projectForm.invalid) {
       console.log('Form is invalid');
@@ -135,12 +147,14 @@ createdProjectId: number | null = null;
 
     if (formValue.projectType === 'fixed') {
       // Create Fixed Price Project data
+      console.log(formValue.experienceLevel)
       projectData = {
         title: formValue.title,
         description: formValue.description,
         currency: formValue.currency,
         expectedDuration: formValue.expectedDuration,
         experienceLevel: formValue.experienceLevel,
+
         projectSkills: [], // Assuming project skills are handled elsewhere
         subcategoryId: 1, // Example subcategoryId, you may need to bind this to a form control
        price: formValue.fixedPrice, 
@@ -165,7 +179,7 @@ createdProjectId: number | null = null;
         title: formValue.title,
         description: formValue.description,
         currency: formValue.currency,
-        minimumPrice: formValue.minPrice,  // ✅
+        minimumPrice: 0,  // ✅
         maximumPrice: formValue.maxPrice,  // ✅
         biddingStartDate: formValue.biddingStartDate,
         biddingEndDate: formValue.biddingEndDate,
@@ -174,7 +188,7 @@ createdProjectId: number | null = null;
         projectSkillsIds: formValue.projectSkills, // ✅ must be array of skill IDs
         subcategoryId: formValue.subcategoryID // ✅ single subcategory ID
       };
-
+console.log(projectData);
       this.biddingProjectService.CreateBiddingProject(projectData).subscribe({
         next: (response) => {
           console.log('Bidding project created successfully', response);

@@ -16,10 +16,10 @@
       <div class="col-lg-8 col-md-12">
         <div class="upwork-job-details mb-4">
           <h1 class="job-title">{{project.title}}</h1>
-          
+
           <div class="job-meta">
-            <span class="posted-time">Posted yesterday</span>
-            <span><i class="fa-solid fa-location-dot"></i> Worldwide</span>
+            <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+            <span><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
           </div>
 
           <section class="job-section">
@@ -61,7 +61,7 @@
           </div>
 
           <hr>
-          
+
           <div class="row">
             <div class="col-lg-12">
               <section>
@@ -126,27 +126,26 @@
         <aside  class="upwork-sidebar mb-4">
           <a *ngIf="role=='Freelancer'"  [routerLink]="['/proposal2',project.id]">
             <button class="apply-btn mb-2">
-             
               Apply now
             </button>
           </a>
 
-          <a  [routerLink]="['/proposals',project.id]">
+          <a [routerLink]="['/proposals',project.id]">
             <button class="apply-btn mb-2">
               View Proposals
             </button>
           </a>
-            
-          <button  class="save-btn mb-2" *ngIf="role=='Freelancer'"  
+
+          <button  class="save-btn mb-2" *ngIf="role=='Freelancer'"
           (click)="AddToWishlist(projectid)"
           [class.saved]="isInWishlist()"  >
-          <i class="fa" [class.fa-check]="isInWishlist()" [class.fa-bookmark]="!isInWishlist()"></i>                   
+          <i class="fa" [class.fa-check]="isInWishlist()" [class.fa-bookmark]="!isInWishlist()"></i>
           {{ isInWishlist() ? 'Saved' : 'Save job' }}
 
         </button>
 
-        
-        
+
+
 
           <div class="client-info">
             <p style="font-size: 22px; font-weight: bold;">Project Summary</p>
@@ -200,16 +199,16 @@
           <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" *ngIf="clientReviews?.length??0 > 0">
             <div class="carousel-inner">
               <div class="carousel-item" *ngFor="let review of clientReviews; let i = index" [class.active]="i === 0">
-              
-    
-               
+
+
+
                 <div class="review-card">
       <div class="card-body">
-    
+
         <div class="d-flex justify-content-between align-items-start mb-2">
-          
+
           <a [routerLink]="['/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
-            {{ review.projectTitle }} 
+            {{ review.projectTitle }}
           </a>
           <div class="review-actions" *ngIf="review.reviewerId === currentuserid">
             <button class="btn btn-link text-primary p-1" (click)="editReview(review)">
@@ -220,8 +219,8 @@
             </button>
           </div>
         </div>
-    
-    
+
+
         <div class="d-flex align-items-center mb-2">
           <span class="history-rating ms-auto text-warning">
             <ng-container *ngFor="let star of [1,2,3,4,5]; let idx = index">
@@ -235,11 +234,11 @@
             <span class="rating-number ms-1">{{ review.rating }}/5</span>
           </span>
         </div>
-        
+
         <p class="mb-2 fst-italic text-secondary">
           {{ review.comment !== null ? review.comment : 'No comment' }}
         </p>
-        
+
         <div class="d-flex justify-content-between align-items-center">
           <span></span>
           <span class="history-details small text-muted">{{ review.date | date: 'mediumDate' }}</span>
@@ -247,9 +246,9 @@
       </div>
     </div>
     </div>
-    
-    
-    
+
+
+
             </div>
             <!-- Carousel controls -->
             <ng-container *ngIf="clientReviews.length > 1">
@@ -297,19 +296,19 @@
           <div class="rating-container mb-3">
             <label>Rating:</label>
             <div class="stars">
-              <i *ngFor="let star of [1,2,3,4,5]" 
+              <i *ngFor="let star of [1,2,3,4,5]"
                  class="fas fa-star"
                  [class.active]="star <= editReviewForm.get('rating')?.value"
                  (click)="editReviewForm.patchValue({rating: star})"></i>
             </div>
           </div>
-          
+
           <div class="comment-container mb-3">
             <label>Comment:</label>
-            <textarea 
-              formControlName="comment" 
+            <textarea
+              formControlName="comment"
               class="form-control"
-              rows="3" 
+              rows="3"
               placeholder="Share your experience..."></textarea>
             <div class="error-message" *ngIf="editReviewForm.get('comment')?.touched && editReviewForm.get('comment')?.invalid">
               Please enter a comment (minimum 10 characters)

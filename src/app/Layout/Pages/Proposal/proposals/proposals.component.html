@@ -1,76 +1,191 @@
-<div class="proposals-container">
-    <div class="proposals-header">
-      <h1>Proposals</h1>
-      <div class="header-stats">
-        <div class="stat-item">
-          <span class="stat-value">{{proposals.length}}</span>
-          <span class="stat-label">Total Proposals</span>
-        </div>
+<div class="jobs-available-section mb-5">
+  <div class="hero-overlay"></div>
+  <div class="jobs-available-content">
+
+    <div class="jobs-illustration">
+      <div>
+        <h1 class="jobs-count">Proposals</h1>
+        <!-- <span class="jobs-text"></span> -->
       </div>
     </div>
-    <div class="proposals-header" style="justify-content: end;">
-    <a   *ngIf="role=='Freelancer' && project" [routerLink]="['/proposal2',projectId]" routerLinkActive="router-link-active" >
-    <button class="apply-btn mb-2"
-    [disabled]="project?.freelancerId !== null || isBidEnded"
-    [class.disabled-button]="project?.freelancerId !== null || isBidEnded">
-    
-    {{ project?.freelancerId === null ? (isBidEnded ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
 
-    </button>
-  </a>
+  </div>
 </div>
-    <div class="proposals-list" *ngIf="proposals.length > 0">
-      <div class="proposal-card" *ngFor="let proposal of proposals">
+
+
+
+
+<div class="proposals-container">
+  <div class="proposals-header">
+    <h1>Proposals</h1>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="stat-value">{{proposals.length}}</span>
+        <span class="stat-label">Total Proposals</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active">All <span class="count">{{proposals.length}}</span></button>
+      <button class="filter-tab">Opened <span class="count">{{proposals.length}}</span></button>
+      <button class="filter-tab">Closed <span class="count">0</span></button>
+    </div>
+    <div class="filter-actions">
+      <div class="sort-dropdown">
+        <span>Sort by: </span>
+        <select>
+          <option>Last added</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab" [class.active]="currentFilter === 'All'" (click)="filterProposals('All')">
+        All <span class="count">{{proposals.length}}</span>
+      </button>
+      <button class="filter-tab" [class.active]="currentFilter === 'Pending'" (click)="filterProposals('Pending')">
+        Pending <span class="count">{{getPendingCount()}}</span>
+      </button>
+      <button class="filter-tab" [class.active]="currentFilter === 'Accepted'" (click)="filterProposals('Accepted')">
+        Accepted <span class="count">{{getAcceptedCount()}}</span>
+      </button>
+      <button class="filter-tab" [class.active]="currentFilter === 'Rejected'" (click)="filterProposals('Rejected')">
+        Rejected <span class="count">{{getRejectedCount()}}</span>
+      </button>
+    </div>
+    <div class="filter-actions">
+      <div class="sort-dropdown">
+        <span>Sort by: </span>
+        <select (change)="sortProposals($event)">
+          <option value="lastAdded">Last added</option>
+          <option value="priceLow">Price: Low to High</option>
+          <option value="priceHigh">Price: High to Low</option>
+          <option value="duration">Duration</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="proposals-list" *ngIf="proposals.length > 0">
+    <div class="proposal-card" *ngFor="let proposal of filteredProposals">
+      <div class="proposal-header">
         <div class="freelancer-info">
-          <img [src]="proposal.freelancerProfilePicture || 'assets/default-avatar.png'" 
+          <img [src]="proposal.freelancerProfilePicture? Files+'/'+proposal.freelancerProfilePicture : './images/default.jpg'" 
                alt="Freelancer" 
                class="freelancer-avatar">
           <div class="freelancer-details">
             <h3>{{proposal.freelancerName}}</h3>
             <div class="freelancer-meta">
-              <span class="location" *ngIf="proposal.country">
-                <i class="fas fa-map-marker-alt"></i> {{proposal.country}}
-              </span>
-              <span class="verification" *ngIf="proposal.isVerified">
+              <span *ngIf="proposal.isVerified" class="verified-badge">
                 <i class="fas fa-check-circle"></i> Verified
+              </span>
+              <span *ngIf="proposal.country" class="location-badge">
+                <i class="fas fa-map-marker-alt"></i> {{proposal.country}}
               </span>
             </div>
           </div>
-          <div class="proposal-amount">
-            <span class="amount">${{proposal.price}}</span>
-            <span class="duration">{{proposal.suggestedDuration}} days</span>
-          </div>
         </div>
-  
-        <div class="proposal-content">
-          <div class="cover-letter">
-            <h4>Cover Letter</h4>
-            <p>{{proposal.coverLetter}}</p>
-          </div>
+        <div class="proposal-price">
+          <span class="amount">${{proposal.price}}</span>
+          <span class="duration"><i class="far fa-clock"></i> Suggested Duartion: {{proposal.suggestedDuration}} days</span>
+        </div>
+      </div>
 
-        </div>
-  
-        <div class="proposal-footer">
-          <div class="footer-stats">
-            <span class="stat">
-              <i class="fas fa-star"></i> Rank: {{proposal.rank}}
-            </span>
+      <div class="proposal-content">
+
+        <!-- <div class="content-row">
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-file-alt"></i> Cover Letter
+            </div>
+            <div class="content-value">
+              {{proposal.coverLetter}}
+            </div>
           </div>
-          <div class="action-buttons">
-            <button class="btn-primary" (click)="getprojectById(proposal.id)">
-              View Details
-            </button>
-            <button class="btn-secondary">
-              Message
-            </button>
+        </div> -->
+
+        <div class="content-row">
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-file-alt"></i> Cover Letter
+            </div>
+            <div class="content-value cover-letter">
+              {{proposal.coverLetter.length > 321 ? (proposal.coverLetter | slice:0:321) + '...' : (proposal.coverLetter)}}
+            </div>
+          </div>
+        </div>
+        
+        <div class="content-row">
+
+
+          <!-- <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-star"></i> Rank
+            </div>
+            <div class="content-value">
+              {{proposal.rank}}
+            </div>
+          </div> -->
+
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-star"></i> Rank
+            </div>
+            <div class="content-value">
+              <span class="rank-badge">
+                <i *ngIf="proposal.rank === 'Veteran'" class="fas fa-medal" title="Veteran"></i>
+                <i *ngIf="proposal.rank === 'RisingStar'" class="fas fa-rocket" title="Rising Star"></i>
+                <i *ngIf="proposal.rank === 'Established'" class="fas fa-certificate" title="Established"></i>
+                <i *ngIf="proposal.rank === 'Pro'" class="fas fa-award" title="Pro"></i>
+                <i *ngIf="proposal.rank === 'Elite'" class="fas fa-crown" title="Elite"></i>
+                {{proposal.rank}}
+              </span>
+            </div>
+          </div>
+          
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-chart-line"></i> Proposal status
+            </div>
+            <div class="content-value">
+              <span class="status-badge">{{proposal.proposalStatus}}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  
-    <div class="empty-state" *ngIf="proposals.length === 0">
-      <i class="fas fa-file-alt"></i>
-      <h2>No Proposals Yet</h2>
-      <p>There are currently no proposals for this project.</p>
+
+      <div class="proposal-actions">
+        <button class="action-btn view-btn" (click)="getprojectById(proposal.id)">
+          <i class="fas fa-eye"></i> View Details
+        </button>
+        <a style="text-decoration: none; color:black" [routerLink]="['/chathub', proposal.freelancerName]">
+          <button class="action-btn message-btn">
+            <i class="fas fa-comment"></i> Message
+          </button>
+
+        </a>
+        <!-- <button class="action-btn more-btn">
+          <i class="fas fa-ellipsis-h"></i>
+        </button> -->
+      </div>
     </div>
   </div>
+
+  <!-- <div class="empty-state" *ngIf="proposals.length === 0">
+    <i class="fas fa-file-alt"></i>
+    <h2>No Proposals Yet</h2>
+    <p>There are currently no proposals for this project.</p>
+  </div> -->
+
+  <div class="empty-state" *ngIf="filteredProposals.length === 0">
+    <i class="fas fa-file-alt"></i>
+    <h2>No Proposals Found</h2>
+    <p>There are no proposals matching your current filter criteria.</p>
+  </div>
+</div>

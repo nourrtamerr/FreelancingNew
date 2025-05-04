@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { Notifications } from '../../Shared/Interfaces/Notifications';
 import { NotificationsService } from '../../Shared/Services/Notifications/notifications.service';
 import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
-
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +15,11 @@ import { ProjectsService } from '../../Shared/Services/Projects/projects.service
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
+
+
+
+
+
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   notifications: Notifications[] = [];
@@ -25,10 +30,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
   unreadMessages: number = 0;
   balance: number = 0;
 
+
+  @HostListener('window:scroll', ['$event'])
+onWindowScroll() {
+  const navbar = document.querySelector('.navbar') as HTMLElement;
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+}
+
+  username!:string;
   constructor(
     private AuthService: AuthService,
     private notificationsService: NotificationsService,
-    private projectService: ProjectsService, 
+    private projectService: ProjectsService,
     private router: Router
   ){
     this.isLoggedIn = this.AuthService.isLoggedIn();
@@ -38,7 +55,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.AuthService.isLoggedIn$.subscribe((status :any) => {
         this.isLoggedIn = status;
         console.log(status);
-        
+
         if (status) {
           // this.loadNotifications();
         } else {
@@ -50,6 +67,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.username = this.AuthService.getUserName() || '';
     this.AuthService.userData.subscribe((user) => {
       if (user) {
         const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
@@ -60,14 +78,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.notificationsService.AllNotificaitions.subscribe(notifications => {
         this.notifications = notifications;
       }),
-      
+
       this.notificationsService.unreadNotifications.subscribe(count => {
         this.unreadNotifications = count;
       })
     );
     if (this.isLoggedIn) {
       this.loadNotifications();
-      
+
       // Listen for real-time notifications
       this.notificationsService.hubConnection.on("ReceiveNotification", (notification: Notifications) => {
         console.log('New notification received:', notification);
@@ -103,7 +121,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.notificationsService.getNotifications().subscribe({
         next: (data: Notifications[]) => {
 
-      
+
           this.notifications = data
 
           this.unreadNotifications = data.filter(n => !n.isRead).length;
@@ -138,7 +156,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   markAllAsRead(event: Event): void {
     event.preventDefault();
-    
+
     this.subscriptions.push(
       this.notificationsService.MarkAsReadAllNotifications().subscribe({
         next: (result) => {

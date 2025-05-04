@@ -7,17 +7,10 @@
         <div class="col-lg-10 col-md-10">
           <h1 class="fiverr-hero-title mb-4">Our freelancers<br>will take it from here</h1>
           
-          <!-- <div class="row mb-3">
-            <div class="col-12">
-              <form class="fiverr-searchbar d-flex" (submit)="onSearch()">
-                <input type="text" class="form-control form-control-lg fiverr-search-input" placeholder="Search for any service..." [(ngModel)]="searchTerm" name="searchTerm">
-                <button class="btn btn-light btn-lg ms-2 px-4" type="submit"><i class="fa fa-search"></i></button>
-              </form>
-            </div>
-          </div> -->
+       
   
           <!-- ... existing code ... -->
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <div class="col-12">
               <form class="position-relative" (submit)="onSearch()">
                 <input
@@ -26,6 +19,7 @@
                   placeholder="Search for any service..."
                   [(ngModel)]="searchTerm"
                   name="searchTerm"
+                  (input)="onSearch()"
                 />
                 <button
                   type="submit"
@@ -36,7 +30,45 @@
                 </button>
               </form>
             </div>
+          </div> -->
+
+          <div class="row mb-3">
+            <div class="col-12">
+              <form class="position-relative" (submit)="$event.preventDefault()">
+                <input
+                  type="text"
+                  class="form-control form-control-lg fiverr-search-input pe-5"
+                  placeholder="Search for any service..."
+                  [(ngModel)]="searchTerm"
+                  name="searchTerm"
+                  (input)="onSearch()"
+                  autocomplete="off"
+                />
+                <button
+                  type="submit"
+                  class="search-icon-btn"
+                  tabindex="-1"
+                >
+                  <i class="fa fa-search"></i>
+                </button>
+          
+                <!-- Suggestions Dropdown -->
+                <div class="search-suggestions" *ngIf="showSuggestions && searchResults.length > 0">
+                  <div class="suggestion-item" 
+                       *ngFor="let project of searchResults"
+                       [routerLink]="project.projectType === 'bidding' ? ['/details', project.id] : ['/fixed-project', project.id]"
+                       (click)="onSuggestionClick(project)">
+                    <div class="suggestion-title">{{ project.title }}</div>
+                    <div class="suggestion-type">{{ project.projectType }}</div>
+                    <div class="suggestion-desc">{{ project.description | slice:0:100 }}...</div>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
+
+
+
   <!-- ... existing code ... -->
   
           <div class="row mb-4">
@@ -66,11 +98,12 @@
 
 
 <!-- Browse Talent by Category Section -->
+
 <section class="browse-category-section my-5">
   <div class="container">
     <h2 class="browse-category-title mb-2">Browse talent by category</h2>
     <div class="browse-category-sub mb-4">
-      Looking for work? <a href="#" class="browse-jobs-link">Browse jobs</a>
+      Looking for work? <a [routerLink]="['/new']" class="browse-jobs-link">Browse jobs</a>
     </div>
     <div class="row g-4">
       <div class="col-md-6 col-lg-3" *ngFor="let cat of categories">

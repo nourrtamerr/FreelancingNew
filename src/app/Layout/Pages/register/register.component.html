@@ -1,166 +1,163 @@
-<div class="container py-5">
-  <div class="row justify-content-center align-items-center">
-    <!-- Left Info Card -->
-    <div class="col-lg-5 mb-4 mb-lg-0">
-      <div class="card shadow border-0 h-100">
-        <img src="https://images.pexels.com/photos/3194519/pexels-photo-3194519.jpeg?auto=compress&cs=tinysrgb&w=600"
-             alt="Freelancers working" class="card-img-top rounded-top">
-        <div class="card-body bg-white">
-          <h4 class="mb-3 text-primary fw-semibold">Why Join Us?</h4>
-          <ul class="list-unstyled ps-3">
-            <li class="mb-2"><i class="bi bi-globe text-primary me-2"></i>Access to global opportunities</li>
-            <li class="mb-2"><i class="bi bi-shield-lock text-primary me-2"></i>Secure payment system</li>
-            <li class="mb-2"><i class="bi bi-people text-primary me-2"></i>Professional network growth</li>
-            <li><i class="bi bi-headset text-primary me-2"></i>Dedicated support team</li>
-          </ul>
-        </div>
+<div class="split-screen  ">
+
+
+  <div class="split-screen__left">
+    <div class="left-inner">
+      <div class="left-content">
+        <h4>Freelance Smarter, Hire Better.</h4>
+        <p>More than just a freelance marketplace—your trusted partner for building teams, launching ideas, and getting things done right.</p>
       </div>
     </div>
+    
+  </div>
 
-    <!-- Registration Form Card -->
-    <div class="col-lg-7">
-      <div class="card border-0 shadow-lg">
-        <div class="card-header bg-white text-center py-4 border-bottom">
+  <!-- Right Side -->
+  <div class="split-screen__right">
+
+    <div class="right-inner">
+      <div class="form-container">
+        <div class="form-header text-center mb-4">
           <h2 class="fw-bold text-primary">Create Your Account</h2>
         </div>
-        <div class="card-body px-4 py-5">
-          <form [formGroup]="registerForm" (submit)="onSubmit()" class="row g-4 needs-validation">
-
-            <!-- Firstname -->
-            <div class="col-md-6">
-              <label for="firstname" class="form-label">First Name</label>
-              <input type="text" id="firstname" class="form-control" placeholder="Enter first name" formControlName="firstname"
-                     [ngClass]="{'is-invalid': registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched}">
-              <div *ngIf="registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched" class="invalid-feedback">
-                First name is required.
-              </div>
+  
+        <form [formGroup]="registerForm" (submit)="onSubmit()" class="row g-4 needs-validation">
+          <!-- Firstname -->
+          <div class="col-md-6">
+            <label for="firstname" class="form-label">First Name</label>
+            <input type="text" id="firstname" class="form-control" placeholder="Enter first name" formControlName="firstname"
+                   [ngClass]="{'is-invalid': registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched}">
+            <div *ngIf="registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched" class="invalid-feedback">
+              First name is required.
             </div>
-
-            <!-- Lastname -->
-            <div class="col-md-6">
-              <label for="lastname" class="form-label">Last Name</label>
-              <input type="text" id="lastname" class="form-control" placeholder="Enter last name" formControlName="lastname"
-                     [ngClass]="{'is-invalid': registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched}">
-              <div *ngIf="registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched" class="invalid-feedback">
-                Last name is required.
-              </div>
+          </div>
+  
+          <!-- Lastname -->
+          <div class="col-md-6">
+            <label for="lastname" class="form-label">Last Name</label>
+            <input type="text" id="lastname" class="form-control" placeholder="Enter last name" formControlName="lastname"
+                   [ngClass]="{'is-invalid': registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched}">
+            <div *ngIf="registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched" class="invalid-feedback">
+              Last name is required.
             </div>
-
-            <!-- Username -->
-            <div class="col-md-6">
-              <label for="UserName" class="form-label">Username</label>
-              <input type="text" id="UserName" class="form-control" placeholder="Choose a username" formControlName="UserName"
-                     [ngClass]="{'is-invalid': registerForm.get('UserName')?.invalid && registerForm.get('UserName')?.touched}">
-              <div *ngIf="registerForm.get('UserName')?.invalid && registerForm.get('UserName')?.touched" class="invalid-feedback">
-                Username is required.
-              </div>
+          </div>
+  
+          <!-- Username -->
+          <div class="col-md-6">
+            <label for="UserName" class="form-label">Username</label>
+            <input type="text" id="UserName" class="form-control" placeholder="Choose a username" formControlName="UserName"
+                   [ngClass]="{'is-invalid': registerForm.get('UserName')?.invalid && registerForm.get('UserName')?.touched}">
+            <div *ngIf="registerForm.get('UserName')?.invalid && registerForm.get('UserName')?.touched" class="invalid-feedback">
+              Username is required.
             </div>
-
-            <!-- Email -->
-            <div class="col-md-6">
-              <label for="Email" class="form-label">Email Address</label>
-              <input type="email" id="Email" class="form-control" placeholder="you@example.com" formControlName="Email"
-                     [ngClass]="{'is-invalid': registerForm.get('Email')?.invalid && registerForm.get('Email')?.touched}">
-              <div *ngIf="registerForm.get('Email')?.errors?.['required']" class="invalid-feedback">Email is required.</div>
-              <div *ngIf="registerForm.get('Email')?.errors?.['email']" class="invalid-feedback">Invalid email format.</div>
+          </div>
+  
+          <!-- Email -->
+          <div class="col-md-6">
+            <label for="Email" class="form-label">Email Address</label>
+            <input type="email" id="Email" class="form-control" placeholder="you@example.com" formControlName="Email"
+                   [ngClass]="{'is-invalid': registerForm.get('Email')?.invalid && registerForm.get('Email')?.touched}">
+            <div *ngIf="registerForm.get('Email')?.errors?.['required']" class="invalid-feedback">Email is required.</div>
+            <div *ngIf="registerForm.get('Email')?.errors?.['email']" class="invalid-feedback">Invalid email format.</div>
+          </div>
+  
+          <!-- Phone -->
+          <div class="col-md-6">
+            <label for="PhoneNumber" class="form-label">Phone Number</label>
+            <input type="text" id="PhoneNumber" class="form-control" placeholder="11-digit number" formControlName="PhoneNumber"
+                   [ngClass]="{'is-invalid': registerForm.get('PhoneNumber')?.invalid && registerForm.get('PhoneNumber')?.touched}">
+            <div *ngIf="registerForm.get('PhoneNumber')?.errors?.['required']" class="invalid-feedback">Phone is required.</div>
+            <div *ngIf="registerForm.get('PhoneNumber')?.errors?.['pattern']" class="invalid-feedback">Must be exactly 11 digits.</div>
+          </div>
+  
+          <!-- DOB -->
+          <div class="col-md-6">
+            <label for="DateOfBirth" class="form-label">Date of Birth</label>
+            <input type="date" id="DateOfBirth" class="form-control" formControlName="DateOfBirth"
+                   [ngClass]="{'is-invalid': registerForm.get('DateOfBirth')?.invalid && registerForm.get('DateOfBirth')?.touched}">
+            <div *ngIf="registerForm.get('DateOfBirth')?.invalid && registerForm.get('DateOfBirth')?.touched" class="invalid-feedback">
+              Valid birth date is required.
             </div>
-
-            <!-- Phone -->
-            <div class="col-md-6">
-              <label for="PhoneNumber" class="form-label">Phone Number</label>
-              <input type="text" id="PhoneNumber" class="form-control" placeholder="11-digit number" formControlName="PhoneNumber"
-                     [ngClass]="{'is-invalid': registerForm.get('PhoneNumber')?.invalid && registerForm.get('PhoneNumber')?.touched}">
-              <div *ngIf="registerForm.get('PhoneNumber')?.errors?.['required']" class="invalid-feedback">Phone is required.</div>
-              <div *ngIf="registerForm.get('PhoneNumber')?.errors?.['pattern']" class="invalid-feedback">Must be exactly 11 digits.</div>
+          </div>
+  
+          <!-- City -->
+          <div class="col-md-6">
+            <label for="CityId" class="form-label">City</label>
+            <select id="CityId" class="form-select" formControlName="CityId"
+                    [ngClass]="{'is-invalid': registerForm.get('CityId')?.invalid && registerForm.get('CityId')?.touched}">
+              <option value="" selected disabled>Select your city</option>
+              <option *ngFor="let city of cities" [value]="city.id">{{city.name}}</option>
+            </select>
+            <div *ngIf="registerForm.get('CityId')?.invalid && registerForm.get('CityId')?.touched" class="invalid-feedback">
+              City is required.
             </div>
-
-            <!-- DOB -->
-            <div class="col-md-6">
-              <label for="DateOfBirth" class="form-label">Date of Birth</label>
-              <input type="date" id="DateOfBirth" class="form-control" formControlName="DateOfBirth"
-                     [ngClass]="{'is-invalid': registerForm.get('DateOfBirth')?.invalid && registerForm.get('DateOfBirth')?.touched}">
-              <div *ngIf="registerForm.get('DateOfBirth')?.invalid && registerForm.get('DateOfBirth')?.touched" class="invalid-feedback">
-                Valid birth date is required.
-              </div>
+          </div>
+  
+          <!-- Role -->
+          <div class="col-md-6">
+            <label for="Role" class="form-label">Join As</label>
+            <select id="Role" class="form-select" formControlName="Role"
+                    [ngClass]="{'is-invalid': registerForm.get('Role')?.invalid && registerForm.get('Role')?.touched}">
+              <option value="" disabled selected>Select your role</option>
+              <option value="Freelancer">Freelancer</option>
+              <option value="Client">Client</option>
+            </select>
+            <div *ngIf="registerForm.get('Role')?.invalid && registerForm.get('Role')?.touched" class="invalid-feedback">
+              Role is required.
             </div>
-
-            <!-- City -->
-            <div class="col-md-6">
-              <label for="CityId" class="form-label">City</label>
-              <select id="CityId" class="form-select" formControlName="CityId"
-                      [ngClass]="{'is-invalid': registerForm.get('CityId')?.invalid && registerForm.get('CityId')?.touched}">
-                <option value="" selected disabled>Select your city</option>
-                <option *ngFor="let city of cities" [value]="city.id">{{city.name}}</option>
-              </select>
-              <div *ngIf="registerForm.get('CityId')?.invalid && registerForm.get('CityId')?.touched" class="invalid-feedback">
-                City is required.
-              </div>
+          </div>
+  
+          <!-- Password -->
+          <div class="col-md-6">
+            <label for="Password" class="form-label">Password</label>
+            <input type="password" id="Password" class="form-control" placeholder="Enter password" formControlName="Password"
+                   [ngClass]="{'is-invalid': registerForm.get('Password')?.invalid && registerForm.get('Password')?.touched}">
+            <div *ngIf="registerForm.get('Password')?.hasError('required')" class="invalid-feedback">Password is required.</div>
+            <div *ngIf="registerForm.get('Password')?.hasError('pattern')" class="invalid-feedback">
+              Must be 8+ chars, include upper/lowercase, number & special char.
             </div>
-
-            <!-- Role -->
-            <div class="col-md-6">
-              <label for="Role" class="form-label">Join As</label>
-              <select id="Role" class="form-select" formControlName="Role"
-                      [ngClass]="{'is-invalid': registerForm.get('Role')?.invalid && registerForm.get('Role')?.touched}">
-                <option value="" disabled selected>Select your role</option>
-                <option value="Freelancer">Freelancer</option>
-                <option value="Client">Client</option>
-              </select>
-              <div *ngIf="registerForm.get('Role')?.invalid && registerForm.get('Role')?.touched" class="invalid-feedback">
-                Role is required.
-              </div>
+          </div>
+  
+          <!-- Confirm Password -->
+          <div class="col-md-6">
+            <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" id="ConfirmPassword" class="form-control" placeholder="Confirm password" formControlName="ConfirmPassword"
+                   [ngClass]="{'is-invalid': (registerForm.get('ConfirmPassword')?.invalid || registerForm.hasError('mismatch')) && registerForm.get('ConfirmPassword')?.touched}">
+            <div *ngIf="registerForm.get('ConfirmPassword')?.hasError('required')" class="invalid-feedback">Confirmation required.</div>
+            <div *ngIf="registerForm.hasError('mismatch')" class="invalid-feedback">Passwords do not match.</div>
+          </div>
+  
+          <!-- Profile Picture -->
+          <div class="col-12">
+            <label for="ProfilePicture" class="form-label customFile">Profile Picture</label>
+            <input type="file" id="ProfilePicture" class="form-control" (change)="onFileSelected($event)">
+            <small class="form-text text-muted">Accepted: JPG, PNG, or GIF</small>
+          </div>
+  
+          <!-- Terms -->
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="termsCheck">
+              <label class="form-check-label" for="termsCheck">
+                I agree to the <a href="#" class="text-decoration-underline">terms and conditions</a>
+              </label>
             </div>
-
-            <!-- Password -->
-            <div class="col-md-6">
-              <label for="Password" class="form-label">Password</label>
-              <input type="password" id="Password" class="form-control" placeholder="Enter password" formControlName="Password"
-                     [ngClass]="{'is-invalid': registerForm.get('Password')?.invalid && registerForm.get('Password')?.touched}">
-              <div *ngIf="registerForm.get('Password')?.hasError('required')" class="invalid-feedback">Password is required.</div>
-              <div *ngIf="registerForm.get('Password')?.hasError('pattern')" class="invalid-feedback">
-                Must be 8+ chars, include upper/lowercase, number & special char.
-              </div>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="col-md-6">
-              <label for="ConfirmPassword" class="form-label">Confirm Password</label>
-              <input type="password" id="ConfirmPassword" class="form-control" placeholder="Confirm password" formControlName="ConfirmPassword"
-                     [ngClass]="{'is-invalid': (registerForm.get('ConfirmPassword')?.invalid || registerForm.hasError('mismatch')) && registerForm.get('ConfirmPassword')?.touched}">
-              <div *ngIf="registerForm.get('ConfirmPassword')?.hasError('required')" class="invalid-feedback">Confirmation required.</div>
-              <div *ngIf="registerForm.hasError('mismatch')" class="invalid-feedback">Passwords do not match.</div>
-            </div>
-
-            <!-- Profile Picture -->
-            <div class="col-12">
-              <label for="ProfilePicture" class="form-label">Profile Picture</label>
-              <input type="file" id="ProfilePicture" class="form-control" (change)="onFileSelected($event)">
-              <small class="form-text text-muted">Accepted: JPG, PNG, or GIF</small>
-            </div>
-
-            <!-- Terms -->
-            <div class="col-12">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="termsCheck">
-                <label class="form-check-label" for="termsCheck">
-                  I agree to the <a href="#" class="text-decoration-underline">terms and conditions</a>
-                </label>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="col-12 d-grid mt-4">
-              <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="card-footer text-center bg-light py-3">
+          </div>
+  
+          <!-- Submit Button -->
+          <div class="col-12 d-grid mt-5 pt-3">
+            <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+          </div>
+        </form>
+  
+        <div class="text-center mt-4">
           <p class="mb-0">Already have an account?
             <a routerLink="/login" class="text-primary text-decoration-none fw-semibold">Log in</a>
           </p>
         </div>
       </div>
     </div>
+
+   
   </div>
+
 </div>

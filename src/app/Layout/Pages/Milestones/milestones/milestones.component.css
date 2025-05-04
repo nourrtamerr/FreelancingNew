@@ -1157,3 +1157,150 @@
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
+
+
+/* Add these styles */
+.dispute-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dispute-modal.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.dispute-modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dispute-modal h2 {
+  color: #175b99;
+  margin-bottom: 1rem;
+}
+
+.dispute-form textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin: 1rem 0;
+  min-height: 120px;
+}
+
+.dispute-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dispute-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dispute-submit {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.dispute-cancel {
+  background: #e2e8f0;
+  border: none;
+  color: #64748b;
+}
+
+
+.milestone-actions {
+  margin: 16px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Add these styles for the dispute button */
+.milestone-actions .btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.milestone-actions .btn-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+}
+
+.milestone-actions .btn-danger i {
+  font-size: 14px;
+}
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.milestone-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.milestone-actions .btn-danger {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+.milestone-details-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.milestone-details {
+  flex: 1;
+}
+
+
+.milestone-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.milestone-details-left {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.milestone-actions .btn-danger {
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+}

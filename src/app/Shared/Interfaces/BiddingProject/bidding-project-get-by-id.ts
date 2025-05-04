@@ -12,6 +12,7 @@ export interface BiddingProjectGetById {
   postedFrom: number
   clientTotalNumberOfReviews: number
   clientRating: number
+  biddingStartDate:string
   biddingEndDate: string
   clientIsverified: boolean
   clientCountry: string
@@ -29,4 +30,5 @@ export interface BiddingProjectGetById {
   expectedDuration:number
   endDate:string
   freelancerId?:string
+  currentBid?:number
 }

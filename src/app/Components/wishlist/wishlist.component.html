@@ -3,7 +3,7 @@
       <h1><i class="fas fa-bookmark"></i> Saved Jobs</h1>
       <p>Your curated collection of potential opportunities</p>
     </div>
-  
+
     <div class="wishlist-content">
       <ng-container *ngIf="UserWishList.length > 0; else noItems">
         <div class="wishlist-grid">
@@ -18,7 +18,7 @@
                 <span>{{project.createdAt | date:'MMM d'}}</span>
               </div>
             </div>
-            
+
             <div class="project-details">
               <div class="detail-item">
                 <i class="fas fa-tag"></i>
@@ -35,9 +35,11 @@
                 </div>
               </div>
             </div>
-  
+            @if(project.type === 'fixed'){
             <div class="card-actions">
-              <button class="btn-view">
+              <button class="btn-view"
+              [routerLink]="['/fixed', project.projectId]"
+              >
                 <i class="fas fa-external-link-alt"></i>
                 View Details
               </button>
@@ -45,10 +47,23 @@
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>
+          }@else {
+            <div class="card-actions">
+              <button class="btn-view"
+              [routerLink]="['/details', project.projectId]"
+              >
+                <i class="fas fa-external-link-alt"></i>
+                View Details
+              </button>
+              <button class="btn-remove" (click)="removeFromWishlist(project.projectId)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          }
           </div>
         </div>
       </ng-container>
-  
+
       <ng-template #noItems>
         <div class="empty-state">
           <div class="empty-icon">
