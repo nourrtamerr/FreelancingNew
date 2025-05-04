@@ -1,294 +1,884 @@
+
+
+
+
+
+:root {
+  --primary-color: #175b99;
+  --primary-hover: #0e4577;
+  --primary-light: rgba(23, 91, 153, 0.1);
+  --text-dark: #333333;
+  --text-secondary: #6e6e6e;
+  --border-color: #e0e0e0;
+  --background-light: #f8f9fa;
+  --white: #ffffff;
+  --success-color: #28a745;
+  --success-light: rgba(40, 167, 69, 0.1);
+}
+
+body {
+  background-color: var(--background-light);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .proposals-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-  
-  .proposals-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  
-  .proposals-header h1 {
-    font-size: 1.75rem;
-    color: #001e00;
-    margin: 0;
-  }
-  
-  .header-stats {
-    display: flex;
-    gap: 1.5rem;
-  }
-  
-  .stat-item {
-    text-align: center;
-  }
-  
-  .stat-value {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #14a800;
-  }
-  
-  .stat-label {
-    color: #5e6d55;
-    font-size: 0.875rem;
-  }
-  
-  .proposal-card {
-    background: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  }
-  
-  .freelancer-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .freelancer-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .freelancer-details {
-    flex: 1;
-  }
-  
-  .freelancer-details h3 {
-    margin: 0;
-    font-size: 1.125rem;
-    color: #001e00;
-  }
-  
-  .freelancer-meta {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.25rem;
-    color: #5e6d55;
-    font-size: 0.875rem;
-  }
-  
-  .freelancer-meta i {
-    color: #14a800;
-  }
-  
-  .proposal-amount {
-    text-align: right;
-  }
-  
-  .amount {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #14a800;
-  }
-  
-  .duration {
-    color: #5e6d55;
-    font-size: 0.875rem;
-  }
-  
-  .proposal-content {
-    padding: 1rem 0;
-    border-top: 1px solid #e4ebe4;
-    border-bottom: 1px solid #e4ebe4;
-  }
-  
-  .cover-letter {
-    margin-bottom: 1.5rem;
-    color: #001e00;
-    line-height: 1.6;
-  }
-  
-  .skills-section,
-  .languages-section {
-    margin-top: 1rem;
-  }
-  
-  .skills-section h4,
-  .languages-section h4 {
-    margin: 0 0 0.5rem 0;
-    color: #001e00;
-    font-size: 1rem;
-  }
-  
-  .skills-list,
-  .languages-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .skill-tag,
-  .language-tag {
-    background: #f2f7f2;
-    color: #14a800;
-    padding: 0.25rem 0.75rem;
-    border-radius: 16px;
-    font-size: 0.875rem;
-  }
-  
-  .proposal-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-  }
-  
-  .footer-stats {
-    color: #5e6d55;
-    font-size: 0.875rem;
-  }
-  
-  .footer-stats i {
-    color: #14a800;
-  }
-  
-  .action-buttons {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .btn-primary,
-  .btn-secondary {
-    padding: 0.625rem 1.25rem;
-    border-radius: 20px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .btn-primary {
-    background: #14a800;
-    color: white;
-    border: none;
-  }
-  
-  .btn-primary:hover {
-    background: #3c8224;
-  }
-  
-  .btn-secondary {
-    background: white;
-    color: #14a800;
-    border: 1px solid #14a800;
-  }
-  
-  .btn-secondary:hover {
-    background: #f2f7f2;
-  }
-  
-  .empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  }
-  
-  .empty-state i {
-    font-size: 3rem;
-    color: #5e6d55;
-    margin-bottom: 1rem;
-  }
-  
-  .empty-state h2 {
-    color: #001e00;
-    margin-bottom: 0.5rem;
-  }
-  
-  .empty-state p {
-    color: #5e6d55;
-  }
-  
-  @media (max-width: 768px) {
-    .proposals-container {
-      padding: 1rem;
-    }
-  
-    .freelancer-info {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .proposal-amount {
-      text-align: center;
-    }
-  
-    .action-buttons {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-  }
-
-  .apply-btn {
-    width: 100%;
-    background: #175b99;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 12px 0;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: background 0.2s;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
 }
 
-.apply-btn:hover {
-    background: #3480c7;
-}
-
-.apply-btn {
-  width: auto;
-  background: #175b99;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 16px;
-  margin-top: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-  float: right;
-}
-
-.apply-btn:hover {
-  background: #3480c7;
-}
-
-/* Add this if you have a container for the total proposals count */
+/* Header Styles */
 .proposals-header {
+  background:linear-gradient(135deg, #f8fafc, #f1f5f9);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* margin-bottom: 16px; */
+  margin-bottom: 1.5rem;
 }
 
+.proposals-header h1 {
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  font-weight: 600;
+  margin: 0;
+}
 
+.header-stats {
+  text-align: right;
+}
 
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Filter Bar */
+.filter-bar {
+  background:linear-gradient(135deg, #f8fafc, #f1f5f9);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filter-tabs {
+  display: flex;
+}
+
+.filter-tab {
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.filter-tab.active {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.filter-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+.count {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: var(--text-secondary);
+  border-radius: 12px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.sort-dropdown select {
+  border: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+}
+
+.view-options {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.view-options i {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.view-options i.active {
+  color: var(--primary-color);
+}
+
+/* Proposal Card */
+.proposal-card {
+  background: var(--white);
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.proposal-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-light);
+}
+
+.freelancer-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.freelancer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+}
+
+.freelancer-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.freelancer-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.verified-badge, .location-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.verified-badge {
+  color: var(--success-color);
+}
+
+.location-badge {
+  color: var(--text-secondary);
+}
+
+.proposal-price {
+  text-align: right;
+}
+
+.amount {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Proposal Content */
+.proposal-content {
+  padding: 1.25rem;
+}
+
+.content-row {
+  display: flex;
+  margin-bottom: 1.25rem;
+  gap: 2rem;
+}
+
+.content-row:last-child {
+  margin-bottom: 0;
+}
+
+.content-col {
+  flex: 1;
+}
+
+.content-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.content-label i {
+  color: var(--primary-color);
+}
+
+.content-value {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--success-light);
+  color: var(--success-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Proposal Actions */
+.proposal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--background-light);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.view-btn {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.view-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.message-btn {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.message-btn:hover {
+  background-color: var(--primary-light);
+}
+
+.more-btn {
+  background-color: var(--white);
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.more-btn:hover {
+  background-color: var(--background-light);
+  color: var(--primary-color);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.empty-state i {
+  font-size: 2.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.empty-state h2 {
+  color: var(--text-dark);
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Apply Button */
+.apply-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.apply-btn:hover {
+  background-color: var(--primary-hover);
+}
 
 .disabled-button {
   background-color: #e0e0e0 !important;
   color: #888 !important;
   cursor: not-allowed !important;
-  border: 1px solid #ccc !important;
   opacity: 0.7;
 }
 
-.disabled-button:hover {
-  background-color: #e0e0e0 !important;
-  transform: none !important;
-  box-shadow: none !important;
+/* Responsive */
+@media (max-width: 992px) {
+  .content-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .proposals-container {
+    padding: 0 1rem;
+  }
+  
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .filter-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .proposal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .proposal-price {
+    text-align: left;
+    width: 100%;
+  }
+  
+  .proposal-actions {
+    flex-wrap: wrap;
+  }
+  
+  .action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+
+/* ... existing code ... */
+
+body {
+  background-color: #f0f5fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.proposals-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Header Styles */
+.proposals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ... existing code ... */
+
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ... existing code ... */
+
+/* Proposal Card */
+.proposal-card {
+  background: var(--white);
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border-left: 4px solid var(--primary-color);
+}
+
+.proposal-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: rgba(23, 91, 153, 0.05);
+}
+
+/* ... existing code ... */
+
+/* Proposal Content */
+.proposal-content {
+  padding: 1.5rem;
+  background-color: white;
+}
+
+.content-row {
+  display: flex;
+  margin-bottom: 1.5rem;
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.content-row:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.content-col {
+  flex: 1;
+  min-width: 0; /* Prevents flex items from overflowing */
+}
+
+.content-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.content-label i {
+  color: var(--primary-color);
+}
+
+.content-value {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  padding: 0.75rem;
+  border-radius: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* .content-value.cover-letter {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: none;
+  line-height: 1.5;
+  position: relative;
+  padding-right: 1.5rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.content-value.cover-letter::after {
+  content: "...";
+  position: absolute;
+  bottom: 0;
+  right: 0.5rem;
+  background-color: #f9f9f9;
+} */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--success-light);
+  color: var(--success-color);
+  padding: 0.35rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Proposal Actions */
+.proposal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  background-color: #f5f8fc;
+}
+
+/* ... existing code ... */
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: rgba(23, 91, 153, 0.02);
+  border: 1px dashed var(--primary-color);
+}
+
+/* ... rest of existing code ... */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ... existing code ... */
+
+/* Proposal Card */
+.proposal-card {
+  background: var(--white);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border-top: 4px solid #175b99;
+}
+
+/* ... existing code ... */
+
+.freelancer-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #175b99;
+}
+
+.freelancer-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.verified-badge, .location-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.verified-badge i, .location-badge i {
+  color: #175b99;
+}
+
+/* ... existing code ... */
+
+.content-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #175b99;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid rgba(23, 91, 153, 0.2);
+}
+
+.content-label i {
+  color: #175b99;
+}
+
+/* ... existing code ... */
+
+.action-btn i {
+  color: #175b99;
+}
+
+/* .view-btn {
+  background-color: #175b99;
+  color: var(--white);
+} */
+
+/* .view-btn i {
+  color: white;
+} */
+
+/* ... rest of existing code ... */
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Rank badge styles */
+.rank-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rank-badge i {
+  font-size: 1.1rem;
+}
+
+.rank-badge i.fa-medal {
+  color: #6c757d; /* Veteran - silver */
+}
+
+.rank-badge i.fa-rocket {
+  color: #17a2b8; /* Rising Star - blue */
+}
+
+.rank-badge i.fa-certificate {
+  color: #28a745; /* Established - green */
+}
+
+.rank-badge i.fa-award {
+  color: #fd7e14; /* Pro - orange */
+}
+
+.rank-badge i.fa-crown {
+  color: #ffc107; /* Elite - gold */
+}
+
+
+
+
+/* Status badge styles for different states */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge.Pending {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.status-badge.Accepted {
+  background-color: var(--success-light);
+  color: var(--success-color);
+}
+
+.status-badge.Rejected {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+/* Sort dropdown hover effect */
+.sort-dropdown select:hover {
+  color: var(--primary-hover);
+}
+
+.sort-dropdown select:focus {
+  outline: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.jobs-available-section {
+  /* background: #175b99; */
+  background: url('/images/try2.jpg') center center/cover no-repeat;
+  /* padding: 40px 0; */
+  /* margin-bottom: 40px; */
+  color: white;
+  position: relative;
+  overflow: hidden;
+  padding-top: 80px;
+  height:320px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+}
+
+.jobs-available-content {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  align-items: center;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.jobs-count {
+  font-size: 42px;
+  font-weight: 600;
+  /* margin-bottom: 0; */
+ /* text-align: center; */
+ padding-bottom: 30px;
+}
+
+.jobs-text {
+  font-size: 32px;
+  margin-left: 10px;
+}
+
+.jobs-illustration {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stats-image {
+  max-width: 300px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .jobs-available-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .jobs-count {
+    font-size: 36px;
+  }
+
+  .jobs-text {
+    font-size: 24px;
+  }
+
+  .stats-image {
+    max-width: 200px;
+  }
+}
+
+
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 20, 20, 0.55);
+
+  z-index: 1;
 }

@@ -88,6 +88,8 @@
             }">
             {{ getStatusText(milestone.status) }}
           </span>
+
+          
         </div>
 
         <!-- Actions based on user role -->
@@ -108,17 +110,24 @@
         <div class="milestone-info">
           <p class="description">{{milestone.description}}</p>
           <div class="milestone-details">
-            <div class="detail">
-              <i class="fas fa-calendar-alt"></i>
-              <span>Start: {{milestone.startDate | date}}</span>
+            <div class="milestone-details-left">
+              <div class="detail">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Start: {{milestone.startDate | date}}</span>
+              </div>
+              <div class="detail">
+                <i class="fas fa-flag-checkered"></i>
+                <span>Due: {{milestone.endDate | date}}</span>
+              </div>
+              <div class="detail">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Amount: ${{milestone.amount}}</span>
+              </div>
             </div>
-            <div class="detail">
-              <i class="fas fa-flag-checkered"></i>
-              <span>Due: {{milestone.endDate | date}}</span>
-            </div>
-            <div class="detail">
-              <i class="fas fa-money-bill-wave"></i>
-              <span>Amount: ${{milestone.amount}}</span>
+            <div class="milestone-actions" *ngIf="isLatestMilestone(milestone) && milestone.status === 0">
+              <button class="btn btn-danger" (click)="openDisputeModal(milestone.id!)">
+                <i class="fas fa-exclamation-triangle"></i> Dispute
+              </button>
             </div>
           </div> 
         </div>
@@ -206,5 +215,23 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <span class="close-modal" (click)="closeImageModal()">&times;</span>
     <img *ngIf="selectedImage" [src]="selectedImage" alt="Full size image">
+  </div>
+</div>
+
+
+<div class="dispute-modal" [class.show]="showDisputeModal" (click)="closeDisputeModal()">
+  <div class="dispute-modal-content" (click)="$event.stopPropagation()">
+    <h2>Submit Dispute</h2>
+    <form class="dispute-form" (ngSubmit)="submitDispute()">
+      <textarea 
+        [(ngModel)]="disputeReason" 
+        name="disputeReason"
+        placeholder="Please explain the reason for your dispute..."
+        required></textarea>
+      <div class="dispute-actions">
+        <button type="button" class="dispute-cancel" (click)="closeDisputeModal()">Cancel</button>
+        <button type="submit" class="dispute-submit" [disabled]="!disputeReason">Submit Dispute</button>
+      </div>
+    </form>
   </div>
 </div>

@@ -16,7 +16,7 @@ interface PasswordMatchErrors extends ValidationErrors {
 }
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule,CommonModule,FormsModule],
+  imports: [ReactiveFormsModule,CommonModule,FormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

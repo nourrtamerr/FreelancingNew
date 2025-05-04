@@ -1,12 +1,17 @@
+<!-- <app-navbar></app-navbar> -->
 <app-navbar *ngIf="showNavbar"></app-navbar>
 
-<div style="padding-top: 80px;">
+<div  *ngIf="showNavbar" style="padding-top: 60px;"> 
 
 </div>
+
+
 <router-outlet></router-outlet>
 
 
 
 
 
-<app-footer></app-footer>
+
+<app-footer  *ngIf="showNavbar"></app-footer>
+<app-chatbot></app-chatbot>

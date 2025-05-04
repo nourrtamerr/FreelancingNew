@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FixedPriceProjectService } from '../../../Shared/Services/FixedPriceProject/fixed-price-project.service';
@@ -9,6 +9,10 @@ import { SkillService } from '../../../Shared/Services/Skill/skill.service';
 import { SubCategoryService } from '../../../Shared/Services/SubCategory/sub-category.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { Currency } from '../../../Shared/Enums/currency';
+import { ExperienceLevel } from '../../../Shared/Enums/experience-level';
+// import { ExperienceLevel } from '../../../Shared/Enums/FixedPriceProjectEnum';
+// import { ExperienceLevel } from '../../Shared/Enums/experience-level';
 
 
 
@@ -19,7 +23,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-create-project',
   standalone: true,  // Make sure this is true for standalone component
-  imports: [CommonModule, ReactiveFormsModule,RouterModule],  // Import ReactiveFormsModule here
+  imports: [CommonModule, ReactiveFormsModule,RouterModule, FormsModule],  // Import ReactiveFormsModule here
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.css']
 })
@@ -39,6 +43,8 @@ export class CreateProjectComponent implements OnInit {
   availableSkills: any[] = [];
 subcategories: any[] = [];
 createdProjectId: number | null = null;
+currencies=Currency
+experienceLevel= ExperienceLevel
 
 
   ngOnInit(): void {
@@ -70,12 +76,12 @@ createdProjectId: number | null = null;
     });
   }
 
-  currencies = [
-    { id: 1, name: 'USD' },
-    { id: 2, name: 'EUR' },
-    { id: 3, name: 'GBP' },
-    { id: 4, name: 'INR' },
-  ];  
+  // currencies = [
+  //   { id: 1, name: 'USD' },
+  //   { id: 2, name: 'EUR' },
+  //   { id: 3, name: 'GBP' },
+  //   { id: 4, name: 'INR' },
+  // ];  
   
 
   // Handle project type change (fixed/bidding)
@@ -124,6 +130,12 @@ createdProjectId: number | null = null;
     }
     return '';
   }
+
+
+  getEnumValues(enumObj: any): number[] {
+    return Object.values(enumObj).filter(value => typeof value === 'number') as number[];
+    }
+
   onSubmit(): void {
     if (this.projectForm.invalid) {
       console.log('Form is invalid');
@@ -135,12 +147,14 @@ createdProjectId: number | null = null;
 
     if (formValue.projectType === 'fixed') {
       // Create Fixed Price Project data
+      console.log(formValue.experienceLevel)
       projectData = {
         title: formValue.title,
         description: formValue.description,
         currency: formValue.currency,
         expectedDuration: formValue.expectedDuration,
         experienceLevel: formValue.experienceLevel,
+
         projectSkills: [], // Assuming project skills are handled elsewhere
         subcategoryId: 1, // Example subcategoryId, you may need to bind this to a form control
        price: formValue.fixedPrice, 

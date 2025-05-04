@@ -1,0 +1,649 @@
+<div class="admin-panel">
+  <h1 class="page-title">Admin Data Management</h1>
+  
+  <!-- Navigation tabs -->
+  <div class="admin-tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'categories'" (click)="setActiveTab('categories')">
+      <i class="fas fa-list"></i> Categories
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'subcategories'" (click)="setActiveTab('subcategories')">
+      <i class="fas fa-sitemap"></i> Subcategories
+    </button>
+  
+        <button class="tab-btn" [class.active]="activeTab === 'countries'" (click)="setActiveTab('countries')">
+          <i class="fas fa-city"></i> countries
+        </button>
+    <button class="tab-btn" [class.active]="activeTab === 'cities'" (click)="setActiveTab('cities')">
+      <i class="fas fa-city"></i> Cities
+    </button>
+  </div>
+
+  <!-- Categories Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'categories'">
+    <div class="card">
+      <div class="card-header">
+        <h2>Categories</h2>
+        <button class="add-btn" (click)="openAddCategoryModal()">
+          <i class="fas fa-plus"></i> Add Category
+        </button>
+      </div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let category of categories; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{category.name}}</td>
+              <td class="actions-cell">
+                <button class="action-btn edit-btn" (click)="selectCategoryForUpdate(category)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete-btn" (click)="selectCategoryForDelete(category)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="categories.length === 0">
+              <td colspan="3" class="no-data">No categories found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cities Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'cities'">
+    <div class="card">
+      <div class="card-header">
+        <h2>Cities</h2>
+        <button class="add-btn" (click)="openAddCityModal()">
+          <i class="fas fa-plus"></i> Add City
+        </button>
+      </div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Country</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let city of cities; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{city.name}}</td>
+              <td>{{getCountryName(city.id)}}</td>
+              <td class="actions-cell">
+                <button class="action-btn edit-btn" (click)="selectCityForUpdate(city)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete-btn" (click)="selectCityForDelete(city)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="cities.length === 0">
+              <td colspan="4" class="no-data">No cities found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subcategories Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'subcategories'">
+    <div class="card">
+      <div class="card-header">
+        <h2>Subcategories</h2>
+        <button class="add-btn" (click)="openAddSubCategoryModal()">
+          <i class="fas fa-plus"></i> Add Subcategory
+        </button>
+      </div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subcategory of subCategories; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{subcategory.name}}</td>
+              <td>{{getCategoryName(subcategory.categoryId)}}</td>
+              <td class="actions-cell">
+                <button class="action-btn edit-btn" (click)="selectSubCategoryForUpdate(subcategory)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete-btn" (click)="selectSubCategoryForDelete(subcategory)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="subCategories.length === 0">
+              <td colspan="4" class="no-data">No subcategories found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="tab-content" *ngIf="activeTab === 'countries'">
+    <div class="card">
+      <div class="card-header">
+        <h2>Countries</h2>
+        <button class="add-btn" (click)="openAddCountryModal()">
+          <i class="fas fa-plus"></i> Add Country
+        </button>
+      </div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let country of countries; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{country.name}}</td>
+              <td class="actions-cell">
+                <button class="action-btn edit-btn" (click)="selectCountryForUpdate(country)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete-btn" (click)="selectCountryForDelete(country)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="countries.length === 0">
+              <td colspan="3" class="no-data">No countries found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Add Category Modal -->
+
+  <div class="modal-overlay" *ngIf="showAddCategoryModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Add Category</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">×</button>
+      </div>
+      <form #categoryForm="ngForm" (ngSubmit)="addCategory()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="categoryName">Category Name</label>
+            <input
+              type="text"
+              id="categoryName"
+              name="categoryName"
+              [(ngModel)]="newCategory.name"
+              #categoryName="ngModel"
+              placeholder="Enter category name"
+              required
+              minlength="1"
+              class="form-control"
+              [ngClass]="{'is-invalid': categoryName.invalid && (categoryName.dirty || categoryName.touched)}"
+            />
+            <div
+              *ngIf="categoryName.invalid && (categoryName.dirty || categoryName.touched)"
+              class="invalid-feedback"
+            >
+              Category name is required.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAllModals()">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="categoryForm.invalid"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Category Modal -->
+  <!-- Update Category Modal -->
+<div class="modal-overlay" *ngIf="showUpdateCategoryModal">
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-header">
+      <h3>Update Category</h3>
+      <button type="button" class="close-btn" (click)="closeAllModals()">×</button>
+    </div>
+    <form #updateCategoryForm="ngForm" (ngSubmit)="updateCategory()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="updateCategoryName">Category Name</label>
+          <input
+            type="text"
+            id="updateCategoryName"
+            name="updateCategoryName"
+            [(ngModel)]="updateCategoryModel.name"
+            #updateCategoryName="ngModel"
+            placeholder="Enter category name"
+            required
+            minlength="1"
+            class="form-control"
+            [ngClass]="{'is-invalid': updateCategoryName.invalid && (updateCategoryName.dirty || updateCategoryName.touched)}"
+          />
+          <div
+            *ngIf="updateCategoryName.invalid && (updateCategoryName.dirty || updateCategoryName.touched)"
+            class="invalid-feedback"
+          >
+            Category name is required.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="updateCategoryForm.invalid"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+  <!-- Delete Category Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteCategoryModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Delete Category</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-message">Are you sure you want to delete the category "{{selectedCategory.id}}"?</p>
+        <p class="warning-message">This action cannot be undone!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteCategory()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add SubCategory Modal -->
+  <div class="modal-overlay" *ngIf="showAddSubCategoryModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Add Subcategory</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="subcategoryName">Subcategory Name</label>
+          <input type="text" id="subcategoryName" [(ngModel)]="newSubCategory.name" placeholder="Enter subcategory name" required>
+        </div>
+        <div class="form-group">
+          <label for="categorySelect">Parent Category</label>
+          <select id="categorySelect" [(ngModel)]="newSubCategory.categoryId" required>
+            <option [ngValue]="0" disabled>Select a category</option>
+            <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addSubCategory()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update SubCategory Modal -->
+  <div class="modal-overlay" *ngIf="showUpdateSubCategoryModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Update Subcategory</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="updateSubcategoryName">Subcategory Name</label>
+          <input type="text" id="updateSubcategoryName" [(ngModel)]="updateSubCategoryModel.name" placeholder="Enter subcategory name" required>
+        </div>
+        <div class="form-group">
+          <label for="updateCategorySelect">Parent Category</label>
+          <select id="updateCategorySelect" [(ngModel)]="updateSubCategoryModel.categoryId" required>
+            <option [ngValue]="0" disabled>Select a category</option>
+            <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="updateSubCategory()">Update</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete SubCategory Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteSubCategoryModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Delete Subcategory</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-message">Are you sure you want to delete the subcategory "{{selectedSubCategory?.name}}"?</p>
+        <p class="warning-message">This action cannot be undone!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteSubCategory()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Countries Modal -->
+<!-- Add Country Modal -->
+<div class="modal-overlay" *ngIf="showAddCountryModal">
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-header">
+      <h3>Add Country</h3>
+      <button type="button" class="close-btn" (click)="closeAllModals()">×</button>
+    </div>
+    <form #countryForm="ngForm" (ngSubmit)="addCountry()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="countryName">Country Name</label>
+          <input
+            type="text"
+            id="countryName"
+            name="countryName"
+            [(ngModel)]="newCountry.name"
+            #countryName="ngModel"
+            placeholder="Enter country name"
+            required
+            minlength="1"
+            class="form-control"
+            [ngClass]="{'is-invalid': countryName.invalid && (countryName.dirty || countryName.touched)}"
+          />
+          <div
+            *ngIf="countryName.invalid && (countryName.dirty || countryName.touched)"
+            class="invalid-feedback"
+          >
+            Country name is required.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="countryForm.invalid"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div class="modal-overlay" *ngIf="showUpdateCountryModal">
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-header">
+      <h3>Update Country</h3>
+      <button type="button" class="close-btn" (click)="closeAllModals()">×</button>
+    </div>
+    <form #updateCountryForm="ngForm" (ngSubmit)="updateCountry()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="updateCountryName">Country Name</label>
+          <input
+            type="text"
+            id="updateCountryName"
+            name="updateCountryName"
+            [(ngModel)]="updateCountryModel.name"
+            #updateCountryName="ngModel"
+            placeholder="Enter country name"
+            required
+            minlength="1"
+            class="form-control"
+            [ngClass]="{'is-invalid': updateCountryName.invalid && (updateCountryName.dirty || updateCountryName.touched)}"
+          />
+          <div
+            *ngIf="updateCountryName.invalid && (updateCountryName.dirty || updateCountryName.touched)"
+            class="invalid-feedback"
+          >
+            Country name is required.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="updateCountryForm.invalid"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+
+<div class="modal-overlay" *ngIf="showDeleteCountryModal">
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-header">
+      <h3>Delete Country</h3>
+      <button type="button" class="close-btn" (click)="closeAllModals()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-message">Are you sure you want to delete the country "{{selectedCountry?.name}}"?</p>
+      <p class="warning-message">This action cannot be undone!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="deleteCountry()">Delete</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Add City Modal -->
+  <div class="modal-overlay" *ngIf="showAddCityModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Add City</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form #cityForm="ngForm" (ngSubmit)="addCity()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="cityName">City Name</label>
+            <input
+              type="text"
+              id="cityName"
+              name="cityName"
+              [(ngModel)]="newCity.name"
+              #cityName="ngModel"
+              placeholder="Enter city name"
+              required
+              minlength="1"
+              class="form-control"
+              [ngClass]="{'is-invalid': cityName.invalid && (cityName.dirty || cityName.touched)}"
+            />
+            <div
+              *ngIf="cityName.invalid && (cityName.dirty || cityName.touched)"
+              class="invalid-feedback"
+            >
+              City name is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="countrySelect">Parent Country</label>
+            <select
+              id="countrySelect"
+              name="countryId"
+              [(ngModel)]="newCity.countryId"
+              #countryId="ngModel"
+              required
+              class="form-control"
+              [ngClass]="{'is-invalid': countryId.invalid && (countryId.dirty || countryId.touched)}"
+            >
+              <option [ngValue]="null" disabled>Select a country</option>
+              <option *ngFor="let country of countries" [ngValue]="country.id">{{country.name}}</option>
+            </select>
+            <div
+              *ngIf="countryId.invalid && (countryId.dirty || countryId.touched)"
+              class="invalid-feedback"
+            >
+              Parent country is required.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="cityForm.invalid"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update City Modal -->
+  <div class="modal-overlay" *ngIf="showUpdateCityModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Update City</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form #updateCityForm="ngForm" (ngSubmit)="updateCity()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="updateCityName">City Name</label>
+            <input
+              type="text"
+              id="updateCityName"
+              name="updateCityName"
+              [(ngModel)]="updateCityModel.name"
+              #cityName="ngModel"
+              placeholder="Enter city name"
+              required
+              minlength="1"
+              class="form-control"
+              [ngClass]="{'is-invalid': cityName.invalid && (cityName.dirty || cityName.touched)}"
+            />
+            <div
+              *ngIf="cityName.invalid && (cityName.dirty || cityName.touched)"
+              class="invalid-feedback"
+            >
+              City name is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="updateCountrySelect">Parent Country</label>
+            <select
+              id="updateCountrySelect"
+              name="countryId"
+              [(ngModel)]="updateCityModel.countryId"
+              #countryId="ngModel"
+              required
+              class="form-control"
+              [ngClass]="{'is-invalid': countryId.invalid && (countryId.dirty || countryId.touched)}"
+            >
+              <option [ngValue]="null" disabled>Select a country</option>
+              <option *ngFor="let country of countries" [ngValue]="country.id">{{country.name}}</option>
+            </select>
+            <div
+              *ngIf="countryId.invalid && (countryId.dirty || countryId.touched)"
+              class="invalid-feedback"
+            >
+              Parent country is required.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="updateCityForm.invalid"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+ 
+  <!-- Delete City Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteCityModal">
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-header">
+        <h3>Delete City</h3>
+        <button type="button" class="close-btn" (click)="closeAllModals()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-message">Are you sure you want to delete the city "{{selectedCity?.name}}"?</p>
+        <p class="warning-message">This action cannot be undone!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteCity()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+</div> 

@@ -2,15 +2,19 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./Components/navbar/navbar.component";
 import { FooterComponent } from "./Components/footer/footer.component";
-import { filter } from 'rxjs/operators';
+import { ChatComponent } from "./Layout/Pages/chat/chat.component";
+import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.component';
+import { filter } from 'rxjs';
+// import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule,RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ChatComponent,ChatbotComponent, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  // styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'Prolance';

@@ -18,8 +18,8 @@
           <h1 class="job-title">{{project.title}}</h1>
 
           <div class="job-meta">
-            <span class="posted-time">Posted yesterday</span>
-            <span><i class="fa-solid fa-location-dot"></i> Worldwide</span>
+            <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
+            <span><i class="fa-solid fa-location-dot"></i> {{project.clientCountry}}</span>
           </div>
 
           <section class="job-section">

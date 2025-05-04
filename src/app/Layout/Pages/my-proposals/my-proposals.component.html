@@ -4,6 +4,20 @@
       <h1 class="section-title">My Proposals</h1>
     </div>
   </div>
+
+  <!-- <div class="jobs-available-section mb-5">
+    <div class="hero-overlay"></div>
+    <div class="jobs-available-content">
+  
+      <div class="jobs-illustration">
+        <div>
+          <h1 class="jobs-count">Proposals</h1>
+
+        </div>
+      </div>
+  
+    </div>
+  </div> -->
   
   <div class="proposals-container">
     <div class="loading-spinner" *ngIf="loading">
@@ -13,9 +27,50 @@
     <div class="error-message" *ngIf="error">
       {{ error }}
     </div>
+
+
+
+
+
+
+    <div class="filter-bar" *ngIf="!loading && !error">
+      <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="currentFilter === 'All'" (click)="filterProposals('All')">
+          All <span class="count">{{proposals.length}}</span>
+        </button>
+        <button class="filter-tab" [class.active]="currentFilter === 'Pending'" (click)="filterProposals('Pending')">
+          Pending <span class="count">{{getPendingCount()}}</span>
+        </button>
+        <button class="filter-tab" [class.active]="currentFilter === 'Accepted'" (click)="filterProposals('Accepted')">
+          Accepted <span class="count">{{getAcceptedCount()}}</span>
+        </button>
+        <button class="filter-tab" [class.active]="currentFilter === 'Rejected'" (click)="filterProposals('Rejected')">
+          Rejected <span class="count">{{getRejectedCount()}}</span>
+        </button>
+      </div>
+      <div class="filter-actions">
+        <div class="sort-dropdown">
+          <span>Sort by: </span>
+          <select (change)="sortProposals($event)">
+            <option value="lastAdded">Last added</option>
+            <option value="priceLow">Price: Low to High</option>
+            <option value="priceHigh">Price: High to Low</option>
+            <option value="duration">Duration</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
   
     <div class="proposals-grid" *ngIf="!loading && !error">
-      <div class="proposal-card" *ngFor="let proposal of proposals">
+      <div class="proposal-card" *ngFor="let proposal of filteredProposals">
         <div class="proposal-header">
           <div class="freelancer-info">
             <img [src]="proposal.freelancerProfilePicture? Filesurl+'/'+proposal.freelancerProfilePicture : '/images/default.jpg'" alt="Profile" class="profile-picture">
@@ -69,4 +124,16 @@
         </div>
       </div>
     </div>
+
+    <div class="empty-state" *ngIf="!loading && !error && filteredProposals.length === 0">
+      <i class="fas fa-file-alt"></i>
+      <h2>No Proposals Found</h2>
+      <p>There are no proposals matching your current filter criteria.</p>
+    </div>
+    
+
+
   </div>
+
+
+  

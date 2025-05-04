@@ -43,6 +43,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   editedMessageText = '';
   videoCallStatus: string = 'idle';
   showVideoCall = false;
+ 
   private ringAudio: HTMLAudioElement = new Audio('ring.mp3');
   constructor(
     private authService: AuthService,
@@ -355,7 +356,6 @@ this.chatService.hubConnection.on("ConversationDeleted", (userId1: string, userI
     }
   
     this.receiverUsername = username;
-  
     this.accountService.getIdByUserName(username).subscribe({
       next: (data: any) => {
         if (!data || !data.id) {

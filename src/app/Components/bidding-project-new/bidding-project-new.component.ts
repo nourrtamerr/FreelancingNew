@@ -106,6 +106,9 @@ export class BiddingProjectNewComponent implements OnInit,OnDestroy {
 
 
   role: string=''
+
+  searchTerm: string = '';
+
   private timerInterval: any;
   ngOnInit(): void {
 
@@ -580,6 +583,20 @@ export class BiddingProjectNewComponent implements OnInit,OnDestroy {
       this.userWishlist2.push(projectid);
      }
 
+    }
+
+
+    onSearch() {
+      if (!this.searchTerm?.trim()) {
+        this.projects = [...this.projectsBeforeAnyFilters];
+        return;
+      }
+  
+      const searchTermLower = this.searchTerm.toLowerCase();
+      this.projects = this.projectsBeforeAnyFilters.filter(project => 
+        project.title.toLowerCase().includes(searchTermLower) ||
+        project.description.toLowerCase().includes(searchTermLower)
+      );
     }
 
 

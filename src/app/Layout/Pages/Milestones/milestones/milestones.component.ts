@@ -3,7 +3,7 @@ import { MilestoneService } from '../../../../Shared/Services/Milestone/mileston
 import { CommonModule } from '@angular/common';
 import { Milestone, MilestoneFile } from '../../../../Shared/Interfaces/milestone';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Environment, Files } from '../../../../base/environment';
 import { ProjectsService } from '../../../../Shared/Services/Projects/projects.service';
@@ -17,7 +17,7 @@ import { SentimentService } from '../../../../Shared/Services/AI/Sentimentservic
 
 @Component({
   selector: 'app-milestones',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule,FormsModule],
   templateUrl: './milestones.component.html',
   styleUrl: './milestones.component.css'
 })
@@ -227,10 +227,7 @@ submitProjectReview(): void {
     document.body.style.overflow = 'auto'; // Restore scrolling
   }
   
-  ngOnDestroy() {
-    // Ensure scroll is restored when component is destroyed
-    document.body.style.overflow = 'auto';
-  }
+
 
   deleteFile(fileName: string) {
     const fileNameOnly = fileName.split('/').pop(); // Extract filename from URL
@@ -432,4 +429,53 @@ submitProjectReview(): void {
       });
     }
   }
+
+
+
+
+
+  // Add these properties
+showDisputeModal: boolean = false;
+disputeReason: string = '';
+selectedMilestoneId: number | null = null;
+
+// Add these methods
+isLatestMilestone(milestone: Milestone): boolean {
+  const pendingMilestones = this.milestones.filter(m => m.status === 0);
+  return pendingMilestones.length > 0 && 
+         pendingMilestones[0].id === milestone.id;
+}
+
+openDisputeModal(milestoneId: number): void {
+  this.selectedMilestoneId = milestoneId;
+  this.showDisputeModal = true;
+  document.body.style.overflow = 'hidden';
+}
+
+closeDisputeModal(): void {
+  this.showDisputeModal = false;
+  this.disputeReason = '';
+  this.selectedMilestoneId = null;
+  document.body.style.overflow = 'auto';
+}
+
+submitDispute(): void {
+  if (this.selectedMilestoneId && this.disputeReason.trim()) {
+    this.accountservice.Dispute(this.selectedMilestoneId, this.disputeReason).subscribe({
+      next: (response) => {
+        this.toastr.success('Dispute submitted successfully');
+        this.closeDisputeModal();
+      },
+      error: (error) => {
+        this.toastr.error('Failed to submit dispute');
+        console.error('Error submitting dispute:', error);
+      }
+    });
+  }
+}
+
+// Add to ngOnDestroy
+ngOnDestroy() {
+  document.body.style.overflow = 'auto';
+}
 }

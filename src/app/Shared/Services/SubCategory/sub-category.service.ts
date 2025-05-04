@@ -21,7 +21,7 @@ export class SubCategoryService {
 
 
   getAllSubcategories(): Observable<any> {
-    return this.http.get(this.apiUrl);
+    return this.http.get(this.apiUrl); 
   }
 
 

@@ -18,4 +18,14 @@ export class CountriesService {
     return this._HttpClient.get<Country[]>(`${this.apiUrl}Country`);
   }
 
+  AddCountry(country:Country):Observable<Country> {
+    return this._HttpClient.post<Country>(`${this.apiUrl}Country`, country);
+  }
+  updateCountry(country: Country): Observable<any> {
+    return this._HttpClient.put(`${this.apiUrl}Country/`, country);
+  }
+  deleteCountry(id:number):Observable<Country> {
+    return this._HttpClient.delete<Country>(`${this.apiUrl}Country?id=${id}`);
+  }
+
 }

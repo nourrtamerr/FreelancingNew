@@ -12,25 +12,26 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && error.error?.message.includes('Invalid token')) {
+      if (error.status === 401 && error.error?.message?.includes('Invalid token')) {
         authService.logout();
         router.navigate(['/login']);
         toastr.error('Session expired. Please log in again.');
         return EMPTY;
+      } 
+      else if (error.status === 500) {
+        toastr.error('Error Requset');
+        return EMPTY;
       }
       else if (error.error?.message) {
-
-        if(!error.error.message.includes('Fixed price project with ID') && !error.error.message.includes('No Bidding Project Found Hasing This Id')){
-
+        if (
+          !error.error.message.includes('Fixed price project with ID') &&
+          !error.error.message.includes('No Bidding Project Found Hasing This Id')
+        ) {
           toastr.error(error.error.message);
         }
-        if(!error.error.message.includes('No Bidding Project Found Hasing This Id'))
-        {
+        if (!error.error.message.includes('No Bidding Project Found Hasing This Id')) {
           return EMPTY;
         }
-
-        
-
       }
       return throwError(() => error);
     })
