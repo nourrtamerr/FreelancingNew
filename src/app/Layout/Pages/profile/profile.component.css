@@ -34,11 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-<<<<<<< Updated upstream
-    background:#68a8e3;
-=======
     background:  linear-gradient(135deg, #f8fafc, #e2e8f0);
->>>>>>> Stashed changes
     border-radius: 50%;
     margin-right: 16px;
 }
@@ -245,13 +241,8 @@
 }
 
 .wt-skills .skill-dynamic-html {
-<<<<<<< Updated upstream
-    background:#68a8e3;
-    color: var(--upwork-green);
-=======
     background: rgba(20, 168, 0, 0.1);
     color: #175b99;
->>>>>>> Stashed changes
     padding: 6px 12px;
     border-radius: 16px;
     font-size: 14px;
@@ -308,11 +299,7 @@
         background: #6db3f5;
         border-radius: 20px;
         padding: 6px 12px;
-<<<<<<< Updated upstream
-        color: #0d151d;
-=======
         color: #175b99;
->>>>>>> Stashed changes
         font-size: 14px;
         transition: all 0.2s;
 
@@ -370,11 +357,7 @@
         .add-skill {
             background: none;
             border: none;
-<<<<<<< Updated upstream
-            color: #55a9f7;
-=======
             color: #175b99;
->>>>>>> Stashed changes
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
@@ -386,13 +369,8 @@
     }
 
     .btn-outline-success {
-<<<<<<< Updated upstream
-        color: #75b4ef;
-        border-color: #68a2d8;
-=======
         color: #175b99;
         border-color: #175b99;
->>>>>>> Stashed changes
         
         &:hover {
             background-color: #175b99;
@@ -404,11 +382,7 @@
 .add-skill {
     background: none;
     border: none;
-<<<<<<< Updated upstream
-    color: #62a9ec;
-=======
     color: #175b99;
->>>>>>> Stashed changes
     padding: 4px 8px;
     border-radius: 4px;
     cursor: pointer;
@@ -425,11 +399,7 @@
     background: #4f9de6;
     border-radius: 20px;
     padding: 6px 12px;
-<<<<<<< Updated upstream
-    color: #a0c5e7;
-=======
     color: #175b99;
->>>>>>> Stashed changes
     font-size: 14px;
     transition: all 0.2s;
 }
@@ -670,6 +640,7 @@ input:checked:active + .slider {
 
 .role-badge i.fa-check-circle {
     font-size: 0.9em;
+    background-color: #175b99 !important;
 }
 
 
@@ -3480,11 +3451,7 @@ textarea.form-control {
 
     &:hover {
         border-color: #175b99;
-<<<<<<< Updated upstream
-        box-shadow: 0 2px 8px#68a8e3;
-=======
         box-shadow: 0 2px 8px rgba(20, 168, 0, 0.1);
->>>>>>> Stashed changes
     }
 }
 
@@ -3806,7 +3773,7 @@ textarea.form-control {
         background-color: #175b99;
     }
     &:disabled {
-        background-color: #e0e0e0;
+        background-color: linear-gradient(45deg, #90CAF9, #64B5F6);;
     }
 }
 
@@ -4178,6 +4145,9 @@ textarea.form-control {
             filter: brightness(0) invert(1);
         }
     }
+.progress-bar{
+    background-color: #175b99 !important; 
+}
 
 
 
@@ -4189,9 +4159,19 @@ textarea.form-control {
 
 
 
+.btn-success{
+    background-color: #175b99 !important; 
 
+}
+.btn-success:disabled{
+    background-color: #175b99 !important; 
 
+}
 
+.btn-success:hover{
+    background-color: #175b99 !important; 
+
+}
 
 
 
