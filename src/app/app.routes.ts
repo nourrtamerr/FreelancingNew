@@ -39,6 +39,7 @@ import { AllPaymentsComponent } from './Layout/Pages/AllPayments/all-payments/al
 import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 import { AddBanComponent } from './Layout/Pages/add-ban/add-ban.component';
+import { ReviewsListComponent } from './Layout/Pages/Reviews/reviews-list/reviews-list.component';
 import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.component';
 import { AdminDataManagementComponent } from './Layout/Pages/admin-data-management/admin-data-management.component';
 import { DisputesystemComponent } from './Layout/Pages/disputesystem/disputesystem.component';
@@ -77,7 +78,7 @@ export const routes: Routes = [
       {path: 'admin-data-management',component: AdminDataManagementComponent, canActivate: [adminGuard]},
       {path: 'updateban/:id',component: UpdateBanComponent,title:'Ban Update',canActivate: [adminGuard]},
       {path: 'dashboard', component: UserDashboradComponent,title:'Freelancer Statistics',canActivate: [freelancerGuard] },
-      {path: 'addfund', component: AddFundByClientComponent,title:'Add Fund',canActivate: [clientGuard]},
+      {path: 'addfund', component: AddFundByClientComponent,title:'Add Fund',canActivate: [clientOrFreelancerGuard]},
       {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
@@ -92,6 +93,7 @@ export const routes: Routes = [
       {path: 'notification',component: NotificationsComponent},
 
       {path: 'Allpayments',component: AllPaymentsComponent },
+      {path: 'reviews',component: ReviewsListComponent },
     
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 

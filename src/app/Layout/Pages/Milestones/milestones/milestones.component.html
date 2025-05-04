@@ -20,13 +20,30 @@
       <span class="stat-label">Total Milestones</span>
     </div>
   </div>
-
-  <div class="project-review-section" *ngIf="areAllMilestonesCompleted()">
+  <!-- *ngIf="areAllMilestonesCompleted()" -->
+  <div class="project-review-section" >
     <div class="review-card">
       <div class="review-header">
         <h3>{{ existingReview ? 'Update Your Review' : 'Project Completed Successfully!' }}</h3>
         <p>{{ existingReview ? 'Edit your review for the' : 'Share your experience working with the' }} 
            {{ isProjectClient ? 'Freelancer' : 'Client' }}</p>
+      </div>
+  
+      <!-- Add this sentiment display section -->
+      <div class="sentiment-feedback">
+        <div class="sentiment-badge" [ngClass]="{
+          'positive': sentiment === 'positive',
+          'negative': sentiment === 'negative',
+          'neutral': sentiment === 'neutral'
+        }">
+          <i class="fas" [ngClass]="{
+            'fa-smile': sentiment === 'positive',
+            'fa-frown': sentiment === 'negative',
+            'fa-meh': sentiment === 'neutral'
+          }"></i>
+          <span>{{ sentiment | titlecase }} Sentiment</span>
+          <small>({{ (sentimentScore * 100).toFixed(1) }}% confidence)</small>
+        </div>
       </div>
   
       <form [formGroup]="reviewForm" (ngSubmit)="submitProjectReview()">

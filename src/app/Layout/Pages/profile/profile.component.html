@@ -1,4 +1,4 @@
-<div class="profile-container">
+<div class="profile-container mt-5">
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="container">
@@ -105,7 +105,7 @@
             <i class="fa fa-user"></i> Profile
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="profile.role == 'Freelancer' || profile.role == 'Client'">
           <a
             class="nav-link"
             [class.active]="activeTab === 'myprojects'"
@@ -370,7 +370,7 @@
                 <div class="form-group mt-4">
                   <button
                     type="submit"
-                    class="btn btn-success"
+                    class="btn btn-primary "
                     [disabled]="profileForm.invalid"
                   >
                     Save Changes

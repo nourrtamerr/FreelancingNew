@@ -80,9 +80,8 @@ export class MyProposalsComponent implements OnInit {
       case 'duration':
         this.filteredProposals.sort((a, b) => a.suggestedDuration - b.suggestedDuration);
         break;
-      case 'lastAdded':
-      default:
-        // Assuming the proposals are already sorted by last added in the original array
+
+      default:  
         this.filteredProposals = [...this.filteredProposals];
         break;
     }

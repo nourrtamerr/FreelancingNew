@@ -3,6 +3,18 @@
     margin: 0 auto;
     padding: 20px;
   }
+  .sentiment-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .sentiment-badge i {
+    font-size: 1.1em;
+  }
   
   .profile-header {
     display: flex;

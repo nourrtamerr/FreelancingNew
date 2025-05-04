@@ -3,10 +3,10 @@
 
 /* Upwork Colors (as CSS variables) */
 :root {
-    --upwork-green: #108a00;
-    --upwork-green-hover: #3c8224;
+    --upwork-green: #175b99;
+    --upwork-green-hover: #175b99;
     --upwork-text: #001e00;
-    --upwork-secondary: #5e6d55;
+    --upwork-secondary: #175b99;
     --upwork-border: #e4ebe4;
     --upwork-background: #f7faf7;
 }
@@ -34,7 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(20, 168, 0, 0.1);
+    background:#68a8e3;
     border-radius: 50%;
     margin-right: 16px;
 }
@@ -241,7 +241,7 @@
 }
 
 .wt-skills .skill-dynamic-html {
-    background: rgba(20, 168, 0, 0.1);
+    background:#68a8e3;
     color: var(--upwork-green);
     padding: 6px 12px;
     border-radius: 16px;
@@ -279,8 +279,8 @@
             height: 40px;
 
             &:focus {
-                border-color: #108a00;
-                box-shadow: 0 0 0 1px #108a00;
+                border-color: #175b99;
+                box-shadow: 0 0 0 1px #175b99;
             }
         }
     }
@@ -296,20 +296,20 @@
     .skill-tag {
         display: inline-flex;
         align-items: center;
-        background: rgba(20, 168, 0, 0.08);
+        background: #6db3f5;
         border-radius: 20px;
         padding: 6px 12px;
-        color: #108a00;
+        color: #0d151d;
         font-size: 14px;
         transition: all 0.2s;
 
         &:hover {
-            background: rgba(20, 168, 0, 0.12);
+            background: rgba(98, 169, 204, 0.12);
         }
 
         &.custom {
-            background: rgba(0, 107, 194, 0.08);
-            color: #006bc2;
+            background: #68a8e3;
+            color: #70b1e5;
         }
 
         .skill-name {
@@ -357,23 +357,23 @@
         .add-skill {
             background: none;
             border: none;
-            color: #108a00;
+            color: #55a9f7;
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
 
             &:hover {
-                background: rgba(20, 168, 0, 0.08);
+                background: #4f9de6;
             }
         }
     }
 
     .btn-outline-success {
-        color: #108a00;
-        border-color: #108a00;
+        color: #75b4ef;
+        border-color: #68a2d8;
         
         &:hover {
-            background-color: #108a00;
+            background-color: #175b99;
             color: white;
         }
     }
@@ -382,7 +382,7 @@
 .add-skill {
     background: none;
     border: none;
-    color: #108a00;
+    color: #62a9ec;
     padding: 4px 8px;
     border-radius: 4px;
     cursor: pointer;
@@ -390,22 +390,22 @@
 }
 
 .add-skill:hover {
-    background-color: rgba(20, 168, 0, 0.08);
+    background-color:  #175b99;
 }
 
 .skill-tag {
     display: inline-flex;
     align-items: center;
-    background: rgba(20, 168, 0, 0.08);
+    background: #4f9de6;
     border-radius: 20px;
     padding: 6px 12px;
-    color: #108a00;
+    color: #a0c5e7;
     font-size: 14px;
     transition: all 0.2s;
 }
 
 .skill-tag:hover {
-    background: rgba(20, 168, 0, 0.12);
+    background: rgba(87, 105, 223, 0.12);
 }
 
 
@@ -448,7 +448,7 @@
 }
 
 input:checked + .slider {
-    background-color: #108a00;  /* Upwork green color */
+    background-color: #175b99;  /* Upwork green color */
 }
 
 input:checked + .slider:before {
@@ -456,7 +456,7 @@ input:checked + .slider:before {
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #108a00;
+    box-shadow: 0 0 1px #175b99;
 }
 
 .custom-switch {
@@ -480,7 +480,7 @@ input:focus + .slider {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #108a00;  /* Changed from #ccc to Upwork green */
+    background-color: #175b99;  /* Changed from #ccc to Upwork green */
     opacity: 0.5;  /* Make it slightly transparent when off */
     transition: .4s;
     border-radius: 24px;
@@ -499,7 +499,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider {
-    background-color: #108a00;
+    background-color: #175b99;
     opacity: 1;  /* Full opacity when on */
 }
 
@@ -508,12 +508,12 @@ input:checked + .slider:before {
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #108a00;
+    box-shadow: 0 0 1px #175b99;
 }
 
 input:checked{
-    background-color: #108a00;
-    color:#108a00 ;
+    background-color: #175b99;
+    color:#175b99 ;
 }
 
 .custom-switch {
@@ -555,7 +555,7 @@ input:checked{
 }
 
 input:checked + .slider {
-    background-color: #108a00;  /* Upwork green color */
+    background-color: #175b99;  /* Upwork green color */
 }
 
 input:checked + .slider:before {
@@ -564,7 +564,7 @@ input:checked + .slider:before {
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #108a00;
+    box-shadow: 0 0 1px #175b99;
 }
 
 .custom-switch {
@@ -607,7 +607,7 @@ input:focus + .slider {
 
 /* Make it always green when checked */
 input:checked + .slider {
-    background-color: #108a00 !important;  /* Upwork green color with !important */
+    background-color: #175b99 !important;  /* Upwork green color with !important */
 }
 
 input:checked + .slider:before {
@@ -618,7 +618,7 @@ input:checked + .slider:before {
 input:checked:hover + .slider,
 input:checked:focus + .slider,
 input:checked:active + .slider {
-    background-color: #108a00 !important;
+    background-color: #175b99 !important;
 }
 
 
@@ -626,7 +626,7 @@ input:checked:active + .slider {
     display: inline-flex;
     align-items: center;
     padding: 8px 16px;
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
     border-radius: 20px;
     font-weight: 500;
@@ -670,11 +670,11 @@ input:checked:active + .slider {
 }
 
 .filtered-skills .skill-dynamic-html {
-    color: #2e7d32;
+    color: #175b99;
 }
 
 .filtered-skills .wt-addinfo {
-    color: #108a00;
+    color: #175b99;
 }
 
 /* Non-recommended Skills */
@@ -708,7 +708,7 @@ input:checked:active + .slider {
 
 .wt-addinfo:hover {
     background: #e8f5e9;
-    color: #108a00;
+    color: #175b99;
 }
 
 .wt-deleteinfo:hover {
@@ -722,15 +722,15 @@ input:checked:active + .slider {
 }
 
 .btn-outline-primary {
-    color: #108a00;
-    border-color: #108a00;
+    color: #175b99;
+    border-color: #175b99;
     padding: 4px 12px;
     font-size: 12px;
     transition: all 0.3s ease;
 }
 
 .btn-outline-primary:hover {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
 }
 
@@ -790,8 +790,8 @@ input:checked:active + .slider {
 
 .add-skill-btn {
     background: transparent;
-    border: 1px solid #28a745;
-    color: #28a745;
+    border: 1px solid #175b99;
+    color: #175b99;
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -802,7 +802,7 @@ input:checked:active + .slider {
     cursor: pointer;
 
     &:hover {
-        background-color: #28a745;  /* Bootstrap success green */
+        background-color: #175b99;  /* Bootstrap success green */
         color: white;
     }
 }
@@ -838,11 +838,11 @@ input:checked:active + .slider {
                 position: relative;
                 
                 &:hover {
-                    color: #28a745;
+                    color: #175b99;
                 }
                 
                 &.active {
-                    color: #28a745;
+                    color: #175b99;
                     font-weight: 500;
                     
                     &:after {
@@ -852,7 +852,7 @@ input:checked:active + .slider {
                         left: 0;
                         right: 0;
                         height: 2px;
-                        background: #28a745;
+                        background: #175b99;
                     }
                 }
                 
@@ -901,7 +901,7 @@ input:checked:active + .slider {
         margin-bottom: 1rem;
 
         h4 {
-            color: #108a00;
+            color: #175b99;
             margin: 0;
             font-size: 1.2rem;
         }
@@ -1062,7 +1062,7 @@ textarea.form-control {
 }
 
 .modal-header.bg-success {
-    background-color: #28a745 !important;
+    background-color: #175b99 !important;
 }
 
 .modal-header .btn-close-white {
@@ -1164,18 +1164,18 @@ textarea.form-control {
 
 
 .bg-upwork {
-    background-color: #108a00;
+    background-color: #175b99;
 }
 
 .btn-upwork {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     color: white;
 }
 
 .btn-upwork:hover {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     color: white;
 }
 
@@ -1189,7 +1189,7 @@ textarea.form-control {
 }
 
 .form-control:focus {
-    border-color: #108a00;
+    border-color: #175b99;
     box-shadow: 0 0 0 0.2rem rgba(20, 168, 0, 0.25);
 }
 
@@ -1235,12 +1235,17 @@ textarea.form-control {
     position: relative;
     padding: 20px;
     margin-bottom: 20px;
-    border-left: 3px solid #108a00;
+    border-left: 3px solid #175b99;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
 }
+/* .haga{
+    background-color: #3384d0;
+    border-radius: 5px;
+    
+} */
 
 .experience-item:hover {
     transform: translateX(5px);
@@ -1254,7 +1259,7 @@ textarea.form-control {
     top: 24px;
     width: 15px;
     height: 15px;
-    border: 3px solid #108a00;
+    border: 3px solid #175b99;
     background: white;
     border-radius: 50%;
 }
@@ -1310,7 +1315,7 @@ textarea.form-control {
 }
 
 .empty-state i {
-    color: #108a00;
+    color: #175b99;
     opacity: 0.5;
 }
 
@@ -1325,8 +1330,8 @@ textarea.form-control {
 }
 
 .btn-upwork {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     color: white;
     padding: 8px 16px;
     font-weight: 500;
@@ -1337,8 +1342,8 @@ textarea.form-control {
 }
 
 .btn-upwork:hover {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2);
 }
@@ -1372,11 +1377,11 @@ textarea.form-control {
 
 .btn-edit {
     background-color: #e9ecef;
-    color: #108a00;
+    color: #175b99;
 }
 
 .btn-edit:hover {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
     transform: translateY(-2px);
 }
@@ -1493,11 +1498,11 @@ textarea.form-control {
 
 .btn-edit {
     background-color: #e9ecef;
-    color: #108a00;
+    color: #175b99;
 }
 
 .btn-edit:hover {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
 }
 
@@ -1518,7 +1523,7 @@ textarea.form-control {
 }
 
 .empty-state i {
-    color: #108a00;
+    color: #175b99;
     opacity: 0.5;
 }
 
@@ -2347,7 +2352,7 @@ textarea.form-control {
 }
 
 .project-date {
-    color: #5e6d55;
+    color: #175b99;
     font-size: 0.875rem;
 }
 
@@ -2356,7 +2361,7 @@ textarea.form-control {
 }
 
 .project-description {
-    color: #5e6d55;
+    color: #175b99;
     font-size: 0.9rem;
     line-height: 1.5;
     margin-bottom: 1rem;
@@ -2376,7 +2381,7 @@ textarea.form-control {
 
 /* Upwork Button Styles */
 .btn-upwork-primary {
-    background: #108a00;
+    background: #175b99;
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
@@ -2386,7 +2391,7 @@ textarea.form-control {
 }
 
 .btn-upwork-primary:hover {
-    background: #108a00;
+    background: #175b99;
 }
 
 .btn-upwork-secondary {
@@ -2426,7 +2431,7 @@ textarea.form-control {
 
 .empty-state i {
     font-size: 3rem;
-    color: #95a789;
+    color: #175b99;
     margin-bottom: 1rem;
 }
 
@@ -2436,7 +2441,7 @@ textarea.form-control {
 }
 
 .empty-state p {
-    color: #5e6d55;
+    color: #175b99;
     margin-bottom: 1.5rem;
 }
 
@@ -2483,7 +2488,7 @@ textarea.form-control {
 
 .no-image-content {
     text-align: center;
-    color: #95a789;
+    color: #175b99;
 }
 
 .no-image-content i {
@@ -2535,7 +2540,7 @@ textarea.form-control {
 
 .icon-wrapper i {
     font-size: 24px;
-    color: #108a00;
+    color: #175b99;
 }
 
 .text-wrapper h6 {
@@ -2546,14 +2551,14 @@ textarea.form-control {
 }
 
 .text-wrapper p {
-    color: #5e6d55;
+    color: #175b99;
     font-size: 14px;
     margin: 0;
 }
 
 .no-image-container:hover {
     background: #f2f7f2;
-    border-color: #108a00;
+    border-color: #175b99;
 }
 .no-image-container {
     background: #f9f9f9;
@@ -2584,7 +2589,7 @@ textarea.form-control {
 
 .icon-wrapper i {
     font-size: 24px;
-    color: #108a00;
+    color: #175b99;
 }
 
 .text-wrapper h6 {
@@ -2595,31 +2600,31 @@ textarea.form-control {
 }
 
 .text-wrapper p {
-    color: #5e6d55;
+    color: #175b99;
     font-size: 14px;
     margin: 0;
 }
 .btn-action.btn-edit:hover {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
-    border-color: #108a00;
+    border-color: #175b99;
 }
 .btn-outline-success:hover {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     color: white;
 }
 
 .btn-action.btn-edit {
     background: transparent;
     border: 1px solid #e4ebe4;
-    color: #5e6d55;
+    color: #175b99;
     transition: all 0.3s ease;
 }
 
 .btn-action.btn-edit:hover {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     color: white;
 }
 
@@ -2632,7 +2637,7 @@ textarea.form-control {
 .btn-action.btn-delete {
     background: transparent;
     border: 1px solid #e4ebe4;
-    color: #5e6d55;
+    color: #175b99;
     transition: all 0.3s ease;
 }
 
@@ -2647,7 +2652,7 @@ textarea.form-control {
 .btn-upwork-secondary {
     background: transparent;
     border: 1px solid #e4ebe4;
-    color: #5e6d55;
+    color: #175b99;
     padding: 8px 16px;
     margin-right: 8px;
     border-radius: 20px;
@@ -2655,15 +2660,15 @@ textarea.form-control {
 }
 
 .btn-upwork-secondary:hover {
-    background-color: #108a00;
-    border-color: #108a00;
+    background-color: #175b99;
+    border-color: #175b99;
     color: white;
 }
 
 .btn-upwork-danger {
     background: transparent;
     border: 1px solid #e4ebe4;
-    color: #5e6d55;
+    color: #175b99;
     padding: 8px 16px;
     border-radius: 20px;
     transition: all 0.3s ease;
@@ -2682,8 +2687,8 @@ textarea.form-control {
 
 .btn-upwork-secondary {
     background: transparent;
-    border: 1px solid #108a00;
-    color: #108a00;
+    border: 1px solid #175b99;
+    color: #175b99;
     padding: 8px 16px;
     margin-right: 8px;
     border-radius: 20px;
@@ -2691,7 +2696,7 @@ textarea.form-control {
 }
 
 .btn-upwork-secondary:hover {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
 }
 
@@ -2845,13 +2850,13 @@ textarea.form-control {
 }
 
 .project-date {
-    color: #5e6d55;
+    color: #175b99;
     font-size: 14px;
     margin-bottom: 12px;
 }
 
 .project-description {
-    color: #5e6d55;
+    color: #175b99;
     font-size: 14px;
     line-height: 1.5;
     margin: 0;
@@ -2869,7 +2874,7 @@ textarea.form-control {
     align-items: center;
     justify-content: center;
     background: #f8f9fa;
-    color: #5e6d55;
+    color: #175b99;
 }
 
 .no-image i {
@@ -3444,14 +3449,14 @@ textarea.form-control {
     transition: all 0.3s ease;
 
     &:hover {
-        border-color: #108a00;
-        box-shadow: 0 2px 8px rgba(20, 168, 0, 0.1);
+        border-color: #175b99;
+        box-shadow: 0 2px 8px#68a8e3;
     }
 }
 
 .certificate-icon {
     font-size: 1.5rem;
-    color: #108a00;
+    color: #175b99;
     margin-right: 1.25rem;
     padding-top: 0.25rem;
 }
@@ -3474,13 +3479,13 @@ textarea.form-control {
 .certificate-name {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #108a00;
+    color: #175b99;
     margin: 0 0 0.25rem;
 }
 
 .certificate-issuer {
     font-size: 0.95rem;
-    color: #5e6d55;
+    color: #175b99;
     display: block;
 }
 
@@ -3500,28 +3505,28 @@ textarea.form-control {
     padding: 0.4rem;
     background: none;
     border: none;
-    color: #5e6d55;
+    color: #175b99;
     border-radius: 4px;
     transition: all 0.2s ease;
 
     &:hover {
         background-color: #f2f7f2;
-        color: #108a00;
+        color: #175b99;
     }
 }
 
 .empty-state {
     text-align: center;
     padding: 3rem 1rem;
-    color: #5e6d55;
+    color: #175b99;
 
     i {
-        color: #108a00;
+        color: #175b99;
         opacity: 0.5;
     }
 
     h5 {
-        color: #108a00;
+        color: #175b99;
         margin: 1rem 0 0.5rem;
     }
 
@@ -3531,7 +3536,7 @@ textarea.form-control {
 }
 
 .btn-upwork {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -3539,7 +3544,7 @@ textarea.form-control {
     transition: background-color 0.2s ease;
 
     &:hover {
-        background-color: #3c8224;
+        background-color: #175b99;
     }
 }
 
@@ -3566,12 +3571,12 @@ textarea.form-control {
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border-color: #108a00;
+        border-color: #175b99;
     }
 }
 
 .certificate-icon {
-    color: #108a00;
+    color: #175b99;
     font-size: 2rem;
     margin-bottom: 1rem;
     opacity: 0.8;
@@ -3611,7 +3616,7 @@ textarea.form-control {
         margin-bottom: 0.5rem;
         
         i {
-            color: #108a00;
+            color: #175b99;
             width: 16px;
         }
     }
@@ -3634,7 +3639,7 @@ textarea.form-control {
         
         &:hover {
             background-color: #f5f5f5;
-            color: #108a00;
+            color: #175b99;
         }
     }
 }
@@ -3670,7 +3675,7 @@ textarea.form-control {
 
     .education-icon {
         font-size: 2.5rem;
-        color: #108a00;
+        color: #175b99;
         opacity: 0.8;
         padding-top: 0.5rem;
     }
@@ -3709,7 +3714,7 @@ textarea.form-control {
                 font-size: 0.95rem;
 
                 i {
-                    color: #108a00;
+                    color: #175b99;
                 }
             }
         }
@@ -3730,7 +3735,7 @@ textarea.form-control {
     color: #666;
 
     i {
-        color: #108a00;
+        color: #175b99;
         opacity: 0.5;
     }
 
@@ -3748,23 +3753,23 @@ textarea.form-control {
 }
 
 .btn-upwork {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
     &:hover {
-        background-color: #118f00;
+        background-color: #175b99;
     }
 }
 
 
 .bg-upwork {
-    background-color: #108a00;
+    background-color: #175b99;
 }
 
 .btn-upwork {
-    background-color: #108a00;
+    background-color: #175b99;
     color: white;
     &:hover {
-        background-color: #3c8224;
+        background-color: #175b99;
     }
     &:disabled {
         background-color: #e0e0e0;
@@ -3812,7 +3817,7 @@ textarea.form-control {
     .upload-hint {
         color: #666;
         i {
-            color: #108a00;
+            color: #175b99;
         }
     }
 }
@@ -3904,7 +3909,7 @@ textarea.form-control {
   
   .action-btn:hover {
     background: #e6f5ea;
-    color: #14a800;
+    color: #175b99;
   }
 
 .project-title {
@@ -4008,7 +4013,7 @@ textarea.form-control {
         .project-title {
             font-size: 18px;
             font-weight: 500;
-            color: #14a800;
+            color: #175b99;
             margin-bottom: 15px;
         }
     
@@ -4019,7 +4024,7 @@ textarea.form-control {
                 border-radius: 20px;
                 font-size: 13px;
                 margin-right: 10px;
-                color: #14a800;
+                color: #175b99;
     
                 i {
                     margin-right: 5px;
@@ -4046,7 +4051,7 @@ textarea.form-control {
             span {
                 display: inline-block;
                 background: #f2f7f2;
-                color: #14a800;
+                color: #175b99;
                 padding: 4px 12px;
                 border-radius: 20px;
                 font-size: 13px;
@@ -4057,10 +4062,10 @@ textarea.form-control {
     }
     
     .btn-upwork {
-        background-color: #14a800;
+        background-color: #175b99;
         color: white;
         &:hover {
-            background-color: #3c8224;
+            background-color: #175b99;
         }
     }
     
@@ -4070,7 +4075,7 @@ textarea.form-control {
         color: #666;
     
         i {
-            color: #14a800;
+            color: #175b99;
         }
     
         h5 {
@@ -4096,7 +4101,7 @@ textarea.form-control {
             }
     
             .language-name {
-                color: #14a800;
+                color: #175b99;
                 font-weight: 500;
             }
     
@@ -4122,14 +4127,14 @@ textarea.form-control {
 
 
     .bg-upwork {
-        background-color: #14a800;
+        background-color: #175b99;
     }
     
     .btn-upwork {
-        background-color: #14a800;
+        background-color: #175b99;
         color: white;
         &:hover {
-            background-color: #3c8224;
+            background-color: #175b99;
             color: white;
         }
     }

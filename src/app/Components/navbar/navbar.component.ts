@@ -8,6 +8,8 @@ import { Notifications } from '../../Shared/Interfaces/Notifications';
 import { NotificationsService } from '../../Shared/Services/Notifications/notifications.service';
 import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
 import { HostListener } from '@angular/core';
+import { AccountService } from '../../Shared/Services/Account/account.service';
+import { Files } from '../../base/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -30,6 +32,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   unreadMessages: number = 0;
   balance: number = 0;
 
+  userImage:string|null=null
+
 
   @HostListener('window:scroll', ['$event'])
 onWindowScroll() {
@@ -46,7 +50,8 @@ onWindowScroll() {
     private AuthService: AuthService,
     private notificationsService: NotificationsService,
     private projectService: ProjectsService,
-    private router: Router
+    private router: Router,
+    private accountService: AccountService
   ){
     this.isLoggedIn = this.AuthService.isLoggedIn();
     console.log(this.isLoggedIn); // Log the initial status of isLoggedI
@@ -66,12 +71,23 @@ onWindowScroll() {
     );
   }
 
+
+  files=Files.filesUrl;
+
   ngOnInit(): void {
+
+    this.accountService.getImagebyUserName(this.AuthService.getUserName()!).subscribe((res:any)=>{
+      this.userImage = res.fileName;
+      console.log("image:",this.userImage);
+    })
+
+
     this.username = this.AuthService.getUserName() || '';
     this.AuthService.userData.subscribe((user) => {
       if (user) {
         const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
         this.role = role?.toLowerCase() || null;
+        console.log(this.role);
       }
     });
     this.subscriptions.push(
