@@ -84,17 +84,16 @@
             Manage
           </a>
           <ul class="dropdown-menu">
-
-            <li><a class="dropdown-item" [routerLink]="['/admin-dashboard']">Dashboard</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/adminnavbar']">Dashboard</a></li>
           </ul>
         </li>
-        
+
       </ul>
 
       <!-- Rest of the navbar content -->
 
       <!-- Freelancer Navigation -->
-    
+
       <div></div>
       <!-- Right Side Navigation -->
       <ul class="navbar-nav ms-auto align-items-center">
@@ -106,7 +105,7 @@
           </a>
         </li>
 
-<!-- 
+<!--
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link icon-link" [routerLink]="['/withdraw']">
             <i class="fa-regular fa-wallet me-1"></i>
@@ -220,13 +219,13 @@
             data-bs-toggle="dropdown"
           >
             <!-- <i class="fas fa-user-circle"></i> -->
-            <img [src]="userImage ? files + '/' + userImage : 'images/default.jpg'" 
-            alt="Profile" 
+            <img [src]="userImage ? files + '/' + userImage : 'images/default.jpg'"
+            alt="Profile"
             class="user-avatar">          </a>
           <ul class="dropdown-menu dropdown-menu-end">
 
             <li class="dropdown-item2">
-               
+
                 Hello, {{username}}
             </li>
             <li><hr class="dropdown-divider" /></li>

@@ -372,6 +372,15 @@
               <i class="fa fa-certificate"></i> All Payments
             </a>
           </li>
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
+              [class.active]="activeTab === 'disputes'"
+              (click)="setActiveTab('disputes')"
+            >
+              <i class="fa fa-certificate"></i> Disputes
+            </a>
+          </li>
           </ul>
         </div>
       </div>
