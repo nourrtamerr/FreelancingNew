@@ -1,13 +1,20 @@
 .navbar {
-  background: #ffffff;
-  border-bottom: 1px solid #e4ebe4;
-  padding: 0.75rem 0;
+  background: #175b99;
+
+  /* background: #4dac72; */
+  /* background: linear-gradient(135deg, #1a374d 0%, #142b3b 100%); */
+
+  /* border-bottom: 1px solid #e4ebe4; */
+  /* padding: 0.5rem 0; */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+ 
 }
+
+
 
 .navbar-logo {
   height: 38px;
@@ -16,7 +23,7 @@
 
 /* Navigation Links */
 .nav-link {
-  color: #001e00;
+  color: #f8f8f8;
   font-size: 0.95rem;
   font-weight: 500;
   padding: 0.5rem 1rem;
@@ -55,7 +62,7 @@
   font-size: 1.25rem;
   padding: 0.5rem;
   position: relative;
-  color: #001e00;
+  color: #ffffff;
   transition: all 0.2s ease;
   margin: 0 8px;
 }

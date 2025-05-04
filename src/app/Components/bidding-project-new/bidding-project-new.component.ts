@@ -102,6 +102,8 @@ export class BiddingProjectNewComponent implements OnInit {
 
   role: string=''
 
+  searchTerm: string = '';
+
   ngOnInit(): void {
 
     const roles = this.authService.getRoles();
@@ -572,6 +574,20 @@ export class BiddingProjectNewComponent implements OnInit {
       this.userWishlist2.push(projectid);
      }
 
+    }
+
+
+    onSearch() {
+      if (!this.searchTerm?.trim()) {
+        this.projects = [...this.projectsBeforeAnyFilters];
+        return;
+      }
+  
+      const searchTermLower = this.searchTerm.toLowerCase();
+      this.projects = this.projectsBeforeAnyFilters.filter(project => 
+        project.title.toLowerCase().includes(searchTermLower) ||
+        project.description.toLowerCase().includes(searchTermLower)
+      );
     }
 
 

@@ -12,11 +12,12 @@ import { AuthService } from '../../../Shared/Services/Auth/auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsService } from '../../../Shared/Services/Projects/projects.service';
 import { map } from 'rxjs';
+import { TimeAgoPipe } from '../../../Pipes/time-ago.pipe';
 
 @Component({
   selector: 'app-fixed-project-details',
   standalone: true,
-  imports: [CommonModule, RouterModule,ReactiveFormsModule],
+  imports: [CommonModule, RouterModule,ReactiveFormsModule, TimeAgoPipe],
   templateUrl: './fixed-project-details.component.html',
   styleUrl: './fixed-project-details.component.css'
 })

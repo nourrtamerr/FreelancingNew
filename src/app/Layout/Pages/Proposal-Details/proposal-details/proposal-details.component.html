@@ -1,131 +1,153 @@
+<div class="jobs-available-section mb-5">
+  <div class="hero-overlay"></div>
+  <div class="jobs-available-content">
+    <div class="jobs-illustration">
+      <div>
+        <h1 class="jobs-count">Proposal Details</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="proposal-container">
   <div class="proposal-header">
     <div class="header-content">
       <h1>Proposal Details</h1>
+      <span class="status-badge {{proposal?.proposalStatus}}">{{proposal?.proposalStatus}}</span>
     </div>
   </div>
 
-  <div class="proposals-list" *ngIf="proposal">
-    <div class="proposal-card" >
-      <div class="proposal-content">
-        <div class="main-content">
-          
-
-          <div class="section">
-            <h2>Cover Letter</h2>
-            <p class="cover-letter">{{proposal.coverLetter}}</p>
-          </div>
-          
-
-          <div class="section">
-            <h2>Proposed Terms</h2>
-            <div class="terms-grid">
-              <div class="term-item">
-                <i class="fas fa-dollar-sign"></i>
-                <div class="term-details">
-                  <span class="label">Bid Amount</span>
-                  
-                  <span class="value">${{proposal.price || 0}}</span>
-                </div>
-              </div>
-              <div class="term-item">
-                <i class="fas fa-clock"></i>
-                <div class="term-details">
-                  <span class="label">Suggested Duration</span>
-                  <span class="value">{{proposal.suggestedDuration || 'Not specified'}} days</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="section" *ngIf="proposal.suggestedMilestones.length > 0">
-            <h2>Suggested Milestones</h2>
-            <div class="terms-grid">
-              <div class="term-item" *ngFor="let milestone of proposal.suggestedMilestones">
-                <div class="milestone-content">
-                  <h3 class="milestone-title">{{ milestone.title }}</h3>
-                  <p class="milestone-description">{{ milestone.description || 'No description provided' }}</p>
-                  <div class="milestone-details">
-                    <div class="detail-row">
-                      <i class="fas fa-dollar-sign"></i>
-                      <div class="term-details">
-                        <span class="label">Amount</span>
-                        <span class="value">${{ milestone.amount || 0 }}</span>
-                      </div>
-                    </div>
-                    <div class="detail-row">
-                      <i class="fas fa-clock"></i>
-                      <div class="term-details">
-                        <span class="label">Duration</span>
-                        <span class="value">{{ milestone.duration || 0 }} days</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-
-      
-  </div>
-
-  <div class="sidebar">
-    <div class="freelancer-card">
-      <div class="freelancer-header">
-        <img [src]="filesurl+'/'+proposal.freelancerProfilePicture|| 'assets/default-avatar.png'" alt="Freelancer" class="profile-image">
+  <div class="proposal-content-wrapper" *ngIf="proposal">
+    <div class="proposal-main-card">
+      <div class="proposal-card-header">
         <div class="freelancer-info">
-          <h3>{{proposal.freelancerName}}</h3>
-          <!-- <p class="title">{{proposal.freelancer?.title}}</p> -->
+          <img [src]="filesurl+'/'+proposal.freelancerProfilePicture|| 'assets/default-avatar.png'" 
+               alt="Freelancer" 
+               class="freelancer-avatar">
+          <div class="freelancer-details">
+            <h3>{{proposal.freelancerName}}</h3>
+            <div class="freelancer-meta">
+              <span *ngIf="proposal.isVerified" class="verified-badge">
+                <i class="fas fa-check-circle"></i> Verified
+              </span>
+              <span *ngIf="proposal.country" class="location-badge">
+                <i class="fas fa-map-marker-alt"></i> {{proposal.country}}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="proposal-price">
+          <span class="amount">${{proposal.price || 0}}</span>
+          <span class="duration"><i class="far fa-clock"></i> Suggested Duration: {{proposal.suggestedDuration || 'Not specified'}} days</span>
         </div>
       </div>
-      <div class="section" *ngIf="proposal.country != null">
-        <h2>Country</h2>
+
+      <div class="proposal-content">
+        <div class="content-row">
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-file-alt"></i> Cover Letter
+            </div>
+            <div class="content-value">
+              {{proposal.coverLetter}}
+            </div>
+          </div>
+        </div>
         
-        <span>{{proposal.country}}</span>
-       
+        <div class="content-row">
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-star"></i> Rank
+            </div>
+            <div class="content-value">
+              <span class="rank-badge">
+                <i *ngIf="proposal.rank === 'Veteran'" class="fas fa-medal" title="Veteran"></i>
+                <i *ngIf="proposal.rank === 'RisingStar'" class="fas fa-rocket" title="Rising Star"></i>
+                <i *ngIf="proposal.rank === 'Established'" class="fas fa-certificate" title="Established"></i>
+                <i *ngIf="proposal.rank === 'Pro'" class="fas fa-award" title="Pro"></i>
+                <i *ngIf="proposal.rank === 'Elite'" class="fas fa-crown" title="Elite"></i>
+                {{proposal.rank}}
+              </span>
+            </div>
+          </div>
+          
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-chart-line"></i> Proposal status
+            </div>
+            <div class="content-value">
+              <span class="status-badge {{proposal.proposalStatus}}">{{proposal.proposalStatus}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-row" *ngIf="proposal.freelancerskills && proposal.freelancerskills.length > 0">
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-tools"></i> Skills
+            </div>
+            <div class="content-value">
+              <div class="skills-list">
+                <span class="skill-tag" *ngFor="let skill of proposal.freelancerskills">{{skill}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-row" *ngIf="proposal.freelancerLanguages && proposal.freelancerLanguages.length > 0">
+          <div class="content-col">
+            <div class="content-label">
+              <i class="fas fa-language"></i> Languages
+            </div>
+            <div class="content-value">
+              <div class="skills-list">
+                <span class="skill-tag" *ngFor="let language of proposal.freelancerLanguages">{{language}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-         <div class="section" *ngIf="proposal.country != null">
-        <h2>Skills</h2>
-        <ul class="skills-list">
-        <li *ngFor="let skill of proposal.freelancerskills" class="skill-item">{{skill}}</li>
-        </ul>
+
+      <div class="section" *ngIf="proposal.suggestedMilestones && proposal.suggestedMilestones.length > 0">
+        <div class="content-label">
+          <i class="fas fa-tasks"></i> Suggested Milestones
+        </div>
+        <div class="milestones-container">
+          <div class="milestone-card" *ngFor="let milestone of proposal.suggestedMilestones; let i = index">
+            <div class="milestone-header">
+              <span class="milestone-number">Milestone {{i+1}}</span>
+              <span class="milestone-amount">${{milestone.amount || 0}}</span>
+            </div>
+            <h3 class="milestone-title">{{milestone.title}}</h3>
+            <p class="milestone-description">{{milestone.description || 'No description provided'}}</p>
+            <div class="milestone-footer">
+              <span class="milestone-duration">
+                <i class="far fa-clock"></i> {{milestone.duration || 0}} days
+              </span>
+            </div>
           </div>
-          <div class="section" *ngIf="proposal.country != null">
-            <h2>Language</h2>
-            <ul class="skills-list">
-            <li *ngFor="let language of proposal.freelancerLanguages" class="skill-item">{{language}}</li>
-            </ul>
-          </div>
-      <div class="freelancer-stats">
-        <div class="stat">
-            <i class="fas fa-star"></i>
-            <span>Rank: {{proposal.rank || 0}}</span> 
-          </div>
-        <div class="stat">
-            <i class="fa-regular fa-circle-check"></i>
-            <span>{{ proposal.isVerified ? 'Verified' : 'Not Verified' }}</span>
-          </div>
+        </div>
+      </div>
+
+      <div class="proposal-actions">
+        <a class="action-btn view-btn" [routerLink]="['/Freelancerprofile',proposal.freelancerName]">
+          <i class="fas fa-user"></i> View Profile
+        </a>
+        <button class="action-btn message-btn">
+          <i class="fas fa-comment"></i> Message
+        </button>
+        <button *ngIf="projectstatus.toString() ==='Pending' && isOwner" class="action-btn confirm-btn" (click)="openPaymentModal()">
+          <i class="fas fa-check-circle"></i> Confirm Proposal
+        </button>
+      </div>
     </div>
-    <div class="button-container">
-        <a class="btn btn-primary" [routerLink]="['/Freelancerprofile',proposal.freelancerName]" routerLinkActive="router-link-active" >View Profile</a>
-      </div>
   </div>
-</div>
-</div>
-  <div class="no-proposals" *ngIf="!proposal">
+
+  <div class="empty-state" *ngIf="!proposal">
     <i class="fas fa-file-alt"></i>
-    <h2>No Proposals Found</h2>
-    <p>There are currently no proposals for this project.</p>
+    <h2>No Proposal Found</h2>
+    <p>The proposal you're looking for doesn't exist or has been removed.</p>
   </div>
-</div>
-
-
-<!-- ... existing code ... -->
-<div class="card-actions" *ngIf="projectstatus.toString() ==='Pending' && isOwner">
-  <button class="btn-confirm" (click)="openPaymentModal()">
-    <i class="fas fa-check-circle"></i> Confirm Proposal
-  </button>
 </div>
 
 <!-- Payment Modal -->
@@ -134,7 +156,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Confirm Proposal Payment</h5>
-        <button type="button" class="btn-close" (click)="closePaymentModal()"></button>
+        <button type="button" class="btn-close" (click)="closePaymentModal()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
       <div class="modal-body">
         <div class="payment-methods">
@@ -153,7 +177,8 @@
             <div class="method-option" [class.selected]="selectedMethod === PaymentMethod.Balance" 
                  (click)="selectPaymentMethod(PaymentMethod.Balance)">
               <i class="fas fa-wallet"></i>
-              <span>Balance (${{currentBalance | number:'1.2-2'}})</span>            </div>
+              <span>Balance (${{currentBalance | number:'1.2-2'}})</span>
+            </div>
           </div>
         </div>
 

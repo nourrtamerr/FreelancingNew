@@ -71,7 +71,8 @@ project: BiddingProjectGetById={
   clientProjectsTotalCount:0,
   clientId:'',
   expectedDuration:0,
-  endDate:''
+  endDate:'',
+  biddingStartDate:''
 };
 
 

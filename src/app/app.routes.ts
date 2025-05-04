@@ -73,6 +73,7 @@ export const routes: Routes = [
       {path: 'dashboard', component: UserDashboradComponent,canActivate: [clientOrFreelancerGuard] },
       {path: 'addfund', component: AddFundByClientComponent,canActivate: [clientGuard]},
       {path: 'new',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
+      {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
       {path: 'details/:id',component: BiddingProjectDetailsComponent,canActivate: [clientOrFreelancerGuard] },
       {path:'allusers',loadComponent: () => import('./Layout/Pages/AllUsers/allusers.component').then(m => m.AllusersComponent),canActivate: [adminGuard]},
       {path :'addAdmin',loadComponent: () => import('./Layout/Pages/add-admin/add-admin.component').then(m => m.AddAdminComponent),canActivate: [adminGuard]},

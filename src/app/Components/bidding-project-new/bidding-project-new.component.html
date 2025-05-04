@@ -20,7 +20,7 @@
   
   
     <!-- Search Bar and Filters -->
-    <div class="container pt-5">
+    <!-- <div class="container pt-5">
       <div class="row justify-content-center align-items-center mb-3">
         <div class="col-lg-8 col-md-8 col-sm-12">
           <div class="upwork-searchbar d-flex">
@@ -30,10 +30,34 @@
             </button>
           </div>
         </div>
+      </div>
+    </div> -->
 
 
+
+    <div class="container pt-5">
+      <div class="row justify-content-center align-items-center mb-3">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <div class="upwork-searchbar d-flex">
+            <input 
+              type="text" 
+              placeholder="Search for jobs" 
+              class="form-control border-0 shadow-none" 
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()"
+              name="searchTerm"
+            />
+            <button class="search-btn" (click)="onSearch()">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
+
+
+
+
   
     <!-- Main Content -->
     <div class="container">

@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { Notifications } from '../../Shared/Interfaces/Notifications';
 import { NotificationsService } from '../../Shared/Services/Notifications/notifications.service';
 import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
-
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +15,11 @@ import { ProjectsService } from '../../Shared/Services/Projects/projects.service
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
+
+
+
+
+
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   notifications: Notifications[] = [];
@@ -24,6 +29,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
   savedTalent: number = 0;
   unreadMessages: number = 0;
   balance: number = 0;
+
+
+  @HostListener('window:scroll', ['$event'])
+onWindowScroll() {
+  const navbar = document.querySelector('.navbar') as HTMLElement;
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+}
 
   constructor(
     private AuthService: AuthService,

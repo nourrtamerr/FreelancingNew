@@ -40,6 +40,13 @@ export class HomeComponent implements OnInit {
 
     reviews: Review[]=[]
 
+    allProjects: BiddingProjectGetAll[] = []; // Store all projects
+    // LatestBiddings: BiddingProjectGetAll[] = [];
+  
+    searchTerm = '';
+    searchResults: any[] = [];
+    showSuggestions = false;
+
 
   ngOnInit(): void {
     
@@ -53,6 +60,28 @@ export class HomeComponent implements OnInit {
       error: (err)=>{
         console.log('Error :',err );
       }
+    })
+
+    // this.biddingProjectService.GetAllBiddingProjects({},1,100).subscribe({
+    //   next: (response) => {
+    //     this.allProjects = response;
+    //     this.LatestBiddings = response.slice(0, 3).sort((a, b) => b.postedFrom - a.postedFrom);
+    //   },
+    //   error: (err) => {
+    //     console.log('Error loading projects:', err);
+    //   }
+    // })
+
+    this.projectService.getProjects().subscribe({
+      next: (data) => {
+        this.allProjects = data;
+       
+      },
+
+      error: (err) => {
+        console.log('Error loading latest projects:', err);
+      }
+
     })
     
 
@@ -111,7 +140,6 @@ export class HomeComponent implements OnInit {
   // }
 
 
-  searchTerm = '';
 
 
 
@@ -191,8 +219,49 @@ export class HomeComponent implements OnInit {
     }
   ];
 
+  // onSearch() {
+  //   if (!this.searchTerm.trim()) {
+  //     // If search is empty, show latest 3 projects
+  //     this.LatestBiddings = this.allProjects.slice(0, 3)
+  //       .sort((a, b) => b.postedFrom - a.postedFrom);
+  //     return;
+  //   }
+
+  //   const searchTermLower = this.searchTerm.toLowerCase();
+  //   const filteredProjects = this.allProjects.filter(project => 
+  //     project.title.toLowerCase().includes(searchTermLower) ||
+  //     project.description.toLowerCase().includes(searchTermLower)
+  //   );
+
+  //   this.LatestBiddings = filteredProjects.slice(0, 3)
+  //     .sort((a, b) => b.postedFrom - a.postedFrom);
+  // }
+
+
   onSearch() {
-    // Implement your search logic or navigation here
-    alert('Searching for: ' + this.searchTerm);
+    if (!this.searchTerm.trim()) {
+      this.searchResults = [];
+      this.showSuggestions = false;
+      return;
+    }
+
+    const searchTermLower = this.searchTerm.toLowerCase();
+    this.searchResults = this.allProjects
+      .filter(project => 
+        project.title.toLowerCase().includes(searchTermLower) ||
+        project.description.toLowerCase().includes(searchTermLower)
+      )
+      .slice(0, 5); // Show only top 5 suggestions
+    
+    this.showSuggestions = true;
   }
+
+  // Add new method to handle suggestion click
+  onSuggestionClick(project: any) {
+    this.showSuggestions = false;
+    this.searchTerm = '';
+  }
+
+
+
 }
