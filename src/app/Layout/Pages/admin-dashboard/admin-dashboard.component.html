@@ -1,6 +1,6 @@
 <div class="container py-4 text-center ">
   <!-- Header -->
-  <div class="row mb-4  mt-5 ">
+  <div class="row mb-4 ">
     <div class="offset-lg-3 col-6">
       <div class="card ">
         <div class="card-body">
@@ -13,7 +13,7 @@
   </div>
 
   <!-- Admin Navigation Menu -->
-  <div class="row mb-4">
+  <!-- <div class="row mb-4">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Stats Cards -->
   <div class="row mb-4">
@@ -136,7 +136,7 @@
 
   <!-- Charts Row -->
   <div class="row mb-4">
-    
+
     <!-- Revenue Chart -->
     <div class="col-lg-6 mb-4">
       <div class="card h-100">
@@ -157,7 +157,7 @@
                   <td>{{ skill.count }}</td>
                   <td>
                     <div class="progress">
-                      <div class="progress-bar" role="progressbar" 
+                      <div class="progress-bar" role="progressbar"
                            [style.width.%]="(skill.count / topSkills[0].count) * 100"
                            [attr.aria-valuenow]="skill.count"
                            aria-valuemin="0"
@@ -227,7 +227,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Monthly Revenue Chart -->
     <div class="col-md-8">
       <div class="card h-100">
@@ -243,5 +243,5 @@
         </div>
       </div>
     </div>
-  </div>  
-</div> 
+  </div>
+</div>

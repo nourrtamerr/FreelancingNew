@@ -511,13 +511,14 @@ import { AllusersComponent } from "../AllUsers/allusers.component";
 import { AddAdminComponent } from "../add-admin/add-admin.component";
 import { IdentityVerificationDeicisionComponent } from "../identity-verification-deicision/identity-verification-deicision.component";
 import { AllPaymentsComponent } from "../AllPayments/all-payments/all-payments.component";
+import { AdminDashboardComponent } from "../admin-dashboard/admin-dashboard.component";
 
 
 @Component({
 
   selector: 'app-adminnavbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TimeAgoPipe, RouterModule, BannedUsersComponent, AllusersComponent, AddAdminComponent, IdentityVerificationDeicisionComponent, AllPaymentsComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TimeAgoPipe, RouterModule, BannedUsersComponent, AllusersComponent, AddAdminComponent, IdentityVerificationDeicisionComponent, AllPaymentsComponent, AdminDashboardComponent],
   providers:[FormBuilder],
   templateUrl: './adminnavbar.component.html',
   styleUrl: './adminnavbar.component.css'

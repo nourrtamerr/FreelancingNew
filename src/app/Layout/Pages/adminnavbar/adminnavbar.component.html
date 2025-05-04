@@ -321,6 +321,15 @@
           <li class="nav-item" *ngIf="profile.role == 'Admin'">
             <a
               class="nav-link"
+              [class.active]="activeTab === 'admin-dashboard'"
+              (click)="setActiveTab('admin-dashboard')"
+            >
+              <i class="fa fa-folder"></i> Statistics
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+            <a
+              class="nav-link"
               [class.active]="activeTab === 'banned'"
               (click)="setActiveTab('banned')"
             >
@@ -373,6 +382,9 @@
         <div class="col-lg-12">
           <div *ngIf="activeTab === 'allusers'">
             <app-allusers></app-allusers>
+          </div>
+          <div *ngIf="activeTab === 'admin-dashboard'">
+            <app-admin-dashboard></app-admin-dashboard>
           </div>
 
           <div *ngIf="activeTab === 'banned'">
