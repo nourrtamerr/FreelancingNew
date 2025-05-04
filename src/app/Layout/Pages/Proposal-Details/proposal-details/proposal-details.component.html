@@ -21,7 +21,7 @@
     <div class="proposal-main-card">
       <div class="proposal-card-header">
         <div class="freelancer-info">
-          <img [src]="filesurl+'/'+proposal.freelancerProfilePicture|| 'assets/default-avatar.png'" 
+          <img [src]="proposal.freelancerProfilePicture? filesurl+'/'+proposal.freelancerProfilePicture: './images/default.jpg'" 
                alt="Freelancer" 
                class="freelancer-avatar">
           <div class="freelancer-details">

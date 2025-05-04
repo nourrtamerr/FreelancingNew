@@ -105,7 +105,11 @@
             <i class="fa fa-user"></i> Profile
           </a>
         </li>
+<<<<<<< Updated upstream
         <li class="nav-item" *ngIf="profile.role == 'Freelancer' || profile.role == 'Client'">
+=======
+        <li class="nav-item" *ngIf="profile.role == 'Freelancer'||profile.role == 'Client'">
+>>>>>>> Stashed changes
           <a
             class="nav-link"
             [class.active]="activeTab === 'myprojects'"
@@ -955,7 +959,7 @@
             class="card-header d-flex justify-content-between align-items-center"
           >
             <h3 class="mb-0">Work Experience</h3>
-            <button class="btn btn-upwork" (click)="openAddExperienceModal()">
+            <button class="btn btn-upwork-primary" (click)="openAddExperienceModal()">
               <i class="fa fa-plus-circle me-2"></i>Add Experience
             </button>
           </div>
@@ -1228,7 +1232,7 @@
             <div class="education-actions">
               <button
                 *ngIf="!userEducation"
-                class="btn btn-upwork"
+                class="btn btn-upwork-primary"
                 (click)="openAddEducationModal()"
               >
                 <i class="fa fa-plus-circle me-2"></i>Add Education
@@ -1479,7 +1483,7 @@
             class="card-header d-flex justify-content-between align-items-center"
           >
             <h3 class="mb-0">Certificates & Achievements</h3>
-            <button class="btn btn-upwork" (click)="openAddCertificateModal()">
+            <button class="btn btn-upwork-primary" (click)="openAddCertificateModal()">
               <i class="fa fa-plus-circle me-2"></i>Add Certificate
             </button>
           </div>
@@ -1853,7 +1857,7 @@
           >
             <h5 class="mb-0">Languages</h5>
             <button
-              class="btn btn-sm btn-upwork"
+              class="btn btn-sm btn-upwork-primary"
               (click)="openAddLanguageModal()"
             >
               <i class="fa fa-plus"></i>
@@ -1922,7 +1926,7 @@
             </button>
             <button
               type="submit"
-              class="btn btn-upwork"
+              class="btn btn-upwork-primary"
               [disabled]="languageForm.invalid"
             >
               <i class="fa fa-plus me-2"></i>Add Language

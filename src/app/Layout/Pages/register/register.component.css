@@ -392,3 +392,24 @@ input[type="file"].form-control {
   input[type="file"].form-control::file-selector-button:hover {
     background-color: #dde0e3;
   }
+
+
+  /* Add these styles at the end of the file */
+.modal-content {
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  background-color: #175b99;
+}
+
+.btn-outline-primary {
+  border-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(23, 91, 153, 0.2);
+}
