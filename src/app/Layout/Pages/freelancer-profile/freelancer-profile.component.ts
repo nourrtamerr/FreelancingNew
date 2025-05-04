@@ -30,6 +30,7 @@ import { ReviewService } from '../../../Shared/Services/Review/review.service';
 import { GetReviewsByRevieweeIdDto } from '../../../Shared/Interfaces/get-reviews-by-reviewee-id-dto';
 import { FreelancerLanguage } from '../../../Shared/Interfaces/freelancer-language';
 import { FreelancerlanguageService } from '../../../Shared/Services/FreelancerLanguages/freelancerlanguage.service';
+import { SentimentService } from '../../../Shared/Services/AI/Sentimentservice.service';
 
 @Component({
   selector: 'app-freelancer-profile',
@@ -57,7 +58,8 @@ constructor(
     ,private BiddingProjects:BiddingProjectService
     ,private fixedprojects:FixedPriceProjectService
     ,private reviewservice:ReviewService
-    ,private freelancerlanguages:FreelancerlanguageService
+    ,private freelancerlanguages:FreelancerlanguageService,
+    private sentimentService: SentimentService
 ){
 
 }
@@ -361,21 +363,82 @@ setImage(projectId: number, index: number) {
 }
 
 reviews:GetReviewsByRevieweeIdDto[]=[];
-loadReviews()
-{
-  this.reviewservice.getRevieweeById(this.profile.id).subscribe(
-    {
-      next:(data:GetReviewsByRevieweeIdDto[])=>{
-        this.reviews=data;
-      },
-      error:(err)=>{
-        this.error=err;
-        this.toastr.error("failed to load reviews");
-      }
+// loadReviews()
+// {
+//   this.reviewservice.getRevieweeById(this.profile.id).subscribe(
+//     {
+//       next:(data:GetReviewsByRevieweeIdDto[])=>{
+//         this.reviews=data;
+//       },
+//       error:(err)=>{
+//         this.error=err;
+//         this.toastr.error("failed to load reviews");
+//       }
+//     }
+//   )
+// }
+loadReviews() {
+  this.reviewservice.getRevieweeById(this.profile.id).subscribe({
+    next: (data: GetReviewsByRevieweeIdDto[]) => {
+      // Process each review's sentiment
+      const reviewPromises = data.map(review => 
+        new Promise<GetReviewsByRevieweeIdDto>((resolve) => {
+          if (review.comment) {
+            this.sentimentService.analyze(review.comment).subscribe({ 
+              next: (sentimentResponse) => {
+                console.log('Sentiment:', sentimentResponse.prediction, 'Score:', sentimentResponse.probability)
+                console.log('review:', review,)
+                resolve({
+                  ...review,
+                  sentiment: sentimentResponse.prediction,
+                  sentimentScore: sentimentResponse.probability,
+                 
+                });
+              },
+              error: () => resolve(review) // Keep original review if sentiment analysis fails
+            });
+          } else {
+            resolve(review);
+          }
+        })
+      );
+
+      // Wait for all sentiment analyses to complete
+      Promise.all(reviewPromises).then(analyzedReviews => {
+        this.reviews = analyzedReviews;
+      });
+    },
+    error: (err) => {
+      this.error = err;
+      this.toastr.error("Failed to load reviews");
     }
-  )
+  });
 }
 
+
+
+
+
+
+
+
+
+
+getSentimentLabel(sentimentPrediction: string): string {
+  if (!sentimentPrediction) return 'Unknown';
+  
+  const sentiment = sentimentPrediction.toLowerCase().trim();
+  switch (sentiment) {
+    case 'positive':
+      return 'Positive';
+    case 'negative':
+      return 'Negative';
+    case 'neutral':
+      return 'Neutral';
+    default:
+      return 'Unknown';
+  }
+}
 
 
 editReview(review: any) {
@@ -388,29 +451,68 @@ editReview(review: any) {
   });
 }
 
+// updateReview() {
+//   if (this.editReviewForm.valid && this.selectedReview) {
+//     const updatedReview = {
+//       ...this.selectedReview,
+//       rating: this.editReviewForm.get('rating')?.value,
+//       comment: this.editReviewForm.get('comment')?.value
+      
+//     };
+
+//     // Call your review service to update
+//     this.reviewservice.updateReview(updatedReview.id,updatedReview).subscribe({
+//       next: () => {
+//         // Update the review in the list
+//         const index = this.reviews.findIndex(r => r.id === this.selectedReview.id);
+//         if (index !== -1) {
+//           this.reviews[index] = updatedReview;
+//         }
+//         this.closeEditModal();
+//         this.toastr.success('Review updated successfully');
+//       },
+//       error: (error) => {
+//         console.error('Error updating review:', error);
+//         this.toastr.error('Failed to update review');
+//       }
+//     });
+//   }
+// }
+
 updateReview() {
   if (this.editReviewForm.valid && this.selectedReview) {
-    const updatedReview = {
-      ...this.selectedReview,
-      rating: this.editReviewForm.get('rating')?.value,
-      comment: this.editReviewForm.get('comment')?.value
-      
-    };
+    // First analyze sentiment
+    this.sentimentService.analyze(this.editReviewForm.get('comment')?.value).subscribe({
+      next: (response) => {
+        if (response && response.prediction !== undefined) {
+          const updatedReview = {
+            ...this.selectedReview,
+            rating: this.editReviewForm.get('rating')?.value,
+            comment: this.editReviewForm.get('comment')?.value,
+            sentiment: response.prediction,
+            sentimentScore: response.probability
+          };
 
-    // Call your review service to update
-    this.reviewservice.updateReview(updatedReview.id,updatedReview).subscribe({
-      next: () => {
-        // Update the review in the list
-        const index = this.reviews.findIndex(r => r.id === this.selectedReview.id);
-        if (index !== -1) {
-          this.reviews[index] = updatedReview;
+          this.reviewservice.updateReview(updatedReview.id, updatedReview).subscribe({
+            next: () => {
+              // Update the review in the reviews array
+              const index = this.reviews.findIndex(r => r.id === updatedReview.id);
+              if (index !== -1) {
+                this.reviews[index] = updatedReview;
+              }
+              this.closeEditModal();
+              this.toastr.success('Review updated successfully');
+            },
+            error: (error) => {
+              console.error('Error updating review:', error);
+              this.toastr.error('Failed to update review');
+            }
+          });
         }
-        this.closeEditModal();
-        this.toastr.success('Review updated successfully');
       },
       error: (error) => {
-        console.error('Error updating review:', error);
-        this.toastr.error('Failed to update review');
+        console.error('Error analyzing sentiment:', error);
+        this.toastr.error('Failed to analyze sentiment');
       }
     });
   }

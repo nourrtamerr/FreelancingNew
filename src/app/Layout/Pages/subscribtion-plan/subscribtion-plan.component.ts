@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SubscriptionPaymentService } from '../../../Shared/Services/Subscribtion plan Payment/subscribtionpayment.service';
 import { FormsModule } from '@angular/forms'; // Required for ngModel
 import { CardPaymentDTO } from '../../../Shared/Interfaces/CardPaymentDTO';
+import { SubscriptionService } from '../../../Shared/Services/Subscribtion/subscribtion.service'; // Import the interface for subscription details
 
 @Component({
   selector: 'app-subscribtion-plan',
@@ -72,7 +73,8 @@ export class SubscribtionPlanComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private subscriptionService: SubscriptionPaymentService
+    private subscriptionService: SubscriptionPaymentService,
+    private subscibtionuserid : SubscriptionService 
   ) {}
 
   ngOnInit(): void {}
@@ -116,23 +118,7 @@ closePaymentOptions() {
 
 
 
-// payWithStripe() {
-//   if (this.selectedPlanId !== null) {
-//     this.subscriptionService.payWithStripe(this.selectedPlanId).subscribe({
-//       next: (res: any) => {
-//       //  if (res && res.url) {
-//           // After Stripe payment success, redirect to success page
-//          window.location.href = res.url; // Redirect to the Stripe URL
-//           console.log('Redirecting to Stripe URL:', res);
-//           this.router.navigate(['/paymentsucess']);
-//         //}
-//       },
-//       error: (err) => {
-//         console.error('Stripe error:', err);
-//       }
-//     });
-//   }
-// }
+
 payWithStripe() {
   if (this.selectedPlanId !== null) {
     this.subscriptionService.payWithStripe(this.selectedPlanId).subscribe({
@@ -176,6 +162,41 @@ payWithCard() {
     });
   }
 }
+
+currentPlanDetails: any = null;
+subscription$: any | null = null;
+viewCurrentPlan() {
+  // Call your SubscriptionPaymentService to fetch the current user's subscription plan
+  this.subscription$ = this.subscibtionuserid.getCurrentSubscription().subscribe({
+    next: (planDetails: any) => {
+      if (planDetails) {
+        // Store the details of the current plan into the `currentPlanDetails`
+        this.currentPlanDetails = {
+          id: planDetails.id,
+          name: planDetails.name,
+          description: planDetails.description,
+          price: planDetails.price,
+          duration: planDetails.durationInDays,
+          totalNumber: planDetails.totalNumber
+        };
+      } else {
+        this.currentPlanDetails = null;
+      }
+    },
+    error: (err) => {
+      console.error('Error fetching current subscription plan:', err);
+      this.currentPlanDetails = null;
+    }
+  });
+}
+
+
+ngOnDestroy(): void {
+  if (this.subscription$) {
+    this.subscription$.unsubscribe();
+  }
+}
+
 
 
 }

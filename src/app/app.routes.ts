@@ -39,6 +39,8 @@ import { AllPaymentsComponent } from './Layout/Pages/AllPayments/all-payments/al
 import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 import { AddBanComponent } from './Layout/Pages/add-ban/add-ban.component';
+import { ReviewsListComponent } from './Layout/Pages/Reviews/reviews-list/reviews-list.component';
+import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.component';
 import { AdminDataManagementComponent } from './Layout/Pages/admin-data-management/admin-data-management.component';
 import { DisputesystemComponent } from './Layout/Pages/disputesystem/disputesystem.component';
 
@@ -91,10 +93,13 @@ export const routes: Routes = [
       {path: 'notification',component: NotificationsComponent},
 
       {path: 'Allpayments',component: AllPaymentsComponent },
+      {path: 'reviews',component: ReviewsListComponent },
     
     {path:'register', loadComponent: () => import('./Layout/Pages/register/register.component').then(m => m.RegisterComponent)},
 
       {path: 'paymentsucess',component: PaymentsucessComponent},
+      {path: 'chatbot',component: ChatbotComponent},
+
 
 
 

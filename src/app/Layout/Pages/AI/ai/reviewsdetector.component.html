@@ -6,3 +6,16 @@
     {{ sentiment }}
   </div>
 </div>
+
+
+<!-- reviewsdetector.component.html -->
+ <h1>ay haga</h1>
+<textarea [(ngModel)]="reviewText" rows="4" placeholder="Write your review..."></textarea>
+<button (click)="analyzeReview()" >
+  
+</button>
+
+<div *ngIf="sentiment" class="sentiment-result">
+  {{ sentiment }}
+</div>
+

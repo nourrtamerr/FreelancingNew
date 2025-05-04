@@ -13,6 +13,7 @@ import { AppUser } from '../../../../Shared/Interfaces/Account';
 import { Review } from '../../../../Shared/Interfaces/Reviews';
 import { ReviewService } from '../../../../Shared/Services/Review/review.service';
 import { GetReviewsByRevieweeIdDto } from '../../../../Shared/Interfaces/get-reviews-by-reviewee-id-dto';
+import { SentimentService } from '../../../../Shared/Services/AI/Sentimentservice.service';
 
 @Component({
   selector: 'app-milestones',
@@ -27,6 +28,8 @@ export class MilestonesComponent implements OnInit{
   FilesURL: string = "";
   reviewForm!: FormGroup;
   isProjectReviewed: boolean = false;
+  sentiment: string = '';
+  sentimentScore: number = 0;
   
   getStatusText(status: any): string {
     switch (status) {
@@ -43,7 +46,7 @@ export class MilestonesComponent implements OnInit{
 private toastr:ToastrService,
 private accountservice:AccountService
 ,private fb: FormBuilder
-,private reviewservice:ReviewService) {}
+,private reviewservice:ReviewService,private sentimentService:SentimentService) {}
 
 areAllMilestonesCompleted(): boolean {
   return this.milestones.length == 0 || 
@@ -54,43 +57,101 @@ setRating(rating: number): void {
   this.reviewForm.patchValue({ rating });
 }
 
+// submitProjectReview(): void {
+//   if (this.reviewForm.valid) {
+//     const review: Review = {
+//       id:this.existingReview?this.existingReview.id:undefined,
+//       rating: this.reviewForm.get('rating')?.value,
+//       comment: this.reviewForm.get('comment')?.value,
+//       revieweeId: this.isProjectClient ? this.projectdata.freelancerId : this.projectdata.clientId,
+//       reviewerId: this.isProjectClient ? this.projectdata.clientId : this.projectdata.freelancerId,
+//       projectId: this.projectdata.id
+//     };
+//     console.log(review);
+//     if(!this.existingReview){
+//     this.reviewservice.addReview(review).subscribe({
+//       next: (response) => {
+//         this.toastr.success('Review submitted successfully');
+//         this.projectdata.isReviewed = true;
+//         this.reviewForm.reset();
+//       },
+//       error: (error) => {
+//         this.toastr.error('Failed to submit review');
+//         console.error('Error submitting review:', error);
+//       }
+//     });
+//   }
+//   else{
+//     this.reviewservice.updateReview(this.existingReview.id,review).subscribe({
+//       next: (response) => {
+//         this.toastr.success('Review submitted successfully');
+//         this.projectdata.isReviewed = true;
+//         this.reviewForm.reset();
+//       },
+//       error: (error) => {
+//         this.toastr.error('Failed to submit review');
+//         console.error('Error submitting review:', error);
+//       }
+//     });
+//   }
+//   }
+// }
+
 submitProjectReview(): void {
   if (this.reviewForm.valid) {
-    const review: Review = {
-      id:this.existingReview?this.existingReview.id:undefined,
-      rating: this.reviewForm.get('rating')?.value,
-      comment: this.reviewForm.get('comment')?.value,
-      revieweeId: this.isProjectClient ? this.projectdata.freelancerId : this.projectdata.clientId,
-      reviewerId: this.isProjectClient ? this.projectdata.clientId : this.projectdata.freelancerId,
-      projectId: this.projectdata.id
-    };
-    console.log(review);
-    if(!this.existingReview){
-    this.reviewservice.addReview(review).subscribe({
+    // First analyze the sentiment
+    this.sentimentService.analyze(this.reviewForm.get('comment')?.value).subscribe({
       next: (response) => {
-        this.toastr.success('Review submitted successfully');
-        this.projectdata.isReviewed = true;
-        this.reviewForm.reset();
+        if (response && response.prediction !== undefined) {
+          this.sentiment = response.prediction;
+          this.sentimentScore = response.probability;
+
+          const review: Review = {
+            id: this.existingReview ? this.existingReview.id : undefined,
+            rating: this.reviewForm.get('rating')?.value,
+            comment: this.reviewForm.get('comment')?.value,
+            revieweeId: this.isProjectClient ? this.projectdata.freelancerId : this.projectdata.clientId,
+            reviewerId: this.isProjectClient ? this.projectdata.clientId : this.projectdata.freelancerId,
+            projectId: this.projectdata.id,
+            sentiment: this.sentiment,
+            sentimentScore: this.sentimentScore
+          };
+
+          // Add new review
+          if (!this.existingReview) {
+            this.reviewservice.addReview(review).subscribe({
+              next: (response) => {
+                this.toastr.success('Review submitted successfully');
+                this.projectdata.isReviewed = true;
+                this.reviewForm.reset();
+              },
+              error: (error) => {
+                this.toastr.error('Failed to submit review');
+                console.error('Error submitting review:', error);
+              }
+            });
+          } 
+          // Update existing review
+          else {
+            this.reviewservice.updateReview(this.existingReview.id, review).subscribe({
+              next: (response) => {
+                this.toastr.success('Review updated successfully');
+                this.projectdata.isReviewed = true;
+                this.reviewForm.reset();
+              },
+              error: (error) => {
+                this.toastr.error('Failed to update review');
+                console.error('Error updating review:', error);
+              }
+            });
+          }
+        }
       },
       error: (error) => {
-        this.toastr.error('Failed to submit review');
-        console.error('Error submitting review:', error);
+        console.error('Error analyzing sentiment:', error);
+        this.toastr.error('Failed to analyze sentiment');
       }
     });
-  }
-  else{
-    this.reviewservice.updateReview(this.existingReview.id,review).subscribe({
-      next: (response) => {
-        this.toastr.success('Review submitted successfully');
-        this.projectdata.isReviewed = true;
-        this.reviewForm.reset();
-      },
-      error: (error) => {
-        this.toastr.error('Failed to submit review');
-        console.error('Error submitting review:', error);
-      }
-    });
-  }
   }
 }
 
