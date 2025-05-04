@@ -363,7 +363,7 @@
               <i class="fa fa-certificate"></i> Validation Requests
             </a>
           </li>
-          <li class="nav-item" *ngIf="profile.role == 'Admin'">
+          <!-- <li class="nav-item" *ngIf="profile.role == 'Admin'">
             <a
               class="nav-link"
               [class.active]="activeTab === 'allpayments'"
@@ -371,7 +371,7 @@
             >
               <i class="fa fa-certificate"></i> All Payments
             </a>
-          </li>
+          </li> -->
           <li class="nav-item" *ngIf="profile.role == 'Admin'">
             <a
               class="nav-link"
@@ -408,8 +408,11 @@
             <app-identity-verification-deicision></app-identity-verification-deicision>
           </div>
 
-          <div *ngIf="activeTab === 'allpayments'" class="card">
+          <!-- <div *ngIf="activeTab === 'allpayments'" class="card">
             <app-all-payments></app-all-payments>
+          </div> -->
+          <div *ngIf="activeTab === 'disputes'" class="card">
+            <app-disputesystem></app-disputesystem>
           </div>
         </div>
 

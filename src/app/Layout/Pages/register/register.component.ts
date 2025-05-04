@@ -187,18 +187,18 @@ export class RegisterComponent implements OnInit {
         console.log('Registration successful:', response);
         this._toaste.success('Registration successful! A confirmation email has been sent.');
     
-        this._AccountService.ResendEmailConfirmation(values.Email).subscribe({
-          next: () => {
-            this._toaste.info('A new email confirmation has been sent to your inbox.');
-            setTimeout(() => {
-              window.close(); 
-            }, 500);
-          },
-          error: (error) => {
-            console.error('Resend failed:', error);
-            this._toaste.warning('Failed to resend confirmation email.');
-          }
-        });
+        // this._AccountService.ResendEmailConfirmation(values.Email).subscribe({
+        //   next: () => {
+        //     this._toaste.info('A new email confirmation has been sent to your inbox.');
+        //     setTimeout(() => {
+        //       window.close(); 
+        //     }, 500);
+        //   },
+        //   error: (error) => {
+        //     console.error('Resend failed:', error);
+        //     this._toaste.warning('Failed to resend confirmation email.');
+        //   }
+        // });
     
         // Optionally redirect somewhere like /check-email
         // this._Router.navigate(['/check-email']);
