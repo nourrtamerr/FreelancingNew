@@ -338,7 +338,18 @@
                     }"></i>
                     <span>{{ getBiddingStatus(project.biddingStartDate, project.biddingEndDate).text }}</span>
                     <span class="countdown-timer" *ngIf="getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class !== 'bidding-ended'">
-                      {{ getCountdownDays(project.biddingEndDate) }}d:{{ getCountdownHours(project.biddingEndDate) }}h:{{ getCountdownMinutes(project.biddingEndDate) }}m
+                     
+                      @if(getBiddingStatus(project.biddingStartDate, project.biddingEndDate).class === 'bidding-active')
+                      {
+
+                        {{getCountdownDays(project.biddingEndDate) }}d:{{ getCountdownHours(project.biddingEndDate) }}h:{{ getCountdownMinutes(project.biddingEndDate)}}m:{{getCountdownSeconds(project.biddingEndDate)}}s
+                      }
+                      @else {
+
+                        {{getCountdownDays(project.biddingStartDate) }}d:{{ getCountdownHours(project.biddingStartDate) }}h:{{ getCountdownMinutes(project.biddingStartDate) }}m:{{getCountdownSeconds(project.biddingStartDate)}}s
+                      }
+                  
+
                     </span>
                   </div>
                   

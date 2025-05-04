@@ -38,6 +38,7 @@ import { ReviewsDetectorComponent } from './Layout/Pages/AI/ai/reviewsdetector.c
 import { PaymentsucessComponent } from './Layout/Pages/PaymentSucessful/paymentsucess/paymentsucess.component';
 import { clientOrFreelancerGuard } from './Shared/Guards/Combination/client-or-freelancer-guard.guard';
 import { AddBanComponent } from './Layout/Pages/add-ban/add-ban.component';
+import { DisputesystemComponent } from './Layout/Pages/disputesystem/disputesystem.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -97,6 +98,7 @@ export const routes: Routes = [
       {path:'wishlist', component: WishlistComponent,title:'Favorites'},
       {path:'myproposals',component:MyProposalsComponent},
       {path:'detector',component:ReviewsDetectorComponent},
-      {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] }
+      {path: 'new/:categoryId',component: BiddingProjectNewComponent ,canActivate: [clientOrFreelancerGuard] },
+      {path: 'disputes',component: DisputesystemComponent} //,canActivate: [adminGuard] }
 
 ];

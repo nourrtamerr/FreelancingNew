@@ -21,7 +21,10 @@
         <!-- Main Job Details -->
         <div class="col-lg-8 col-md-12">
           <div class="upwork-job-details mb-4">
-            <h1 class="job-title">{{project?.title}}</h1>
+            <div class="job-header-flex">
+              <h1 class="job-title">{{project?.title}}</h1>
+             
+            </div>
             
             <div class="job-meta">
               <span class="posted-time">Posted {{project.postedFrom | timeAgo}}</span>
@@ -79,13 +82,8 @@
 
 <div class="project-info-bar-modern">
     
-  <div class="project-info-modern-item">
-    <i class="fa-regular fa-hourglass-half"></i>
-    <div>
-      <div class="info-modern-value">{{project.biddingEndDate | timeLeft}}</div>
-      <div class="info-modern-label">Time left</div>
-    </div>
-  </div>
+ 
+  
   <div class="project-info-modern-item">
     <i class="fa fa-users"></i>
     <div>
@@ -120,14 +118,42 @@
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12">
           <aside class="upwork-sidebar mb-4"> 
+
+            <div class="auction-countdown-container mb-2">
+              <div class="auction-status">
+                <i class="fas" [class]="getAuctionStatusIcon()"></i>
+                {{getAuctionStatusText()}}
+              </div>
+              <div class="countdown-timer">
+                <div class="time-segment">
+                  <span class="time-value">{{timeLeft.days}}</span>
+                  <span class="time-label">DAYS</span>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-segment">
+                  <span class="time-value">{{timeLeft.hours}}</span>
+                  <span class="time-label">HOURS</span>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-segment">
+                  <span class="time-value">{{timeLeft.minutes}}</span>
+                  <span class="time-label">MINS</span>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-segment">
+                  <span class="time-value">{{timeLeft.seconds}}</span>
+                  <span class="time-label">SECS</span>
+                </div>
+              </div>
+            </div>
            <div  >
             
             <a *ngIf="role=='Freelancer'" [routerLink]="(project?.freelancerId === null && !isBidEndDatePassed()) ? ['/proposal2', project.id] : []">
               <button class="apply-btn mb-2" 
                       [disabled]="project?.freelancerId !== null || isBidEndDatePassed()"
                       [title]="getBidButtonTitle()"
-                      [class.disabled-button]="project?.freelancerId !== null || isBidEndDatePassed()">
-                {{ project?.freelancerId === null ? (isBidEndDatePassed() ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+                      [class.disabled-button]="project?.freelancerId !== null || isBidEndDatePassed()|| !isAuctionStarted()">
+                {{ project?.freelancerId === null ? (isBidEndDatePassed() ? 'Bidding Ended' : !isAuctionStarted() ? 'Bidding didnt start yet' :'Apply now') : 'Project Assigned' }}
               </button>
             </a>
   
@@ -197,85 +223,76 @@
 
 
 
-     <!-- ... existing code ... -->
-
-<div class="row pb-4">
-  <div class="col-lg-12">
-    <section>
-      <h3 class="section-title mb-4">Client's recent history</h3>
-      <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" *ngIf="clientReviews?.length??0 > 0">
-        <div class="carousel-inner">
-          <div class="carousel-item" *ngFor="let review of clientReviews; let i = index" [class.active]="i === 0">
-          
-
-           
-            <div class="review-card">
-  <div class="card-body">
-
-    <div class="d-flex justify-content-between align-items-start mb-2">
-      
-      <a [routerLink]="['/details', review.projectId]" class="history-title fw-bold me-2 text-decoration-underline">
-        {{ review.projectTitle }} 
-      </a>
-      <div class="review-actions" *ngIf="review.reviewerId === currentuserid">
-        <button class="btn btn-link text-primary p-1" (click)="editReview(review)">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="btn btn-link text-danger p-1" (click)="deleteReview(review.id)">
-          <i class="fas fa-trash"></i>
-        </button>
-      </div>
-    </div>
-
-
-    <div class="d-flex align-items-center mb-2">
-      <span class="history-rating ms-auto text-warning">
-        <ng-container *ngFor="let star of [1,2,3,4,5]; let idx = index">
-          <i class="fa-star"
-             [ngClass]="{
-               'fa': true,
-               'fa-solid': review.rating >= star,
-               'fa-regular': review.rating < star
-             }"></i>
-        </ng-container>
-        <span class="rating-number ms-1">{{ review.rating }}/5</span>
-      </span>
-    </div>
-    
-    <p class="mb-2 fst-italic text-secondary">
-      {{ review.comment !== null ? review.comment : 'No comment' }}
-    </p>
-    
-    <div class="d-flex justify-content-between align-items-center">
-      <span></span>
-      <span class="history-details small text-muted">{{ review.date | date: 'mediumDate' }}</span>
-    </div>
-  </div>
-</div>
-</div>
-
-
-
-        </div>
-        <!-- Carousel controls -->
-        <ng-container *ngIf="clientReviews.length > 1">
-          <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </ng-container>
-      </div>
-      <div *ngIf="clientReviews.length === 0" class="text-muted">Client hasn't done any reviews yet</div>
-    </section>
-  </div>
-</div>
-
-<!-- ... existing code ... -->
-
+     <!-- Replace or update the auction countdown section -->
+     <!-- <div class="auction-countdown" *ngIf="!isBidEndDatePassed(); else biddingEnded">
+       <div class="countdown-header">
+         <i class="fas fa-clock"></i>
+         <h3 class="countdown-title">
+           {{ !isAuctionStarted() ? 'BIDDING STARTS IN' : 'BIDDING ENDS IN' }}
+         </h3>
+       </div>
+       <div class="countdown-timer">
+         <div class="countdown-segment" [ngClass]="{'countdown-ending': timeLeft.days === 0 && timeLeft.hours < 12}">
+           <div class="countdown-value" [ngClass]="{'countdown-urgent': timeLeft.days === 0 && timeLeft.hours < 6}">
+             {{timeLeft.days}}
+           </div>
+           <div class="countdown-label">DAYS</div>
+         </div>
+         <div class="countdown-separator">:</div>
+         <div class="countdown-segment" [ngClass]="{'countdown-ending': timeLeft.days === 0 && timeLeft.hours < 12}">
+           <div class="countdown-value" [ngClass]="{'countdown-urgent': timeLeft.days === 0 && timeLeft.hours < 6}">
+             {{timeLeft.hours}}
+           </div>
+           <div class="countdown-label">HOURS</div>
+         </div>
+         <div class="countdown-separator">:</div>
+         <div class="countdown-segment" [ngClass]="{'countdown-ending': timeLeft.days === 0 && timeLeft.hours < 12}">
+           <div class="countdown-value" [ngClass]="{'countdown-urgent': timeLeft.days === 0 && timeLeft.hours < 6}">
+             {{timeLeft.minutes}}
+           </div>
+           <div class="countdown-label">MINS</div>
+         </div>
+         <div class="countdown-separator">:</div>
+         <div class="countdown-segment" [ngClass]="{'countdown-ending': timeLeft.days === 0 && timeLeft.hours < 12}">
+           <div class="countdown-value" [ngClass]="{'countdown-urgent': timeLeft.days === 0 && timeLeft.hours < 6}">
+             {{timeLeft.seconds}}
+           </div>
+           <div class="countdown-label">SECS</div>
+         </div>
+       </div>
+     </div> -->
+     
+     <ng-template #biddingEnded>
+       <div class="auction-countdown countdown-ended">
+         <div class="countdown-header">
+           <i class="fas fa-clock"></i>
+           <h3 class="countdown-title">BIDDING ENDED</h3>
+         </div>
+         <div class="countdown-timer">
+           <div class="countdown-segment countdown-ended">
+             <div class="countdown-value">00</div>
+             <div class="countdown-label">DAYS</div>
+           </div>
+           <div class="countdown-separator">:</div>
+           <div class="countdown-segment countdown-ended">
+             <div class="countdown-value">00</div>
+             <div class="countdown-label">HOURS</div>
+           </div>
+           <div class="countdown-separator">:</div>
+           <div class="countdown-segment countdown-ended">
+             <div class="countdown-value">00</div>
+             <div class="countdown-label">MINS</div>
+           </div>
+           <div class="countdown-separator">:</div>
+           <div class="countdown-segment countdown-ended">
+             <div class="countdown-value">00</div>
+             <div class="countdown-label">SECS</div>
+           </div>
+         </div>
+         <p class="countdown-ended-message">Bidding has ended for this project</p>
+       </div>
+     </ng-template>
+     
      
      <!-- Other open jobs -->
      <div class="row mt-5" style="border-top: 1px solid #efefef;">
