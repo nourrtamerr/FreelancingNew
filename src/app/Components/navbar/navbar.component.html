@@ -79,7 +79,7 @@
             <li><a class="dropdown-item" [routerLink]="['/addfund']">Billing & Payments</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown pe-4">
+        <li class="nav-item dropdown pe-4" *ngIf="role === 'admin'">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
             Manage
           </a>
