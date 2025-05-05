@@ -84,7 +84,11 @@
             <tr *ngFor="let city of cities; let i = index">
               <td>{{i + 1}}</td>
               <td>{{city.name}}</td>
-              <td>{{getCountryName(city.id)}}</td>
+              <td>
+                <div *ngIf="countries.length > 0">
+                  {{ getCountryName(city.countryId) }}
+                </div>
+              </td>
               <td class="actions-cell">
                 <button class="action-btn edit-btn" (click)="selectCityForUpdate(city)">
                   <i class="fas fa-edit"></i>

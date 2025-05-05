@@ -337,6 +337,7 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
     this.citiesService.getCitiess().subscribe({
       next: (data) => {
         this.cities = data;
+        console.log(data,'mycitiesss');
       },
       error: (err) => {
         console.error('Error loading cities:', err);
@@ -348,6 +349,8 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
     this.countriesService.getCountries().subscribe({
       next: (data) => {
         this.countries = data;
+        // console.log(this.countries,'countrieeeeeeeeeeeeeeeeeeeeeeeeeeeees')
+        this.loadCities();
       },
       error: (err) => {
         console.error('Error loading countries:', err);
@@ -491,10 +494,12 @@ export class AdminDataManagementComponent implements OnInit , AfterViewChecked {
 
   getCategoryName(categoryId: number): string {
     const category = this.categories.find(c => c.id === categoryId);
+    console.log(this.countries,'countrieeeeeeeeeeeeeeeeeeees')
     return category ? category.name : 'Unknown';
   }
 
   getCountryName(countryId: number): string {
+    
     const country = this.countries.find(c => c.id === countryId);
     return country ? country.name : 'Unknown';
   }
