@@ -732,4 +732,46 @@ getBiddingStatus(startDateStr: string, endDateStr: string): { text: string, clas
     return { text: 'Bidding Ended', class: 'bidding-ended' };
   }
 }
+
+
+bidStatusOpen = true;
+selectedBidStatuses: string[] = [];
+bidStatusOptions = [
+  { value: 'upcoming', label: 'Not Started' },
+  { value: 'active', label: 'Currently Active' },
+  { value: 'ended', label: 'Ended' }
+];
+
+toggleBidStatus(status: string) {
+  const index = this.selectedBidStatuses.indexOf(status);
+  if (index > -1) {
+    this.selectedBidStatuses.splice(index, 1);
+  } else {
+    this.selectedBidStatuses.push(status);
+  }
+  this.filterProjectsByBidStatus();
+}
+
+filterProjectsByBidStatus() {
+  if (this.selectedBidStatuses.length === 0) {
+    this.projects = [...this.projectsBeforeAnyFilters];
+  } else {
+    this.projects = this.projectsBeforeAnyFilters.filter(project => {
+      const now = new Date();
+      const startDate = new Date(project.biddingStartDate);
+      const endDate = new Date(project.biddingEndDate);
+
+      if (this.selectedBidStatuses.includes('upcoming') && now < startDate) {
+        return true;
+      }
+      if (this.selectedBidStatuses.includes('active') && now >= startDate && now <= endDate) {
+        return true;
+      }
+      if (this.selectedBidStatuses.includes('ended') && now > endDate) {
+        return true;
+      }
+      return false;
+    });
+  }
+}
 }

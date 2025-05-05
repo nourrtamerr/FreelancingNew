@@ -2203,3 +2203,12 @@
   background-color: green;
   color: black;
 }
+  
+  /* Add to your existing styles */
+.sidebar-section .custom-checkbox {
+  margin-bottom: 8px;
+}
+
+.sidebar-section .custom-checkbox:last-child {
+  margin-bottom: 0;
+}

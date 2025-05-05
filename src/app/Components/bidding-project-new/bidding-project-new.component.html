@@ -342,6 +342,23 @@
             </div>
           </div>
 
+          <div class="sidebar-section">
+            <div class="sidebar-label-row" (click)="bidStatusOpen = !bidStatusOpen">
+              <label class="sidebar-label">Bid Status</label>
+              <span class="chevron" [class.open]="bidStatusOpen"></span>
+            </div>
+          
+            <div class="sidebar-group-content" *ngIf="bidStatusOpen">
+              <div *ngFor="let status of bidStatusOptions">
+                <label class="custom-checkbox">
+                  <input type="checkbox" 
+                         [checked]="selectedBidStatuses.includes(status.value)"
+                         (change)="toggleBidStatus(status.value)" />
+                  <span class="checkbox-text">{{status.label}}</span>
+                </label>
+              </div>
+            </div>
+          </div>
 
         </aside>
 
