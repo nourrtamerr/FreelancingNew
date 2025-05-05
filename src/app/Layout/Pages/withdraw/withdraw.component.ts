@@ -6,6 +6,7 @@ import { FundsCard } from '../../../Shared/Interfaces/funds-card';
 import { CommonModule } from '@angular/common';
 import { AppUser } from '../../../Shared/Interfaces/Account';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-withdraw',
@@ -28,7 +29,8 @@ export class WithdrawComponent {
     private fb: FormBuilder,
     private fundService: FundandwithdrawService,
     private toaster: ToastrService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router:Router
   ) {
     this.paymentForm = this.fb.group({
       paymentMethod: ['card', Validators.required],
@@ -109,6 +111,7 @@ export class WithdrawComponent {
       // Call the service to process the payment
       this.fundService.cardwithdraw(this.cardinfo).subscribe(
         response => {
+          this.router.navigate(['/paymentsucess']);
         console.log('Payment processed successfully:', response);
         // Handle success response
       }, error => {

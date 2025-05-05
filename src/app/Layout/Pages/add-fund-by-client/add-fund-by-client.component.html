@@ -1,7 +1,7 @@
 <div class="payment-container">
   <form [formGroup]="paymentForm"  class="payment-form">
     <div class="payment-section">
-      <h2>Add new payment method</h2>
+      <h2>Add Funds to your account</h2>
 
       <div class="payment-option" [class.selected]="selectedPaymentMethod === 'card'" (click)="onPaymentMethodChange('card')">
         <input type="radio" id="card" formControlName="paymentMethod" value="card">
@@ -51,11 +51,7 @@
         </div>
       </div>
 
-      <div class="payment-option" [class.selected]="selectedPaymentMethod === 'paypal'" (click)="onPaymentMethodChange('paypal')">
-        <input type="radio" id="paypal" formControlName="paymentMethod" value="paypal">
-        <label for="paypal">PayPal</label>
-        <img src="./images/paypal.jpeg" alt="PayPal" class="payment-logo">
-      </div>
+     
 
       <div class="payment-option" [class.selected]="selectedPaymentMethod === 'stripe'" (click)="onPaymentMethodChange('stripe')">
         <input type="radio" id="stripe" formControlName="paymentMethod" value="stripe">
@@ -63,11 +59,7 @@
         <img src="./images/Stripe-Logo.png" alt="stripe" class="payment-logo">
       </div>
 
-      <div class="payment-option" [class.selected]="selectedPaymentMethod === 'bank'" (click)="onPaymentMethodChange('bank')">
-        <input type="radio" id="bank" formControlName="paymentMethod" value="bank">
-        <label for="bank">Bank deposit</label>
-        <img src="./images/BANK.jpeg" alt="Bank" class="payment-logo">
-      </div>
+
     </div>
 
     <div class="amount-section">

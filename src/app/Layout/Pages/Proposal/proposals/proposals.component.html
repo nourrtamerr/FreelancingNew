@@ -2,7 +2,9 @@
   <div class="hero-overlay"></div>
   <div class="jobs-available-content">
 
+     
     <div class="jobs-illustration">
+      
       <div>
         <h1 class="jobs-count">Proposals</h1>
         <!-- <span class="jobs-text"></span> -->
@@ -16,6 +18,19 @@
 
 
 <div class="proposals-container">
+  
+  <a *ngIf="(role=='Freelancer' && project && project.projectType=='Bidding' && isBiddingStarted && !isBidEnded && project.freelancerId==null) || 
+  (role=='Freelancer' && project && project.projectType=='Fixed' && project.freelancerId==null)" 
+[routerLink]="['/proposal2',projectId]" 
+routerLinkActive="router-link-active">
+<button class="apply-btn mb-2 bg-danger"
+[disabled]="project?.freelancerId !== null || isBidEnded"
+[class.disabled-button]="project?.freelancerId !== null || isBidEnded">
+
+{{ project?.freelancerId === null ? (isBidEnded ? 'Bidding Ended' : 'Apply now') : 'Project Assigned' }}
+
+</button>
+</a>
   <div class="proposals-header">
     <h1>Proposals</h1>
     <div class="header-stats">

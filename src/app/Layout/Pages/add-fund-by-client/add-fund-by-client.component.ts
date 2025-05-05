@@ -98,7 +98,8 @@ export class AddFundByClientComponent {
         this.cardinfo.cvv = formData.cvv;
 
         this.fundService.cardfund(this.cardinfo).subscribe(
-          response => {
+          (response:any) => {
+            window.location.href=response.url;
             console.log('Payment processed successfully:', response);
           },
           error => {

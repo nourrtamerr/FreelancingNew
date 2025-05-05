@@ -1733,11 +1733,11 @@
             </div>
 
             <!-- Verification Status -->
-            <div class="status-item">
+            <div class="status-item" *ngIf="profile.role!='Admin'">
               <div class="status-icon">
                 <i class="fa fa-shield"></i>
               </div>
-              <div class="status-content">
+              <div class="status-content" >
                 <span class="status-label">Identity Verification</span>
                 <div class="status-value">
                   <ng-container

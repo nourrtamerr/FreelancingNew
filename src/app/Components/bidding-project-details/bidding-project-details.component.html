@@ -181,9 +181,9 @@
 
             <a *ngIf="role=='Freelancer'" [routerLink]="(project?.freelancerId === null && !isBidEndDatePassed()) ? ['/proposal2', project.id] : []">
               <button class="apply-btn mb-2"
-                      [disabled]="project?.freelancerId !== null || isBidEndDatePassed()"
+                      [disabled]="project?.freelancerId !== null || isBidEndDatePassed() || !isAuctionStarted()"
                       [title]="getBidButtonTitle()"
-                      [class.disabled-button]="project?.freelancerId !== null || isBidEndDatePassed()|| !isAuctionStarted()">
+                      [class.disabled-button]="(project?.freelancerId !== null || isBidEndDatePassed()|| !isAuctionStarted())">
                 {{ project?.freelancerId === null ? (isBidEndDatePassed() ? 'Bidding Ended' : !isAuctionStarted() ? 'Bidding didnt start yet' :'Apply now') : 'Project Assigned' }}
               </button>
             </a>
@@ -397,7 +397,7 @@
           </button>
         </ng-container>
       </div>
-      <div *ngIf="clientReviews.length === 0" class="text-muted">Client hasn't done any reviews yet</div>
+      <div *ngIf="clientReviews.length === 0" class="text-muted">Client Doesnt have any reviews yet</div>
     </section>
   </div>
 </div>

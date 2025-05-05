@@ -1,6 +1,6 @@
 <div class="chat-container">
   <!-- Left Sidebar: Chat History -->
-  <audio #ringAudio src="ring.mp3" hidden></audio>
+  <audio #ringAudio src="/assets/ring.mp3" hidden></audio>
   <div class="chat-sidebar" [class.show]="showSidebar">
     <div class="sidebar-header">
       <div class="header-content">
@@ -193,7 +193,6 @@
         <button class="btn btn-primary send-btn" 
                 (click)="sendMessage()"
                 [disabled]="!newMessage.trim() && !selectedFile">
-          
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>

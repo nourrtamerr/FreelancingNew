@@ -49,7 +49,7 @@ private accountservice:AccountService
 ,private reviewservice:ReviewService,private sentimentService:SentimentService) {}
 
 areAllMilestonesCompleted(): boolean {
-  return this.milestones.length == 0 || 
+  return this.milestones.length != 0 && 
          this.milestones.every(milestone => milestone.status === 1);
 }
 

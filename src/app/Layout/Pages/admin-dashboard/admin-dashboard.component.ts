@@ -174,6 +174,8 @@ export class AdminDashboardComponent implements OnInit {
       this.loadLanguageDistribution(),
     ]).subscribe({
       next: () => {
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah')
+        console.log(this.projectStats,'project stats')
         this.proposalStats = {
           ...this.proposalStats,
           averagePerProject: this.projectStats.total > 0 ? this.proposalStats.total / this.projectStats.total : 0

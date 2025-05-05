@@ -20,8 +20,8 @@
       <span class="stat-label">Total Milestones</span>
     </div>
   </div>
-  <!-- *ngIf="areAllMilestonesCompleted()" -->
-  <div class="project-review-section" >
+ 
+  <div  *ngIf="areAllMilestonesCompleted()" class="project-review-section" >
     <div class="review-card">
       <div class="review-header">
         <h3>{{ existingReview ? 'Update Your Review' : 'Project Completed Successfully!' }}</h3>
@@ -211,7 +211,7 @@
   </div>
 </div>
 
-<div class="image-modal" [class.show]="selectedImage" (click)="closeImageModal()">
+<div class="image-modal"  [class.show]="selectedImage" (click)="closeImageModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <span class="close-modal" (click)="closeImageModal()">&times;</span>
     <img *ngIf="selectedImage" [src]="selectedImage" alt="Full size image">

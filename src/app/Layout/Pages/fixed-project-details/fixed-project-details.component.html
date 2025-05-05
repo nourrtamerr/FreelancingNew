@@ -126,7 +126,7 @@
       <!-- Sidebar -->
       <div class="col-lg-4 col-md-12">
         <aside  class="upwork-sidebar mb-4">
-          <a *ngIf="role=='Freelancer'"  [routerLink]="['/proposal2',project.id]">
+          <a *ngIf="role=='Freelancer' && !project.freelancerId"  [routerLink]="['/proposal2',project.id]">
             <button class="apply-btn mb-2">
               Apply now
             </button>
@@ -264,7 +264,7 @@
               </button>
             </ng-container>
           </div>
-          <div *ngIf="clientReviews.length === 0" class="text-muted">Client hasn't done any reviews yet</div>
+          <div *ngIf="clientReviews.length === 0" class="text-muted">Client Doesnt have any reviews yet</div>
         </section>
       </div>
     </div>

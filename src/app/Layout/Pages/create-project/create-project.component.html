@@ -58,7 +58,7 @@
                             </div> -->
                     
                             <div class="form-group">
-                                <label for="maxPrice">Maximum Price</label>
+                                <label for="maxPrice">Bidding Start Price</label>
                                 <input type="number" id="maxPrice" formControlName="maxPrice" class="form-control"/>
                                 <small class="error-message" *ngIf="projectForm.get('maxPrice')?.invalid && projectForm.get('maxPrice')?.touched">
                                     <span *ngIf="projectForm.get('maxPrice')?.errors?.['required']">Maximum price is required</span>

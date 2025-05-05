@@ -43,6 +43,7 @@ export interface Milestone {
     clientIsverified:boolean
     clientCountry:string
     clientCity:string
+    freelancerId?:string
     clinetAccCreationDate: string
     freelancersubscriptionPlan: string
     freelancerTotalNumber: number
