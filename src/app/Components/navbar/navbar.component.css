@@ -11,7 +11,7 @@
   left: 0;
   right: 0;
   z-index: 1000;
- 
+
 }
 
 
@@ -207,4 +207,9 @@
     width: 32px;
     height: 32px;
   }
+}
+
+.log {
+  font-size: 1.15rem;
+
 }

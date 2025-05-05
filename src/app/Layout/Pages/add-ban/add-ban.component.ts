@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Ban } from '../../../Shared/Interfaces/Bans';
 import { BansService } from '../../../Shared/Services/Bans/bans.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule,Location } from '@angular/common';
 import { AccountService } from '../../../Shared/Services/Account/account.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -20,7 +20,7 @@ export class AddBanComponent {
   constructor (
     private banservice:BansService,
     private activatedroute:ActivatedRoute,
-    private router:Router,
+    private loca: Location,
     private account:AccountService,
     private toastr:ToastrService,
   ){}
@@ -58,7 +58,8 @@ export class AddBanComponent {
         this.ban= response;
         // console.log(response);
         this.toastr.success('Ban added successfully');
-        this.router.navigate(['/banned']);
+        // this.router.navigate(['/banned']);
+        this.loca.back();
       },
       error: (error) => {
         console.error(error);
