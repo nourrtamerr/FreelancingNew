@@ -17,6 +17,7 @@ import { Files } from '../../../base/environment';
 import { UserRole } from '../../../Shared/Interfaces/Account';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
 import { catchError, of } from 'rxjs';
+import { CitiesService } from '../../../Shared/Services/Cities/cities.service';
 declare var bootstrap: any;
 
 @Component({
@@ -35,6 +36,7 @@ export class RegisterComponent implements OnInit {
     private _Router: Router,
     private _toaste: ToastrService,
     private _CountriesService: CountriesService,
+    private _CitesService: CitiesService,
     private route: ActivatedRoute,
     private authService:AuthService
   ) {}
@@ -72,13 +74,13 @@ export class RegisterComponent implements OnInit {
         validators: this.passwordMatchValidator
       }
     );
-    this._CountriesService.getCountries().subscribe(cities => {
+    this._CitesService.getCitiess().subscribe(cities => {
       this.cities = cities;
       console.log(this.cities);
     });
 
 
-    
+
   this.route.queryParams.subscribe(params => {
     if (params['externalLoginFailed'] === 'true') {
       this._toaste.warning(
@@ -88,7 +90,7 @@ export class RegisterComponent implements OnInit {
     }
   });
   this.roleModal = new bootstrap.Modal(document.getElementById('roleSelectionModal'));
-  
+
   }
 
   passwordMatchValidator(form: AbstractControl) {
@@ -119,7 +121,7 @@ export class RegisterComponent implements OnInit {
       this.selectedFile = file;
     }
   }
-  
+
   errorMessage:string=""
   frontendBase = 'http://localhost:4200';
   provider:string="Google"
@@ -132,12 +134,12 @@ export class RegisterComponent implements OnInit {
   ExternalLogin(role:UserRole): void {
       const returnUrl = `${this.frontendBase}/home`;
       const errorUrl = `${this.frontendBase}/home`;
-  
+
       console.log(`Initiating ${this.provider} login...`);
       this._toaste.info(`Redirecting to ${this.provider} login...`, 'Please wait');
-  
+
       this.authService.logout();
-  
+
       this._AccountService.ExternalLogin(this.provider, role, returnUrl, errorUrl)
         .pipe(
           catchError((error) => {
@@ -186,12 +188,12 @@ export class RegisterComponent implements OnInit {
       next: (response) => {
         console.log('Registration successful:', response);
         this._toaste.success('Registration successful! A confirmation email has been sent.');
-    
+
         // this._AccountService.ResendEmailConfirmation(values.Email).subscribe({
         //   next: () => {
         //     this._toaste.info('A new email confirmation has been sent to your inbox.');
         //     setTimeout(() => {
-        //       window.close(); 
+        //       window.close();
         //     }, 500);
         //   },
         //   error: (error) => {
@@ -199,7 +201,7 @@ export class RegisterComponent implements OnInit {
         //     this._toaste.warning('Failed to resend confirmation email.');
         //   }
         // });
-    
+
         // Optionally redirect somewhere like /check-email
         // this._Router.navigate(['/check-email']);
       },
@@ -217,6 +219,6 @@ export class RegisterComponent implements OnInit {
         }
       }
     });
-    
+
   }
 }
